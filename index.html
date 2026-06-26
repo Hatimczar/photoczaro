@@ -1566,6 +1566,29 @@ function makeCarousel(imgs, labelFn, trackClass, itemClass) {
   btnPrev.addEventListener('click', () => track.scrollBy({ left: -track.clientWidth * 0.85, behavior: 'smooth' }));
   btnNext.addEventListener('click', () => track.scrollBy({ left: track.clientWidth * 0.85, behavior: 'smooth' }));
 
+  // Desktop mouse drag-to-scroll
+  let isDragging = false, dragStartX = 0, dragScrollLeft = 0;
+  track.addEventListener('mousedown', e => {
+    isDragging = true;
+    dragStartX = e.pageX - track.offsetLeft;
+    dragScrollLeft = track.scrollLeft;
+    track.style.cursor = 'grabbing';
+    track.style.userSelect = 'none';
+  });
+  track.addEventListener('mouseleave', () => { isDragging = false; track.style.cursor = 'grab'; });
+  track.addEventListener('mouseup', () => { isDragging = false; track.style.cursor = 'grab'; });
+  track.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    const walk = (x - dragStartX) * 1.2;
+    track.scrollLeft = dragScrollLeft - walk;
+  });
+  track.style.cursor = 'grab';
+
+  // Prevent click-through after a drag
+  track.addEventListener('click', e => { if (Math.abs(track.scrollLeft - dragScrollLeft) > 5) e.stopPropagation(); }, true);
+
   wrap.appendChild(arrowBar);
   wrap.appendChild(track);
   wrap.appendChild(dotsRow);

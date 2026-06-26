@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photoczaro — Capturing Life, Creating Art</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #c9a96e;
+    --gold-light: #e8d5a3;
+    --white: #f5f0eb;
+    --grey: #8a8680;
+    --dark: #0a0a0a;
+    --dark-2: #111111;
+    --dark-3: #1a1a1a;
+    --ease: cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s var(--ease), height 0.3s var(--ease), background 0.3s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,169,110,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s, width 0.4s var(--ease), height 0.4s var(--ease), border-color 0.3s;
+  }
+  body:has(a:hover) .cursor, body:has(button:hover) .cursor { width: 14px; height: 14px; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 60px; height: 60px; border-color: var(--gold); }
+  body:has(.gallery-item:hover) .cursor { background: var(--white); width: 60px; height: 60px; mix-blend-mode: difference; }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 60px;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    transition: background 0.5s;
+  }
+  nav.scrolled { background: rgba(10,10,10,0.97); padding: 18px 60px; }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 400;
+  }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    color: var(--grey);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.4s var(--ease);
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    overflow: hidden;
+    padding: 0 60px 80px;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url("images/Portraits__Tatiana - Hilton Creek__DSC_3323-1.jpg");
+    background-size: cover;
+    background-position: center 30%;
+    transform: scale(1.08);
+    transition: transform 8s ease-out;
+    will-change: transform;
+  }
+  .hero-bg.loaded { transform: scale(1); }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(10,10,10,0.75) 0%,
+      rgba(10,10,10,0.3) 50%,
+      rgba(10,10,10,0.7) 100%
+    );
+  }
+  .hero-overlay-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40%;
+    background: linear-gradient(to top, var(--dark) 0%, transparent 100%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 0.3s var(--ease) forwards;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(70px, 9vw, 130px);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 1s 0.5s var(--ease) forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .hero-tagline {
+    margin-top: 32px;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    color: rgba(245,240,235,0.65);
+    font-weight: 300;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 0.8s var(--ease) forwards;
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 80px; right: 60px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeIn 1.5s 1.5s ease forwards;
+  }
+  .hero-scroll span {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--grey);
+    writing-mode: vertical-rl;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.5); opacity: 0.4; }
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* Section base */
+  section { padding: 120px 60px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 30px;
+    margin-bottom: 80px;
+    overflow: hidden;
+  }
+  .section-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    opacity: 0.7;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 6vw, 90px);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+  .section-title em { font-style: italic; color: var(--gold-light); }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(201,169,110,0.4), transparent);
+    align-self: center;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s var(--ease);
+  }
+  .section-line.visible { transform: scaleX(1); }
+
+  /* Reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+
+  /* Portraits gallery */
+  #portraits { background: var(--dark); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+    align-items: start;
+  }
+  .model-block { display: flex; flex-direction: column; gap: 3px; }
+  .gallery-item {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    aspect-ratio: 3/4;
+    background: var(--dark-3);
+  }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transform: scale(1.05);
+    transition: transform 0.9s var(--ease);
+    display: block;
+  }
+  .gallery-item:hover img { transform: scale(1.12); }
+  .gallery-item-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 20px;
+  }
+  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+  .gallery-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--white);
+    font-style: italic;
+    transform: translateY(8px);
+    transition: transform 0.5s var(--ease);
+    line-height: 1.1;
+  }
+  .gallery-item:hover .gallery-item-name { transform: translateY(0); }
+
+  /* Model gallery toggle */
+  .model-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--dark-3);
+    border: none;
+    width: 100%;
+    cursor: none;
+    color: var(--grey);
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    transition: background 0.3s, color 0.3s;
+    user-select: none;
+  }
+  .model-toggle:hover { background: #222; color: var(--gold); }
+  .model-toggle.active { color: var(--gold); background: #1c1c1c; }
+  .toggle-icon {
+    font-size: 16px;
+    line-height: 1;
+    transition: transform 0.5s var(--ease), color 0.3s;
+    color: var(--gold);
+    font-style: normal;
+  }
+  .model-toggle.active .toggle-icon { transform: rotate(45deg); }
+
+  /* Expandable model sub-gallery */
+  .model-gallery {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1s var(--ease);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3px;
+  }
+  .model-gallery.open { max-height: 4000px; }
+  .model-gallery-item {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    background: var(--dark-3);
+    cursor: none;
+  }
+  .model-gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transform: scale(1.03);
+    transition: transform 0.8s var(--ease);
+  }
+  .model-gallery-item:hover img { transform: scale(1.1); }
+  .model-gallery-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,10,0);
+    transition: background 0.4s;
+  }
+  .model-gallery-item:hover::after { background: rgba(10,10,10,0.15); }
+
+  /* Magazines section */
+  #magazines { background: var(--dark-2); }
+  .magazine-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+  .magazine-block { display: flex; flex-direction: column; gap: 3px; }
+  .magazine-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--dark-3);
+    cursor: none;
+  }
+  .magazine-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid transparent;
+    transition: border-color 0.4s;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .magazine-card:hover::before { border-color: var(--gold); }
+  .magazine-card img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transform: scale(1.03);
+    transition: transform 1s var(--ease);
+  }
+  .magazine-card:hover img { transform: scale(1.08); }
+  .magazine-card-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 30px 24px 20px;
+    background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, transparent 100%);
+    transform: translateY(10px);
+    transition: transform 0.5s var(--ease);
+  }
+  .magazine-card:hover .magazine-card-info { transform: translateY(0); }
+  .magazine-pub {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .magazine-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--white);
+  }
+
+  /* Projects section */
+  #projects { background: var(--dark); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3px;
+    align-items: start;
+  }
+  .project-block { display: flex; flex-direction: column; gap: 3px; }
+  .project-cover {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    aspect-ratio: 3/4;
+    background: var(--dark-3);
+  }
+  .project-cover img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    transform: scale(1.05);
+    transition: transform 1s var(--ease);
+    display: block;
+  }
+  .project-cover:hover img { transform: scale(1.1); }
+  .project-cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.88) 0%, rgba(10,10,10,0.2) 60%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 36px;
+    transition: background 0.5s;
+  }
+  .project-cover:hover .project-cover-overlay { background: linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.3) 60%, transparent 100%); }
+  .project-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    transform: translateY(6px);
+    transition: transform 0.5s var(--ease);
+  }
+  .project-cover:hover .project-eyebrow { transform: translateY(0); }
+  .project-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 300;
+    color: var(--white);
+    font-style: italic;
+    line-height: 1.1;
+    transform: translateY(8px);
+    transition: transform 0.5s var(--ease) 0.05s;
+  }
+  .project-cover:hover .project-name { transform: translateY(0); }
+  .project-count {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,235,0.45);
+    margin-top: 8px;
+    transform: translateY(8px);
+    transition: transform 0.5s var(--ease) 0.1s;
+  }
+  .project-cover:hover .project-count { transform: translateY(0); }
+  /* project sub-gallery: 4-col grid */
+  .project-gallery {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1.2s var(--ease);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+  }
+  .project-gallery.open { max-height: 6000px; }
+  .project-gallery-item {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    background: var(--dark-3);
+    cursor: none;
+  }
+  .project-gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transform: scale(1.03);
+    transition: transform 0.8s var(--ease);
+  }
+  .project-gallery-item:hover img { transform: scale(1.1); }
+
+  /* About */
+  #about { background: var(--dark-2); }
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+  }
+  .about-image-wrap {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+  }
+  .about-image-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transform: scale(1.05);
+    transition: transform 8s ease;
+  }
+  .about-image-wrap:hover img { transform: scale(1.0); }
+  .about-image-frame {
+    position: absolute;
+    inset: 20px;
+    border: 1px solid rgba(201,169,110,0.3);
+    pointer-events: none;
+    transition: inset 0.6s var(--ease);
+  }
+  .about-image-wrap:hover .about-image-frame { inset: 10px; }
+  .about-text { padding-right: 40px; }
+  .about-bio {
+    font-size: 17px;
+    line-height: 1.9;
+    color: rgba(245,240,235,0.75);
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .about-bio strong {
+    color: var(--white);
+    font-weight: 400;
+  }
+  .about-stats {
+    display: flex;
+    gap: 50px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* Contact */
+  #contact { background: var(--dark-2); text-align: center; padding: 140px 60px; }
+  .contact-inner { max-width: 700px; margin: 0 auto; }
+  .contact-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(54px, 7vw, 100px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 30px;
+  }
+  .contact-subtitle {
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: var(--grey);
+    margin-bottom: 60px;
+    line-height: 1.8;
+  }
+  .contact-email {
+    display: inline-block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 6px;
+  }
+  .contact-email::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 1px;
+    background: var(--gold);
+    transform: scaleX(0.3);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease);
+  }
+  .contact-email:hover::after { transform: scaleX(1); }
+  .contact-socials {
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    margin-top: 60px;
+    padding-top: 60px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .contact-socials a {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--grey);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .contact-socials a:hover { color: var(--gold); }
+
+  /* Footer */
+  footer {
+    background: var(--dark);
+    padding: 30px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+  .footer-copy {
+    font-size: 11px;
+    color: rgba(138,134,128,0.5);
+    letter-spacing: 0.1em;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,5,5,0.97);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s var(--ease);
+    cursor: none;
+  }
+  .lightbox.open { opacity: 1; pointer-events: all; }
+  .lightbox img {
+    max-width: 88vw;
+    max-height: 88vh;
+    object-fit: contain;
+    transform: scale(0.94);
+    transition: transform 0.5s var(--ease);
+  }
+  .lightbox.open img { transform: scale(1); }
+  .lightbox-close {
+    position: absolute;
+    top: 36px; right: 48px;
+    background: none; border: none;
+    color: var(--white);
+    font-size: 28px;
+    cursor: none;
+    opacity: 0.5;
+    transition: opacity 0.3s, transform 0.3s;
+    line-height: 1;
+  }
+  .lightbox-close:hover { opacity: 1; transform: rotate(90deg); }
+  .lightbox-caption {
+    position: absolute;
+    bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: rgba(245,240,235,0.5);
+    letter-spacing: 0.05em;
+  }
+  .lightbox-nav {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    background: none; border: none;
+    color: var(--white);
+    font-size: 36px;
+    cursor: none;
+    opacity: 0.3;
+    transition: opacity 0.3s;
+    padding: 20px 30px;
+    z-index: 2;
+    line-height: 1;
+  }
+  .lightbox-nav:hover { opacity: 0.9; }
+  .lightbox-prev { left: 10px; }
+  .lightbox-next { right: 10px; }
+
+  /* divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,169,110,0.3), transparent);
+    margin: 0 60px;
+  }
+
+  /* Featured strip between sections */
+  .featured-strip {
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 30px 0;
+    background: var(--dark-3);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .strip-inner {
+    display: inline-block;
+    animation: marquee 30s linear infinite;
+  }
+  .strip-inner span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: rgba(201,169,110,0.4);
+    letter-spacing: 0.25em;
+    margin: 0 40px;
+  }
+  .strip-inner span::before {
+    content: '✦';
+    margin-right: 40px;
+    font-style: normal;
+    font-size: 10px;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+
+    nav { padding: 18px 24px; }
+    nav.scrolled { padding: 14px 24px; }
+    .nav-logo { font-size: 18px; }
+    .nav-links { gap: 20px; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.12em; }
+
+    .hero { padding: 0 24px 60px; }
+    .hero-scroll { right: 24px; bottom: 60px; }
+
+    section { padding: 80px 24px; }
+    .section-header { gap: 16px; margin-bottom: 48px; }
+    .section-title { font-size: clamp(36px, 10vw, 60px); }
+
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+    .projects-grid { grid-template-columns: 1fr; gap: 12px; }
+
+    .about-layout { grid-template-columns: 1fr; gap: 48px; }
+    .about-text { padding-right: 0; }
+    .about-stats { gap: 30px; }
+    .stat-num { font-size: 40px; }
+
+    #contact { padding: 80px 24px; }
+    .contact-socials { gap: 24px; }
+
+    footer { padding: 24px; flex-direction: column; gap: 10px; text-align: center; }
+
+    .lightbox img { max-width: 96vw; max-height: 80vh; }
+    .lightbox-close { top: 16px; right: 20px; }
+    .lightbox-nav { padding: 12px 16px; font-size: 28px; }
+    .lightbox-caption { font-size: 14px; bottom: 20px; }
+
+    .model-gallery { grid-template-columns: repeat(2, 1fr); }
+    .project-gallery { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .nav-links { gap: 14px; }
+    .nav-links a { font-size: 9px; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
+    .magazine-grid { grid-template-columns: 1fr; gap: 12px; }
+    .about-stats { flex-wrap: wrap; gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- Navigation -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Photoczaro</a>
+  <ul class="nav-links">
+    <li><a href="#portraits">Portraits</a></li>
+    <li><a href="#magazines">Publications</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-overlay-bottom"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Dubai — Photography</p>
+    <h1 class="hero-title">Photo<em>czaro</em></h1>
+    <p class="hero-tagline">Capturing Life, Creating Art</p>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- Marquee strip -->
+<div class="featured-strip">
+  <div class="strip-inner">
+    <span>Portraits</span><span>Magazine Publications</span><span>Editorial</span><span>Fashion</span><span>Fine Art</span><span>Commercial</span><span>Dubai</span><span>Portraits</span><span>Magazine Publications</span><span>Editorial</span><span>Fashion</span><span>Fine Art</span><span>Commercial</span><span>Dubai</span><span>Portraits</span><span>Magazine Publications</span><span>Editorial</span><span>Fashion</span><span>Fine Art</span><span>Commercial</span><span>Dubai</span>
+  </div>
+</div>
+
+<!-- Portraits -->
+<section id="portraits">
+  <div class="section-header">
+    <span class="section-number reveal">01</span>
+    <h2 class="section-title reveal reveal-delay-1">Port<em>raits</em></h2>
+    <div class="section-line" id="line-portraits"></div>
+  </div>
+  <div class="gallery-grid" id="portraits-grid">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Magazines -->
+<section id="magazines">
+  <div class="section-header">
+    <span class="section-number reveal">02</span>
+    <h2 class="section-title reveal reveal-delay-1">Pub<em>lications</em></h2>
+    <div class="section-line" id="line-magazines"></div>
+  </div>
+  <div class="magazine-grid" id="magazines-grid">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+<!-- Projects -->
+<section id="projects">
+  <div class="section-header">
+    <span class="section-number reveal">03</span>
+    <h2 class="section-title reveal reveal-delay-1">Pro<em>jects</em></h2>
+    <div class="section-line" id="line-projects"></div>
+  </div>
+  <div class="projects-grid" id="projects-grid"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- About -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-number reveal">04</span>
+    <h2 class="section-title reveal reveal-delay-1">The<em> Vision</em></h2>
+    <div class="section-line" id="line-about"></div>
+  </div>
+  <div class="about-layout">
+    <div class="about-image-wrap reveal">
+      <img src="images/Portraits__Zaraish - The Beach__DSC_0564-1.jpg" alt="Photoczaro portrait" loading="lazy">
+      <div class="about-image-frame"></div>
+    </div>
+    <div class="about-text reveal reveal-delay-2">
+      <p class="about-bio">
+        <strong>Photoczaro</strong> is a Dubai-based fine art and portrait photographer
+        specialising in high-end editorial, fashion, and magazine photography.
+        With a sharp eye for light, emotion, and composition, every frame
+        tells a story — timeless, cinematic, deeply personal.
+      </p>
+      <p class="about-bio">
+        Published across international titles including <strong>Marika Magazine</strong>,
+        <strong>Malvie</strong>, <strong>Ellas</strong>, <strong>GMARO</strong>,
+        <strong>Beautica</strong>, <strong>Charisma</strong>, and <strong>Quadro Magazine</strong> —
+        Photoczaro brings a distinct visual identity to every collaboration.
+      </p>
+      <div class="about-stats">
+        <div>
+          <span class="stat-num">19+</span>
+          <span class="stat-label">Portrait Sessions</span>
+        </div>
+        <div>
+          <span class="stat-num">12+</span>
+          <span class="stat-label">Publications</span>
+        </div>
+        <div>
+          <span class="stat-num">∞</span>
+          <span class="stat-label">Stories Told</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="contact-inner">
+    <h2 class="contact-title reveal">Let's<br>Create Together</h2>
+    <p class="contact-subtitle reveal reveal-delay-1">
+      Available for portrait sessions, editorial projects,<br>
+      magazine commissions &amp; commercial work across Dubai and beyond.
+    </p>
+    <a href="mailto:hatim@photoczaro.com" class="contact-email reveal reveal-delay-2">
+      hatim@photoczaro.com
+    </a>
+    <div class="contact-socials reveal reveal-delay-3">
+      <a href="https://www.instagram.com/photoczaro_portraits/" target="_blank">Instagram</a>
+      <a href="https://wa.me/971508065253" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">Photoczaro</span>
+  <span class="footer-copy">© 2026 Photoczaro — All Rights Reserved</span>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lb-close">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lb-prev">‹</button>
+  <img src="" alt="" id="lb-img">
+  <button class="lightbox-nav lightbox-next" id="lb-next">›</button>
+  <div class="lightbox-caption" id="lb-caption"></div>
+</div>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animateCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// Hero bg zoom-in
+const heroBg = document.getElementById('hero-bg');
+window.addEventListener('load', () => { heroBg.classList.add('loaded'); });
+heroBg.classList.add('loaded');
+
+// Parallax hero
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  heroBg.style.transform = `scale(1) translateY(${y * 0.3}px)`;
+});
+
+// Image data
+const portraits = [
+  { name: 'Anastasiia', src: 'images/Portraits__Anastasiia__DSC_0444-B&W.jpg' },
+  { name: 'Darya', src: 'images/Portraits__Darya__DSC_0287-B&W.jpg' },
+  { name: 'Diana', src: 'images/Portraits__Diana__DSC_0042.jpg' },
+  { name: 'Elizabeth', src: 'images/Portraits__Elizabeth__DSC_0685.jpeg' },
+  { name: 'Evelina', src: 'images/Portraits__Evelina__DSC_0150.jpg' },
+  { name: 'Jane', src: 'images/Portraits__Jane__IMG_2378 Nude Lip.png' },
+  { name: 'Kardelen', src: 'images/Portraits__Kardelen__DSC_0024.jpg' },
+  { name: 'Karla', src: 'images/Portraits__Karla - Financial Centre__Image_01.jpg' },
+  { name: 'Karla II', src: 'images/Portraits__Karla - Princess Tower__DSC_0469.jpg' },
+  { name: 'Klaudia', src: 'images/Portraits__Klaudia - Home__DSC_0280.jpg' },
+  { name: 'Kseniia', src: 'images/Portraits__Kseniia__DSC_0422.jpg' },
+  { name: 'Nargiz', src: 'images/Portraits__Nargiz - Ajman Walk__DSC_0030.jpg' },
+  { name: 'Olga', src: 'images/Portraits__Olga - City Walk__DSC_0024.jpg' },
+  { name: 'Olga II', src: 'images/Portraits__Olga - Home__DSC_0500-B&W-1.jpg' },
+  { name: 'Sana', src: 'images/Portraits__Sana - ILuvMe Salon__IMG_3904.jpg' },
+  { name: 'Tatiana', src: 'images/Portraits__Tatiana - Hilton Creek__DSC_3323-1.jpg' },
+  { name: 'Zara Kennedy', src: 'images/Portraits__Zara Kennedy - IKEA__DSC_3624-DeNoiseAI-standard.jpg' },
+  { name: 'Zaraish', src: 'images/Portraits__Zaraish - The Beach__DSC_0564-1.jpg' },
+];
+
+const magazines = [
+  { name: 'Artego Magazine', pub: 'Artego', src: 'images/Magazines__Artego - Darya__14.jpg' },
+  { name: 'Artells Magazine', pub: 'Artells', src: 'images/Magazines__Artells - Elizabeth__3464-16 copy.jpg' },
+  { name: 'Beautica Magazine', pub: 'Beautica', src: 'images/Magazines__Beautica-Jane__347.jpg' },
+  { name: 'Ellas Magazine', pub: 'Ellas', src: 'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _46.jpg' },
+  { name: 'GMARO', pub: 'GMARO Magazine', src: 'images/Magazines__GMARO - Jane__Double Page25.jpg' },
+  { name: 'Hannah — Malvie', pub: 'Malvie Magazine', src: 'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image5-21.jpg' },
+  { name: 'Jane — Beautica', pub: 'Jane Beautica', src: 'images/Magazines__Jane Beautica Magazine__344.jpg' },
+  { name: 'Klaudia — Marika', pub: 'Marika Magazine', src: 'images/Magazines__Marika - Klaudia__MARIKA MAGAZINE PORTRAIT (ISSUE 3755 - MARCH)-37 копия.jpg' },
+  { name: 'Olga — Marika', pub: 'Marika Magazine', src: 'images/Magazines__Marika - Olga__MARIKA MAGAZINE PORTRAITS (ISSUE 3494 - JANUARY)-1 копия.jpg' },
+  { name: 'Kardelen — Quadro', pub: 'Quadro Magazine', src: 'images/Magazines__Quadro - Kardelen__2143-2 copy.jpg' },
+  { name: 'Zara — Charisma', pub: '6X Charisma', src: 'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_37.png' },
+  { name: 'Top Shot', pub: 'Top Shot Magazine', src: 'images/Magazines__Top Shot - issue 12 37.jpeg' },
+];
+
+// Gallery images per model
+const galleries = {};
+  galleries['Anastasiia'] = [
+    'images/Portraits__Anastasiia__DSC_0318-1.jpg',
+    'images/Portraits__Anastasiia__DSC_0318-2.jpg',
+    'images/Portraits__Anastasiia__DSC_0318-3.jpg',
+    'images/Portraits__Anastasiia__DSC_0318.jpg',
+    'images/Portraits__Anastasiia__DSC_0328.jpg',
+    'images/Portraits__Anastasiia__DSC_0352.jpg',
+    'images/Portraits__Anastasiia__DSC_0383.jpg',
+    'images/Portraits__Anastasiia__DSC_0431.jpg',
+    'images/Portraits__Anastasiia__DSC_0439.jpg',
+    'images/Portraits__Anastasiia__DSC_0443.jpg',
+    'images/Portraits__Anastasiia__DSC_0444.jpg',
+    'images/Portraits__Anastasiia__IMG_3367-DeNoiseAI.jpg',
+  ];
+  galleries['Darya'] = [
+    'images/Portraits__Darya__DSC_0139-1.jpg',
+    'images/Portraits__Darya__DSC_0139-2.jpg',
+    'images/Portraits__Darya__DSC_0139.jpg',
+    'images/Portraits__Darya__DSC_0140-1.jpg',
+    'images/Portraits__Darya__DSC_0140-2.jpg',
+    'images/Portraits__Darya__DSC_0140-3.jpg',
+    'images/Portraits__Darya__DSC_0140-4.jpg',
+    'images/Portraits__Darya__DSC_0140.jpg',
+    'images/Portraits__Darya__DSC_0240-1.jpg',
+    'images/Portraits__Darya__DSC_0240-2.jpg',
+    'images/Portraits__Darya__DSC_0240.jpg',
+    'images/Portraits__Darya__DSC_0258-1.jpg',
+  ];
+  galleries['Diana'] = [
+    'images/Portraits__Diana__DSC_0030.jpg',
+    'images/Portraits__Diana__DSC_0034.jpg',
+    'images/Portraits__Diana__DSC_0036.jpg',
+    'images/Portraits__Diana__DSC_0037.jpg',
+    'images/Portraits__Diana__DSC_0039.jpg',
+    'images/Portraits__Diana__DSC_0042.jpg',
+    'images/Portraits__Diana__DSC_1475.jpg',
+    'images/Portraits__Diana__DSC_1482.jpg',
+  ];
+  galleries['Elizabeth'] = [
+    'images/Portraits__Elizabeth__DSC_0685.jpeg',
+  ];
+  galleries['Evelina'] = [
+    'images/Portraits__Evelina__DSC_0136.jpg',
+    'images/Portraits__Evelina__DSC_0150.jpg',
+    'images/Portraits__Evelina__DSC_0162.jpg',
+    'images/Portraits__Evelina__DSC_0169.jpg',
+    'images/Portraits__Evelina__DSC_0213.jpg',
+    'images/Portraits__Evelina__DSC_0285.jpg',
+  ];
+  galleries['Jane'] = [
+    'images/Portraits__Jane__DSC_0009.png',
+    'images/Portraits__Jane__DSC_0078.png',
+    'images/Portraits__Jane__DSC_0084.png',
+    'images/Portraits__Jane__DSC_0091.png',
+    'images/Portraits__Jane__DSC_0095.png',
+    'images/Portraits__Jane__IMG_2356.png',
+    'images/Portraits__Jane__IMG_2365.png',
+    'images/Portraits__Jane__IMG_2378 Crop.png',
+    'images/Portraits__Jane__IMG_2378 Nude Lip.png',
+    'images/Portraits__Jane__IMG_2378.png',
+    'images/Portraits__Jane__IMG_2389.png',
+  ];
+  galleries['Kardelen'] = [
+    'images/Portraits__Kardelen__DSC_0024-1.jpg',
+    'images/Portraits__Kardelen__DSC_0024.jpg',
+    'images/Portraits__Kardelen__DSC_0072-1.jpg',
+    'images/Portraits__Kardelen__DSC_0072-2.jpg',
+    'images/Portraits__Kardelen__DSC_0072.jpg',
+    'images/Portraits__Kardelen__DSC_3690-1.jpg',
+    'images/Portraits__Kardelen__DSC_3710-1.jpg',
+    'images/Portraits__Kardelen__DSC_3710-2.jpg',
+    'images/Portraits__Kardelen__DSC_3710-3.jpg',
+    'images/Portraits__Kardelen__DSC_3710-4.jpg',
+    'images/Portraits__Kardelen__DSC_3710-5.jpg',
+    'images/Portraits__Kardelen__DSC_3710.jpg',
+  ];
+  galleries['Karla'] = [
+    'images/Portraits__Karla - Financial Centre__DSC_0050.jpg',
+    'images/Portraits__Karla - Financial Centre__DSC_0077.jpg',
+    'images/Portraits__Karla - Financial Centre__DSC_0086.jpg',
+    'images/Portraits__Karla - Financial Centre__DSC_0100-1.jpg',
+    'images/Portraits__Karla - Financial Centre__DSC_0100.jpg',
+    'images/Portraits__Karla - Financial Centre__DSC_0104.jpg',
+    'images/Portraits__Karla - Financial Centre__DSC_0105.jpg',
+    'images/Portraits__Karla - Financial Centre__Image_01.jpg',
+    'images/Portraits__Karla - Financial Centre__Image_02.jpg',
+  ];
+  galleries['Karla II'] = [
+    'images/Portraits__Karla - Princess Tower__DSC_0469-1.jpg',
+    'images/Portraits__Karla - Princess Tower__DSC_0469-2.jpg',
+    'images/Portraits__Karla - Princess Tower__DSC_0469.jpg',
+    'images/Portraits__Karla - Princess Tower__DSC_0526.jpg',
+    'images/Portraits__Karla - Princess Tower__DSC_0600.jpg',
+  ];
+  galleries['Klaudia'] = [
+    'images/Portraits__Klaudia - Home__DSC_0280.jpg',
+    'images/Portraits__Klaudia - Home__DSC_0294.jpg',
+  ];
+  galleries['Kseniia'] = [
+    'images/Portraits__Kseniia__DSC_0309-1.jpg',
+    'images/Portraits__Kseniia__DSC_0314-1.jpg',
+    'images/Portraits__Kseniia__DSC_0317.jpg',
+    'images/Portraits__Kseniia__DSC_0330.jpg',
+    'images/Portraits__Kseniia__DSC_0343-1.jpg',
+    'images/Portraits__Kseniia__DSC_0343.jpg',
+    'images/Portraits__Kseniia__DSC_0354.jpg',
+    'images/Portraits__Kseniia__DSC_0362-2.jpg',
+    'images/Portraits__Kseniia__DSC_0389.jpg',
+    'images/Portraits__Kseniia__DSC_0404.jpg',
+    'images/Portraits__Kseniia__DSC_0414-1.jpg',
+    'images/Portraits__Kseniia__DSC_0414.jpg',
+  ];
+  galleries['Nargiz'] = [
+    'images/Portraits__Nargiz - Ajman Walk__DSC_0001.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__DSC_0002.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__DSC_0006.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__DSC_0008.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__DSC_0019.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__DSC_0024-2.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__DSC_0024-3.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__DSC_0024.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__DSC_0030-3.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__DSC_0030.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__IMG_2594-3.jpg',
+    'images/Portraits__Nargiz - Ajman Walk__IMG_2594.jpg',
+  ];
+  galleries['Olga'] = [
+    'images/Portraits__Olga - City Walk__DSC_0002.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0003.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0004.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0005.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0008.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0012.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0014.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0015.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0016.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0017.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0018.jpg',
+    'images/Portraits__Olga - City Walk__DSC_0020.jpg',
+  ];
+  galleries['Olga II'] = [
+    'images/Portraits__Olga - Home__DSC_0689.jpg',
+    'images/Portraits__Olga - Home__DSC_0693.jpg',
+    'images/Portraits__Olga - Home__DSC_0708.jpg',
+    'images/Portraits__Olga - Home__DSC_0713.jpg',
+    'images/Portraits__Olga - Home__DSC_0717.jpg',
+    'images/Portraits__Olga - Home__DSC_0728.jpg',
+    'images/Portraits__Olga - Home__DSC_0761.jpg',
+    'images/Portraits__Olga - Home__DSC_0810.jpg',
+  ];
+  galleries['Sana'] = [
+    'images/Portraits__Sana - ILuvMe Salon__IMG_3843.jpg',
+    'images/Portraits__Sana - ILuvMe Salon__IMG_3847.jpg',
+    'images/Portraits__Sana - ILuvMe Salon__IMG_3904.jpg',
+    'images/Portraits__Sana - ILuvMe Salon__IMG_3927.jpg',
+    'images/Portraits__Sana - ILuvMe Salon__IMG_3931.jpg',
+    'images/Portraits__Sana - ILuvMe Salon__IMG_3936.jpg',
+    'images/Portraits__Sana - ILuvMe Salon__IMG_3937.jpg',
+    'images/Portraits__Sana - ILuvMe Salon__IMG_3954.jpg',
+    'images/Portraits__Sana - ILuvMe Salon__IMG_3962.jpg',
+    'images/Portraits__Sana - ILuvMe Salon__IMG_3966.jpg',
+  ];
+  galleries['Tatiana'] = [
+    'images/Portraits__Tatiana - Hilton Creek__DSC_3306.jpg',
+    'images/Portraits__Tatiana - Hilton Creek__DSC_3323-1.jpg',
+    'images/Portraits__Tatiana - Hilton Creek__DSC_3323.jpg',
+    'images/Portraits__Tatiana - Hilton Creek__DSC_3351.jpg',
+    'images/Portraits__Tatiana - Hilton Creek__DSC_3355.jpg',
+    'images/Portraits__Tatiana - Hilton Creek__DSC_3361.jpg',
+    'images/Portraits__Tatiana - Hilton Creek__DSC_3401-1.jpg',
+    'images/Portraits__Tatiana - Hilton Creek__DSC_3476.jpg',
+  ];
+  galleries['Zara Kennedy'] = [
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3563-1.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3563-2.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3563-DeNoiseAI-standard.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3563.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3583-1.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3583-2.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3583-3.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3583-DeNoiseAI-standard.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3583.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3624-1.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3624-2.jpg',
+    'images/Portraits__Zara Kennedy - IKEA__DSC_3624-DeNoiseAI-standard.jpg',
+  ];
+  galleries['Zaraish'] = [
+    'images/Portraits__Zaraish - The Beach__DSC_0478.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0493-1.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0493.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0528-1.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0528-2.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0528.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0542.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0564-1.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0564.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0590.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0596-1.jpg',
+    'images/Portraits__Zaraish - The Beach__DSC_0596.jpg',
+  ];
+
+// Build portrait gallery — each model gets a cover card + expandable sub-gallery
+const pgrid = document.getElementById('portraits-grid');
+let allPortraits = [];
+portraits.forEach((p, i) => {
+  const imgs = galleries[p.name] || [p.src];
+
+  // model block wrapper
+  const block = document.createElement('div');
+  block.className = 'model-block reveal';
+  block.style.transitionDelay = (i % 4) * 0.08 + 's';
+
+  // cover card
+  const cover = document.createElement('div');
+  cover.className = 'gallery-item';
+  cover.innerHTML = `<img src="${p.src}" alt="${p.name}" loading="lazy">
+    <div class="gallery-item-overlay">
+      <span class="gallery-item-name">${p.name}</span>
+    </div>`;
+  cover.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: p.name })), 0));
+
+  // toggle button
+  const toggle = document.createElement('button');
+  toggle.className = 'model-toggle';
+  toggle.innerHTML = `<span>Gallery &nbsp;(${imgs.length})</span><em class="toggle-icon">+</em>`;
+
+  // sub-gallery grid
+  const subgal = document.createElement('div');
+  subgal.className = 'model-gallery';
+  imgs.forEach((src, j) => {
+    const item = document.createElement('div');
+    item.className = 'model-gallery-item';
+    item.innerHTML = `<img src="${src}" alt="${p.name} ${j+1}" loading="lazy">`;
+    item.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: p.name })), j));
+    subgal.appendChild(item);
+  });
+
+  toggle.addEventListener('click', () => {
+    const isOpen = subgal.classList.toggle('open');
+    toggle.classList.toggle('active', isOpen);
+  });
+
+  block.appendChild(cover);
+  block.appendChild(toggle);
+  block.appendChild(subgal);
+  pgrid.appendChild(block);
+  allPortraits.push({ src: p.src, name: p.name });
+});
+
+// Magazine gallery images
+const magGalleries = {};
+  magGalleries['Artego Magazine'] = [
+    'images/Magazines__Artego - Darya__1.jpg',
+    'images/Magazines__Artego - Darya__12.jpg',
+    'images/Magazines__Artego - Darya__13.jpg',
+    'images/Magazines__Artego - Darya__14.jpg',
+    'images/Magazines__Artego - Darya__15.jpg',
+    'images/Magazines__Artego - Darya__2.jpg',
+    'images/Magazines__Artego - Darya__3.jpg',
+    'images/Magazines__Artego - Darya__40.jpg',
+  ];
+  magGalleries['Artells Magazine'] = [
+    'images/Magazines__Artells - Elizabeth__3464-14 copy.jpg',
+    'images/Magazines__Artells - Elizabeth__3464-15 copy.jpg',
+    'images/Magazines__Artells - Elizabeth__3464-16 copy.jpg',
+    'images/Magazines__Artells - Elizabeth__3464-17 copy.jpg',
+  ];
+  magGalleries['Beautica'] = [
+    'images/Magazines__Beautica-Jane__344.jpg',
+    'images/Magazines__Beautica-Jane__345.jpg',
+    'images/Magazines__Beautica-Jane__346.jpg',
+    'images/Magazines__Beautica-Jane__347.jpg',
+  ];
+  magGalleries['Ellas Magazine'] = [
+    'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _01.jpg',
+    'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _02.jpg',
+    'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _03.jpg',
+    'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _04.jpg',
+    'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _05.jpg',
+    'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _42.jpg',
+    'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _43.jpg',
+    'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _44.jpg',
+    'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _45.jpg',
+    'images/Magazines__Ellas Magazine - Jane__ELLAS MAGAZINE OCTOBER  FASHION 3 _46.jpg',
+  ];
+  magGalleries['GMARO'] = [
+    'images/Magazines__GMARO - Jane__Double Page23.jpg',
+    'images/Magazines__GMARO - Jane__Double Page24.jpg',
+    'images/Magazines__GMARO - Jane__Double Page25.jpg',
+    'images/Magazines__GMARO - Jane__Single Page44.jpg',
+    'images/Magazines__GMARO - Jane__Single Page45.jpg',
+    'images/Magazines__GMARO - Jane__Single Page46.jpg',
+    'images/Magazines__GMARO - Jane__Single Page47.jpg',
+    'images/Magazines__GMARO - Jane__Single Page48.jpg',
+    'images/Magazines__GMARO - Jane__Single Page49.jpg',
+  ];
+  magGalleries['Hannah Malvie'] = [
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image1-18.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image1.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image2-19.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image2.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image3-23.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image3.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image4-20.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image4.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image5-21.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image5.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image6-22.jpg',
+    'images/Magazines__Hannah Malvie Magazine__02___Witness_her_elegance_and_confidence_intertwine_in_a_graceful_dance_with_the_image6.jpg',
+  ];
+  magGalleries['Jane Beautica'] = [
+    'images/Magazines__Jane Beautica Magazine__344.jpg',
+    'images/Magazines__Jane Beautica Magazine__345.jpg',
+    'images/Magazines__Jane Beautica Magazine__346.jpg',
+    'images/Magazines__Jane Beautica Magazine__347.jpg',
+  ];
+  magGalleries['Marika Klaudia'] = [
+    'images/Magazines__Marika - Klaudia__MARIKA MAGAZINE PORTRAIT (ISSUE 3755 - MARCH)-36 копия.jpg',
+    'images/Magazines__Marika - Klaudia__MARIKA MAGAZINE PORTRAIT (ISSUE 3755 - MARCH)-37 копия.jpg',
+  ];
+  magGalleries['Marika Olga'] = [
+    'images/Magazines__Marika - Olga__MARIKA MAGAZINE PORTRAITS (ISSUE 3494 - JANUARY)-1 копия.jpg',
+    'images/Magazines__Marika - Olga__MARIKA MAGAZINE PORTRAITS (ISSUE 3494 - JANUARY)-14 копия.jpg',
+    'images/Magazines__Marika - Olga__MARIKA MAGAZINE PORTRAITS (ISSUE 3494 - JANUARY)-15 копия.jpg',
+    'images/Magazines__Marika - Olga__MARIKA MAGAZINE PORTRAITS (ISSUE 3494 - JANUARY)-16 копия.jpg',
+    'images/Magazines__Marika - Olga__MARIKA MAGAZINE PORTRAITS (ISSUE 3494 - JANUARY)-17 копия.jpg',
+    'images/Magazines__Marika - Olga__MARIKA MAGAZINE PORTRAITS (ISSUE 3494 - JANUARY)-2 копия.jpg',
+    'images/Magazines__Marika - Olga__MARIKA MAGAZINE PORTRAITS (ISSUE 3494 - JANUARY)-3 копия.jpg',
+  ];
+  magGalleries['Quadro Kardelen'] = [
+    'images/Magazines__Quadro - Kardelen__2143-1 copy.jpg',
+    'images/Magazines__Quadro - Kardelen__2143-16 copy.jpg',
+    'images/Magazines__Quadro - Kardelen__2143-17 copy.jpg',
+    'images/Magazines__Quadro - Kardelen__2143-2 copy.jpg',
+    'images/Magazines__Quadro - Kardelen__2143-3 copy.jpg',
+  ];
+  magGalleries['Charisma Magazine'] = [
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_.png',
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_2.png',
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_3.png',
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_34.png',
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_35.png',
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_36.png',
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_37.png',
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_4.png',
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_5.png',
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_55.png',
+    'images/Magazines__Zara Kennedy - 6X Charisma Magazine__Charisma Vol 46_56.png',
+  ];
+  magGalleries['Top Shot'] = [
+    'images/Magazines__Top Shot - issue 12 37.jpeg',
+    'images/Magazines__Top Shot issue 05 - 49.jpeg',
+  ];
+
+// Build magazines grid — each card gets cover + expandable gallery
+const mgrid = document.getElementById('magazines-grid');
+let allMagazines = [];
+magazines.forEach((m, i) => {
+  const imgs = magGalleries[m.name] || [m.src];
+
+  const block = document.createElement('div');
+  block.className = 'magazine-block reveal';
+  block.style.transitionDelay = (i % 3) * 0.1 + 's';
+
+  // cover card
+  const card = document.createElement('div');
+  card.className = 'magazine-card';
+  card.innerHTML = `<img src="${m.src}" alt="${m.name}" loading="lazy">
+    <div class="magazine-card-info">
+      <p class="magazine-pub">${m.pub}</p>
+      <p class="magazine-title">${m.name}</p>
+    </div>`;
+  card.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: m.name })), 0));
+
+  // toggle
+  const toggle = document.createElement('button');
+  toggle.className = 'model-toggle';
+  toggle.innerHTML = `<span>Gallery &nbsp;(${imgs.length})</span><em class="toggle-icon">+</em>`;
+
+  // sub-gallery (2-col grid, same style)
+  const subgal = document.createElement('div');
+  subgal.className = 'model-gallery';
+  imgs.forEach((src, j) => {
+    const item = document.createElement('div');
+    item.className = 'model-gallery-item';
+    item.innerHTML = `<img src="${src}" alt="${m.name} ${j+1}" loading="lazy">`;
+    item.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: m.name })), j));
+    subgal.appendChild(item);
+  });
+
+  toggle.addEventListener('click', () => {
+    const isOpen = subgal.classList.toggle('open');
+    toggle.classList.toggle('active', isOpen);
+  });
+
+  block.appendChild(card);
+  block.appendChild(toggle);
+  block.appendChild(subgal);
+  mgrid.appendChild(block);
+  allMagazines.push({ src: m.src, name: m.name });
+});
+
+// Build Projects section
+const projectsData = [
+  {
+    name: 'FP Models',
+    eyebrow: 'Portfolio Set',
+    cover: 'images/Portraits__FP Community Shoot__Emie__DSC_4653.jpg',
+    images: [
+      'images/Portraits__FP Community Shoot__Elizabeth__DSC_4767.jpg',
+      'images/Portraits__FP Community Shoot__Elizabeth__DSC_4773.jpg',
+      'images/Portraits__FP Community Shoot__Elizabeth__DSC_4779.jpg',
+      'images/Portraits__FP Community Shoot__Elizabeth__DSC_4786.jpg',
+      'images/Portraits__FP Community Shoot__Elizabeth__DSC_4801.jpg',
+      'images/Portraits__FP Community Shoot__Emie__DSC_4643.jpg',
+      'images/Portraits__FP Community Shoot__Emie__DSC_4647.jpg',
+      'images/Portraits__FP Community Shoot__Emie__DSC_4650.jpg',
+      'images/Portraits__FP Community Shoot__Emie__DSC_4653.jpg',
+      'images/Portraits__FP Community Shoot__Emie__DSC_4663.jpg',
+      'images/Portraits__FP Community Shoot__Nazgul__DSC_4713.jpg',
+      'images/Portraits__FP Community Shoot__Nazgul__DSC_4718.jpg',
+      'images/Portraits__FP Community Shoot__Nazgul__DSC_4720.jpg',
+      'images/Portraits__FP Community Shoot__Nazgul__DSC_4755.jpg',
+      'images/Portraits__FP Community Shoot__Nazgul__DSC_4758.jpg',
+      'images/Portraits__FP Community Shoot__Yulia__DSC_4597.jpg',
+      'images/Portraits__FP Community Shoot__Yulia__DSC_4613.jpg',
+      'images/Portraits__FP Community Shoot__Yulia__DSC_4619.jpg',
+      'images/Portraits__FP Community Shoot__Yulia__DSC_4620.jpg',
+      'images/Portraits__FP Community Shoot__Yulia__DSC_4631.jpg',
+    ]
+  },
+  {
+    name: 'UC Fashion Week',
+    eyebrow: 'November Fashion Week',
+    cover: 'images/Portraits__UC Fashion Week - 3rd November__Tina__DSC09378-Edit.jpg',
+    images: [
+      'images/Portraits__UC Fashion Week - 3rd November__Hannah__DSC09050---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Hannah__DSC09584---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Hannah__DSC09591---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Maria__DSC09407---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Maria__DSC09417---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Maria__DSC09429---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Maria__DSC09452---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Maria__DSC09723---Edit.JPG',
+      'images/Portraits__UC Fashion Week - 3rd November__Maria__DSC09728---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Olga__DSC09748---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Olga__DSC09814---1.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Olga__DSC09822---1.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Olga__DSC09824---1.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Olga__DSC09826---1.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Olga__DSC09833---1.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Olga__DSC09886---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Olga__DSC09887---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Olga__DSC09897---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Polaroids__Kate.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Polaroids__Olga.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Polaroids__Polaroid-1.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Polaroids__Polaroid-2.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Polaroids__Polaroid-3.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Tina__DSC09207---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Tina__DSC09366---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Tina__DSC09378-Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Tina__DSC09390---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Tina__DSC09397---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Tina__DSC09662---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Tina__DSC09664---Edit.jpg',
+      'images/Portraits__UC Fashion Week - 3rd November__Tina__DSC09669---Edit.jpg',
+    ]
+  }
+];
+
+const pgridProjects = document.getElementById('projects-grid');
+projectsData.forEach((proj, i) => {
+  const block = document.createElement('div');
+  block.className = 'project-block reveal';
+  block.style.transitionDelay = i * 0.15 + 's';
+
+  // cover
+  const cover = document.createElement('div');
+  cover.className = 'project-cover';
+  cover.innerHTML = `
+    <img src="${proj.cover}" alt="${proj.name}" loading="lazy">
+    <div class="project-cover-overlay">
+      <span class="project-eyebrow">${proj.eyebrow}</span>
+      <h3 class="project-name">${proj.name}</h3>
+      <span class="project-count">${proj.images.length} photographs</span>
+    </div>`;
+  cover.addEventListener('click', () => openLightbox(proj.images.map(s => ({ src: s, name: proj.name })), 0));
+
+  // toggle
+  const toggle = document.createElement('button');
+  toggle.className = 'model-toggle';
+  toggle.innerHTML = `<span>View Gallery &nbsp;(${proj.images.length})</span><em class="toggle-icon">+</em>`;
+
+  // gallery grid (4-col)
+  const gal = document.createElement('div');
+  gal.className = 'project-gallery';
+  proj.images.forEach((src, j) => {
+    const item = document.createElement('div');
+    item.className = 'project-gallery-item';
+    item.innerHTML = `<img src="${src}" alt="${proj.name} ${j+1}" loading="lazy">`;
+    item.addEventListener('click', () => openLightbox(proj.images.map(s => ({ src: s, name: proj.name })), j));
+    gal.appendChild(item);
+  });
+
+  toggle.addEventListener('click', () => {
+    const isOpen = gal.classList.toggle('open');
+    toggle.classList.toggle('active', isOpen);
+  });
+
+  block.appendChild(cover);
+  block.appendChild(toggle);
+  block.appendChild(gal);
+  pgridProjects.appendChild(block);
+});
+
+// Lightbox
+let lbImages = [], lbIndex = 0;
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const lbCaption = document.getElementById('lb-caption');
+
+function openLightbox(images, index) {
+  lbImages = images; lbIndex = index;
+  lbImg.src = images[index].src;
+  lbCaption.textContent = images[index].name;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lbNavigate(dir) {
+  lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+  lbImg.style.opacity = '0';
+  setTimeout(() => {
+    lbImg.src = lbImages[lbIndex].src;
+    lbCaption.textContent = lbImages[lbIndex].name;
+    lbImg.style.opacity = '1';
+  }, 200);
+}
+lbImg.style.transition = 'opacity 0.2s';
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+document.getElementById('lb-prev').addEventListener('click', () => lbNavigate(-1));
+document.getElementById('lb-next').addEventListener('click', () => lbNavigate(1));
+lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') lbNavigate(-1);
+  if (e.key === 'ArrowRight') lbNavigate(1);
+});
+
+// Intersection Observer for reveal animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal, .section-line').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

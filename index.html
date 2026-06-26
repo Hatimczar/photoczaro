@@ -745,6 +745,18 @@
     transition: transform 0.5s var(--ease);
   }
   .contact-email:hover::after { transform: scaleX(1); }
+  .contact-phone {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    color: var(--grey);
+    text-decoration: none;
+    margin-top: 14px;
+    transition: color 0.3s;
+  }
+  .contact-phone:hover { color: var(--gold); }
   .contact-socials {
     display: flex;
     justify-content: center;
@@ -1201,6 +1213,9 @@
     </p>
     <a href="mailto:hatim@photoczaro.com" class="contact-email reveal reveal-delay-2">
       hatim@photoczaro.com
+    </a>
+    <a href="tel:+971508065253" class="contact-phone reveal reveal-delay-2">
+      +971 50 806 5253
     </a>
     <div class="contact-socials reveal reveal-delay-3">
       <a href="https://www.instagram.com/photoczaro_portraits/" target="_blank">Instagram</a>

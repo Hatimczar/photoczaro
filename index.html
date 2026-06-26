@@ -340,17 +340,48 @@
   }
   .model-toggle.active .toggle-icon { transform: rotate(45deg); }
 
-  /* Expandable model sub-gallery */
-  .model-gallery {
+  /* Carousel wrapper — handles expand/collapse */
+  .carousel-wrap {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 1s var(--ease);
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3px;
+    transition: max-height 0.9s var(--ease);
   }
-  .model-gallery.open { max-height: 4000px; }
+  .carousel-wrap.open { max-height: 700px; }
+  .carousel-arrows {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 10px 14px 8px;
+    background: #181818;
+  }
+  .carousel-arrow {
+    background: none;
+    border: 1px solid rgba(201,169,110,0.35);
+    color: var(--gold);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    line-height: 1;
+    padding: 0;
+  }
+  .carousel-arrow:hover { background: rgba(201,169,110,0.12); border-color: var(--gold); }
+
+  /* Carousel track */
+  .model-gallery {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 3px;
+    scrollbar-width: none;
+  }
+  .model-gallery::-webkit-scrollbar { display: none; }
   .model-gallery-item {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
     position: relative;
     overflow: hidden;
     aspect-ratio: 3/4;
@@ -499,17 +530,19 @@
     transition: transform 0.5s var(--ease) 0.1s;
   }
   .project-cover:hover .project-count { transform: translateY(0); }
-  /* project sub-gallery: 4-col grid */
+  /* project sub-gallery: horizontal carousel */
   .project-gallery {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 1.2s var(--ease);
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
     gap: 3px;
+    scrollbar-width: none;
   }
-  .project-gallery.open { max-height: 6000px; }
+  .project-gallery::-webkit-scrollbar { display: none; }
   .project-gallery-item {
+    flex: 0 0 48%;
+    scroll-snap-align: start;
     position: relative;
     overflow: hidden;
     aspect-ratio: 3/4;
@@ -770,6 +803,44 @@
     to { transform: translateX(-50%); }
   }
 
+  /* ── Hamburger nav ── */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 101;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--white);
+    transition: transform 0.4s var(--ease), opacity 0.3s;
+    transform-origin: center;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  .nav-links.mobile-open {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed;
+    inset: 0;
+    background: rgba(8,8,8,0.97);
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    z-index: 100;
+    animation: fadeIn 0.3s ease;
+  }
+  .nav-links.mobile-open a { font-size: 22px; letter-spacing: 0.2em; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
   /* ── Mobile ── */
   @media (max-width: 768px) {
     body { cursor: auto; }
@@ -778,25 +849,26 @@
     nav { padding: 18px 24px; }
     nav.scrolled { padding: 14px 24px; }
     .nav-logo { font-size: 18px; }
-    .nav-links { gap: 20px; }
-    .nav-links a { font-size: 10px; letter-spacing: 0.12em; }
+    .nav-hamburger { display: flex; }
+    .nav-links { display: none; }
+    .carousel-arrow { cursor: pointer; }
 
-    .hero { padding: 0 24px 60px; }
+    .hero { padding: 0 24px 80px; }
     .hero-scroll { right: 24px; bottom: 60px; }
 
-    section { padding: 80px 24px; }
-    .section-header { gap: 16px; margin-bottom: 48px; }
-    .section-title { font-size: clamp(36px, 10vw, 60px); }
+    section { padding: 72px 20px; }
+    .section-header { gap: 12px; margin-bottom: 40px; }
+    .section-title { font-size: clamp(34px, 9vw, 56px); }
 
-    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; }
 
-    .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 
-    .projects-grid { grid-template-columns: 1fr; gap: 12px; }
+    .projects-grid { grid-template-columns: 1fr; gap: 10px; }
 
     .about-layout { grid-template-columns: 1fr; gap: 48px; }
     .about-text { padding-right: 0; }
-    .about-stats { gap: 30px; }
+    .about-stats { gap: 30px; flex-wrap: wrap; }
     .stat-num { font-size: 40px; }
 
     #contact { padding: 80px 24px; }
@@ -809,13 +881,13 @@
     .lightbox-nav { padding: 12px 16px; font-size: 28px; }
     .lightbox-caption { font-size: 14px; bottom: 20px; }
 
-    .model-gallery { grid-template-columns: repeat(2, 1fr); }
-    .project-gallery { grid-template-columns: repeat(2, 1fr); }
+    .model-gallery-item { flex: 0 0 80%; }
+    .project-gallery-item { flex: 0 0 80%; }
+    .carousel-wrap.open { max-height: 600px; }
   }
 
   @media (max-width: 480px) {
-    .nav-links { gap: 14px; }
-    .nav-links a { font-size: 9px; }
+    section { padding: 60px 16px; }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
     .magazine-grid { grid-template-columns: 1fr; gap: 12px; }
     .about-stats { flex-wrap: wrap; gap: 24px; }
@@ -830,13 +902,16 @@
 <!-- Navigation -->
 <nav id="nav">
   <a href="#" class="nav-logo">Photoczaro</a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links">
     <li><a href="#portraits">Portraits</a></li>
     <li><a href="#magazines">Publications</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- Hero -->
@@ -1246,18 +1321,51 @@ const galleries = {};
     'images/Portraits__Zaraish - The Beach__DSC_0596.jpg',
   ];
 
-// Build portrait gallery — each model gets a cover card + expandable sub-gallery
+function makeCarousel(imgs, labelFn, trackClass, itemClass) {
+  const wrap = document.createElement('div');
+  wrap.className = 'carousel-wrap';
+
+  const arrowBar = document.createElement('div');
+  arrowBar.className = 'carousel-arrows';
+  const btnPrev = document.createElement('button');
+  btnPrev.className = 'carousel-arrow';
+  btnPrev.innerHTML = '&#8249;';
+  btnPrev.setAttribute('aria-label', 'Previous');
+  const btnNext = document.createElement('button');
+  btnNext.className = 'carousel-arrow';
+  btnNext.innerHTML = '&#8250;';
+  btnNext.setAttribute('aria-label', 'Next');
+  arrowBar.appendChild(btnPrev);
+  arrowBar.appendChild(btnNext);
+
+  const track = document.createElement('div');
+  track.className = trackClass;
+  imgs.forEach((src, j) => {
+    const item = document.createElement('div');
+    item.className = itemClass;
+    item.innerHTML = `<img src="${src}" alt="${labelFn(j)}" loading="lazy">`;
+    item.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: labelFn(j) })), j));
+    track.appendChild(item);
+  });
+
+  btnPrev.addEventListener('click', () => track.scrollBy({ left: -track.clientWidth * 0.85, behavior: 'smooth' }));
+  btnNext.addEventListener('click', () => track.scrollBy({ left: track.clientWidth * 0.85, behavior: 'smooth' }));
+
+  wrap.appendChild(arrowBar);
+  wrap.appendChild(track);
+  return wrap;
+}
+
+// Build portrait gallery — each model gets a cover card + expandable carousel
 const pgrid = document.getElementById('portraits-grid');
 let allPortraits = [];
 portraits.forEach((p, i) => {
   const imgs = galleries[p.name] || [p.src];
 
-  // model block wrapper
   const block = document.createElement('div');
   block.className = 'model-block reveal';
   block.style.transitionDelay = (i % 4) * 0.08 + 's';
 
-  // cover card
   const cover = document.createElement('div');
   cover.className = 'gallery-item';
   cover.innerHTML = `<img src="${p.src}" alt="${p.name}" loading="lazy">
@@ -1266,30 +1374,20 @@ portraits.forEach((p, i) => {
     </div>`;
   cover.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: p.name })), 0));
 
-  // toggle button
   const toggle = document.createElement('button');
   toggle.className = 'model-toggle';
   toggle.innerHTML = `<span>Gallery &nbsp;(${imgs.length})</span><em class="toggle-icon">+</em>`;
 
-  // sub-gallery grid
-  const subgal = document.createElement('div');
-  subgal.className = 'model-gallery';
-  imgs.forEach((src, j) => {
-    const item = document.createElement('div');
-    item.className = 'model-gallery-item';
-    item.innerHTML = `<img src="${src}" alt="${p.name} ${j+1}" loading="lazy">`;
-    item.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: p.name })), j));
-    subgal.appendChild(item);
-  });
+  const carousel = makeCarousel(imgs, j => p.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
 
   toggle.addEventListener('click', () => {
-    const isOpen = subgal.classList.toggle('open');
+    const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
   });
 
   block.appendChild(cover);
   block.appendChild(toggle);
-  block.appendChild(subgal);
+  block.appendChild(carousel);
   pgrid.appendChild(block);
   allPortraits.push({ src: p.src, name: p.name });
 });
@@ -1424,25 +1522,16 @@ magazines.forEach((m, i) => {
   toggle.className = 'model-toggle';
   toggle.innerHTML = `<span>Gallery &nbsp;(${imgs.length})</span><em class="toggle-icon">+</em>`;
 
-  // sub-gallery (2-col grid, same style)
-  const subgal = document.createElement('div');
-  subgal.className = 'model-gallery';
-  imgs.forEach((src, j) => {
-    const item = document.createElement('div');
-    item.className = 'model-gallery-item';
-    item.innerHTML = `<img src="${src}" alt="${m.name} ${j+1}" loading="lazy">`;
-    item.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: m.name })), j));
-    subgal.appendChild(item);
-  });
+  const carousel = makeCarousel(imgs, j => m.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
 
   toggle.addEventListener('click', () => {
-    const isOpen = subgal.classList.toggle('open');
+    const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
   });
 
   block.appendChild(card);
   block.appendChild(toggle);
-  block.appendChild(subgal);
+  block.appendChild(carousel);
   mgrid.appendChild(block);
   allMagazines.push({ src: m.src, name: m.name });
 });
@@ -1539,25 +1628,16 @@ projectsData.forEach((proj, i) => {
   toggle.className = 'model-toggle';
   toggle.innerHTML = `<span>View Gallery &nbsp;(${proj.images.length})</span><em class="toggle-icon">+</em>`;
 
-  // gallery grid (4-col)
-  const gal = document.createElement('div');
-  gal.className = 'project-gallery';
-  proj.images.forEach((src, j) => {
-    const item = document.createElement('div');
-    item.className = 'project-gallery-item';
-    item.innerHTML = `<img src="${src}" alt="${proj.name} ${j+1}" loading="lazy">`;
-    item.addEventListener('click', () => openLightbox(proj.images.map(s => ({ src: s, name: proj.name })), j));
-    gal.appendChild(item);
-  });
+  const carousel = makeCarousel(proj.images, j => proj.name + ' ' + (j + 1), 'project-gallery', 'project-gallery-item');
 
   toggle.addEventListener('click', () => {
-    const isOpen = gal.classList.toggle('open');
+    const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
   });
 
   block.appendChild(cover);
   block.appendChild(toggle);
-  block.appendChild(gal);
+  block.appendChild(carousel);
   pgridProjects.appendChild(block);
 });
 
@@ -1597,6 +1677,22 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeLightbox();
   if (e.key === 'ArrowLeft') lbNavigate(-1);
   if (e.key === 'ArrowRight') lbNavigate(1);
+});
+
+// Hamburger menu
+const hamburger = document.getElementById('nav-hamburger');
+const navLinks = document.getElementById('nav-links');
+hamburger.addEventListener('click', () => {
+  const isOpen = hamburger.classList.toggle('open');
+  navLinks.classList.toggle('mobile-open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('mobile-open');
+    document.body.style.overflow = '';
+  });
 });
 
 // Intersection Observer for reveal animations

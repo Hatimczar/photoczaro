@@ -705,6 +705,125 @@
     display: block;
   }
 
+  /* Social Proof */
+  #social-proof { background: var(--dark); overflow: hidden; }
+  .social-proof-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 60px;
+  }
+  .proof-tab {
+    padding: 14px 36px;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--grey);
+    cursor: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.3s, border-color 0.3s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'Inter', sans-serif;
+  }
+  .proof-tab.active, .proof-tab:hover { color: var(--gold); border-bottom-color: var(--gold); }
+  .proof-panel { display: none; }
+  .proof-panel.active { display: block; }
+  /* Reviews slider */
+  .reviews-track-wrap { overflow: hidden; position: relative; }
+  .reviews-track {
+    display: flex;
+    gap: 24px;
+    transition: transform 0.5s var(--ease);
+  }
+  .review-card {
+    flex: 0 0 calc(33.333% - 16px);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .review-stars { color: var(--gold); font-size: 14px; letter-spacing: 3px; }
+  .review-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.7;
+    color: rgba(245,240,235,0.85);
+  }
+  .review-author {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .review-author strong { color: var(--white); display: block; margin-bottom: 4px; font-weight: 400; }
+  /* Agencies slider */
+  .agencies-track-wrap { overflow: hidden; }
+  .agencies-track {
+    display: flex;
+    gap: 3px;
+    transition: transform 0.5s var(--ease);
+  }
+  .agency-card {
+    flex: 0 0 calc(25% - 3px);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 48px 36px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    transition: background 0.3s;
+  }
+  .agency-card:hover { background: rgba(255,255,255,0.06); }
+  .agency-icon {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: rgba(201,169,110,0.12);
+    border: 1px solid rgba(201,169,110,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .agency-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--white);
+  }
+  .agency-location {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .slider-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 40px;
+  }
+  .slider-btn {
+    width: 48px; height: 48px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: none;
+    color: var(--white);
+    font-size: 20px;
+    cursor: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.3s, background 0.3s;
+    font-family: 'Inter', sans-serif;
+  }
+  .slider-btn:hover { border-color: var(--gold); background: rgba(201,169,110,0.08); color: var(--gold); }
+
   /* Contact */
   #contact { background: var(--dark-2); text-align: center; padding: 140px 60px; }
   .contact-inner { max-width: 700px; margin: 0 auto; }
@@ -1029,6 +1148,10 @@
     .about-stats { gap: 30px; flex-wrap: wrap; }
     .stat-num { font-size: 40px; }
 
+    .review-card { flex: 0 0 85%; }
+    .agency-card { flex: 0 0 70%; }
+    .proof-tab { padding: 12px 18px; font-size: 10px; }
+
     #contact { padding: 80px 24px; }
     .contact-socials { gap: 24px; }
 
@@ -1070,8 +1193,8 @@
 <nav id="nav">
   <a href="#" class="nav-logo">Photoczaro</a>
   <ul class="nav-links" id="nav-links">
-    <li><a href="#portraits">Portraits</a></li>
     <li><a href="#magazines">Publications</a></li>
+    <li><a href="#portraits">Portraits</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -1084,8 +1207,8 @@
 <!-- Mobile menu overlay -->
 <div class="mobile-menu-overlay" id="mobile-menu">
   <ul class="mobile-menu-nav" id="mobile-menu-nav">
-    <li><a href="#portraits"><span class="menu-link-text">Portraits</span></a></li>
     <li><a href="#magazines"><span class="menu-link-text">Publications</span></a></li>
+    <li><a href="#portraits"><span class="menu-link-text">Portraits</span></a></li>
     <li><a href="#projects"><span class="menu-link-text">Projects</span></a></li>
     <li><a href="#about"><span class="menu-link-text">About</span></a></li>
     <li><a href="#contact"><span class="menu-link-text">Contact</span></a></li>
@@ -1123,27 +1246,27 @@
 </div>
 
 <!-- Portraits -->
-<section id="portraits">
+<!-- Magazines -->
+<section id="magazines">
   <div class="section-header">
     <span class="section-number reveal">01</span>
-    <h2 class="section-title reveal reveal-delay-1">Port<em>raits</em></h2>
-    <div class="section-line" id="line-portraits"></div>
+    <h2 class="section-title reveal reveal-delay-1">Pub<em>lications</em></h2>
+    <div class="section-line" id="line-magazines"></div>
   </div>
-  <div class="gallery-grid" id="portraits-grid">
+  <div class="magazine-grid" id="magazines-grid">
     <!-- Injected by JS -->
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- Magazines -->
-<section id="magazines">
+<section id="portraits">
   <div class="section-header">
     <span class="section-number reveal">02</span>
-    <h2 class="section-title reveal reveal-delay-1">Pub<em>lications</em></h2>
-    <div class="section-line" id="line-magazines"></div>
+    <h2 class="section-title reveal reveal-delay-1">Port<em>raits</em></h2>
+    <div class="section-line" id="line-portraits"></div>
   </div>
-  <div class="magazine-grid" id="magazines-grid">
+  <div class="gallery-grid" id="portraits-grid">
     <!-- Injected by JS -->
   </div>
 </section>
@@ -1202,6 +1325,96 @@
     </div>
   </div>
 </section>
+
+<!-- Social Proof -->
+<section id="social-proof">
+  <div class="section-header">
+    <span class="section-number reveal">05</span>
+    <h2 class="section-title reveal reveal-delay-1">Trusted<em> By</em></h2>
+    <div class="section-line" id="line-social-proof"></div>
+  </div>
+
+  <div class="social-proof-tabs">
+    <button class="proof-tab active" data-panel="mm">ModelManagement · 4.9 ★</button>
+    <button class="proof-tab" data-panel="google">Google Reviews</button>
+  </div>
+
+  <!-- ModelManagement Reviews panel -->
+  <div class="proof-panel active" id="panel-mm">
+    <div class="reviews-track-wrap" id="mm-track-wrap">
+      <div class="reviews-track" id="mm-track">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"It was a pleasure working with Hatim. He is such a great photographer as well as he is a lovely person. I highly recommend working with him, you are going to have an amazing time together!"</p>
+          <div class="review-author"><strong>Lucia</strong>Aspiring Model · Dec 2024</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★☆</div>
+          <p class="review-text">"Good collaboration, amazing images."</p>
+          <div class="review-author"><strong>Mina</strong>Aspiring Model · Jun 2024</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Had a great experience shooting with Hatim! He's very patient and creative with all his ideas, results came out amazing. Good communication and overall positive vibes, will definitely work with him again!"</p>
+          <div class="review-author"><strong>Gracella</strong>Aspiring Model · Apr 2024</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"J'ai fait mon premier shooting en distanciel avec Hatim et c'était une super expérience ! Hatim est à l'écoute et mets à l'aise tout de suite, il sait guider la modèle. Je recommande vivement !"</p>
+          <div class="review-author"><strong>Fiona</strong>Aspiring Model · Jan 2024</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Amazing photoshoot. Very friendly and professional. Replies back very quickly and was quick to edit and send back photos."</p>
+          <div class="review-author"><strong>Victoria</strong>Aspiring Model · Jul 2023</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Excelente profesional te deja saber en breve que sentimiento debes transmitir con mucha paciencia y con resultados espectaculares — le doy mil estrellas."</p>
+          <div class="review-author"><strong>Ana</strong>Aspiring Model · Jun 2023</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Hatim and I recently did a virtual shoot. It was a lovely experience. He gave great direction and provided a very positive experience! The photos turned out beautifully, I would absolutely work with him again!"</p>
+          <div class="review-author"><strong>Ashlynn</strong>Aspiring Model · Mar 2023</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Hatim is very professional, respects model boundaries and is encouraging throughout the session. This was my first time doing a virtual shoot and it was great in expanding my experience. Hatim is also very responsive and flexible."</p>
+          <div class="review-author"><strong>Abigail</strong>Premium Model · Jul 2022</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"I had such a fun experience with Hatim. He had the perfect eye for the shot, extremely quick uploads & edits. He is very friendly and encourages your confidence; I really look forward to working with Hatim in the future!"</p>
+          <div class="review-author"><strong>Ki</strong>Aspiring Model · Sep 2021</div>
+        </div>
+      </div>
+    </div>
+    <div class="slider-controls">
+      <button class="slider-btn" id="mm-prev">←</button>
+      <button class="slider-btn" id="mm-next">→</button>
+    </div>
+  </div>
+
+  <!-- Google Reviews panel -->
+  <div class="proof-panel" id="panel-google">
+    <div class="reviews-track-wrap" id="google-track-wrap">
+      <div class="reviews-track" id="google-track">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Google reviews coming soon — share your experience!"</p>
+          <div class="review-author"><strong>Your Name Here</strong>Google Review</div>
+        </div>
+      </div>
+    </div>
+    <div class="slider-controls">
+      <button class="slider-btn" id="google-prev">←</button>
+      <button class="slider-btn" id="google-next">→</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
 
 <!-- Contact -->
 <section id="contact">
@@ -2039,6 +2252,67 @@ if (emailBtn) {
     emailBtn.style.transition = 'transform 0.5s var(--ease)';
   });
 }
+
+// Social proof tabs + sliders
+(function() {
+  const tabs = document.querySelectorAll('.proof-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.proof-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+    });
+  });
+
+  function makeSlider(trackId, wrapId, prevId, nextId, visibleCount) {
+    const track = document.getElementById(trackId);
+    const wrap = document.getElementById(wrapId);
+    if (!track || !wrap) return;
+    const items = track.children;
+    let current = 0;
+    const max = () => Math.max(0, items.length - visibleCount());
+
+    function update() {
+      const gap = parseInt(getComputedStyle(track).gap) || 24;
+      const itemW = items[0].offsetWidth + gap;
+      track.style.transform = `translateX(-${current * itemW}px)`;
+    }
+
+    document.getElementById(prevId).addEventListener('click', () => { current = Math.max(0, current - 1); update(); });
+    document.getElementById(nextId).addEventListener('click', () => { current = Math.min(max(), current + 1); update(); });
+    window.addEventListener('resize', () => { current = Math.min(current, max()); update(); });
+
+    // Swipe support (touch + mouse drag)
+    let startX = 0, isDragging = false, dragDist = 0;
+    function onStart(x) { startX = x; isDragging = true; dragDist = 0; track.style.transition = 'none'; }
+    function onMove(x) {
+      if (!isDragging) return;
+      dragDist = x - startX;
+      const gap = parseInt(getComputedStyle(track).gap) || 24;
+      const itemW = items[0].offsetWidth + gap;
+      track.style.transform = `translateX(${-current * itemW + dragDist}px)`;
+    }
+    function onEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      track.style.transition = '';
+      if (dragDist < -50) current = Math.min(max(), current + 1);
+      else if (dragDist > 50) current = Math.max(0, current - 1);
+      update();
+    }
+    wrap.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+    wrap.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+    wrap.addEventListener('touchend', onEnd);
+    wrap.addEventListener('mousedown', e => { onStart(e.clientX); wrap.style.userSelect = 'none'; });
+    window.addEventListener('mousemove', e => { if (isDragging) onMove(e.clientX); });
+    window.addEventListener('mouseup', () => { if (isDragging) { onEnd(); wrap.style.userSelect = ''; } });
+  }
+
+  const reviewsVisible = () => window.innerWidth <= 768 ? 1 : 3;
+  makeSlider('mm-track', 'mm-track-wrap', 'mm-prev', 'mm-next', reviewsVisible);
+  makeSlider('google-track', 'google-track-wrap', 'google-prev', 'google-next', reviewsVisible);
+})();
 </script>
 </body>
 </html>

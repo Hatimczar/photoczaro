@@ -807,38 +807,102 @@
   .nav-hamburger {
     display: none;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
     background: none;
     border: none;
     cursor: pointer;
     padding: 4px;
-    z-index: 101;
+    z-index: 201;
   }
   .nav-hamburger span {
     display: block;
-    width: 24px;
-    height: 1.5px;
+    width: 26px;
+    height: 1px;
     background: var(--white);
-    transition: transform 0.4s var(--ease), opacity 0.3s;
+    transition: transform 0.5s var(--ease), opacity 0.3s, width 0.4s var(--ease);
     transform-origin: center;
   }
-  .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-hamburger span:nth-child(2) { width: 18px; }
+  .nav-hamburger.open span:nth-child(2) { width: 26px; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  .nav-links.mobile-open {
-    display: flex !important;
-    flex-direction: column;
+  /* Mobile menu overlay */
+  .mobile-menu-overlay {
+    display: none;
     position: fixed;
     inset: 0;
-    background: rgba(8,8,8,0.97);
-    align-items: center;
-    justify-content: center;
-    gap: 36px;
-    z-index: 100;
-    animation: fadeIn 0.3s ease;
+    z-index: 200;
+    background: #080808;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 100px 40px 48px;
   }
-  .nav-links.mobile-open a { font-size: 22px; letter-spacing: 0.2em; }
+  .mobile-menu-overlay.open { display: flex; animation: menuSlideIn 0.5s var(--ease) forwards; }
+  @keyframes menuSlideIn {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .mobile-menu-nav { list-style: none; counter-reset: nav-counter; }
+  .mobile-menu-nav li {
+    counter-increment: nav-counter;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 0;
+    overflow: hidden;
+  }
+  .mobile-menu-nav li:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .mobile-menu-nav a {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 22px 0;
+    text-decoration: none;
+    color: rgba(245,240,235,0.55);
+    transition: color 0.35s;
+  }
+  .mobile-menu-nav a:hover, .mobile-menu-nav a:active { color: var(--white); }
+  .mobile-menu-nav a::before {
+    content: counter(nav-counter, decimal-leading-zero);
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    opacity: 0.7;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+  .mobile-menu-nav .menu-link-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 44px;
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .mobile-menu-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .mobile-menu-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .mobile-menu-socials { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .mobile-menu-socials a {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(138,134,128,0.6);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .mobile-menu-socials a:hover { color: var(--gold); }
+
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
   /* ── Mobile ── */
@@ -850,7 +914,7 @@
     nav.scrolled { padding: 14px 24px; }
     .nav-logo { font-size: 18px; }
     .nav-hamburger { display: flex; }
-    .nav-links { display: none; }
+    .nav-links { display: none !important; }
     .carousel-arrow { cursor: pointer; }
 
     .hero { padding: 0 24px 80px; }
@@ -913,6 +977,24 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
+
+<!-- Mobile menu overlay -->
+<div class="mobile-menu-overlay" id="mobile-menu">
+  <ul class="mobile-menu-nav" id="mobile-menu-nav">
+    <li><a href="#portraits"><span class="menu-link-text">Portraits</span></a></li>
+    <li><a href="#magazines"><span class="menu-link-text">Publications</span></a></li>
+    <li><a href="#projects"><span class="menu-link-text">Projects</span></a></li>
+    <li><a href="#about"><span class="menu-link-text">About</span></a></li>
+    <li><a href="#contact"><span class="menu-link-text">Contact</span></a></li>
+  </ul>
+  <div class="mobile-menu-footer">
+    <span class="mobile-menu-brand">Photoczaro</span>
+    <div class="mobile-menu-socials">
+      <a href="https://www.instagram.com/photoczaro_portraits/" target="_blank">Instagram</a>
+      <a href="https://wa.me/971508065253" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+</div>
 
 <!-- Hero -->
 <section class="hero" id="home">
@@ -1376,7 +1458,7 @@ portraits.forEach((p, i) => {
 
   const toggle = document.createElement('button');
   toggle.className = 'model-toggle';
-  toggle.innerHTML = `<span>Gallery &nbsp;(${imgs.length})</span><em class="toggle-icon">+</em>`;
+  toggle.innerHTML = `<span>Explore the Series &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length} frames</em></span><em class="toggle-icon">+</em>`;
 
   const carousel = makeCarousel(imgs, j => p.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
 
@@ -1520,7 +1602,7 @@ magazines.forEach((m, i) => {
   // toggle
   const toggle = document.createElement('button');
   toggle.className = 'model-toggle';
-  toggle.innerHTML = `<span>Gallery &nbsp;(${imgs.length})</span><em class="toggle-icon">+</em>`;
+  toggle.innerHTML = `<span>Explore the Edit &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length} frames</em></span><em class="toggle-icon">+</em>`;
 
   const carousel = makeCarousel(imgs, j => m.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
 
@@ -1626,7 +1708,7 @@ projectsData.forEach((proj, i) => {
   // toggle
   const toggle = document.createElement('button');
   toggle.className = 'model-toggle';
-  toggle.innerHTML = `<span>View Gallery &nbsp;(${proj.images.length})</span><em class="toggle-icon">+</em>`;
+  toggle.innerHTML = `<span>Explore the Project &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${proj.images.length} frames</em></span><em class="toggle-icon">+</em>`;
 
   const carousel = makeCarousel(proj.images, j => proj.name + ' ' + (j + 1), 'project-gallery', 'project-gallery-item');
 
@@ -1681,16 +1763,16 @@ document.addEventListener('keydown', e => {
 
 // Hamburger menu
 const hamburger = document.getElementById('nav-hamburger');
-const navLinks = document.getElementById('nav-links');
+const mobileMenu = document.getElementById('mobile-menu');
 hamburger.addEventListener('click', () => {
   const isOpen = hamburger.classList.toggle('open');
-  navLinks.classList.toggle('mobile-open', isOpen);
+  mobileMenu.classList.toggle('open', isOpen);
   document.body.style.overflow = isOpen ? 'hidden' : '';
 });
-navLinks.querySelectorAll('a').forEach(a => {
+document.getElementById('mobile-menu-nav').querySelectorAll('a').forEach(a => {
   a.addEventListener('click', () => {
     hamburger.classList.remove('open');
-    navLinks.classList.remove('mobile-open');
+    mobileMenu.classList.remove('open');
     document.body.style.overflow = '';
   });
 });

@@ -57,6 +57,60 @@
   body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 60px; height: 60px; border-color: var(--gold); }
   body:has(.gallery-item:hover) .cursor { background: var(--white); width: 60px; height: 60px; mix-blend-mode: difference; }
 
+  /* Scroll progress bar */
+  .scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(to right, var(--gold), var(--gold-light));
+    z-index: 9999;
+    transition: width 0.1s linear;
+    pointer-events: none;
+  }
+
+  /* Page loader */
+  .page-loader {
+    position: fixed;
+    inset: 0;
+    background: var(--dark);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    transition: opacity 0.8s var(--ease), visibility 0.8s;
+  }
+  .page-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    animation: loaderPulse 1.5s ease-in-out infinite;
+  }
+  .loader-bar {
+    width: 120px;
+    height: 1px;
+    background: rgba(201,169,110,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .loader-bar::after {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gold);
+    animation: loaderSweep 1.2s ease-in-out infinite;
+  }
+  @keyframes loaderPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+  @keyframes loaderSweep { 0%{left:-100%} 100%{left:100%} }
+
   /* Nav */
   nav {
     position: fixed;
@@ -98,6 +152,8 @@
   }
   .nav-links a:hover { color: var(--white); }
   .nav-links a:hover::after { width: 100%; }
+  .nav-links a.active { color: var(--white); }
+  .nav-links a.active::after { width: 100%; background: var(--gold); }
 
   /* Hero */
   .hero {
@@ -339,6 +395,32 @@
     font-style: normal;
   }
   .model-toggle.active .toggle-icon { transform: rotate(45deg); }
+
+  /* Card tilt effect */
+  .gallery-item, .magazine-card, .project-cover {
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  /* Carousel dot indicators */
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 0 6px;
+    background: #181818;
+  }
+  .carousel-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: rgba(201,169,110,0.25);
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+  .carousel-dot.active {
+    background: var(--gold);
+    transform: scale(1.5);
+  }
 
   /* Carousel wrapper — handles expand/collapse */
   .carousel-wrap {
@@ -960,6 +1042,15 @@
 </head>
 <body>
 
+<!-- Page loader -->
+<div class="page-loader" id="page-loader">
+  <span class="loader-logo">Photoczaro</span>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scroll-progress"></div>
+
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
 
@@ -1430,11 +1521,30 @@ function makeCarousel(imgs, labelFn, trackClass, itemClass) {
     track.appendChild(item);
   });
 
+  // Dot indicators
+  const dotsRow = document.createElement('div');
+  dotsRow.className = 'carousel-dots';
+  const dots = imgs.map((_, j) => {
+    const d = document.createElement('div');
+    d.className = 'carousel-dot' + (j === 0 ? ' active' : '');
+    d.addEventListener('click', () => {
+      track.scrollTo({ left: track.scrollWidth / imgs.length * j, behavior: 'smooth' });
+    });
+    dotsRow.appendChild(d);
+    return d;
+  });
+
+  track.addEventListener('scroll', () => {
+    const idx = Math.round(track.scrollLeft / (track.scrollWidth / imgs.length));
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  }, { passive: true });
+
   btnPrev.addEventListener('click', () => track.scrollBy({ left: -track.clientWidth * 0.85, behavior: 'smooth' }));
   btnNext.addEventListener('click', () => track.scrollBy({ left: track.clientWidth * 0.85, behavior: 'smooth' }));
 
   wrap.appendChild(arrowBar);
   wrap.appendChild(track);
+  wrap.appendChild(dotsRow);
   return wrap;
 }
 
@@ -1787,6 +1897,101 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.08 });
 
 document.querySelectorAll('.reveal, .section-line').forEach(el => observer.observe(el));
+
+// Page loader
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('page-loader').classList.add('hidden');
+  }, 900);
+});
+
+// Scroll progress bar
+const progressBar = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  progressBar.style.width = pct + '%';
+}, { passive: true });
+
+// Active nav link on scroll
+const navSections = ['portraits','magazines','projects','about','contact'];
+const navAnchors = {};
+navSections.forEach(id => {
+  const a = document.querySelector(`.nav-links a[href="#${id}"]`);
+  if (a) navAnchors[id] = a;
+});
+const sectionEls = navSections.map(id => document.getElementById(id)).filter(Boolean);
+window.addEventListener('scroll', () => {
+  let current = '';
+  sectionEls.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 160) current = sec.id;
+  });
+  Object.entries(navAnchors).forEach(([id, a]) => a.classList.toggle('active', id === current));
+}, { passive: true });
+
+// 3D card tilt on hover
+document.querySelectorAll('.gallery-item, .magazine-card, .project-cover').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `perspective(600px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) scale(1.02)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(600px) rotateY(0deg) rotateX(0deg) scale(1)';
+    card.style.transition = 'transform 0.6s var(--ease)';
+  });
+  card.addEventListener('mouseenter', () => { card.style.transition = 'transform 0.1s'; });
+});
+
+// Animated stat counters
+const statEls = document.querySelectorAll('.stat-num');
+const statObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const raw = el.textContent.trim();
+    const num = parseInt(raw);
+    if (isNaN(num)) return;
+    const suffix = raw.replace(/[0-9]/g, '');
+    let start = 0, duration = 1400;
+    const step = timestamp => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * num) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+    statObserver.unobserve(el);
+  });
+}, { threshold: 0.5 });
+statEls.forEach(el => statObserver.observe(el));
+
+// Lightbox touch swipe
+let lbTouchX = null;
+lb.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+lb.addEventListener('touchend', e => {
+  if (lbTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - lbTouchX;
+  if (Math.abs(dx) > 40) lbNavigate(dx < 0 ? 1 : -1);
+  lbTouchX = null;
+}, { passive: true });
+
+// Magnetic contact email
+const emailBtn = document.querySelector('.contact-email');
+if (emailBtn) {
+  emailBtn.addEventListener('mousemove', e => {
+    const r = emailBtn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) * 0.25;
+    const y = (e.clientY - r.top - r.height / 2) * 0.25;
+    emailBtn.style.transform = `translate(${x}px, ${y}px)`;
+    emailBtn.style.transition = 'transform 0.15s';
+  });
+  emailBtn.addEventListener('mouseleave', () => {
+    emailBtn.style.transform = 'translate(0,0)';
+    emailBtn.style.transition = 'transform 0.5s var(--ease)';
+  });
+}
 </script>
 </body>
 </html>

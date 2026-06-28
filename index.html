@@ -1228,24 +1228,6 @@
   }
   @media (max-width: 768px) { .img-ghost { display: none; } }
 
-  /* ── Image blur-up loading ── */
-  .gallery-item img,
-  .magazine-card img,
-  .project-cover img,
-  .model-gallery-item img,
-  .project-gallery-item img,
-  .about-image-wrap img {
-    filter: blur(8px);
-    transition: filter 0.6s ease, transform 0.9s var(--ease);
-  }
-  .gallery-item img.loaded,
-  .magazine-card img.loaded,
-  .project-cover img.loaded,
-  .model-gallery-item img.loaded,
-  .project-gallery-item img.loaded,
-  .about-image-wrap img.loaded {
-    filter: blur(0);
-  }
 
   /* ── Review card hover glow ── */
   .review-card {
@@ -2647,22 +2629,6 @@ lbNavigate = function(dir) {
   }, 2800);
 })();
 
-// Image blur-up on load
-document.querySelectorAll('img[loading="lazy"]').forEach(img => {
-  if (img.complete && img.naturalWidth) { img.classList.add('loaded'); return; }
-  img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
-});
-// Also apply to dynamically added images via MutationObserver
-new MutationObserver(mutations => {
-  mutations.forEach(m => m.addedNodes.forEach(node => {
-    if (node.nodeType !== 1) return;
-    const imgs = node.tagName === 'IMG' ? [node] : node.querySelectorAll('img');
-    imgs.forEach(img => {
-      if (img.complete && img.naturalWidth) { img.classList.add('loaded'); return; }
-      img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
-    });
-  }));
-}).observe(document.body, { childList: true, subtree: true });
 
 // Review auto-advance
 (function() {

@@ -1175,24 +1175,26 @@
     .about-stats { flex-wrap: wrap; gap: 24px; }
   }
 
-  /* ── Film grain on hero ── */
-  .hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    opacity: 0.045;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 180px;
-    animation: grainShift 0.6s steps(2) infinite;
-  }
-  @keyframes grainShift {
-    0%   { background-position: 0 0; }
-    25%  { background-position: -4% -9%; }
-    50%  { background-position: 9% 4%; }
-    75%  { background-position: -9% 7%; }
-    100% { background-position: 4% -4%; }
+  /* ── Film grain on hero — desktop only ── */
+  @media (hover: hover) {
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px;
+      animation: grainShift 0.6s steps(2) infinite;
+    }
+    @keyframes grainShift {
+      0%   { background-position: 0 0; }
+      25%  { background-position: -4% -9%; }
+      50%  { background-position: 9% 4%; }
+      75%  { background-position: -9% 7%; }
+      100% { background-position: 4% -4%; }
+    }
   }
 
   /* ── Hero cycling text ── */
@@ -1256,13 +1258,11 @@
   .bottom-nav {
     display: none;
     position: fixed;
-    bottom: 18px;
+    bottom: max(18px, env(safe-area-inset-bottom));
     left: 50%;
     transform: translateX(-50%);
     z-index: 300;
-    background: rgba(12,12,12,0.92);
-    backdrop-filter: blur(24px) saturate(1.4);
-    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    background: rgba(12,12,12,0.96);
     border: 1px solid rgba(201,169,110,0.18);
     border-radius: 60px;
     padding: 10px 20px;
@@ -1649,16 +1649,20 @@
 </nav>
 
 <script>
-// Lenis smooth scroll
-const lenis = new Lenis({
-  duration: 1.25,
-  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  smoothWheel: true,
-});
-(function rafLoop(t) { lenis.raf(t); requestAnimationFrame(rafLoop); })(0);
+// Lenis smooth scroll — desktop only (mobile uses native scroll)
+const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+let lenis;
+if (!isTouchDevice) {
+  lenis = new Lenis({
+    duration: 1.25,
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+  });
+  (function rafLoop(t) { lenis.raf(t); requestAnimationFrame(rafLoop); })(0);
+}
 
-// Keep native scroll events working with lenis
-lenis.on('scroll', () => {
+// Scroll handler — works with Lenis on desktop, native scroll on mobile
+function onScroll() {
   const y = window.scrollY;
   nav.classList.toggle('scrolled', y > 80);
   heroBg.style.transform = `scale(1) translateY(${y * 0.28}px)`;
@@ -1667,25 +1671,28 @@ lenis.on('scroll', () => {
   let current = '';
   sectionEls.forEach(sec => { if (y >= sec.offsetTop - 160) current = sec.id; });
   Object.entries(navAnchors).forEach(([id, a]) => a.classList.toggle('active', id === current));
-  // bottom nav active state
   const bnItems = document.querySelectorAll('.bottom-nav-item');
   bnItems.forEach(item => {
     item.classList.toggle('active', item.dataset.section === (current || 'home'));
   });
-});
-
-// Custom cursor
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-function animateCursor() {
-  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-  requestAnimationFrame(animateCursor);
 }
-animateCursor();
+if (lenis) lenis.on('scroll', onScroll);
+else window.addEventListener('scroll', onScroll, { passive: true });
+
+// Custom cursor — desktop only
+if (!isTouchDevice) {
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+}
 
 // Nav scroll
 const nav = document.getElementById('nav');
@@ -2589,8 +2596,8 @@ lbNavigate = function(dir) {
   updateLbCounter();
 };
 
-// Ghost image cursor follower
-(function() {
+// Ghost image cursor follower — desktop only
+if (!isTouchDevice) {
   const ghost = document.getElementById('img-ghost');
   const ghostImg = ghost.querySelector('img');
   let gx = 0, gy = 0, gtx = 0, gty = 0;
@@ -2609,7 +2616,7 @@ lbNavigate = function(dir) {
     ghost.style.top = gy + 'px';
     requestAnimationFrame(animateGhost);
   })();
-})();
+}
 
 // Hero cycling text
 (function() {

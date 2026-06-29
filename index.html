@@ -1185,7 +1185,8 @@
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
     /* Force every portrait card to identical height — bypasses iOS aspect-ratio bug */
     .model-block { width: 100%; }
-    .gallery-item { width: 100%; height: calc(50vw * 1.33); aspect-ratio: unset; }
+    .gallery-item { width: 100%; height: auto; aspect-ratio: unset; }
+    .gallery-item img { height: auto; aspect-ratio: 3/4; }
     .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .about-stats { flex-wrap: wrap; gap: 24px; }
   }

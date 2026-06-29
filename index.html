@@ -1257,21 +1257,30 @@
   /* ── Mobile bottom nav pill ── */
   .bottom-nav {
     display: none;
-    position: fixed;
-    bottom: max(18px, env(safe-area-inset-bottom));
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 300;
-    background: rgba(12,12,12,0.96);
-    border: 1px solid rgba(201,169,110,0.18);
-    border-radius: 60px;
-    padding: 10px 20px;
-    gap: 6px;
-    align-items: center;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
   }
   @media (max-width: 768px) {
-    .bottom-nav { display: flex; }
+    .bottom-nav {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 300;
+      background: rgba(12,12,12,0.96);
+      border: 1px solid rgba(201,169,110,0.18);
+      border-radius: 60px;
+      padding: 8px 12px;
+      gap: 2px;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      width: auto;
+      height: auto;
+      max-width: calc(100vw - 32px);
+      overflow: visible;
+    }
     footer { padding-bottom: 80px; }
     #contact { padding-bottom: 120px; }
   }

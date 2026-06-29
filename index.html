@@ -334,7 +334,9 @@
     background: var(--dark-3);
   }
   .gallery-item img {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 3/4;
     object-fit: cover;
     object-position: center top;
     transform: scale(1.05);
@@ -1186,9 +1188,8 @@
   @media (max-width: 480px) {
     section { padding: 60px 16px; }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
-    /* Force every portrait card to identical height — bypasses iOS aspect-ratio bug */
     .model-block { width: 100%; }
-    .gallery-item { width: 100%; height: calc(50vw * 1.33); aspect-ratio: unset; }
+    .gallery-item { width: 100%; height: auto; }
     .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .about-stats { flex-wrap: wrap; gap: 24px; }
   }
@@ -1930,7 +1931,7 @@ portraits.forEach((p, i) => {
 
   const toggle = document.createElement('button');
   toggle.className = 'model-toggle';
-  toggle.innerHTML = `<span>Explore the Series &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length} frames</em></span><em class="toggle-icon">+</em>`;
+  toggle.innerHTML = `<span>Explore &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length} frames</em></span><em class="toggle-icon">+</em>`;
 
   const carousel = makeCarousel(imgs, j => p.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
 

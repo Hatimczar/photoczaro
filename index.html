@@ -1187,6 +1187,7 @@
     /* Force exact 3:4 height using vw — bypasses all iOS/Android aspect-ratio bugs */
     .gallery-grid .gallery-item { aspect-ratio: unset !important; height: calc((100vw - 34px) * 2 / 3) !important; }
     .gallery-grid .gallery-item img { position: absolute !important; top: 0; left: 0; width: 100% !important; height: 100% !important; }
+    .gallery-grid .model-toggle { white-space: nowrap; font-size: 8px; letter-spacing: 0.12em; padding: 10px 12px; }
     .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .about-stats { flex-wrap: wrap; gap: 24px; }
   }
@@ -1928,7 +1929,7 @@ portraits.forEach((p, i) => {
 
   const toggle = document.createElement('button');
   toggle.className = 'model-toggle';
-  toggle.innerHTML = `<span>Explore the Series &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length} frames</em></span><em class="toggle-icon">+</em>`;
+  toggle.innerHTML = `<span>Explore &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length}</em></span><em class="toggle-icon">+</em>`;
 
   const carousel = makeCarousel(imgs, j => p.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
 

@@ -384,7 +384,10 @@
     text-transform: uppercase;
     transition: background 0.3s, color 0.3s;
     user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
   }
+  .model-toggle span { overflow: hidden; text-overflow: ellipsis; }
   .model-toggle:hover { background: #222; color: var(--gold); }
   .model-toggle.active { color: var(--gold); background: #1c1c1c; }
   .toggle-icon {

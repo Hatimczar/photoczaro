@@ -330,11 +330,11 @@
     position: relative;
     overflow: hidden;
     cursor: none;
-    aspect-ratio: 3/4;
     background: var(--dark-3);
   }
   .gallery-item img {
-    width: 100%; height: 100%;
+    width: 100%; height: auto;
+    aspect-ratio: 3/4;
     object-fit: cover;
     object-position: center top;
     transform: scale(1.05);
@@ -1183,10 +1183,7 @@
   @media (max-width: 480px) {
     section { padding: 60px 16px; }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
-    /* Force every portrait card to identical height — bypasses iOS aspect-ratio bug */
     .model-block { width: 100%; }
-    .gallery-item { width: 100%; height: auto; aspect-ratio: unset; }
-    .gallery-grid .gallery-item img { width: 100%; height: auto !important; aspect-ratio: 3/4; }
     .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .about-stats { flex-wrap: wrap; gap: 24px; }
   }

@@ -844,7 +844,7 @@
     line-height: 1.8;
   }
   .contact-email {
-    display: inline-block;
+    display: block;
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px;
     color: var(--gold);
@@ -1180,8 +1180,10 @@
   @media (max-width: 480px) {
     section { padding: 60px 16px; }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
-    .magazine-grid { grid-template-columns: 1fr; gap: 12px; }
+    .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .about-stats { flex-wrap: wrap; gap: 24px; }
+    /* Hide expand toggle on mobile — tap image opens lightbox directly */
+    .model-toggle { display: none; }
   }
 </style>
 </head>

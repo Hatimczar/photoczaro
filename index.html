@@ -845,6 +845,8 @@
   }
   .contact-email {
     display: block;
+    width: fit-content;
+    margin: 0 auto;
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px;
     color: var(--gold);
@@ -865,7 +867,9 @@
   }
   .contact-email:hover::after { transform: scaleX(1); }
   .contact-phone {
-    display: inline-block;
+    display: block;
+    width: fit-content;
+    margin: 18px auto 0;
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px;
     color: var(--gold);
@@ -873,7 +877,6 @@
     text-decoration: none;
     position: relative;
     padding-bottom: 6px;
-    margin-top: 18px;
   }
   .contact-phone::after {
     content: '';

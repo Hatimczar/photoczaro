@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1174,145 +1173,6 @@
     .magazine-grid { grid-template-columns: 1fr; gap: 12px; }
     .about-stats { flex-wrap: wrap; gap: 24px; }
   }
-
-  /* ── Film grain on hero — desktop only ── */
-  @media (hover: hover) {
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      opacity: 0.045;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 180px;
-      animation: grainShift 0.6s steps(2) infinite;
-    }
-    @keyframes grainShift {
-      0%   { background-position: 0 0; }
-      25%  { background-position: -4% -9%; }
-      50%  { background-position: 9% 4%; }
-      75%  { background-position: -9% 7%; }
-      100% { background-position: 4% -4%; }
-    }
-  }
-
-  /* ── Hero cycling text ── */
-  #hero-cycle {
-    display: inline-block;
-    transition: opacity 0.35s ease, transform 0.35s ease;
-  }
-
-  /* ── Ghost image cursor follower ── */
-  .img-ghost {
-    position: fixed;
-    width: 150px;
-    height: 190px;
-    border-radius: 3px;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 9996;
-    opacity: 0;
-    transform: translate(-50%, -65%) scale(0.82) rotate(-4deg);
-    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-    box-shadow: 0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,169,110,0.18);
-    will-change: left, top, opacity, transform;
-  }
-  .img-ghost.show {
-    opacity: 1;
-    transform: translate(-50%, -65%) scale(1) rotate(-2deg);
-  }
-  .img-ghost img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    display: block;
-  }
-  @media (max-width: 768px) { .img-ghost { display: none; } }
-
-
-  /* ── Review card hover glow ── */
-  .review-card {
-    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  }
-  .review-card:hover {
-    background: rgba(255,255,255,0.055);
-    border-color: rgba(201,169,110,0.25);
-    box-shadow: 0 0 40px rgba(201,169,110,0.06);
-    transform: translateY(-4px);
-  }
-
-  /* ── Lightbox counter ── */
-  .lb-counter {
-    position: absolute;
-    top: 40px; left: 50%;
-    transform: translateX(-50%);
-    font-size: 11px;
-    letter-spacing: 0.25em;
-    color: rgba(245,240,235,0.35);
-    font-family: 'Inter', sans-serif;
-    font-weight: 300;
-  }
-
-  /* ── Mobile bottom nav pill ── */
-  .bottom-nav {
-    display: none;
-  }
-  @media (max-width: 768px) {
-    .bottom-nav {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 300;
-      background: rgba(12,12,12,0.96);
-      border: 1px solid rgba(201,169,110,0.18);
-      border-radius: 60px;
-      padding: 8px 12px;
-      gap: 2px;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-      width: auto;
-      height: auto;
-      max-width: calc(100vw - 32px);
-      overflow: visible;
-    }
-    footer { padding-bottom: 80px; }
-    #contact { padding-bottom: 120px; }
-  }
-  .bottom-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    text-decoration: none;
-    padding: 7px 14px;
-    border-radius: 50px;
-    transition: background 0.25s, color 0.25s;
-    color: rgba(138,134,128,0.7);
-    -webkit-tap-highlight-color: transparent;
-  }
-  .bottom-nav-item.active,
-  .bottom-nav-item:active { background: rgba(201,169,110,0.12); color: var(--gold); }
-  .bottom-nav-item svg {
-    width: 20px; height: 20px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  .bottom-nav-label {
-    font-size: 8px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-family: 'Inter', sans-serif;
-    font-weight: 300;
-  }
 </style>
 </head>
 <body>
@@ -1328,7 +1188,6 @@
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
-<div class="img-ghost" id="img-ghost"><img src="" alt=""></div>
 
 <!-- Navigation -->
 <nav id="nav">
@@ -1369,7 +1228,7 @@
   <div class="hero-overlay"></div>
   <div class="hero-overlay-bottom"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Dubai — <span id="hero-cycle">Portraits</span></p>
+    <p class="hero-eyebrow">Dubai — Photography</p>
     <h1 class="hero-title">Photo<em>czaro</em></h1>
     <p class="hero-tagline">Capturing Life, Creating Art</p>
   </div>
@@ -1626,82 +1485,25 @@
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lb-close">✕</button>
-  <span class="lb-counter" id="lb-counter"></span>
   <button class="lightbox-nav lightbox-prev" id="lb-prev">‹</button>
   <img src="" alt="" id="lb-img">
   <button class="lightbox-nav lightbox-next" id="lb-next">›</button>
   <div class="lightbox-caption" id="lb-caption"></div>
 </div>
 
-<!-- Mobile bottom nav -->
-<nav class="bottom-nav" id="bottom-nav">
-  <a href="#" class="bottom-nav-item active" data-section="home">
-    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M9 21V12h6v9"/></svg>
-    <span class="bottom-nav-label">Home</span>
-  </a>
-  <a href="#magazines" class="bottom-nav-item" data-section="magazines">
-    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="13" y="3" width="8" height="11" rx="1"/><rect x="13" y="17" width="8" height="4" rx="1"/></svg>
-    <span class="bottom-nav-label">Press</span>
-  </a>
-  <a href="#portraits" class="bottom-nav-item" data-section="portraits">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-    <span class="bottom-nav-label">Portraits</span>
-  </a>
-  <a href="#about" class="bottom-nav-item" data-section="about">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg>
-    <span class="bottom-nav-label">About</span>
-  </a>
-  <a href="#contact" class="bottom-nav-item" data-section="contact">
-    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-    <span class="bottom-nav-label">Contact</span>
-  </a>
-</nav>
-
 <script>
-// Lenis smooth scroll — desktop only (mobile uses native scroll)
-const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-let lenis;
-if (!isTouchDevice) {
-  lenis = new Lenis({
-    duration: 1.25,
-    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-  });
-  (function rafLoop(t) { lenis.raf(t); requestAnimationFrame(rafLoop); })(0);
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animateCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
 }
-
-// Scroll handler — works with Lenis on desktop, native scroll on mobile
-function onScroll() {
-  const y = window.scrollY;
-  nav.classList.toggle('scrolled', y > 80);
-  heroBg.style.transform = `scale(1) translateY(${y * 0.28}px)`;
-  const pct = y / (document.documentElement.scrollHeight - window.innerHeight) * 100;
-  progressBar.style.width = pct + '%';
-  let current = '';
-  sectionEls.forEach(sec => { if (y >= sec.offsetTop - 160) current = sec.id; });
-  Object.entries(navAnchors).forEach(([id, a]) => a.classList.toggle('active', id === current));
-  const bnItems = document.querySelectorAll('.bottom-nav-item');
-  bnItems.forEach(item => {
-    item.classList.toggle('active', item.dataset.section === (current || 'home'));
-  });
-}
-if (lenis) lenis.on('scroll', onScroll);
-else window.addEventListener('scroll', onScroll, { passive: true });
-
-// Custom cursor — desktop only
-if (!isTouchDevice) {
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursor-ring');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  function animateCursor() {
-    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
-}
+animateCursor();
 
 // Nav scroll
 const nav = document.getElementById('nav');
@@ -2588,87 +2390,6 @@ const statObserver = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.5 });
 statEls.forEach(el => statObserver.observe(el));
-
-// Lightbox counter
-function updateLbCounter() {
-  const el = document.getElementById('lb-counter');
-  if (el) el.textContent = (lbIndex + 1) + ' / ' + lbImages.length;
-}
-const _origOpen = openLightbox;
-openLightbox = function(images, index) {
-  _origOpen(images, index);
-  updateLbCounter();
-};
-const _origNav = lbNavigate;
-lbNavigate = function(dir) {
-  _origNav(dir);
-  updateLbCounter();
-};
-
-// Ghost image cursor follower — desktop only
-if (!isTouchDevice) {
-  const ghost = document.getElementById('img-ghost');
-  const ghostImg = ghost.querySelector('img');
-  let gx = 0, gy = 0, gtx = 0, gty = 0;
-  document.querySelectorAll('.gallery-item, .magazine-card, .project-cover').forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      const img = card.querySelector('img');
-      if (img && img.src) { ghostImg.src = img.src; ghost.classList.add('show'); }
-    });
-    card.addEventListener('mousemove', e => { gtx = e.clientX; gty = e.clientY; });
-    card.addEventListener('mouseleave', () => ghost.classList.remove('show'));
-  });
-  (function animateGhost() {
-    gx += (gtx - gx) * 0.07;
-    gy += (gty - gy) * 0.07;
-    ghost.style.left = gx + 'px';
-    ghost.style.top = gy + 'px';
-    requestAnimationFrame(animateGhost);
-  })();
-}
-
-// Hero cycling text
-(function() {
-  const words = ['Portraits', 'Editorial', 'Fashion', 'Fine Art'];
-  let idx = 0;
-  const el = document.getElementById('hero-cycle');
-  if (!el) return;
-  setInterval(() => {
-    idx = (idx + 1) % words.length;
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(-10px)';
-    setTimeout(() => {
-      el.textContent = words[idx];
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    }, 380);
-  }, 2800);
-})();
-
-
-// Review auto-advance
-(function() {
-  let mmTimer, ggTimer;
-  const mmTrack = document.getElementById('mm-track');
-  const ggTrack = document.getElementById('google-track');
-  function autoAdvance(trackEl, prevId, nextId) {
-    if (!trackEl) return;
-    const btn = document.getElementById(nextId);
-    const timer = setInterval(() => { if (btn) btn.click(); }, 4500);
-    const wrap = trackEl.closest('.reviews-track-wrap');
-    if (wrap) {
-      wrap.addEventListener('mouseenter', () => clearInterval(timer));
-      wrap.addEventListener('mouseleave', () => { /* intentionally no restart to avoid complexity */ });
-    }
-    return timer;
-  }
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      mmTimer = autoAdvance(mmTrack, 'mm-prev', 'mm-next');
-      ggTimer = autoAdvance(ggTrack, 'google-prev', 'google-next');
-    }, 3000);
-  });
-})();
 
 // Lightbox touch swipe
 let lbTouchX = null;

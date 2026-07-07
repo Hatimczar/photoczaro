@@ -304,6 +304,10 @@
   }
   .section-line.visible { transform: scaleX(1); }
 
+  /* Image copyright protection */
+  img { -webkit-user-drag: none; user-drag: none; -webkit-touch-callout: none; pointer-events: none; }
+  .gallery-item, .magazine-card, .project-cover, .about-image-wrap, .model-gallery-item, .project-gallery-item { pointer-events: auto; }
+
   /* Reveal animation */
   .reveal {
     opacity: 0;
@@ -2376,6 +2380,10 @@ window.addEventListener('scroll', () => {
   });
   Object.entries(navAnchors).forEach(([id, a]) => a.classList.toggle('active', id === current));
 }, { passive: true });
+
+// Image protection — block right-click save, drag-to-desktop, and long-press save on mobile
+document.addEventListener('contextmenu', e => { if (e.target.tagName === 'IMG') e.preventDefault(); });
+document.addEventListener('dragstart', e => { if (e.target.tagName === 'IMG') e.preventDefault(); });
 
 // 3D card tilt on hover
 document.querySelectorAll('.gallery-item, .magazine-card, .project-cover').forEach(card => {

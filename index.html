@@ -120,10 +120,21 @@
     align-items: center;
     justify-content: space-between;
     padding: 28px 60px;
-    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
-    transition: background 0.5s;
+    background: transparent;
+    transition: all 0.5s var(--ease);
   }
-  nav.scrolled { background: rgba(10,10,10,0.97); padding: 18px 60px; }
+  nav.scrolled {
+    top: 12px;
+    left: 24px;
+    right: 24px;
+    padding: 14px 28px;
+    border-radius: 100px;
+    background: rgba(12,10,7,0.62);
+    backdrop-filter: blur(22px) saturate(1.5);
+    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    border: 0.5px solid rgba(255,255,255,0.11);
+    box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.12), inset 0 -0.5px 0 rgba(0,0,0,0.25), 0 8px 32px rgba(0,0,0,0.45);
+  }
   .nav-logo {
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px;
@@ -349,7 +360,7 @@
   .gallery-item-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 55%);
+    background: linear-gradient(to top, rgba(8,6,3,0.82) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.5s;
     display: flex;
@@ -377,8 +388,11 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background: var(--dark-3);
-    border: none;
+    background: rgba(22,18,12,0.7);
+    backdrop-filter: blur(10px) saturate(1.3);
+    -webkit-backdrop-filter: blur(10px) saturate(1.3);
+    border: 0.5px solid rgba(255,255,255,0.07);
+    box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.08);
     width: 100%;
     cursor: none;
     color: var(--grey);
@@ -386,11 +400,11 @@
     font-size: 10px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    transition: background 0.3s, color 0.3s;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
     user-select: none;
   }
-  .model-toggle:hover { background: #222; color: var(--gold); }
-  .model-toggle.active { color: var(--gold); background: #1c1c1c; }
+  .model-toggle:hover { background: rgba(30,24,16,0.75); color: var(--gold); border-color: rgba(201,169,110,0.2); }
+  .model-toggle.active { color: var(--gold); background: rgba(28,22,14,0.8); border-color: rgba(201,169,110,0.25); }
   .toggle-icon {
     font-size: 16px;
     line-height: 1;
@@ -531,7 +545,11 @@
     position: absolute;
     bottom: 0; left: 0; right: 0;
     padding: 30px 24px 20px;
-    background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, transparent 100%);
+    background: linear-gradient(to top, rgba(8,6,3,0.88) 0%, rgba(8,6,3,0.4) 60%, transparent 100%);
+    backdrop-filter: blur(8px) saturate(1.3);
+    -webkit-backdrop-filter: blur(8px) saturate(1.3);
+    border-top: 0.5px solid rgba(201,169,110,0.12);
+    box-shadow: inset 0 0.5px 0 rgba(201,169,110,0.1);
     transform: translateY(10px);
     transition: transform 0.5s var(--ease);
   }

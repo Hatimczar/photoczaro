@@ -846,6 +846,88 @@
   }
   .slider-btn:hover { border-color: var(--gold); background: rgba(201,169,110,0.08); color: var(--gold); }
 
+  /* Blog / Journal */
+  #blog { background: var(--dark-2); }
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .blog-card {
+    display: block;
+    text-decoration: none;
+    background: var(--dark);
+    padding: 40px 36px;
+    border: 0.5px solid rgba(255,255,255,0.05);
+    transition: border-color 0.4s, background 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .blog-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease);
+  }
+  .blog-card:hover { background: #0e0e0e; border-color: rgba(255,255,255,0.1); }
+  .blog-card:hover::before { transform: scaleX(1); }
+  .blog-card-category {
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: block;
+  }
+  .blog-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--white);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .blog-card-title em { font-style: italic; color: var(--gold-light); }
+  .blog-card-excerpt {
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--grey);
+    margin-bottom: 32px;
+  }
+  .blog-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 0.5px solid rgba(255,255,255,0.07);
+    padding-top: 20px;
+  }
+  .blog-card-date {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+  }
+  .blog-card-read {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.3s, transform 0.3s var(--ease);
+  }
+  .blog-card:hover .blog-card-read { opacity: 1; transform: translateX(0); }
+
+  @media (max-width: 900px) {
+    .blog-grid { grid-template-columns: 1fr; gap: 2px; }
+    .blog-card { padding: 32px 24px; }
+  }
+
   /* Contact */
   #contact { background: var(--dark-2); text-align: center; padding: 140px 60px; }
   .contact-inner { max-width: 700px; margin: 0 auto; }
@@ -1234,6 +1316,7 @@
     <li><a href="#portraits">Portraits</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#about">About</a></li>
+    <li><a href="#blog">Journal</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
@@ -1248,6 +1331,7 @@
     <li><a href="#portraits"><span class="menu-link-text">Portraits</span></a></li>
     <li><a href="#projects"><span class="menu-link-text">Projects</span></a></li>
     <li><a href="#about"><span class="menu-link-text">About</span></a></li>
+    <li><a href="#blog"><span class="menu-link-text">Journal</span></a></li>
     <li><a href="#contact"><span class="menu-link-text">Contact</span></a></li>
   </ul>
   <div class="mobile-menu-footer">
@@ -1488,6 +1572,44 @@
       <button class="slider-btn" id="google-prev">←</button>
       <button class="slider-btn" id="google-next">→</button>
     </div>
+  </div>
+</section>
+
+<!-- Blog / Journal -->
+<section id="blog">
+  <div class="section-header">
+    <span class="section-number reveal">05</span>
+    <h2 class="section-title reveal reveal-delay-1">The<em> Journal</em></h2>
+    <div class="section-line" id="line-blog"></div>
+  </div>
+  <div class="blog-grid">
+    <a href="blog/fujifilm-x100vi-review.html" class="blog-card reveal">
+      <span class="blog-card-category">Gear Review</span>
+      <h3 class="blog-card-title">Fujifilm X100VI -<br><em>Six Months In</em></h3>
+      <p class="blog-card-excerpt">I waited eight months to get my hands on this camera. After real use across Dubai shoots, here's the honest answer on whether it earned its place in the bag.</p>
+      <div class="blog-card-meta">
+        <span class="blog-card-date">June 2025 &nbsp;·&nbsp; 7 min</span>
+        <span class="blog-card-read">Read →</span>
+      </div>
+    </a>
+    <a href="blog/shooting-golden-hour-dubai.html" class="blog-card reveal reveal-delay-1">
+      <span class="blog-card-category">On Shooting</span>
+      <h3 class="blog-card-title">Golden Hour in Dubai -<br><em>What Nobody Tells You</em></h3>
+      <p class="blog-card-excerpt">Every photography account makes golden hour here look effortless. The real window is about twenty minutes long and three things can kill it before it starts.</p>
+      <div class="blog-card-meta">
+        <span class="blog-card-date">April 2025 &nbsp;·&nbsp; 6 min</span>
+        <span class="blog-card-read">Read →</span>
+      </div>
+    </a>
+    <a href="blog/sony-a7cr-portrait-photographer.html" class="blog-card reveal reveal-delay-2">
+      <span class="blog-card-category">Gear Review</span>
+      <h3 class="blog-card-title">Sony A7CR -<br><em>Compact Full-Frame for Portraits</em></h3>
+      <p class="blog-card-excerpt">61 megapixels in Sony's smallest full-frame body sounds like an obvious win. After two months of real portrait sessions, the answer is more specific than that.</p>
+      <div class="blog-card-meta">
+        <span class="blog-card-date">February 2025 &nbsp;·&nbsp; 8 min</span>
+        <span class="blog-card-read">Read →</span>
+      </div>
+    </a>
   </div>
 </section>
 
@@ -2384,7 +2506,7 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // Active nav link on scroll
-const navSections = ['magazines','portraits','projects','about','contact'];
+const navSections = ['magazines','portraits','projects','about','blog','contact'];
 const navAnchors = {};
 navSections.forEach(id => {
   const a = document.querySelector(`.nav-links a[href="#${id}"]`);

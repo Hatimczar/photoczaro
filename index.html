@@ -72,7 +72,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="images/Portraits__Tatiana - Hilton Creek__DSC_3323-1.jpg">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -2157,7 +2159,7 @@ function makeCarousel(imgs, labelFn, trackClass, itemClass) {
 // Build portrait gallery - each model gets a cover card + expandable carousel
 const pgrid = document.getElementById('portraits-grid');
 let allPortraits = [];
-portraits.forEach((p, i) => {
+function buildPortraits() { portraits.forEach((p, i) => {
   const imgs = galleries[p.name] || [p.src];
 
   const block = document.createElement('div');
@@ -2188,7 +2190,8 @@ portraits.forEach((p, i) => {
   block.appendChild(carousel);
   pgrid.appendChild(block);
   allPortraits.push({ src: p.src, name: p.name });
-});
+}); }
+setTimeout(buildPortraits, 0);
 
 // Magazine gallery images
 const magGalleries = {};
@@ -2379,7 +2382,7 @@ const magGalleries = {};
 // Build magazines grid - each card gets cover + expandable gallery
 const mgrid = document.getElementById('magazines-grid');
 let allMagazines = [];
-magazines.forEach((m, i) => {
+function buildMagazines() { magazines.forEach((m, i) => {
   const imgs = magGalleries[m.name] || [m.src];
 
   const block = document.createElement('div');
@@ -2413,7 +2416,8 @@ magazines.forEach((m, i) => {
   block.appendChild(carousel);
   mgrid.appendChild(block);
   allMagazines.push({ src: m.src, name: m.name });
-});
+}); }
+setTimeout(buildMagazines, 50);
 
 // Build Projects section
 const projectsData = [
@@ -2485,7 +2489,7 @@ const projectsData = [
 ];
 
 const pgridProjects = document.getElementById('projects-grid');
-projectsData.forEach((proj, i) => {
+function buildProjects() { projectsData.forEach((proj, i) => {
   const block = document.createElement('div');
   block.className = 'project-block reveal';
   block.style.transitionDelay = i * 0.15 + 's';
@@ -2518,7 +2522,8 @@ projectsData.forEach((proj, i) => {
   block.appendChild(toggle);
   block.appendChild(carousel);
   pgridProjects.appendChild(block);
-});
+}); }
+setTimeout(buildProjects, 100);
 
 // Lightbox
 let lbImages = [], lbIndex = 0;

@@ -407,15 +407,20 @@
 
   @media (max-width: 768px) {
     nav { padding: 20px 24px; }
-    .post-hero, .post-cover, .post-body { padding-left: 24px; padding-right: 24px; }
-    .post-spread { padding: 0 24px; }
-    .post-spread { padding: 0 24px; }
-    .post-footer { padding: 40px 24px; flex-direction: column; gap: 24px; align-items: flex-start; }
-    .post-body p { font-size: 16px; }
-    .post-meta { flex-wrap: wrap; gap: 20px; }
-    .read-next { padding: 40px 24px; }
+    .post-hero { padding: 100px 20px 28px; }
+    .post-cover { padding: 0; margin-bottom: 32px; }
+    .post-cover img { border-left: none; border-right: none; }
+    .post-spread { padding: 0 20px; }
+    .post-body { padding-left: 20px; padding-right: 20px; }
+    .post-footer { padding: 40px 20px; flex-direction: column; gap: 24px; align-items: flex-start; }
+    .post-body p { font-size: 15px; line-height: 1.8; }
+    .post-body p.lead { font-size: 19px; line-height: 1.55; margin-bottom: 28px; }
+    .post-body h2 { font-size: 26px; margin: 40px 0 16px; }
+    .post-meta { flex-wrap: wrap; gap: 16px; }
+    .post-title { font-size: clamp(32px, 9vw, 52px); }
+    .qa-block { padding: 20px 16px; }
+    .read-next { padding: 40px 20px; }
     .read-next-grid { grid-template-columns: 1fr; }
-    .qa-block { padding: 24px 20px; }
   }
 
   /* Cursor */

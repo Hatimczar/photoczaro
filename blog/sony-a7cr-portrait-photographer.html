@@ -89,16 +89,16 @@
   .nav-back { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color 0.3s; }
   .nav-back:hover { color: var(--gold); }
   .nav-back::before { content: '← '; }
-  .post-hero { padding-top: 120px; padding-bottom: 60px; padding-left: 60px; padding-right: 60px; max-width: 860px; margin: 0 auto; }
+  .post-hero { padding-top: 120px; padding-bottom: 60px; padding-left: 60px; padding-right: 60px; max-width: 1200px; margin: 0 auto; }
   .post-category { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; display: block; }
   .post-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(42px, 6vw, 76px); font-weight: 300; line-height: 1.05; letter-spacing: -0.01em; color: var(--white); margin-bottom: 16px; }
   .post-title em { font-style: italic; color: var(--gold-light); }
   .post-meta { display: flex; gap: 32px; margin-top: 28px; padding-top: 28px; border-top: 0.5px solid rgba(255,255,255,0.1); }
   .post-meta-item { font-size: 11px; letter-spacing: 0.12em; color: var(--grey); }
   .post-meta-item span { display: block; color: var(--white); margin-top: 4px; font-size: 12px; }
-  .post-cover { width: 100%; max-width: 860px; margin: 0 auto 60px; padding: 0 60px; }
+  .post-cover { width: 100%; max-width: 1200px; margin: 0 auto 60px; padding: 0 60px; }
   .post-cover-img { width: 100%; aspect-ratio: 16/9; background: var(--dark-3); border: 0.5px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 11px; letter-spacing: 0.2em; color: rgba(255,255,255,0.15); text-transform: uppercase; }
-  .post-body { max-width: 680px; margin: 0 auto; padding: 0 60px 120px; }
+  .post-body { max-width: 860px; margin: 0 auto; padding: 0 60px 120px; }
   .post-body p { font-size: 17px; line-height: 1.85; color: rgba(245,240,235,0.82); margin-bottom: 28px; font-weight: 300; }
   .post-body p.lead { font-family: 'Cormorant Garamond', serif; font-size: 24px; line-height: 1.6; font-weight: 300; font-style: italic; color: var(--gold-light); margin-bottom: 40px; }
   .post-body h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--white); margin: 56px 0 20px; letter-spacing: -0.01em; }
@@ -108,7 +108,7 @@
   .post-body .gear-note { background: var(--dark-3); border: 0.5px solid rgba(201,169,110,0.2); padding: 24px 28px; margin: 40px 0; font-size: 13px; line-height: 1.7; color: var(--grey); }
   .post-body .gear-note strong { color: var(--gold); font-weight: 400; display: block; margin-bottom: 10px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; }
   .post-body hr { border: none; border-top: 0.5px solid rgba(255,255,255,0.08); margin: 60px 0; }
-  .post-footer { border-top: 0.5px solid rgba(255,255,255,0.07); padding: 60px; max-width: 860px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .post-footer { border-top: 0.5px solid rgba(255,255,255,0.07); padding: 60px; max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
   .back-to-blog { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color 0.3s; }
   .back-to-blog:hover { color: var(--gold); }
   .back-to-blog::before { content: '← '; }
@@ -117,6 +117,7 @@
   @media (max-width: 768px) {
     nav { padding: 20px 24px; }
     .post-hero, .post-cover, .post-body { padding-left: 24px; padding-right: 24px; }
+    .post-spread { padding: 0 24px; }
     .post-footer { padding: 40px 24px; flex-direction: column; gap: 24px; align-items: flex-start; }
     .post-body p { font-size: 16px; }
     .post-meta { flex-wrap: wrap; gap: 20px; }
@@ -267,7 +268,7 @@ window.addEventListener('pageshow',()=>{
   </div>
 </div>
 
-<div style="max-width:860px;margin:0 auto;padding:0 60px 80px;">
+<div style="max-width:1200px;margin:0 auto;padding:0 80px 80px;">
   <div style="border-top:0.5px solid rgba(255,255,255,0.07);padding-top:48px;">
     <p style="font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#c9a96e;margin-bottom:28px;">Read next</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">

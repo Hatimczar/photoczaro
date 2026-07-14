@@ -137,9 +137,9 @@
   .post-hero {
     padding-top: 120px;
     padding-bottom: 60px;
-    padding-left: 60px;
-    padding-right: 60px;
-    max-width: 860px;
+    padding-left: 80px;
+    padding-right: 80px;
+    max-width: 1200px;
     margin: 0 auto;
   }
   .post-category {
@@ -173,9 +173,9 @@
   /* Cover image placeholder */
   .post-cover {
     width: 100%;
-    max-width: 860px;
+    width: 100%;
     margin: 0 auto 60px;
-    padding: 0 60px;
+    padding: 0;
   }
   .post-cover-img {
     width: 100%;
@@ -193,9 +193,9 @@
 
   /* Body */
   .post-body {
-    max-width: 680px;
+    max-width: 860px;
     margin: 0 auto;
-    padding: 0 60px 120px;
+    padding: 0 80px 120px;
   }
   .post-body p {
     font-size: 17px;
@@ -254,7 +254,7 @@
   .post-footer {
     border-top: 0.5px solid rgba(255,255,255,0.07);
     padding: 60px;
-    max-width: 860px;
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -283,6 +283,7 @@
   @media (max-width: 768px) {
     nav { padding: 20px 24px; }
     .post-hero, .post-cover, .post-body { padding-left: 24px; padding-right: 24px; }
+    .post-spread { padding: 0 24px; }
     .post-footer { padding: 40px 24px; flex-direction: column; gap: 24px; align-items: flex-start; }
     .post-body p { font-size: 16px; }
     .post-meta { flex-wrap: wrap; gap: 20px; }
@@ -427,7 +428,7 @@ window.addEventListener('pageshow',()=>{
   </div>
 </div>
 
-<div style="max-width:860px;margin:0 auto;padding:0 60px 80px;">
+<div style="max-width:1200px;margin:0 auto;padding:0 80px 80px;">
   <div style="border-top:0.5px solid rgba(255,255,255,0.07);padding-top:48px;">
     <p style="font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#c9a96e;margin-bottom:28px;">Read next</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">

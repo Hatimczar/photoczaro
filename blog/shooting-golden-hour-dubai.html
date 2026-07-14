@@ -106,7 +106,8 @@
   .post-meta-item { font-size: 11px; letter-spacing: 0.12em; color: var(--grey); }
   .post-meta-item span { display: block; color: var(--white); margin-top: 4px; font-size: 12px; }
   .post-cover { width: 100%; max-width: 1200px; margin: 0 auto 60px; padding: 0 60px; }
-  .post-cover-img { width: 100%; aspect-ratio: 16/9; background: var(--dark-3); border: 0.5px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 11px; letter-spacing: 0.2em; color: rgba(255,255,255,0.15); text-transform: uppercase; }
+  .post-cover-img { width: 100%; aspect-ratio: 16/9; overflow: hidden; }
+  .post-cover-img img { width: 100%; height: 100%; object-fit: cover; }
   .post-body { max-width: 860px; margin: 0 auto; padding: 0 60px 120px; }
   .post-body p { font-size: 17px; line-height: 1.85; color: rgba(245,240,235,0.82); margin-bottom: 28px; font-weight: 300; }
   .post-body p.lead { font-family: 'Cormorant Garamond', serif; font-size: 24px; line-height: 1.6; font-weight: 300; font-style: italic; color: var(--gold-light); margin-bottom: 40px; }
@@ -225,7 +226,7 @@ window.addEventListener('pageshow',()=>{
 </div>
 
 <div class="post-cover">
-  <div class="post-cover-img">Cover image - Dubai golden hour location</div>
+  <div class="post-cover-img"><img src="../images/blog-golden-hour.jpg" alt="Golden hour light in Dubai" loading="eager"></div>
 </div>
 
 <div class="post-body">

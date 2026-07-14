@@ -384,6 +384,9 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 2px;
   }
+  .blog-card-img { width: 100%; aspect-ratio: 16/9; overflow: hidden; margin-bottom: 28px; }
+  .blog-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+  .blog-card:hover .blog-card-img img { transform: scale(1.04); }
   .blog-card {
     display: block;
     text-decoration: none;
@@ -583,6 +586,7 @@
     </a>
 
     <a href="blog/shooting-golden-hour-dubai.html" class="blog-card reveal reveal-delay-1">
+      <div class="blog-card-img"><img src="images/blog-golden-hour.jpg" alt="Golden hour in Dubai" loading="lazy"></div>
       <span class="blog-card-category">On Shooting</span>
       <h2 class="blog-card-title">Golden Hour in Dubai -<br><em>What Nobody Tells You</em></h2>
       <p class="blog-card-excerpt">Every photography account makes golden hour here look effortless. The real window is about twenty minutes long and three things can kill it before it starts.</p>

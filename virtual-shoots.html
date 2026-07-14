@@ -34,37 +34,20 @@
   }
 
   /* Cursor */
-  .cursor {
-    position: fixed; width: 6px; height: 6px;
-    background: var(--gold); border-radius: 50%;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%, -50%);
-  }
+  .cursor { position: fixed; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
   .cursor-ring {
     position: fixed; width: 80px; height: 80px;
     border: 1.5px solid rgba(201,169,110,0.55); border-radius: 50%;
     pointer-events: none; z-index: 9998;
-    transform: translate(-50%, -50%) scale(0.35);
-    transition: transform 0.45s cubic-bezier(0.215, 0.61, 0.355, 1), border-color 0.3s, background-color 0.3s, backdrop-filter 0.3s;
-    box-sizing: border-box;
+    transform: translate(-50%,-50%) scale(0.35);
+    transition: transform 0.45s cubic-bezier(0.215,0.61,0.355,1), border-color 0.3s, background-color 0.3s, backdrop-filter 0.3s;
   }
-  .cursor-ring.hovered { transform: translate(-50%, -50%) scale(1); border-color: rgba(201,169,110,0.9); }
-  .cursor-ring.on-media {
-    transform: translate(-50%, -50%) scale(1);
-    border-color: rgba(255,255,255,0.2);
-    background-color: rgba(255,255,255,0.05);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
+  .cursor-ring.hovered { transform: translate(-50%,-50%) scale(1); border-color: rgba(201,169,110,0.9); }
+  .cursor-ring.on-media { transform: translate(-50%,-50%) scale(1); border-color: rgba(255,255,255,0.2); background-color: rgba(255,255,255,0.05); backdrop-filter: blur(4px); }
 
   /* Page transition */
-  .page-transition {
-    position: fixed; inset: 0; background: var(--dark); z-index: 20000;
-    transform: translateX(-100%);
-    transition: transform 0.6s var(--ease);
-    pointer-events: none;
-  }
-  .page-transition.slide-in  { transform: translateX(0%); pointer-events: all; }
+  .page-transition { position: fixed; inset: 0; background: var(--dark); z-index: 20000; transform: translateX(-100%); transition: transform 0.6s var(--ease); pointer-events: none; }
+  .page-transition.slide-in { transform: translateX(0%); pointer-events: all; }
   .page-transition.slide-out { transform: translateX(100%); }
 
   /* Nav */
@@ -77,60 +60,29 @@
   }
   nav.scrolled {
     padding: 14px 36px; border-radius: 100px;
-    background: rgba(12,10,7,0.62);
-    backdrop-filter: blur(22px) saturate(1.5);
-    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    background: rgba(12,10,7,0.62); backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
     border-color: rgba(255,255,255,0.11);
     box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.12), 0 8px 32px rgba(0,0,0,0.45);
     margin: 12px 24px 0;
   }
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px; letter-spacing: 0.15em;
-    color: var(--gold); text-decoration: none; font-weight: 400;
-  }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; letter-spacing: 0.15em; color: var(--gold); text-decoration: none; font-weight: 400; }
   .nav-links { display: flex; gap: 40px; list-style: none; }
-  .nav-links a {
-    color: var(--grey); text-decoration: none;
-    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-    transition: color 0.3s; position: relative;
-  }
-  .nav-links a::after {
-    content: ''; position: absolute; bottom: -3px; left: 0;
-    width: 0; height: 1px; background: var(--gold);
-    transition: width 0.4s var(--ease);
-  }
+  .nav-links a { color: var(--grey); text-decoration: none; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; transition: color 0.3s; position: relative; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.4s var(--ease); }
   .nav-links a:hover { color: var(--white); }
   .nav-links a:hover::after { width: 100%; }
   .nav-links a.active { color: var(--white); }
   .nav-links a.active::after { width: 100%; }
-
-  /* Hamburger */
-  .nav-hamburger {
-    display: none; flex-direction: column; gap: 5px;
-    background: none; border: none; cursor: none; padding: 4px; z-index: 101;
-  }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: none; padding: 4px; z-index: 101; }
   .nav-hamburger span { display: block; width: 24px; height: 1px; background: var(--white); transition: transform 0.4s var(--ease), opacity 0.3s; }
   .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
   .nav-hamburger.open span:nth-child(2) { opacity: 0; }
   .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-
-  /* Mobile menu */
-  .mobile-menu-overlay {
-    position: fixed; inset: 0; background: rgba(8,6,3,0.97);
-    z-index: 99; display: flex; align-items: center; justify-content: center;
-    opacity: 0; visibility: hidden; transition: opacity 0.5s var(--ease), visibility 0.5s;
-  }
+  .mobile-menu-overlay { position: fixed; inset: 0; background: rgba(8,6,3,0.97); z-index: 99; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.5s var(--ease), visibility 0.5s; }
   .mobile-menu-overlay.open { opacity: 1; visibility: visible; }
   .mobile-menu-nav { list-style: none; text-align: center; }
   .mobile-menu-nav li { overflow: hidden; margin-bottom: 8px; }
-  .mobile-menu-nav a {
-    display: inline-block;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(36px, 8vw, 56px); font-weight: 300;
-    color: var(--white); text-decoration: none; letter-spacing: 0.05em;
-    transform: translateY(100%); transition: transform 0.6s var(--ease), color 0.3s;
-  }
+  .mobile-menu-nav a { display: inline-block; font-family: 'Cormorant Garamond', serif; font-size: clamp(36px,8vw,56px); font-weight: 300; color: var(--white); text-decoration: none; letter-spacing: 0.05em; transform: translateY(100%); transition: transform 0.6s var(--ease), color 0.3s; }
   .mobile-menu-overlay.open .mobile-menu-nav a { transform: translateY(0); }
   .mobile-menu-nav li:nth-child(1) a { transition-delay: 0.05s; }
   .mobile-menu-nav li:nth-child(2) a { transition-delay: 0.10s; }
@@ -140,120 +92,121 @@
   .mobile-menu-nav li:nth-child(6) a { transition-delay: 0.30s; }
   .mobile-menu-nav li:nth-child(7) a { transition-delay: 0.35s; }
   .mobile-menu-nav a:hover { color: var(--gold); }
-  .mobile-menu-footer {
-    position: absolute; bottom: 40px; left: 0; right: 0;
-    text-align: center; display: flex; flex-direction: column; gap: 16px; align-items: center;
-  }
+  .mobile-menu-footer { position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; display: flex; flex-direction: column; gap: 16px; align-items: center; }
   .mobile-menu-brand { font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; }
   .mobile-menu-socials { display: flex; gap: 24px; }
   .mobile-menu-socials a { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color 0.3s; }
   .mobile-menu-socials a:hover { color: var(--white); }
 
   /* Hero */
-  .vs-hero {
-    padding: 200px 60px 80px;
-    border-bottom: 0.5px solid rgba(255,255,255,0.06);
-  }
-  .vs-eyebrow {
-    font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 24px;
-    opacity: 0; transform: translateY(20px);
-    animation: fadeUp 1s 0.3s var(--ease) forwards;
-  }
-  .vs-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(56px, 7vw, 110px);
-    font-weight: 300; line-height: 0.92; letter-spacing: -0.02em;
-    color: var(--white);
-    opacity: 0; transform: translateY(30px);
-    animation: fadeUp 1s 0.5s var(--ease) forwards;
-  }
+  .vs-hero { padding: 200px 60px 80px; border-bottom: 0.5px solid rgba(255,255,255,0.06); }
+  .vs-eyebrow { font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; opacity: 0; transform: translateY(20px); animation: fadeUp 1s 0.3s var(--ease) forwards; }
+  .vs-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(56px,7vw,110px); font-weight: 300; line-height: 0.92; letter-spacing: -0.02em; color: var(--white); opacity: 0; transform: translateY(30px); animation: fadeUp 1s 0.5s var(--ease) forwards; }
   .vs-title em { font-style: italic; color: var(--gold-light); }
-  .vs-sub {
-    margin-top: 32px; font-size: 14px; letter-spacing: 0.06em;
-    color: var(--grey); max-width: 520px; line-height: 1.8;
-    opacity: 0; transform: translateY(20px);
-    animation: fadeUp 1s 0.7s var(--ease) forwards;
-  }
-  .vs-count {
-    margin-top: 20px; font-size: 11px; letter-spacing: 0.2em;
-    text-transform: uppercase; color: rgba(138,134,128,0.5);
-    opacity: 0; animation: fadeUp 1s 0.85s var(--ease) forwards;
-  }
+  .vs-sub { margin-top: 32px; font-size: 14px; letter-spacing: 0.06em; color: var(--grey); max-width: 520px; line-height: 1.8; opacity: 0; transform: translateY(20px); animation: fadeUp 1s 0.7s var(--ease) forwards; }
+  .vs-count { margin-top: 20px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(138,134,128,0.5); opacity: 0; animation: fadeUp 1s 0.85s var(--ease) forwards; }
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
   /* Gallery grid */
-  .vs-grid-section { padding: 0; }
-  .vs-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2px;
-  }
+  .vs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
 
   /* Gallery item */
   .vs-item {
-    position: relative; overflow: hidden;
-    aspect-ratio: 3/4;
-    cursor: none;
-    background: var(--dark-3);
+    position: relative; overflow: hidden; aspect-ratio: 3/4;
+    cursor: none; background: var(--dark-3);
   }
-  .vs-item img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.8s var(--ease), filter 0.5s;
-    filter: brightness(0.92);
-  }
-  .vs-item:hover img { transform: scale(1.06); filter: brightness(0.7); }
+  .vs-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s var(--ease), filter 0.5s; filter: brightness(0.92); }
+  .vs-item:hover img { transform: scale(1.06); filter: brightness(0.65); }
   .vs-item-overlay {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    justify-content: flex-end;
+    position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end;
     padding: 28px 24px;
-    background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 55%);
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 55%);
     opacity: 0; transition: opacity 0.4s;
   }
   .vs-item:hover .vs-item-overlay { opacity: 1; }
-  .vs-item-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px; font-weight: 300;
-    color: var(--white); letter-spacing: 0.02em;
-    transform: translateY(10px);
-    transition: transform 0.4s var(--ease);
-  }
+  .vs-item-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; color: var(--white); letter-spacing: 0.02em; transform: translateY(10px); transition: transform 0.4s var(--ease); }
   .vs-item:hover .vs-item-name { transform: translateY(0); }
-  .vs-item-date {
-    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--gold); margin-top: 4px;
-    transform: translateY(10px);
-    transition: transform 0.4s 0.04s var(--ease);
-  }
+  .vs-item-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+  .vs-item-date { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); transform: translateY(10px); transition: transform 0.4s 0.04s var(--ease); }
   .vs-item:hover .vs-item-date { transform: translateY(0); }
+  .vs-item-count { font-size: 9px; letter-spacing: 0.15em; color: rgba(201,169,110,0.55); transform: translateY(10px); transition: transform 0.4s 0.06s var(--ease); }
+  .vs-item:hover .vs-item-count { transform: translateY(0); }
 
   /* Reveal */
-  .reveal {
-    opacity: 0; transform: translateY(30px);
-    transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
-  }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
   /* Footer */
-  .vs-footer {
-    padding: 48px 60px;
-    border-top: 0.5px solid rgba(255,255,255,0.06);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .vs-footer-back {
-    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--grey); text-decoration: none; transition: color 0.3s;
-  }
+  .vs-footer { padding: 48px 60px; border-top: 0.5px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; }
+  .vs-footer-back { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color 0.3s; }
   .vs-footer-back:hover { color: var(--gold); }
   .vs-footer-back::before { content: '← '; }
-  .vs-footer-brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 14px; letter-spacing: 0.2em; color: var(--gold); text-decoration: none;
-  }
+  .vs-footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 14px; letter-spacing: 0.2em; color: var(--gold); text-decoration: none; }
   .vs-footer-copy { font-size: 10px; letter-spacing: 0.15em; color: rgba(138,134,128,0.4); }
+
+  /* ── Lightbox ── */
+  .lb-overlay {
+    position: fixed; inset: 0; z-index: 30000;
+    background: rgba(5,4,3,0.97);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.4s var(--ease), visibility 0.4s;
+  }
+  .lb-overlay.open { opacity: 1; visibility: visible; }
+
+  .lb-inner { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+
+  .lb-img-wrap { position: relative; max-width: min(90vw, 1100px); max-height: 90vh; display: flex; align-items: center; justify-content: center; }
+  .lb-img { max-width: 100%; max-height: 90vh; object-fit: contain; display: block; transition: opacity 0.3s; }
+  .lb-img.fading { opacity: 0; }
+
+  /* Close */
+  .lb-close {
+    position: fixed; top: 28px; right: 36px;
+    background: none; border: none; cursor: none;
+    color: rgba(255,255,255,0.5); font-size: 28px; line-height: 1;
+    transition: color 0.3s; z-index: 1;
+  }
+  .lb-close:hover { color: var(--gold); }
+
+  /* Arrows */
+  .lb-arrow {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.05); border: 0.5px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.6); font-size: 20px;
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none; transition: background 0.3s, color 0.3s, border-color 0.3s;
+    z-index: 1;
+  }
+  .lb-arrow:hover { background: rgba(201,169,110,0.15); border-color: var(--gold); color: var(--gold); }
+  .lb-prev { left: 28px; }
+  .lb-next { right: 28px; }
+
+  /* Counter + session name */
+  .lb-meta {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+    text-align: center; pointer-events: none;
+  }
+  .lb-session-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: var(--white); letter-spacing: 0.06em; margin-bottom: 6px; }
+  .lb-counter { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--grey); }
+
+  /* Thumbnails strip */
+  .lb-thumbs {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 6px; align-items: center; max-width: 90vw; overflow-x: auto;
+    padding: 0 8px;
+    scrollbar-width: none;
+  }
+  .lb-thumbs::-webkit-scrollbar { display: none; }
+  .lb-thumb {
+    width: 48px; height: 48px; flex-shrink: 0;
+    object-fit: cover; opacity: 0.4; border-radius: 2px;
+    cursor: none; transition: opacity 0.3s, transform 0.3s;
+    border: 1px solid transparent;
+  }
+  .lb-thumb.active { opacity: 1; border-color: var(--gold); transform: scale(1.1); }
+  .lb-thumb:hover:not(.active) { opacity: 0.75; }
 
   /* Responsive */
   @media (max-width: 1100px) { .vs-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -267,9 +220,16 @@
     .vs-item-overlay { opacity: 1; }
     .vs-item-name { transform: translateY(0); font-size: 16px; }
     .vs-item-date { transform: translateY(0); }
+    .vs-item-count { transform: translateY(0); }
     .vs-footer { padding: 32px 24px; flex-direction: column; gap: 16px; text-align: center; }
     body { cursor: auto; }
     .cursor, .cursor-ring { display: none; }
+    .lb-arrow { width: 40px; height: 40px; font-size: 16px; }
+    .lb-prev { left: 10px; }
+    .lb-next { right: 10px; }
+    .lb-close { top: 16px; right: 16px; }
+    .lb-thumbs { bottom: 70px; }
+    .lb-meta { bottom: 16px; }
   }
   @media (max-width: 480px) { .vs-grid { grid-template-columns: 1fr 1fr; } }
 </style>
@@ -279,6 +239,23 @@
 <div class="page-transition" id="page-transition"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- Lightbox -->
+<div class="lb-overlay" id="lb-overlay">
+  <div class="lb-inner">
+    <button class="lb-close" id="lb-close" aria-label="Close">✕</button>
+    <button class="lb-arrow lb-prev" id="lb-prev" aria-label="Previous">&#8592;</button>
+    <div class="lb-img-wrap">
+      <img class="lb-img" id="lb-img" src="" alt="">
+    </div>
+    <button class="lb-arrow lb-next" id="lb-next" aria-label="Next">&#8594;</button>
+    <div class="lb-thumbs" id="lb-thumbs"></div>
+    <div class="lb-meta">
+      <div class="lb-session-name" id="lb-session-name"></div>
+      <div class="lb-counter" id="lb-counter"></div>
+    </div>
+  </div>
+</div>
 
 <!-- Nav -->
 <nav id="nav">
@@ -322,98 +299,142 @@
   <p class="vs-eyebrow">Remote Portrait Sessions</p>
   <h1 class="vs-title">Virtual<br><em>Shoots</em></h1>
   <p class="vs-sub">Directed portrait sessions with clients across the world — no studio, no travel, just great light and a camera you already own.</p>
-  <p class="vs-count">11 sessions</p>
+  <p class="vs-count">11 sessions · click any to explore</p>
 </header>
 
-<!-- Gallery -->
-<section class="vs-grid-section">
+<!-- Gallery — chronological newest first -->
+<section>
   <div class="vs-grid">
 
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/dinendra.jpg" alt="Virtual shoot — Dinendra" loading="eager">
-      <div class="vs-item-overlay">
-        <div class="vs-item-name">Dinendra</div>
-        <div class="vs-item-date">April 2024</div>
-      </div>
-    </div>
-
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/nadine.jpg" alt="Virtual shoot — Nadine" loading="eager">
-      <div class="vs-item-overlay">
-        <div class="vs-item-name">Nadine</div>
-        <div class="vs-item-date">January 2024</div>
-      </div>
-    </div>
-
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/denisa.jpg" alt="Virtual shoot — Denisa" loading="lazy">
-      <div class="vs-item-overlay">
-        <div class="vs-item-name">Denisa</div>
-        <div class="vs-item-date">January 2024</div>
-      </div>
-    </div>
-
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/fiona.jpg" alt="Virtual shoot — Fiona" loading="lazy">
-      <div class="vs-item-overlay">
-        <div class="vs-item-name">Fiona</div>
-        <div class="vs-item-date">November 2023</div>
-      </div>
-    </div>
-
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/belen.jpg" alt="Virtual shoot — Belen" loading="lazy">
-      <div class="vs-item-overlay">
-        <div class="vs-item-name">Belen</div>
-        <div class="vs-item-date">August 2023</div>
-      </div>
-    </div>
-
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/ashlynn.jpg" alt="Virtual shoot — Ashlynn" loading="lazy">
-      <div class="vs-item-overlay">
-        <div class="vs-item-name">Ashlynn</div>
-        <div class="vs-item-date">March 2023</div>
-      </div>
-    </div>
-
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/ki.jpg" alt="Virtual shoot — Ki" loading="lazy">
-      <div class="vs-item-overlay">
-        <div class="vs-item-name">Ki</div>
-        <div class="vs-item-date">September 2021</div>
-      </div>
-    </div>
-
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/valeriia.jpg" alt="Virtual shoot — Valeriia" loading="lazy">
+    <!-- Valeriia · May 2024 -->
+    <div class="vs-item reveal" data-session="valeriia" data-name="Valeriia" data-date="May 2024" data-count="11">
+      <img src="images/virtual-shoots/valeriia.jpg" alt="Valeriia" loading="eager">
       <div class="vs-item-overlay">
         <div class="vs-item-name">Valeriia</div>
-        <div class="vs-item-date">May 2024</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">May 2024</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
       </div>
     </div>
 
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/slavina.jpg" alt="Virtual shoot — Slavina" loading="lazy">
+    <!-- Dinendra · April 2024 -->
+    <div class="vs-item reveal" data-session="dinendra" data-name="Dinendra" data-date="April 2024" data-count="11">
+      <img src="images/virtual-shoots/dinendra.jpg" alt="Dinendra" loading="eager">
       <div class="vs-item-overlay">
-        <div class="vs-item-name">Slavina</div>
-        <div class="vs-item-date">March 2023</div>
+        <div class="vs-item-name">Dinendra</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">April 2024</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
       </div>
     </div>
 
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/anna-prague.jpg" alt="Virtual shoot — Anna, Prague" loading="lazy">
+    <!-- Nadine · January 2024 -->
+    <div class="vs-item reveal" data-session="nadine" data-name="Nadine" data-date="January 2024" data-count="11">
+      <img src="images/virtual-shoots/nadine.jpg" alt="Nadine" loading="eager">
+      <div class="vs-item-overlay">
+        <div class="vs-item-name">Nadine</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">January 2024</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Denisa · January 2024 -->
+    <div class="vs-item reveal" data-session="denisa" data-name="Denisa" data-date="January 2024" data-count="11">
+      <img src="images/virtual-shoots/denisa.jpg" alt="Denisa" loading="lazy">
+      <div class="vs-item-overlay">
+        <div class="vs-item-name">Denisa</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">January 2024</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anna · Prague · January 2024 -->
+    <div class="vs-item reveal" data-session="anna-prague" data-name="Anna · Prague" data-date="January 2024" data-count="11">
+      <img src="images/virtual-shoots/anna-prague.jpg" alt="Anna Prague" loading="lazy">
       <div class="vs-item-overlay">
         <div class="vs-item-name">Anna · Prague</div>
-        <div class="vs-item-date">January 2024</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">January 2024</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
       </div>
     </div>
 
-    <div class="vs-item reveal">
-      <img src="images/virtual-shoots/laura.jpg" alt="Virtual shoot — Laura" loading="lazy">
+    <!-- Fiona · November 2023 -->
+    <div class="vs-item reveal" data-session="fiona" data-name="Fiona" data-date="November 2023" data-count="11">
+      <img src="images/virtual-shoots/fiona.jpg" alt="Fiona" loading="lazy">
+      <div class="vs-item-overlay">
+        <div class="vs-item-name">Fiona</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">November 2023</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Belen · August 2023 -->
+    <div class="vs-item reveal" data-session="belen" data-name="Belen" data-date="August 2023" data-count="11">
+      <img src="images/virtual-shoots/belen.jpg" alt="Belen" loading="lazy">
+      <div class="vs-item-overlay">
+        <div class="vs-item-name">Belen</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">August 2023</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slavina · March 2023 -->
+    <div class="vs-item reveal" data-session="slavina" data-name="Slavina" data-date="March 2023" data-count="11">
+      <img src="images/virtual-shoots/slavina.jpg" alt="Slavina" loading="lazy">
+      <div class="vs-item-overlay">
+        <div class="vs-item-name">Slavina</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">March 2023</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ashlynn · March 2023 -->
+    <div class="vs-item reveal" data-session="ashlynn" data-name="Ashlynn" data-date="March 2023" data-count="11">
+      <img src="images/virtual-shoots/ashlynn.jpg" alt="Ashlynn" loading="lazy">
+      <div class="vs-item-overlay">
+        <div class="vs-item-name">Ashlynn</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">March 2023</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Laura · November 2022 -->
+    <div class="vs-item reveal" data-session="laura" data-name="Laura" data-date="November 2022" data-count="11">
+      <img src="images/virtual-shoots/laura.jpg" alt="Laura" loading="lazy">
       <div class="vs-item-overlay">
         <div class="vs-item-name">Laura</div>
-        <div class="vs-item-date">November 2022</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">November 2022</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ki · September 2021 -->
+    <div class="vs-item reveal" data-session="ki" data-name="Ki" data-date="September 2021" data-count="11">
+      <img src="images/virtual-shoots/ki.jpg" alt="Ki" loading="lazy">
+      <div class="vs-item-overlay">
+        <div class="vs-item-name">Ki</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-date">September 2021</div>
+          <div class="vs-item-count">11 images</div>
+        </div>
       </div>
     </div>
 
@@ -428,65 +449,160 @@
 </footer>
 
 <script>
-  // Cursor
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursor-ring');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-  (function loop(){
-    cursor.style.left=mx+'px'; cursor.style.top=my+'px';
-    rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
-    ring.style.left=rx+'px'; ring.style.top=ry+'px';
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('a,button').forEach(el=>{
-    el.addEventListener('mouseenter',()=>ring.classList.add('hovered'));
-    el.addEventListener('mouseleave',()=>ring.classList.remove('hovered'));
-  });
-  document.querySelectorAll('.vs-item').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{ring.classList.remove('hovered');ring.classList.add('on-media');});
-    el.addEventListener('mouseleave',()=>ring.classList.remove('on-media'));
-  });
+// ── Cursor ──
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function loop(){
+  cursor.style.left=mx+'px';cursor.style.top=my+'px';
+  rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.classList.add('hovered'));
+  el.addEventListener('mouseleave',()=>ring.classList.remove('hovered'));
+});
 
-  // Page transitions
-  const pt = document.getElementById('page-transition');
-  function navigateTo(url){pt.classList.add('slide-in');setTimeout(()=>{window.location.href=url;},620);}
-  document.querySelectorAll('a[href]').forEach(a=>{
-    const h=a.getAttribute('href');
-    if(!h||h.startsWith('#')||h.startsWith('mailto')||h.startsWith('tel')||h.startsWith('http')||h.startsWith('//'))return;
-    a.addEventListener('click',e=>{e.preventDefault();navigateTo(h);});
-  });
-  window.addEventListener('pageshow',()=>{
-    pt.classList.remove('slide-in');
-    requestAnimationFrame(()=>requestAnimationFrame(()=>pt.classList.add('slide-out')));
-    setTimeout(()=>pt.classList.remove('slide-out'),700);
-  });
+// ── Page transitions ──
+const pt=document.getElementById('page-transition');
+function navigateTo(url){pt.classList.add('slide-in');setTimeout(()=>{window.location.href=url;},620);}
+document.querySelectorAll('a[href]').forEach(a=>{
+  const h=a.getAttribute('href');
+  if(!h||h.startsWith('#')||h.startsWith('mailto')||h.startsWith('tel')||h.startsWith('http')||h.startsWith('//'))return;
+  a.addEventListener('click',e=>{e.preventDefault();navigateTo(h);});
+});
+window.addEventListener('pageshow',()=>{
+  pt.classList.remove('slide-in');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>pt.classList.add('slide-out')));
+  setTimeout(()=>pt.classList.remove('slide-out'),700);
+});
 
-  // Nav scroll
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60),{passive:true});
+// ── Nav scroll ──
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60),{passive:true});
 
-  // Mobile menu
-  const hamburger = document.getElementById('nav-hamburger');
-  const mobileMenu = document.getElementById('mobile-menu');
-  hamburger.addEventListener('click',()=>{
-    hamburger.classList.toggle('open');
-    mobileMenu.classList.toggle('open');
-    document.body.style.overflow=mobileMenu.classList.contains('open')?'hidden':'';
+// ── Mobile menu ──
+const hamburger=document.getElementById('nav-hamburger');
+const mobileMenu=document.getElementById('mobile-menu');
+hamburger.addEventListener('click',()=>{
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow=mobileMenu.classList.contains('open')?'hidden':'';
+});
+mobileMenu.querySelectorAll('a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow='';
   });
-  mobileMenu.querySelectorAll('a').forEach(a=>{
-    a.addEventListener('click',()=>{
-      hamburger.classList.remove('open');
-      mobileMenu.classList.remove('open');
-      document.body.style.overflow='';
-    });
-  });
+});
 
-  // Reveal on scroll
-  const observer = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});
-  },{threshold:0.08});
-  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+// ── Reveal ──
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ── Lightbox ──
+const lb = document.getElementById('lb-overlay');
+const lbImg = document.getElementById('lb-img');
+const lbPrev = document.getElementById('lb-prev');
+const lbNext = document.getElementById('lb-next');
+const lbClose = document.getElementById('lb-close');
+const lbCounter = document.getElementById('lb-counter');
+const lbSessionName = document.getElementById('lb-session-name');
+const lbThumbs = document.getElementById('lb-thumbs');
+
+let currentImages = [];
+let currentIdx = 0;
+let currentName = '';
+
+function buildImageList(session, count) {
+  const imgs = [];
+  for (let i = 1; i <= count; i++) {
+    imgs.push(`images/vs-sessions/${session}/${String(i).padStart(2,'0')}.jpg`);
+  }
+  return imgs;
+}
+
+function showImage(idx) {
+  currentIdx = idx;
+  lbImg.classList.add('fading');
+  setTimeout(() => {
+    lbImg.src = currentImages[idx];
+    lbImg.classList.remove('fading');
+  }, 150);
+  lbCounter.textContent = `${idx + 1} / ${currentImages.length}`;
+  document.querySelectorAll('.lb-thumb').forEach((t,i) => t.classList.toggle('active', i === idx));
+  const activeThumb = lbThumbs.children[idx];
+  if (activeThumb) activeThumb.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function openLightbox(session, name, count) {
+  currentName = name;
+  currentImages = buildImageList(session, count);
+  lbSessionName.textContent = name;
+  lbThumbs.innerHTML = '';
+  currentImages.forEach((src, i) => {
+    const t = document.createElement('img');
+    t.className = 'lb-thumb' + (i === 0 ? ' active' : '');
+    t.src = src;
+    t.alt = '';
+    t.addEventListener('click', () => showImage(i));
+    lbThumbs.appendChild(t);
+  });
+  showImage(0);
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+  lbImg.src = '';
+}
+
+document.querySelectorAll('.vs-item').forEach(el => {
+  el.addEventListener('mouseenter', () => { ring.classList.remove('hovered'); ring.classList.add('on-media'); });
+  el.addEventListener('mouseleave', () => ring.classList.remove('on-media'));
+  el.addEventListener('click', () => {
+    const session = el.dataset.session;
+    const name = el.dataset.name;
+    const count = parseInt(el.dataset.count);
+    openLightbox(session, name, count);
+  });
+});
+
+lbClose.addEventListener('click', closeLightbox);
+lb.addEventListener('click', e => { if (e.target === lb || e.target === document.querySelector('.lb-inner')) closeLightbox(); });
+
+lbPrev.addEventListener('click', e => {
+  e.stopPropagation();
+  showImage((currentIdx - 1 + currentImages.length) % currentImages.length);
+});
+lbNext.addEventListener('click', e => {
+  e.stopPropagation();
+  showImage((currentIdx + 1) % currentImages.length);
+});
+
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'ArrowRight') showImage((currentIdx + 1) % currentImages.length);
+  if (e.key === 'ArrowLeft') showImage((currentIdx - 1 + currentImages.length) % currentImages.length);
+  if (e.key === 'Escape') closeLightbox();
+});
+
+// Touch swipe
+let touchStartX = 0;
+lbImg.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+lbImg.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) {
+    dx < 0 ? showImage((currentIdx+1)%currentImages.length) : showImage((currentIdx-1+currentImages.length)%currentImages.length);
+  }
+}, {passive:true});
 </script>
 </body>
 </html>

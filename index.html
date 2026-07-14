@@ -83,7 +83,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="images/Portraits__Tatiana - Hilton Creek__DSC_3323-1.jpg">
+<link rel="preload" as="image" href="images/hero-desktop.webp" media="(min-width: 768px)">
+<link rel="preload" as="image" href="images/hero-mobile.webp" media="(max-width: 767px)">
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <style>
@@ -284,12 +285,15 @@
   .hero-bg {
     position: absolute;
     inset: 0;
-    background-image: url("images/Portraits__Tatiana - Hilton Creek__DSC_3323-1.jpg");
+    background-image: url("images/hero-desktop.webp");
     background-size: cover;
     background-position: center 30%;
     transform: scale(1.08);
     transition: transform 8s ease-out;
     will-change: transform;
+  }
+  @media (max-width: 767px) {
+    .hero-bg { background-image: url("images/hero-mobile.webp"); background-position: center center; }
   }
   .hero-bg.loaded { transform: scale(1); }
   .hero-overlay {

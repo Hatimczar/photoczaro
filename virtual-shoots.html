@@ -34,11 +34,11 @@
   }
 
   /* Cursor */
-  .cursor { position: fixed; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+  .cursor { position: fixed; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 40000; transform: translate(-50%,-50%); }
   .cursor-ring {
     position: fixed; width: 80px; height: 80px;
     border: 1.5px solid rgba(201,169,110,0.55); border-radius: 50%;
-    pointer-events: none; z-index: 9998;
+    pointer-events: none; z-index: 39999;
     transform: translate(-50%,-50%) scale(0.35);
     transition: transform 0.45s cubic-bezier(0.215,0.61,0.355,1), border-color 0.3s, background-color 0.3s, backdrop-filter 0.3s;
   }

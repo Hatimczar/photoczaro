@@ -98,30 +98,52 @@
     cursor: none;
   }
 
-  /* Custom cursor */
+  /* Custom cursor — Montoya-style ball */
   .cursor {
     position: fixed;
-    width: 8px; height: 8px;
+    width: 6px; height: 6px;
     background: var(--gold);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
-    transition: transform 0.1s, width 0.3s var(--ease), height 0.3s var(--ease), background 0.3s;
+    transition: width 0.15s, height 0.15s, background 0.2s;
   }
   .cursor-ring {
     position: fixed;
-    width: 36px; height: 36px;
-    border: 1px solid rgba(201,169,110,0.5);
+    width: 80px; height: 80px;
+    border: 1.5px solid rgba(201,169,110,0.55);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: transform 0.08s, width 0.4s var(--ease), height 0.4s var(--ease), border-color 0.3s;
+    transform: translate(-50%, -50%) scale(0.35);
+    transition: transform 0.45s cubic-bezier(0.215, 0.61, 0.355, 1), border-color 0.3s, background-color 0.3s, backdrop-filter 0.3s;
+    box-sizing: border-box;
   }
-  body:has(a:hover) .cursor, body:has(button:hover) .cursor { width: 14px; height: 14px; }
-  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 60px; height: 60px; border-color: var(--gold); }
-  body:has(.gallery-item:hover) .cursor { background: var(--white); width: 60px; height: 60px; mix-blend-mode: difference; }
+  .cursor-ring.hovered {
+    transform: translate(-50%, -50%) scale(1);
+    border-color: rgba(201,169,110,0.9);
+  }
+  .cursor-ring.on-media {
+    transform: translate(-50%, -50%) scale(1);
+    border-color: rgba(255,255,255,0.15);
+    background-color: rgba(255,255,255,0.06);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+
+  /* Page transition overlay */
+  .page-transition {
+    position: fixed;
+    inset: 0;
+    background: var(--dark);
+    z-index: 20000;
+    transform: translateX(-100%);
+    transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+    pointer-events: none;
+  }
+  .page-transition.slide-in  { transform: translateX(0%); pointer-events: all; }
+  .page-transition.slide-out { transform: translateX(100%); }
 
   /* Scroll progress bar */
   .scroll-progress {
@@ -292,16 +314,31 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(70px, 9vw, 130px);
     font-weight: 300;
-    line-height: 0.9;
+    line-height: 0.95;
     letter-spacing: -0.02em;
     color: var(--white);
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeUp 1s 0.5s var(--ease) forwards;
   }
   .hero-title em {
     font-style: italic;
     color: var(--gold-light);
+  }
+  /* Montoya-style word clip animation */
+  .hero-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+  .hero-word span {
+    display: inline-block;
+    transform: translateY(120px);
+    opacity: 0;
+    animation: wordSweepUp 0.9s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+  }
+  .hero-word:nth-child(1) span { animation-delay: 0.5s; }
+  .hero-word:nth-child(2) span { animation-delay: 0.68s; }
+  .hero-word:nth-child(3) span { animation-delay: 0.86s; }
+  @keyframes wordSweepUp {
+    to { transform: translateY(0); opacity: 1; }
   }
   .hero-tagline {
     margin-top: 32px;
@@ -1371,6 +1408,7 @@
 <!-- Scroll progress -->
 <div class="scroll-progress" id="scroll-progress"></div>
 
+<div class="page-transition" id="page-transition"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
 
@@ -1416,7 +1454,9 @@
   <div class="hero-overlay-bottom"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Dubai - Photography</p>
-    <h1 class="hero-title">Photo<em>czaro</em></h1>
+    <h1 class="hero-title">
+      <span class="hero-word"><span>Photo</span></span><span class="hero-word"><span><em>czaro</em></span></span>
+    </h1>
     <p class="hero-tagline">Capturing Life, Creating Art</p>
   </div>
   <div class="hero-scroll">
@@ -1679,18 +1719,48 @@
 </div>
 
 <script>
-// Custom cursor
+// Custom cursor — Montoya-style
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-function animateCursor() {
+(function animateCursor() {
   cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
   ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
   requestAnimationFrame(animateCursor);
+})();
+
+// Ring states: scale up on links/buttons, frosted glass on media items
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));
+});
+document.querySelectorAll('.gallery-item, .magazine-card, .project-cover').forEach(el => {
+  el.addEventListener('mouseenter', () => { ring.classList.remove('hovered'); ring.classList.add('on-media'); });
+  el.addEventListener('mouseleave', () => ring.classList.remove('on-media'));
+});
+
+// Page transitions — slide dark panel on internal navigation
+const pageTransition = document.getElementById('page-transition');
+function navigateTo(url) {
+  pageTransition.classList.add('slide-in');
+  setTimeout(() => { window.location.href = url; }, 620);
 }
-animateCursor();
+document.querySelectorAll('a[href]').forEach(a => {
+  const href = a.getAttribute('href');
+  if (!href || href.startsWith('#') || href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('http') || href.startsWith('//')) return;
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    navigateTo(href);
+  });
+});
+// Slide out after arriving on this page
+window.addEventListener('pageshow', () => {
+  pageTransition.classList.remove('slide-in');
+  requestAnimationFrame(() => requestAnimationFrame(() => pageTransition.classList.add('slide-out')));
+  setTimeout(() => pageTransition.classList.remove('slide-out'), 700);
+});
 
 // Nav scroll
 const nav = document.getElementById('nav');

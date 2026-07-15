@@ -2205,7 +2205,7 @@ function buildPortraits() { portraits.forEach((p, i) => {
   block.appendChild(carousel);
   pgrid.appendChild(block);
   allPortraits.push({ src: p.src, name: p.name });
-}); observeNewRevealEls(pgrid); }
+}); observeNewRevealEls(pgrid); checkReveal(); }
 setTimeout(buildPortraits, 0);
 
 // Magazine gallery images
@@ -2431,7 +2431,7 @@ function buildMagazines() { magazines.forEach((m, i) => {
   block.appendChild(carousel);
   mgrid.appendChild(block);
   allMagazines.push({ src: m.src, name: m.name });
-}); observeNewRevealEls(mgrid); }
+}); observeNewRevealEls(mgrid); checkReveal(); }
 setTimeout(buildMagazines, 50);
 
 // Build Projects section
@@ -2537,7 +2537,7 @@ function buildProjects() { projectsData.forEach((proj, i) => {
   block.appendChild(toggle);
   block.appendChild(carousel);
   pgridProjects.appendChild(block);
-}); observeNewRevealEls(pgridProjects); }
+}); observeNewRevealEls(pgridProjects); checkReveal(); }
 setTimeout(buildProjects, 100);
 
 // Lightbox
@@ -2608,10 +2608,10 @@ function observeNewRevealEls(container) {
   container.querySelectorAll('.reveal, .section-line').forEach(el => observer.observe(el));
 }
 
-// Scroll fallback for iOS Safari where overflow:hidden ancestors break IntersectionObserver
+// Scroll fallback — queries live so it catches dynamically-added grid items
 function checkReveal() {
-  revealEls.forEach(el => {
-    if (!el.classList.contains('visible') && el.getBoundingClientRect().top < window.innerHeight) {
+  document.querySelectorAll('.reveal, .section-line').forEach(el => {
+    if (!el.classList.contains('visible') && el.getBoundingClientRect().top < window.innerHeight * 1.05) {
       el.classList.add('visible');
     }
   });

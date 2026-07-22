@@ -237,4 +237,18 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Privacy Policy (English only) -->
+  <url>
+    <loc>https://photoczaro.com/privacy-policy.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://photoczaro.com/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"        href="https://photoczaro.com/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"        href="https://photoczaro.com/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="es"        href="https://photoczaro.com/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"        href="https://photoczaro.com/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/privacy-policy.html"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
 </urlset>

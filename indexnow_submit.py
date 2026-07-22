@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Submit all photoczaro.com URLs to Bing + Yandex via IndexNow.
+Submit all photoczaro.com URLs to Bing + Yandex + Seznam via IndexNow.
 Run once after each deploy: python3 indexnow_submit.py
 """
 import urllib.request, json
@@ -38,10 +38,11 @@ PAYLOAD = json.dumps({
     "urlList": URLS,
 }).encode()
 
-# Both Bing and Yandex accept the same IndexNow endpoint format
+# Bing, Yandex, and Seznam all accept the same IndexNow endpoint format
 ENDPOINTS = [
     "https://www.bing.com/indexnow",
     "https://yandex.com/indexnow",
+    "https://search.seznam.cz/indexnow",
 ]
 
 for endpoint in ENDPOINTS:

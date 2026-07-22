@@ -29,6 +29,7 @@ URLS = [
     "https://photoczaro.com/cs/",
     "https://photoczaro.com/cs/journal.html",
     "https://photoczaro.com/cs/blog/modeling-portfolio-dubai-guide.html",
+    "https://photoczaro.com/privacy-policy.html",
 ]
 
 PAYLOAD = json.dumps({

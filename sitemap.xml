@@ -1,39 +1,239 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
+  <!-- English (root) -->
   <url>
     <loc>https://photoczaro.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/"/>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
+    <loc>https://photoczaro.com/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/ru/</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/es/</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/cs/</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Journal -->
+  <url>
     <loc>https://photoczaro.com/journal.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/journal.html"/>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
+    <loc>https://photoczaro.com/fr/journal.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/journal.html"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/ru/journal.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/journal.html"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/es/journal.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/journal.html"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/cs/journal.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/journal.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/journal.html"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Modeling portfolio blog post (translated) -->
+  <url>
+    <loc>https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/fr/blog/modeling-portfolio-dubai-guide.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/ru/blog/modeling-portfolio-dubai-guide.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/es/blog/modeling-portfolio-dubai-guide.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/cs/blog/modeling-portfolio-dubai-guide.html</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="fr"       href="https://photoczaro.com/fr/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="ru"       href="https://photoczaro.com/ru/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/blog/modeling-portfolio-dubai-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide.html"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Other blog posts (English only) -->
+  <url>
     <loc>https://photoczaro.com/blog/fujifilm-x100vi-review.html</loc>
+    <lastmod>2025-03-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://photoczaro.com/blog/malvie-magazine-interview.html</loc>
+    <lastmod>2024-02-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://photoczaro.com/blog/shooting-golden-hour-dubai.html</loc>
+    <lastmod>2025-01-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://photoczaro.com/blog/sony-a7cr-portrait-photographer.html</loc>
+    <lastmod>2025-02-01</lastmod>
     <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Virtual shoots -->
+  <url>
+    <loc>https://photoczaro.com/virtual-shoots.html</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 

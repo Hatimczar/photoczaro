@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
-Disallow: /virtual-shoots.html
+
+User-agent: Yandex
+Allow: /
+Crawl-delay: 0
 
 Sitemap: https://photoczaro.com/sitemap.xml

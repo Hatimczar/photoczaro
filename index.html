@@ -1582,12 +1582,17 @@
     <li><a href="#portraits">Portraits</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="journal">Journal</a></li>
-    <li><a href="work-with-me">Work With Me</a></li>
-    <li><a href="for-publishers/">For Publishers</a></li>
-    <li><a href="virtual-shoots">VS</a></li>
+    <li><div class="nav-more">
+      <button type="button" class="nav-more-btn" aria-haspopup="true" aria-expanded="false">More <span class="lsn-caret">▾</span></button>
+      <div class="nav-more-menu" role="menu">
+        <a href="journal">Journal</a>
+        <a href="work-with-me">Work With Me</a>
+        <a href="for-publishers/">For Publishers</a>
+        <a href="virtual-shoots">Virtual Shoots</a>
+      </div>
+    </div></li>
     <li><a href="#contact">Contact</a></li>
-  
+
     <li><div class="lang-switch lang-switch-nav">
       <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="Change language">EN <span class="lsn-caret">▾</span></button>
       <div class="lang-switch-menu" role="menu">
@@ -1603,6 +1608,61 @@
     <span></span><span></span><span></span>
   </button>
 <style>
+  .nav-more { position: relative; display: inline-flex; align-items: center; }
+  .nav-more-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--grey);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.3s;
+  }
+  .nav-more-btn:hover { color: var(--white); }
+  .nav-more .lsn-caret { font-size: 9px; transition: transform 0.3s var(--ease); }
+  .nav-more.open .lsn-caret { transform: rotate(180deg); }
+  .nav-more.open .nav-more-btn { color: var(--white); }
+  .nav-more-menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translate(-50%, 6px);
+    background: rgba(18,16,14,0.9);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 6px;
+    min-width: 168px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 500;
+  }
+  .nav-more.open .nav-more-menu {
+    opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, 0);
+  }
+  .nav-more-menu a {
+    display: block;
+    padding: 9px 14px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(230,228,224,0.7);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-more-menu a:hover { background: rgba(201,169,110,0.12); color: var(--gold); }
+
   .lang-switch-nav.lang-switch { display: inline-flex; align-items: center; }
   .lang-switch-btn-nav {
     background: transparent;
@@ -1632,18 +1692,18 @@
 </style>
 <script>
 (function(){
-  document.querySelectorAll('.lang-switch-btn-nav').forEach(function(btn){
+  document.querySelectorAll('.lang-switch-btn-nav, .nav-more-btn').forEach(function(btn){
     btn.addEventListener('click', function(e){
       e.stopPropagation();
-      var w = btn.closest('.lang-switch');
+      var w = btn.closest('.lang-switch, .nav-more');
       var open = w.classList.toggle('open');
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
   });
   document.addEventListener('click', function(){
-    document.querySelectorAll('.lang-switch-nav.open').forEach(function(w){
+    document.querySelectorAll('.lang-switch-nav.open, .nav-more.open').forEach(function(w){
       w.classList.remove('open');
-      var b = w.querySelector('.lang-switch-btn-nav');
+      var b = w.querySelector('.lang-switch-btn-nav, .nav-more-btn');
       if(b) b.setAttribute('aria-expanded','false');
     });
   });
@@ -1660,7 +1720,8 @@
     <li><a href="#about"><span class="menu-link-text">About</span></a></li>
     <li><a href="journal"><span class="menu-link-text">Journal</span></a></li>
     <li><a href="work-with-me"><span class="menu-link-text">Work With Me</span></a></li>
-    <li><a href="virtual-shoots"><span class="menu-link-text">VS</span></a></li>
+    <li><a href="for-publishers/"><span class="menu-link-text">For Publishers</span></a></li>
+    <li><a href="virtual-shoots"><span class="menu-link-text">Virtual Shoots</span></a></li>
     <li><a href="#contact"><span class="menu-link-text">Contact</span></a></li>
   </ul>
   <div class="mobile-menu-footer">

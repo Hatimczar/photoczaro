@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publisher Approvals | Admin | Photoczaro</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="../for-publishers/style.css?v=2">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+
+<header class="pub-header">
+  <a href="/" class="pub-logo">Photoczaro <span>/ Admin</span></a>
+</header>
+
+<main>
+  <div class="pub-eyebrow">Admin</div>
+  <h1 class="pub-title">Publisher Approvals</h1>
+
+  <div id="login-view">
+    <div class="pub-msg" id="login-msg"></div>
+    <form class="pub-form" id="login-form">
+      <div class="pub-field">
+        <label for="password">Admin Password</label>
+        <input type="password" id="password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="pub-btn pub-btn-solid" id="login-btn">Log In</button>
+    </form>
+  </div>
+
+  <div id="table-view" style="display:none;">
+    <div class="pub-table-wrap">
+      <table class="pub-table">
+        <thead>
+          <tr><th>Name</th><th>Publication</th><th>Email</th><th>Status</th><th>Registered</th><th></th></tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+    <p class="admin-empty" id="empty-note" style="display:none;">No publisher accounts yet.</p>
+  </div>
+</main>
+
+<script>
+const loginView = document.getElementById('login-view');
+const tableView = document.getElementById('table-view');
+const loginForm = document.getElementById('login-form');
+const loginMsg = document.getElementById('login-msg');
+const loginBtn = document.getElementById('login-btn');
+const tableBody = document.getElementById('table-body');
+
+function statusPill(status) {
+  return `<span class="status-pill ${status}">${status}</span>`;
+}
+
+async function loadList() {
+  const res = await fetch('/api/admin-list');
+  if (!res.ok) {
+    loginView.style.display = 'block';
+    tableView.style.display = 'none';
+    return;
+  }
+  const { publishers } = await res.json();
+  loginView.style.display = 'none';
+  tableView.style.display = 'block';
+
+  const emptyNote = document.getElementById('empty-note');
+  const tableWrap = document.querySelector('.pub-table-wrap');
+  if (publishers.length === 0) {
+    emptyNote.style.display = 'block';
+    tableWrap.style.display = 'none';
+    return;
+  }
+  emptyNote.style.display = 'none';
+  tableWrap.style.display = 'block';
+
+  tableBody.innerHTML = '';
+  publishers.forEach((p) => {
+    const row = document.createElement('tr');
+    const date = new Date(p.createdAt).toLocaleDateString();
+    row.innerHTML = `
+      <td>${p.name}</td>
+      <td>${p.magazine}</td>
+      <td>${p.email}</td>
+      <td>${statusPill(p.status)}</td>
+      <td>${date}</td>
+      <td class="pub-table-actions">
+        ${p.status !== 'approved' ? `<button class="approve" data-email="${p.email}" data-action="approve">Approve</button>` : ''}
+        ${p.status !== 'rejected' ? `<button class="reject" data-email="${p.email}" data-action="reject">Reject</button>` : ''}
+      </td>`;
+    tableBody.appendChild(row);
+  });
+
+  tableBody.querySelectorAll('button').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      await fetch('/api/admin-approve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: btn.dataset.email, action: btn.dataset.action }),
+      });
+      loadList();
+    });
+  });
+}
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  loginMsg.className = 'pub-msg';
+  loginBtn.disabled = true;
+  loginBtn.textContent = 'Logging in…';
+
+  try {
+    const res = await fetch('/api/admin-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: document.getElementById('password').value }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      loginMsg.textContent = data.error || 'Incorrect password.';
+      loginMsg.className = 'pub-msg error show';
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Log In';
+      return;
+    }
+    loadList();
+  } catch {
+    loginMsg.textContent = 'Network error. Please try again.';
+    loginMsg.className = 'pub-msg error show';
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Log In';
+  }
+});
+
+loadList();
+</script>
+
+</body>
+</html>

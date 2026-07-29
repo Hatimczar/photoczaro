@@ -1,5 +1,26 @@
-export async function onRequest({ request, next }) {
+import { getCookie, verifyToken } from './_lib/auth.js';
+
+export async function onRequest({ request, next, env }) {
   const url = new URL(request.url);
+
+  // Gate the publisher gallery page and its preview images/manifests.
+  const isGalleryPage = url.pathname === '/for-publishers/gallery.html' || url.pathname === '/for-publishers/gallery';
+  const isGalleryAsset = url.pathname.startsWith('/images/publishers/');
+
+  if (isGalleryPage || isGalleryAsset) {
+    const token = getCookie(request, 'pcz_pub_session');
+    const payload = token ? await verifyToken(token, env.SESSION_SECRET) : null;
+
+    if (!payload || !payload.email) {
+      if (isGalleryAsset) {
+        return new Response('Forbidden', { status: 403 });
+      }
+      return new Response(null, {
+        status: 302,
+        headers: { Location: '/for-publishers/login.html', 'Cache-Control': 'no-store' },
+      });
+    }
+  }
 
   // Only auto-redirect the root path
   if (url.pathname !== '/') return next();

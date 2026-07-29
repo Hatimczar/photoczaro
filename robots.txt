@@ -1,5 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /for-publishers/gallery.html
+Disallow: /for-publishers/signup.html
+Disallow: /for-publishers/login.html
+Disallow: /for-publishers/pending.html
+Disallow: /images/publishers/
 
 User-agent: Yandex
 Allow: /

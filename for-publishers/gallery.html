@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery | For Publishers | Photoczaro</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="style.css?v=2">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<style>
+  details.model-section summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  details.model-section summary::-webkit-details-marker { display: none; }
+  details.model-section summary .marker {
+    display: inline-block;
+    color: var(--gold);
+    font-size: 18px;
+    width: 18px;
+    transform: rotate(0deg);
+    transition: transform 0.25s var(--ease);
+  }
+  details.model-section[open] summary .marker { transform: rotate(45deg); }
+  details.model-section summary:hover h2 { color: var(--gold); }
+  .model-section h2 { transition: color 0.2s; }
+
+  .gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .gallery-welcome { color: var(--grey); font-size: 14px; }
+  .gallery-welcome strong { color: var(--white); }
+  #logout-btn {
+    background: none; border: none; color: var(--grey); font-size: 13px;
+    text-decoration: underline; cursor: pointer; font-family: inherit;
+    padding: 6px 2px;
+    transition: color 0.2s;
+  }
+  #logout-btn:hover { color: var(--gold); }
+
+  @media (max-width: 480px) {
+    .gallery-header { margin-bottom: 28px; }
+    .model-section h2 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="pub-header">
+  <a href="/" class="pub-logo">Photoczaro <span>/ Publishers</span></a>
+  <nav><button id="logout-btn">Log Out</button></nav>
+</header>
+
+<main>
+  <div class="gallery-header">
+    <div>
+      <div class="pub-eyebrow">Gallery</div>
+      <h1 class="pub-title" style="margin-bottom:0;">Select images by model</h1>
+    </div>
+    <div class="gallery-welcome" id="welcome"></div>
+  </div>
+
+  <div id="sections"></div>
+</main>
+
+<div class="selection-bar">
+  <div class="selection-count"><strong id="sel-count">0</strong> image(s) selected</div>
+  <button class="pub-btn pub-btn-solid" id="send-btn" disabled>Send Selection</button>
+</div>
+
+<script>
+const MODELS = [
+  { slug: 'city-walk', name: 'City Walk' },
+  { slug: 'desert', name: 'Desert' },
+  { slug: 'home', name: 'Home' },
+  { slug: 'pantheone', name: 'Pantheone' },
+];
+
+const selected = new Map(); // key `${slug}:${original}` -> { model, original }
+let publisherInfo = null;
+
+const sectionsEl = document.getElementById('sections');
+const selCountEl = document.getElementById('sel-count');
+const sendBtn = document.getElementById('send-btn');
+const welcomeEl = document.getElementById('welcome');
+
+function updateSelectionBar() {
+  selCountEl.textContent = selected.size;
+  sendBtn.disabled = selected.size === 0;
+}
+
+function togglePick(el, key, model, original) {
+  if (selected.has(key)) {
+    selected.delete(key);
+    el.classList.remove('selected');
+  } else {
+    selected.set(key, { model, original });
+    el.classList.add('selected');
+  }
+  updateSelectionBar();
+}
+
+function renderSkeleton(gridEl, count) {
+  gridEl.className = 'skeleton-grid';
+  gridEl.innerHTML = Array.from({ length: count }).map(() => '<div class="skeleton-cell"></div>').join('');
+}
+
+async function loadModelSection(model, gridEl) {
+  renderSkeleton(gridEl, 8);
+  try {
+    const res = await fetch(`/images/publishers/${model.slug}/manifest.json`);
+    if (!res.ok) throw new Error('failed');
+    const items = await res.json();
+
+    gridEl.className = 'model-photo-grid';
+    gridEl.innerHTML = '';
+    items.forEach((item) => {
+      const key = `${model.slug}:${item.original}`;
+      const cell = document.createElement('div');
+      cell.className = 'photo-pick';
+      cell.innerHTML = `<img src="/images/publishers/${model.slug}/${item.preview}" loading="lazy" decoding="async" alt="${model.name} — ${item.original}"><div class="pick-check">✓</div>`;
+      cell.addEventListener('click', () => togglePick(cell, key, model.name, item.original));
+      gridEl.appendChild(cell);
+    });
+  } catch {
+    gridEl.className = 'model-photo-grid';
+    gridEl.innerHTML = '<div class="gallery-error">Couldn\'t load this gallery. Try refreshing the page.</div>';
+  }
+}
+
+function buildSections() {
+  MODELS.forEach((model, i) => {
+    const details = document.createElement('details');
+    details.className = 'model-section';
+    if (i === 0) details.setAttribute('open', '');
+
+    const summary = document.createElement('summary');
+    summary.innerHTML = `<span class="marker">+</span><h2>${model.name}</h2>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'model-photo-grid';
+
+    details.appendChild(summary);
+    details.appendChild(grid);
+    sectionsEl.appendChild(details);
+
+    let loaded = false;
+    const maybeLoad = () => {
+      if (!loaded && details.open) {
+        loaded = true;
+        loadModelSection(model, grid);
+      }
+    };
+    details.addEventListener('toggle', maybeLoad);
+    maybeLoad(); // load the first, already-open section immediately
+  });
+}
+
+async function loadMe() {
+  try {
+    const res = await fetch('/api/publishers-me');
+    if (!res.ok) {
+      window.location.href = 'login';
+      return;
+    }
+    publisherInfo = await res.json();
+    welcomeEl.innerHTML = `Welcome, <strong>${publisherInfo.name}</strong> &middot; ${publisherInfo.magazine}`;
+  } catch {
+    window.location.href = 'login';
+  }
+}
+
+sendBtn.addEventListener('click', () => {
+  if (!publisherInfo || selected.size === 0) return;
+
+  const lines = Array.from(selected.values())
+    .map((s) => `- ${s.original} (${s.model})`)
+    .join('\n');
+
+  const subject = `Image Selection - ${publisherInfo.magazine}`;
+  const body =
+`Hi Hatim,
+
+${publisherInfo.name} here from ${publisherInfo.magazine} Publication, we like these images for Publication:
+
+${lines}
+
+Best Regards,
+${publisherInfo.name}`;
+
+  const mailto = `mailto:info@photoczaro.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+});
+
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  await fetch('/api/publishers-logout', { method: 'POST' });
+  window.location.href = 'login';
+});
+
+loadMe();
+buildSections();
+</script>
+
+</body>
+</html>

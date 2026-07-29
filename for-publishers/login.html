@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In | For Publishers | Photoczaro</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="style.css?v=2">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+
+<header class="pub-header">
+  <a href="/" class="pub-logo">Photoczaro <span>/ Publishers</span></a>
+  <nav><a href="signup" class="pub-btn pub-btn-solid pub-btn-sm">Register</a></nav>
+</header>
+
+<main>
+  <div class="pub-eyebrow">Publisher Access</div>
+  <h1 class="pub-title">Log in</h1>
+
+  <div class="pub-msg" id="msg"></div>
+
+  <form class="pub-form" id="login-form">
+    <div class="pub-field">
+      <label for="email">Email</label>
+      <input type="email" id="email" required autocomplete="email">
+    </div>
+    <div class="pub-field">
+      <label for="password">Password</label>
+      <input type="password" id="password" required autocomplete="current-password">
+    </div>
+    <button type="submit" class="pub-btn pub-btn-solid" id="submit-btn">Log In</button>
+  </form>
+
+  <p class="pub-note">Not registered yet? <a href="signup">Create an account</a></p>
+</main>
+
+<footer class="pub-footer">&copy; Photoczaro. Access to this gallery is by approval only.</footer>
+
+<script>
+const form = document.getElementById('login-form');
+const msg = document.getElementById('msg');
+const btn = document.getElementById('submit-btn');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  msg.className = 'pub-msg';
+  btn.disabled = true;
+  btn.textContent = 'Logging in…';
+
+  try {
+    const res = await fetch('/api/publishers-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+      }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      msg.textContent = data.error || 'Something went wrong.';
+      msg.className = 'pub-msg error show';
+      btn.disabled = false;
+      btn.textContent = 'Log In';
+      return;
+    }
+
+    window.location.href = 'gallery';
+  } catch {
+    msg.textContent = 'Network error. Please try again.';
+    msg.className = 'pub-msg error show';
+    btn.disabled = false;
+    btn.textContent = 'Log In';
+  }
+});
+</script>
+
+</body>
+</html>

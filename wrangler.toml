@@ -1,0 +1,7 @@
+name = "photoczaro"
+pages_build_output_dir = "."
+compatibility_date = "2026-07-01"
+
+[[kv_namespaces]]
+binding = "PUBLISHERS_KV"
+id = "25ad1257e9f44539b1d8bc02f72100eb"

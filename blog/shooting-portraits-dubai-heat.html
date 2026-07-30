@@ -137,6 +137,11 @@
   .post-body blockquote p { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-style: italic; color: var(--gold-light); margin-bottom: 0; }
   .post-body .gear-note { background: var(--dark-3); border: 0.5px solid rgba(201,169,110,0.2); padding: 24px 28px; margin: 40px 0; font-size: 13px; line-height: 1.7; color: var(--grey); }
   .post-body .gear-note strong { color: var(--gold); font-weight: 400; display: block; margin-bottom: 10px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .bts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0; }
+  .bts-grid figure { margin: 0; }
+  .bts-grid img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+  .bts-grid figcaption { font-size: 11px; letter-spacing: 0.04em; color: var(--grey); margin-top: 10px; line-height: 1.5; }
+  @media (max-width: 640px) { .bts-grid { grid-template-columns: 1fr; } }
   .post-body hr { border: none; border-top: 0.5px solid rgba(255,255,255,0.08); margin: 60px 0; }
   .post-footer { border-top: 0.5px solid rgba(255,255,255,0.07); padding: 60px; max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
   .back-to-blog { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color 0.3s; }
@@ -288,6 +293,19 @@ window.addEventListener('pageshow',()=>{
     <strong>What I bring for indoor / studio sessions</strong>
     Godox SK400II V as key light, modified through a softbox or a shoot-through umbrella depending on how hard or soft I want the falloff on the face. A second, lower-output head for fill or a hair light when the space allows it. Light stands with sandbags if I'm working in a rented apartment or villa rather than a dedicated studio. Extra batteries and a spare trigger - always, because a dead trigger on a shoot day is the one failure I can't shoot around.
   </div>
+
+  <div class="bts-grid">
+    <figure>
+      <img src="../images/bts-curio-heritage-godox-setup.webp" alt="Behind the scenes: shooting an indoor portrait session with a Godox softbox inside a heritage-style room at Curio Heritage, Dubai" loading="lazy">
+      <figcaption>Working with a Godox SK400II V and softbox inside a heritage-style room at Curio Heritage - window light doing the rest.</figcaption>
+    </figure>
+    <figure>
+      <img src="../images/bts-airbnb-godox-studio-setup.webp" alt="A bedroom in a Dubai Airbnb converted into a makeshift studio with a white backdrop and Godox softbox" loading="lazy">
+      <figcaption>A rented apartment turned into a makeshift studio for the day - backdrop, Godox softbox, and full control over the light.</figcaption>
+    </figure>
+  </div>
+
+  <p>Neither of these is a dedicated photo studio. One is a heritage-style guesthouse room, the other a bedroom in a rented apartment. The backdrop and the Godox go wherever I do - that's the whole point of not depending on the sun.</p>
 
   <p>A studio or a well-lit apartment also means the whole session runs on a schedule that isn't dictated by when the sun is bearable. I've done full multi-look editorial sessions indoors in the middle of an August afternoon that would have been unworkable outside at the same hour - because inside, the temperature and the light are both things I'm setting, not things I'm reacting to.</p>
 

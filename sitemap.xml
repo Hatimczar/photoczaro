@@ -518,6 +518,14 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- What happens at a professional photoshoot -->
+  <url>
+    <loc>https://photoczaro.com/blog/what-happens-at-a-professional-photoshoot</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Golden hour Dubai (all languages) -->
   <url>
     <loc>https://photoczaro.com/blog/shooting-golden-hour-dubai</loc>

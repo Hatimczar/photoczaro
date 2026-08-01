@@ -445,6 +445,21 @@
   .nav-links a:hover::after { width: 100%; }
   .nav-links a.active { color: var(--white); }
   .nav-links a.active::after { width: 100%; background: var(--gold); }
+  .nav-cta-btn {
+    color: var(--dark) !important;
+    background: linear-gradient(135deg, rgba(201,169,110,0.92), rgba(232,213,163,0.85));
+    padding: 9px 20px;
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(201,169,110,0.28), inset 0 1px 0 rgba(255,255,255,0.35);
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+  .nav-cta-btn::after { display: none; }
+  .nav-cta-btn:hover {
+    color: var(--dark) !important;
+    background: linear-gradient(135deg, rgba(232,213,163,0.98), rgba(201,169,110,0.92));
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(201,169,110,0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+  }
 
   /* Hero */
   .hero {
@@ -531,15 +546,38 @@
   @keyframes wordSweepUp {
     to { transform: translateY(0); opacity: 1; }
   }
+  .hero-descriptor {
+    margin-top: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 2.2vw, 26px);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: var(--gold-light);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 0.72s var(--ease) forwards;
+  }
   .hero-tagline {
-    margin-top: 32px;
+    margin-top: 18px;
+    max-width: 540px;
     font-size: 14px;
-    letter-spacing: 0.12em;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
     color: rgba(245,240,235,0.65);
     font-weight: 300;
     opacity: 0;
     transform: translateY(20px);
-    animation: fadeUp 1s 0.8s var(--ease) forwards;
+    animation: fadeUp 1s 0.88s var(--ease) forwards;
+  }
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: flex-start;
+    margin-top: 34px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 1.05s var(--ease) forwards;
   }
   .hero-scroll {
     position: absolute;
@@ -1278,6 +1316,7 @@
     align-items: center;
     border-top: 1px solid rgba(255,255,255,0.04);
   }
+  .sticky-mobile-cta { display: none; }
   .footer-logo {
     font-family: 'Cormorant Garamond', serif;
     font-size: 16px;
@@ -1470,6 +1509,10 @@
     letter-spacing: 0.02em;
     line-height: 1;
   }
+  .mobile-menu-cta-item { border-top-color: rgba(201,169,110,0.4); }
+  .mobile-menu-cta .menu-link-text { color: var(--gold-light); font-style: normal; }
+  .mobile-menu-cta:hover .menu-link-text,
+  .mobile-menu-cta:active .menu-link-text { color: var(--white); }
   .mobile-menu-footer {
     display: flex;
     justify-content: space-between;
@@ -1509,6 +1552,8 @@
 
     .hero { padding: 0 24px 80px; }
     .hero-scroll { right: 24px; bottom: 60px; }
+    .hero-ctas { gap: 10px; }
+    .hero-ctas .cta-btn { flex: 1 1 auto; text-align: center; }
 
     section { padding: 72px 20px; }
     .section-header { gap: 12px; margin-bottom: 40px; }
@@ -1532,7 +1577,12 @@
     #contact { padding: 80px 24px; }
     .contact-socials { gap: 24px; }
 
-    footer { padding: 24px; flex-direction: column; gap: 10px; text-align: center; }
+    footer { padding: 24px; flex-direction: column; gap: 10px; text-align: center; padding-bottom: 110px; }
+
+    .sticky-mobile-cta { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: rgba(10,10,10,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 0.5px solid rgba(201,169,110,0.25); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); gap: 10px; }
+    .sticky-mobile-cta a { flex: 1; text-align: center; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 14px 10px; font-weight: 500; border-radius: 999px; backdrop-filter: blur(14px) saturate(180%); -webkit-backdrop-filter: blur(14px) saturate(180%); }
+    .sticky-mobile-cta a.sticky-cta-primary { background: linear-gradient(135deg, rgba(201,169,110,0.9), rgba(232,213,163,0.8)); color: var(--dark); box-shadow: 0 4px 16px rgba(201,169,110,0.3), inset 0 1px 0 rgba(255,255,255,0.35); }
+    .sticky-mobile-cta a.sticky-cta-secondary { background: rgba(255,255,255,0.08); color: var(--gold-light); border: 1px solid rgba(255,255,255,0.18); }
 
     .lightbox img { max-width: 96vw; max-height: 80vh; }
     .lightbox-close { top: 16px; right: 20px; }
@@ -1586,12 +1636,12 @@
       <button type="button" class="nav-more-btn" aria-haspopup="true" aria-expanded="false">More <span class="lsn-caret">▾</span></button>
       <div class="nav-more-menu" role="menu">
         <a href="journal">Journal</a>
-        <a href="work-with-me">Work With Me</a>
         <a href="for-publishers/">For Publishers</a>
         <a href="virtual-shoots">Virtual Shoots</a>
       </div>
     </div></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="work-with-me" class="nav-cta-btn">Work With Me</a></li>
 
     <li><div class="lang-switch lang-switch-nav">
       <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="Change language">EN <span class="lsn-caret">▾</span></button>
@@ -1719,10 +1769,10 @@
     <li><a href="#projects"><span class="menu-link-text">Projects</span></a></li>
     <li><a href="#about"><span class="menu-link-text">About</span></a></li>
     <li><a href="journal"><span class="menu-link-text">Journal</span></a></li>
-    <li><a href="work-with-me"><span class="menu-link-text">Work With Me</span></a></li>
     <li><a href="for-publishers/"><span class="menu-link-text">For Publishers</span></a></li>
     <li><a href="virtual-shoots"><span class="menu-link-text">Virtual Shoots</span></a></li>
     <li><a href="#contact"><span class="menu-link-text">Contact</span></a></li>
+    <li class="mobile-menu-cta-item"><a href="work-with-me" class="mobile-menu-cta"><span class="menu-link-text">Work With Me</span></a></li>
   </ul>
   <div class="mobile-menu-footer">
     <span class="mobile-menu-brand">Photoczaro</span>
@@ -1734,16 +1784,20 @@
 
 <!-- Hero -->
 <section class="hero" id="home">
-  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-bg" id="hero-bg" role="img" aria-label="Editorial portrait photography by Photoczaro, Dubai"></div>
   <div class="hero-overlay"></div>
   <div class="hero-overlay-bottom"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Dubai - Photography</p>
     <h1 class="hero-title">
       <span class="hero-word"><span>Photo</span></span><span class="hero-word"><span><em>czaro</em></span></span>
-      <span style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">: Dubai Portrait &amp; Editorial Photographer</span>
     </h1>
-    <p class="hero-tagline">Capturing Life, Creating Art</p>
+    <p class="hero-descriptor">Dubai Portrait, Fashion &amp; Editorial Photographer</p>
+    <p class="hero-tagline">Internationally published photography for models, individuals and creative brands&mdash;crafted with direction, character and a refined editorial perspective.</p>
+    <div class="hero-ctas">
+      <a href="work-with-me" class="cta-btn cta-btn-primary">Plan Your Photoshoot &rarr;</a>
+      <a href="#portraits" class="cta-btn">Explore the Portfolio</a>
+    </div>
   </div>
   <div class="hero-scroll">
     <div class="scroll-line"></div>
@@ -1992,7 +2046,7 @@
 <footer>
   <span class="footer-logo">Photoczaro</span>
   <a href="/privacy-policy" class="footer-copy" style="text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color=''">Privacy Policy</a>
-  <span class="footer-copy">© 2026 Photoczaro - All Rights Reserved</span>
+  <span class="footer-copy">© <span class="js-year">2026</span> Photoczaro - All Rights Reserved</span><script src="/js/site-year.js" defer></script>
 <style>
   .lang-switch { position: relative; display: inline-block; }
   .lang-switch-btn {
@@ -2076,6 +2130,11 @@
 </script>
 </footer>
 
+<div class="sticky-mobile-cta">
+  <a href="https://wa.me/971508065253" target="_blank" class="sticky-cta-primary">WhatsApp Me</a>
+  <a href="tel:+971508065253" class="sticky-cta-secondary">Call</a>
+</div>
+
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lb-close">✕</button>
@@ -2148,16 +2207,16 @@ window.addEventListener('scroll', () => {
 
 // Image data
 const portraits = [
-  { name: 'Anastasiia', src: 'images/Portraits__Anastasiia__IMG_3371-DeNoiseAI-low-light-Fuji.webp' },
-  { name: 'Darya', src: 'images/Portraits__Darya__DSC_0287-2.webp' },
-  { name: 'Diana', src: 'images/Portraits__Diana__DSC_1506 Large.webp' },
-  { name: 'Elizabeth', src: 'images/Portraits__Elizabeth__DSC_0685.webp' },
-  { name: 'Evelina', src: 'images/Portraits__Evelina__DSC_0150.webp' },
-  { name: 'Fernanda', src: 'images/Portraits__Fernanda__Post---5.webp' },
-  { name: 'Jane', src: 'images/Portraits__Jane__IMG_2378 Nude Lip.webp' },
-  { name: 'Kate', src: 'images/Portraits__Kate Indoor Shoot__DSC_0151.webp' },
-  { name: 'Kardelen', src: 'images/Portraits__Kardelen__DSC_3802-1.webp' },
-  { name: 'Karla', src: 'images/Portraits__Karla - Financial Centre__Image_02.webp' },
+  { name: 'Anastasiia', alt: 'Low-light portrait session in Dubai, natural expression and soft ambient light', src: 'images/Portraits__Anastasiia__IMG_3371-DeNoiseAI-low-light-Fuji.webp' },
+  { name: 'Darya', alt: 'Editorial portrait by Photoczaro, Dubai-based portrait photography', src: 'images/Portraits__Darya__DSC_0287-2.webp' },
+  { name: 'Diana', alt: 'Fine-art portrait session, Dubai studio photography by Photoczaro', src: 'images/Portraits__Diana__DSC_1506 Large.webp' },
+  { name: 'Elizabeth', alt: 'Natural-light portrait, Dubai portrait photography by Photoczaro', src: 'images/Portraits__Elizabeth__DSC_0685.webp' },
+  { name: 'Evelina', alt: 'Editorial-style portrait session in Dubai by Photoczaro', src: 'images/Portraits__Evelina__DSC_0150.webp' },
+  { name: 'Fernanda', alt: 'Portrait photography session, Dubai, by Photoczaro', src: 'images/Portraits__Fernanda__Post---5.webp' },
+  { name: 'Jane', alt: 'Beauty-focused portrait shot in Dubai by Photoczaro', src: 'images/Portraits__Jane__IMG_2378 Nude Lip.webp' },
+  { name: 'Kate', alt: 'Indoor portrait session in Dubai, soft directional lighting', src: 'images/Portraits__Kate Indoor Shoot__DSC_0151.webp' },
+  { name: 'Kardelen', alt: 'Studio portrait with dramatic lighting, Dubai photography by Photoczaro', src: 'images/Portraits__Kardelen__DSC_3802-1.webp' },
+  { name: 'Karla', alt: 'Portrait session at DIFC, Dubai, by Photoczaro', src: 'images/Portraits__Karla - Financial Centre__Image_02.webp' },
   { name: 'Karla II', src: 'images/Portraits__Karla - Princess Tower__DSC_0538 копіювати.webp' },
   { name: 'Klaudia', src: 'images/Portraits__Klaudia - Home__DSC_0280.webp' },
   { name: 'Kseniia', src: 'images/Portraits__Kseniia__DSC_0422.webp' },
@@ -2527,11 +2586,11 @@ function buildPortraits() { portraits.forEach((p, i) => {
 
   const cover = document.createElement('div');
   cover.className = 'gallery-item';
-  cover.innerHTML = `<img src="${p.src}" alt="${p.name}" loading="lazy">
+  cover.innerHTML = `<img src="${p.src}" alt="${p.alt || p.name}" loading="lazy">
     <div class="gallery-item-overlay">
       <span class="gallery-item-name">${p.name}</span>
     </div>`;
-  cover.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: p.name })), 0));
+  cover.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: p.name, alt: p.alt })), 0));
 
   const toggle = document.createElement('button');
   toggle.className = 'model-toggle';
@@ -2751,7 +2810,7 @@ function buildMagazines() { magazines.forEach((m, i) => {
   // cover card
   const card = document.createElement('div');
   card.className = 'magazine-card';
-  card.innerHTML = `<img src="${m.src}" alt="${m.name}" loading="lazy">
+  card.innerHTML = `<img src="${m.src}" alt="Editorial feature in ${m.pub}, Dubai portrait and fashion photography by Photoczaro" loading="lazy">
     <div class="magazine-card-info">
       <p class="magazine-pub">${m.pub}</p>
       <p class="magazine-title">${m.name}</p>
@@ -2783,6 +2842,7 @@ const projectsData = [
   {
     name: 'FP Models',
     eyebrow: 'Portfolio Set',
+    alt: 'Group portfolio shoot with multiple models, Dubai, by Photoczaro',
     cover: 'images/Portraits__FP Community Shoot__Emie__DSC_4653.webp',
     images: [
       'images/Portraits__FP Community Shoot__Elizabeth__DSC_4767.webp',
@@ -2810,6 +2870,7 @@ const projectsData = [
   {
     name: 'UC Fashion Week',
     eyebrow: 'November Fashion Week',
+    alt: 'Fashion week event photography in Dubai, backstage and runway portraits by Photoczaro',
     cover: 'images/Portraits__UC Fashion Week - 3rd November__Tina__DSC09378-Edit.webp',
     images: [
       'images/Portraits__UC Fashion Week - 3rd November__Hannah__DSC09050---Edit.webp',
@@ -2857,13 +2918,13 @@ function buildProjects() { projectsData.forEach((proj, i) => {
   const cover = document.createElement('div');
   cover.className = 'project-cover';
   cover.innerHTML = `
-    <img src="${proj.cover}" alt="${proj.name}" loading="lazy">
+    <img src="${proj.cover}" alt="${proj.alt || proj.name}" loading="lazy">
     <div class="project-cover-overlay">
       <span class="project-eyebrow">${proj.eyebrow}</span>
       <h3 class="project-name">${proj.name}</h3>
       <span class="project-count">${proj.images.length} photographs</span>
     </div>`;
-  cover.addEventListener('click', () => openLightbox(proj.images.map(s => ({ src: s, name: proj.name })), 0));
+  cover.addEventListener('click', () => openLightbox(proj.images.map(s => ({ src: s, name: proj.name, alt: proj.alt })), 0));
 
   // toggle
   const toggle = document.createElement('button');
@@ -2893,6 +2954,7 @@ const lbCaption = document.getElementById('lb-caption');
 function openLightbox(images, index) {
   lbImages = images; lbIndex = index;
   lbImg.src = images[index].src;
+  lbImg.alt = images[index].alt || images[index].name;
   lbCaption.textContent = images[index].name;
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -2906,6 +2968,7 @@ function lbNavigate(dir) {
   lbImg.style.opacity = '0';
   setTimeout(() => {
     lbImg.src = lbImages[lbIndex].src;
+    lbImg.alt = lbImages[lbIndex].alt || lbImages[lbIndex].name;
     lbCaption.textContent = lbImages[lbIndex].name;
     lbImg.style.opacity = '1';
   }, 200);

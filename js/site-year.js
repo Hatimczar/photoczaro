@@ -1,0 +1,3 @@
+document.querySelectorAll('.js-year').forEach(function (el) {
+  el.textContent = new Date().getFullYear();
+});

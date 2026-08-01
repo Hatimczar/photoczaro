@@ -181,6 +181,21 @@
   .nav-links a:hover::after { width: 100%; }
   .nav-links a.active { color: var(--white); }
   .nav-links a.active::after { width: 100%; }
+  .nav-cta-btn {
+    color: var(--dark) !important;
+    background: linear-gradient(135deg, rgba(201,169,110,0.92), rgba(232,213,163,0.85));
+    padding: 9px 20px;
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(201,169,110,0.28), inset 0 1px 0 rgba(255,255,255,0.35);
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+  .nav-cta-btn::after { display: none; }
+  .nav-cta-btn:hover, .nav-cta-btn.active {
+    color: var(--dark) !important;
+    background: linear-gradient(135deg, rgba(232,213,163,0.98), rgba(201,169,110,0.92));
+    box-shadow: 0 8px 22px rgba(201,169,110,0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+  .nav-cta-btn:hover { transform: translateY(-1px); }
   .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: none; padding: 4px; z-index: 101; }
   .nav-hamburger span { display: block; width: 24px; height: 1px; background: var(--white); transition: transform 0.4s var(--ease), opacity 0.3s; }
   .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
@@ -200,6 +215,8 @@
   .mobile-menu-nav li:nth-child(6) a { transition-delay: 0.30s; }
   .mobile-menu-nav li:nth-child(7) a { transition-delay: 0.35s; }
   .mobile-menu-nav a:hover { color: var(--gold); }
+  .mobile-menu-nav a.mobile-menu-cta { color: var(--gold-light); }
+  .mobile-menu-nav a.mobile-menu-cta:hover { color: var(--white); }
   .mobile-menu-footer { position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; display: flex; flex-direction: column; gap: 16px; align-items: center; }
   .mobile-menu-brand { font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; }
   .mobile-menu-socials { display: flex; gap: 24px; }
@@ -314,8 +331,8 @@
     <li><a href="index.html#portraits">Portraits</a></li>
     <li><a href="index.html#projects">Projects</a></li>
     <li><a href="journal">Journal</a></li>
-    <li><a href="work-with-me" class="active">Work With Me</a></li>
     <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="work-with-me" class="nav-cta-btn active">Work With Me</a></li>
   
     <li><div class="lang-switch lang-switch-nav">
       <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="Change language">EN <span class="lsn-caret">▾</span></button>
@@ -386,8 +403,8 @@
     <li><a href="index.html#portraits"><span>Portraits</span></a></li>
     <li><a href="index.html#projects"><span>Projects</span></a></li>
     <li><a href="journal"><span>Journal</span></a></li>
-    <li><a href="work-with-me"><span>Work With Me</span></a></li>
     <li><a href="index.html#contact"><span>Contact</span></a></li>
+    <li><a href="work-with-me" class="mobile-menu-cta"><span>Work With Me</span></a></li>
   </ul>
   <div class="mobile-menu-footer">
     <span class="mobile-menu-brand">Photoczaro</span>
@@ -508,7 +525,7 @@
 <footer class="wm-footer">
   <a href="index" class="wm-footer-back">Back to Portfolio</a>
   <a href="index" class="wm-footer-brand">Photoczaro</a>
-  <span class="wm-footer-copy"><a href="/privacy-policy" style="color:inherit;text-decoration:none;margin-right:20px;transition:color 0.3s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='inherit'">Privacy Policy</a>© 2026 Photoczaro</span>
+  <span class="wm-footer-copy"><a href="/privacy-policy" style="color:inherit;text-decoration:none;margin-right:20px;transition:color 0.3s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='inherit'">Privacy Policy</a>© <span class="js-year">2026</span> Photoczaro</span><script src="/js/site-year.js" defer></script>
 <style>
   .lang-switch { position: relative; display: inline-block; }
   .lang-switch-btn {

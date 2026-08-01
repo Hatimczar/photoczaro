@@ -423,6 +423,22 @@
   .nav-links a:hover { color: var(--white); }
   .nav-links a:hover::after { width: 100%; }
   .nav-links a.active { color: var(--white); }
+  .nav-cta-btn {
+    color: var(--dark) !important;
+    background: linear-gradient(135deg, rgba(201,169,110,0.92), rgba(232,213,163,0.85));
+    padding: 9px 20px;
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(201,169,110,0.28), inset 0 1px 0 rgba(255,255,255,0.35);
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+  .nav-cta-btn::after { display: none; }
+  .nav-cta-btn:hover {
+    color: var(--dark) !important;
+    background: linear-gradient(135deg, rgba(232,213,163,0.98), rgba(201,169,110,0.92));
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(201,169,110,0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+
   .nav-links a.active::after { width: 100%; background: var(--gold); }
 
   /* Hero */
@@ -1437,6 +1453,10 @@
     flex-shrink: 0;
     padding-top: 4px;
   }
+    .mobile-menu-cta-item { border-top-color: rgba(201,169,110,0.4); }
+  .mobile-menu-cta .menu-link-text { color: var(--gold-light); font-style: normal; }
+  .mobile-menu-cta:hover .menu-link-text,
+  .mobile-menu-cta:active .menu-link-text { color: var(--white); }
   .mobile-menu-nav .menu-link-text {
     font-family: 'Cormorant Garamond', serif;
     font-size: 44px;
@@ -1558,9 +1578,9 @@
     <li><a href="#projects">Проекты</a></li>
     <li><a href="#about">О нас</a></li>
     <li><a href="/ru/journal">Журнал</a></li>
-    <li><a href="/work-with-me">Работать Со Мной</a></li>
-    <li><a href="/virtual-shoots">VS</a></li>
+    <li><a href="/virtual-shoots">Виртуальные фотосессии</a></li>
     <li><a href="#contact">Контакт</a></li>
+    <li><a href="/work-with-me" class="nav-cta-btn">Работать со мной</a></li>
   
     <li><div class="lang-switch lang-switch-nav">
       <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="Change language">RU <span class="lsn-caret">▾</span></button>
@@ -1633,9 +1653,9 @@
     <li><a href="#projects"><span class="menu-link-text">Проекты</span></a></li>
     <li><a href="#about"><span class="menu-link-text">О нас</span></a></li>
     <li><a href="/ru/journal"><span class="menu-link-text">Журнал</span></a></li>
-    <li><a href="/work-with-me"><span class="menu-link-text">Работать Со Мной</span></a></li>
-    <li><a href="/virtual-shoots"><span class="menu-link-text">VS</span></a></li>
+    <li><a href="/virtual-shoots"><span class="menu-link-text">Виртуальные фотосессии</span></a></li>
     <li><a href="#contact"><span class="menu-link-text">Контакт</span></a></li>
+    <li class="mobile-menu-cta-item"><a href="/work-with-me" class="mobile-menu-cta"><span class="menu-link-text">Работать со мной</span></a></li>
   </ul>
   <div class="mobile-menu-footer">
     <span class="mobile-menu-brand">Photoczaro</span>
@@ -1898,7 +1918,7 @@
 
 <footer>
   <span class="footer-logo">Photoczaro</span>
-  <a href="/privacy-policy" style="font-size:11px;color:rgba(138,134,128,0.5);letter-spacing:0.1em;text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.5)'">Privacy Policy</a><span class="footer-copy">© 2026 Photoczaro - Все права защищены</span>
+  <a href="/privacy-policy" style="font-size:11px;color:rgba(138,134,128,0.5);letter-spacing:0.1em;text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.5)'">Privacy Policy</a><span class="footer-copy">© <span class="js-year">2026</span> Photoczaro - Все права защищены</span><script src="/js/site-year.js" defer></script>
 <style>
   .lang-switch { position: relative; display: inline-block; }
   .lang-switch-btn {

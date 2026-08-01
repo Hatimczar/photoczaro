@@ -136,6 +136,21 @@
   .nav-links a:hover::after { width: 100%; }
   .nav-links a.active { color: var(--white); }
   .nav-links a.active::after { width: 100%; }
+  .nav-cta-btn {
+    color: var(--dark) !important;
+    background: linear-gradient(135deg, rgba(201,169,110,0.92), rgba(232,213,163,0.85));
+    padding: 9px 20px;
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(201,169,110,0.28), inset 0 1px 0 rgba(255,255,255,0.35);
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+  .nav-cta-btn::after { display: none; }
+  .nav-cta-btn:hover {
+    color: var(--dark) !important;
+    background: linear-gradient(135deg, rgba(232,213,163,0.98), rgba(201,169,110,0.92));
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(201,169,110,0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+  }
   .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: none; padding: 4px; z-index: 101; }
   .nav-hamburger span { display: block; width: 24px; height: 1px; background: var(--white); transition: transform 0.4s var(--ease), opacity 0.3s; }
   .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
@@ -155,6 +170,8 @@
   .mobile-menu-nav li:nth-child(6) a { transition-delay: 0.30s; }
   .mobile-menu-nav li:nth-child(7) a { transition-delay: 0.35s; }
   .mobile-menu-nav a:hover { color: var(--gold); }
+  .mobile-menu-nav a.mobile-menu-cta { color: var(--gold-light); }
+  .mobile-menu-nav a.mobile-menu-cta:hover { color: var(--white); }
   .mobile-menu-footer { position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; display: flex; flex-direction: column; gap: 16px; align-items: center; }
   .mobile-menu-brand { font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; }
   .mobile-menu-socials { display: flex; gap: 24px; }
@@ -201,6 +218,7 @@
 
   /* Footer */
   .vs-footer { padding: 48px 60px; border-top: 0.5px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; }
+  .sticky-mobile-cta { display: none; }
   .vs-footer-back { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color 0.3s; }
   .vs-footer-back:hover { color: var(--gold); }
   .vs-footer-back::before { content: '← '; }
@@ -284,7 +302,11 @@
     .vs-item-name { transform: translateY(0); font-size: 16px; }
     .vs-item-date { transform: translateY(0); }
     .vs-item-count { transform: translateY(0); }
-    .vs-footer { padding: 32px 24px; flex-direction: column; gap: 16px; text-align: center; }
+    .vs-footer { padding: 32px 24px; flex-direction: column; gap: 16px; text-align: center; padding-bottom: 110px; }
+    .sticky-mobile-cta { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: rgba(10,10,10,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 0.5px solid rgba(201,169,110,0.25); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); gap: 10px; }
+    .sticky-mobile-cta a { flex: 1; text-align: center; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 14px 10px; font-weight: 500; border-radius: 999px; backdrop-filter: blur(14px) saturate(180%); -webkit-backdrop-filter: blur(14px) saturate(180%); }
+    .sticky-mobile-cta a.sticky-cta-primary { background: linear-gradient(135deg, rgba(201,169,110,0.9), rgba(232,213,163,0.8)); color: var(--dark); box-shadow: 0 4px 16px rgba(201,169,110,0.3), inset 0 1px 0 rgba(255,255,255,0.35); }
+    .sticky-mobile-cta a.sticky-cta-secondary { background: rgba(255,255,255,0.08); color: var(--gold-light); border: 1px solid rgba(255,255,255,0.18); }
     body { cursor: auto; }
     .cursor, .cursor-ring { display: none; }
     .lb-arrow { width: 40px; height: 40px; font-size: 16px; }
@@ -334,9 +356,9 @@
     <li><a href="index.html#projects">Projects</a></li>
     <li><a href="index.html#about">About</a></li>
     <li><a href="journal">Journal</a></li>
-    <li><a href="work-with-me">Work With Me</a></li>
-    <li><a href="virtual-shoots" class="active">VS</a></li>
+    <li><a href="virtual-shoots" class="active">Virtual Shoots</a></li>
     <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="work-with-me" class="nav-cta-btn">Work With Me</a></li>
   
     <li><div class="lang-switch lang-switch-nav">
       <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="Change language">EN <span class="lsn-caret">▾</span></button>
@@ -409,9 +431,9 @@
     <li><a href="index.html#projects"><span>Projects</span></a></li>
     <li><a href="index.html#about"><span>About</span></a></li>
     <li><a href="journal"><span>Journal</span></a></li>
-    <li><a href="work-with-me"><span>Work With Me</span></a></li>
-    <li><a href="virtual-shoots"><span>VS</span></a></li>
+    <li><a href="virtual-shoots"><span>Virtual Shoots</span></a></li>
     <li><a href="index.html#contact"><span>Contact</span></a></li>
+    <li><a href="work-with-me" class="mobile-menu-cta"><span>Work With Me</span></a></li>
   </ul>
   <div class="mobile-menu-footer">
     <span class="mobile-menu-brand">Photoczaro</span>
@@ -550,7 +572,7 @@
 <footer class="vs-footer">
   <a href="index" class="vs-footer-back">Back to Portfolio</a>
   <a href="index" class="vs-footer-brand">Photoczaro</a>
-  <span class="vs-footer-copy"><a href="/privacy-policy" style="color:inherit;text-decoration:none;margin-right:20px;transition:color 0.3s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='inherit'">Privacy Policy</a>© 2025 Photoczaro</span>
+  <span class="vs-footer-copy"><a href="/privacy-policy" style="color:inherit;text-decoration:none;margin-right:20px;transition:color 0.3s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='inherit'">Privacy Policy</a>&copy; <span class="js-year">2026</span> Photoczaro</span><script src="/js/site-year.js" defer></script>
 <style>
   .lang-switch { position: relative; display: inline-block; }
   .lang-switch-btn {
@@ -633,6 +655,11 @@
 })();
 </script>
 </footer>
+
+<div class="sticky-mobile-cta">
+  <a href="https://wa.me/971508065253" target="_blank" class="sticky-cta-primary">WhatsApp Me</a>
+  <a href="tel:+971508065253" class="sticky-cta-secondary">Call</a>
+</div>
 
 <script>
 // ── Cursor ──

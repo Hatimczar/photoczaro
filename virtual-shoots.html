@@ -9,6 +9,7 @@
   gtag("js", new Date());
   gtag("config", "G-K0ZSGEKSDS");
 </script>
+<script src="/js/analytics-events.js" defer></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Virtual Photoshoots Worldwide | Photoczaro</title>
@@ -952,10 +953,10 @@
       <span class="vs-error" data-error-for="vs-privacy"></span>
       <div class="vs-enquiry-actions">
         <button type="submit" class="cta-btn cta-btn-primary" id="vs-submit-btn">Continue on WhatsApp →</button>
-        <span class="vs-enquiry-fallback">Prefer email? <a href="mailto:info@photoczaro.com?subject=Virtual%20Shoot%20Enquiry" id="vs-email-fallback">Contact Photoczaro</a></span>
+        <span class="vs-enquiry-fallback">Prefer email? <a href="mailto:info@photoczaro.com?subject=Virtual%20Shoot%20Enquiry" id="vs-email-fallback" data-analytics-managed="true">Contact Photoczaro</a></span>
       </div>
       <p class="vs-form-status" id="vs-form-status" role="status" aria-live="polite"></p>
-      <p class="vs-enquiry-fallback" style="margin-top:6px;">JavaScript disabled? Message us directly on <a href="https://wa.me/971508065253?text=Hello%20Photoczaro%2C%20I%20would%20like%20to%20enquire%20about%20a%20Virtual%20Shoot." target="_blank" rel="noopener noreferrer" id="vs-whatsapp-noscript">WhatsApp</a>.</p>
+      <p class="vs-enquiry-fallback" style="margin-top:6px;">JavaScript disabled? Message us directly on <a href="https://wa.me/971508065253?text=Hello%20Photoczaro%2C%20I%20would%20like%20to%20enquire%20about%20a%20Virtual%20Shoot." target="_blank" rel="noopener noreferrer" id="vs-whatsapp-noscript" data-analytics-managed="true">WhatsApp</a>.</p>
     </div>
   </form>
 </section>
@@ -1058,8 +1059,8 @@
 </footer>
 
 <div class="sticky-mobile-cta">
-  <a href="https://wa.me/971508065253" target="_blank" class="sticky-cta-primary">WhatsApp Me</a>
-  <a href="tel:+971508065253" class="sticky-cta-secondary">Call</a>
+  <a href="https://wa.me/971508065253" target="_blank" class="sticky-cta-primary" data-cta-location="sticky_mobile_cta">WhatsApp Me</a>
+  <a href="tel:+971508065253" class="sticky-cta-secondary" data-cta-location="sticky_mobile_cta">Call</a>
 </div>
 
 <script>
@@ -1119,10 +1120,10 @@ const observer=new IntersectionObserver(entries=>{
 },{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
-// ── Analytics helper (uses existing sitewide gtag, no PII) ──
+// ── Analytics helper (delegates to the shared sitewide helper, no PII) ──
 function vsTrack(name, params){
-  if (typeof gtag === 'function') {
-    gtag('event', name, Object.assign({ page_path: '/virtual-shoots' }, params || {}));
+  if (window.photoczaroAnalytics && typeof window.photoczaroAnalytics.trackEvent === 'function') {
+    window.photoczaroAnalytics.trackEvent(name, params || {});
   }
 }
 

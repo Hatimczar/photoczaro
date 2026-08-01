@@ -9,6 +9,7 @@
   gtag("js", new Date());
   gtag("config", "G-K0ZSGEKSDS");
 </script>
+<script src="/js/analytics-events.js" defer></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book a Portrait or Model Portfolio Shoot in Dubai | Photoczaro</title>
@@ -617,8 +618,8 @@
     </div>
   </div>
   <div class="wm-routing">
-    <a href="for-agencies" id="agency-route-link">Booking for an agency? Visit For Agencies →</a>
-    <a href="virtual-shoots" id="virtual-route-link">Outside Dubai? Explore Virtual Shoots →</a>
+    <a href="for-agencies" id="agency-route-link" data-analytics-managed="true">Booking for an agency? Visit For Agencies →</a>
+    <a href="virtual-shoots" id="virtual-route-link" data-analytics-managed="true">Outside Dubai? Explore Virtual Shoots →</a>
   </div>
 </section>
 
@@ -928,16 +929,16 @@
       <span class="wm-error" data-error-for="wm-privacy"></span>
       <div class="wm-enquiry-actions">
         <button type="submit" class="cta-btn cta-btn-primary" id="wm-submit-btn">Continue on WhatsApp →</button>
-        <span class="wm-enquiry-fallback">Prefer email? <a href="mailto:info@photoczaro.com?subject=Photoshoot%20Enquiry" id="wm-email-fallback">Contact Photoczaro</a></span>
+        <span class="wm-enquiry-fallback">Prefer email? <a href="mailto:info@photoczaro.com?subject=Photoshoot%20Enquiry" id="wm-email-fallback" data-analytics-managed="true">Contact Photoczaro</a></span>
       </div>
       <p class="wm-form-status" id="wm-form-status" role="status" aria-live="polite"></p>
-      <p class="wm-enquiry-fallback" style="margin-top:6px;">JavaScript disabled? Message us directly on <a href="https://wa.me/971508065253?text=Hello%20Photoczaro%2C%20I%20would%20like%20to%20plan%20a%20photoshoot." target="_blank" rel="noopener noreferrer" id="wm-whatsapp-noscript">WhatsApp</a>.</p>
+      <p class="wm-enquiry-fallback" style="margin-top:6px;">JavaScript disabled? Message us directly on <a href="https://wa.me/971508065253?text=Hello%20Photoczaro%2C%20I%20would%20like%20to%20plan%20a%20photoshoot." target="_blank" rel="noopener noreferrer" id="wm-whatsapp-noscript" data-analytics-managed="true">WhatsApp</a>.</p>
     </div>
   </form>
 
   <!-- 15. Alternative booking paths -->
   <div class="wm-alt-paths">
-    <a href="tel:+971508065253" class="alt-secondary">Call →</a>
+    <a href="tel:+971508065253" class="alt-secondary" data-cta-location="alternative_paths">Call →</a>
     <a href="for-agencies" class="alt-secondary" id="agency-route-link-2">For Agencies →</a>
     <a href="virtual-shoots" class="alt-secondary" id="virtual-route-link-2">Virtual Shoots →</a>
   </div>
@@ -999,8 +1000,8 @@
 </footer>
 
 <div class="sticky-mobile-cta">
-  <a href="https://wa.me/971508065253" target="_blank" class="sticky-cta-primary">WhatsApp Me</a>
-  <a href="tel:+971508065253" class="sticky-cta-secondary">Call</a>
+  <a href="https://wa.me/971508065253" target="_blank" class="sticky-cta-primary" data-cta-location="sticky_mobile_cta">WhatsApp Me</a>
+  <a href="tel:+971508065253" class="sticky-cta-secondary" data-cta-location="sticky_mobile_cta">Call</a>
 </div>
 
 <script>
@@ -1060,10 +1061,10 @@ const observer=new IntersectionObserver(entries=>{
 },{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
-// Analytics helper (uses existing sitewide gtag, no PII)
+// Analytics helper (delegates to the shared sitewide helper, no PII)
 function wmTrack(name, params){
-  if (typeof gtag === 'function') {
-    gtag('event', name, Object.assign({ page_path: '/work-with-me' }, params || {}));
+  if (window.photoczaroAnalytics && typeof window.photoczaroAnalytics.trackEvent === 'function') {
+    window.photoczaroAnalytics.trackEvent(name, params || {});
   }
 }
 
@@ -1246,6 +1247,9 @@ document.addEventListener('keydown', e => {
 
   if (emailFallback) {
     emailFallback.addEventListener('click', () => wmTrack('work_with_me_email_click', { cta_location: 'enquiry_form' }));
+  }
+  if (whatsappNoscript) {
+    whatsappNoscript.addEventListener('click', () => wmTrack('work_with_me_whatsapp_continue', { cta_location: 'enquiry_form_fallback' }));
   }
 })();
 </script>

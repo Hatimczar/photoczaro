@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K0ZSGEKSDS" data-cfasync="false"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-K0ZSGEKSDS");
+</script>
+<script src="/js/analytics-events.js" defer></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Publishers | Photoczaro</title>
@@ -18,8 +27,8 @@
 <header class="pub-header">
   <a href="/" class="pub-logo">Photoczaro <span>/ Publishers</span></a>
   <nav>
-    <a href="login" class="pub-btn pub-btn-sm">Log In</a>
-    <a href="signup" class="pub-btn pub-btn-solid pub-btn-sm">Sign Up</a>
+    <a href="login" class="pub-btn pub-btn-sm" data-analytics-event="publisher_landing_cta_click" data-analytics-param-cta_location="header_nav" data-analytics-param-destination_type="login">Log In</a>
+    <a href="signup" class="pub-btn pub-btn-solid pub-btn-sm" data-analytics-event="publisher_landing_cta_click" data-analytics-param-cta_location="header_nav" data-analytics-param-destination_type="register">Sign Up</a>
   </nav>
 </header>
 
@@ -32,8 +41,8 @@
     feature and send the request straight from the gallery.
   </p>
   <div class="pub-actions">
-    <a href="signup" class="pub-btn pub-btn-solid">Register as a Publisher</a>
-    <a href="login" class="pub-btn">Log In</a>
+    <a href="signup" class="pub-btn pub-btn-solid" data-analytics-event="publisher_landing_cta_click" data-analytics-param-cta_location="main_actions" data-analytics-param-destination_type="register">Register as a Publisher</a>
+    <a href="login" class="pub-btn" data-analytics-event="publisher_landing_cta_click" data-analytics-param-cta_location="main_actions" data-analytics-param-destination_type="login">Log In</a>
   </div>
 
   <div class="pub-grid">

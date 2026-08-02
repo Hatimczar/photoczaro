@@ -1,0 +1,29 @@
+# Dependency / tool directories (none currently required by this static
+# site, but ignored in case Node tooling like wrangler/Playwright is
+# ever installed locally).
+node_modules/
+
+# Cloudflare Wrangler local cache/state — regenerated automatically,
+# never needed for deployment or recovery.
+.wrangler/
+
+# Local environment files — real secrets belong in the Cloudflare
+# dashboard (see .env.example), never in this repository.
+.env
+.env.*
+!.env.example
+
+# Editor/OS metadata.
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Backup/scratch files occasionally left by editors or manual edits.
+*.bak
+*.orig
+*.tmp
+
+# Test/build artifacts, if a headless test run is ever performed in-repo.
+test-results/
+playwright-report/

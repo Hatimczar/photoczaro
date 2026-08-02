@@ -847,7 +847,7 @@
   #magazines { background: var(--dark-2); }
   .magazine-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
     align-items: start;
   }
@@ -1562,7 +1562,7 @@
 
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 
-    .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .magazine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 
     .projects-grid { grid-template-columns: 1fr; gap: 10px; }
 
@@ -1600,8 +1600,18 @@
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .model-block { width: 100%; }
     .gallery-grid .model-toggle { white-space: nowrap; font-size: 8px; letter-spacing: 0.12em; padding: 10px 12px; }
-    .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .magazine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     .about-stats { flex-wrap: wrap; gap: 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .strip-inner { animation: none !important; transform: none !important; }
   }
 </style>
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -1634,8 +1644,8 @@
     <li><a href="#projects">Projects</a></li>
     <li><a href="#about">About</a></li>
     <li><div class="nav-more">
-      <button type="button" class="nav-more-btn" aria-haspopup="true" aria-expanded="false">More <span class="lsn-caret">▾</span></button>
-      <div class="nav-more-menu" role="menu">
+      <button type="button" class="nav-more-btn" aria-expanded="false" aria-controls="nav-more-menu">More <span class="lsn-caret">▾</span></button>
+      <div class="nav-more-menu" id="nav-more-menu">
         <a href="journal">Journal</a>
         <a href="for-publishers/">For Publishers</a>
         <a href="virtual-shoots">Virtual Shoots</a>
@@ -1656,7 +1666,7 @@
       </div>
     </div></li>
   </ul>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
     <span></span><span></span><span></span>
   </button>
 <style>
@@ -1758,6 +1768,14 @@
       var b = w.querySelector('.lang-switch-btn-nav, .nav-more-btn');
       if(b) b.setAttribute('aria-expanded','false');
     });
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    var openMore = document.querySelector('.nav-more.open');
+    if (!openMore) return;
+    openMore.classList.remove('open');
+    var btn = openMore.querySelector('.nav-more-btn');
+    if (btn) { btn.setAttribute('aria-expanded', 'false'); btn.focus(); }
   });
 })();
 </script>
@@ -2152,10 +2170,11 @@
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 (function animateCursor() {
   cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-  rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
+  if (prefersReducedMotion) { rx = mx; ry = my; } else { rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1; }
   ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
   requestAnimationFrame(animateCursor);
 })();
@@ -2173,6 +2192,7 @@ document.querySelectorAll('.gallery-item, .magazine-card, .project-cover').forEa
 // Page transitions: slide dark panel on internal navigation
 const pageTransition = document.getElementById('page-transition');
 function navigateTo(url) {
+  if (prefersReducedMotion) { window.location.href = url; return; }
   pageTransition.classList.add('slide-in');
   setTimeout(() => { window.location.href = url; }, 620);
 }
@@ -2991,17 +3011,29 @@ document.addEventListener('keydown', e => {
 // Hamburger menu
 const hamburger = document.getElementById('nav-hamburger');
 const mobileMenu = document.getElementById('mobile-menu');
-hamburger.addEventListener('click', () => {
-  const isOpen = hamburger.classList.toggle('open');
+function setMobileMenuOpen(isOpen) {
+  hamburger.classList.toggle('open', isOpen);
   mobileMenu.classList.toggle('open', isOpen);
+  hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   document.body.style.overflow = isOpen ? 'hidden' : '';
+  Array.prototype.forEach.call(document.body.children, function(el){
+    if (el === mobileMenu) return;
+    if (isOpen) { el.setAttribute('inert', ''); } else { el.removeAttribute('inert'); }
+  });
+}
+hamburger.addEventListener('click', () => {
+  setMobileMenuOpen(!hamburger.classList.contains('open'));
 });
 document.getElementById('mobile-menu-nav').querySelectorAll('a').forEach(a => {
   a.addEventListener('click', () => {
-    hamburger.classList.remove('open');
-    mobileMenu.classList.remove('open');
-    document.body.style.overflow = '';
+    setMobileMenuOpen(false);
   });
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+    setMobileMenuOpen(false);
+    hamburger.focus();
+  }
 });
 
 // Intersection Observer for reveal animations
@@ -3088,6 +3120,11 @@ const statObserver = new IntersectionObserver(entries => {
     const num = parseInt(raw);
     if (isNaN(num)) return;
     const suffix = raw.replace(/[0-9]/g, '');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = num + suffix;
+      statObserver.unobserve(el);
+      return;
+    }
     let start = 0, duration = 1400;
     const step = timestamp => {
       if (!start) start = timestamp;

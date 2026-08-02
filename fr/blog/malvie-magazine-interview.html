@@ -10,6 +10,8 @@
   gtag("config", "G-K0ZSGEKSDS");
 </script>
 <script src="/js/analytics-events.js" defer></script>
+<script src="/js/sticky-cta.js" defer></script>
+<noscript><style>.sticky-mobile-cta{transform:none!important;pointer-events:auto!important;}</style></noscript>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -212,7 +214,8 @@
 <style>
   @media (max-width: 768px) {
     .post-body { padding-bottom: 110px; }
-    .sticky-mobile-cta { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: rgba(10,10,10,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 0.5px solid rgba(201,169,110,0.25); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); gap: 10px; }
+    .sticky-mobile-cta { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: rgba(10,10,10,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 0.5px solid rgba(201,169,110,0.25); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); gap: 10px; transform: translateY(120%); transition: transform 0.3s ease; pointer-events: none; }
+    .sticky-mobile-cta.is-visible { transform: translateY(0); pointer-events: auto; }
     .sticky-mobile-cta a { flex: 1; text-align: center; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 14px 10px; font-weight: 500; border-radius: 999px; backdrop-filter: blur(14px) saturate(180%); -webkit-backdrop-filter: blur(14px) saturate(180%); }
     .sticky-mobile-cta a.sticky-cta-primary { background: linear-gradient(135deg, rgba(201,169,110,0.9), rgba(232,213,163,0.8)); color: var(--dark); box-shadow: 0 4px 16px rgba(201,169,110,0.3), inset 0 1px 0 rgba(255,255,255,0.35); }
     .sticky-mobile-cta a.sticky-cta-secondary { background: rgba(255,255,255,0.08); color: var(--gold-light); border: 1px solid rgba(255,255,255,0.18); }
@@ -263,7 +266,7 @@ window.addEventListener('pageshow',()=>{
   <div class="nav-back-group">
   <a href="/fr/journal" class="nav-back">Retour au Journal</a>
   <div class="lang-switch lang-switch-nav">
-      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="Change language">FR <span class="lsn-caret">▾</span></button>
+      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="FR, change language">FR <span class="lsn-caret">▾</span></button>
       <div class="lang-switch-menu" role="menu">
         <a href="/blog/malvie-magazine-interview" hreflang="en">English</a>
         <a href="/fr/blog/malvie-magazine-interview" hreflang="fr" class="active">Français</a>
@@ -469,12 +472,12 @@ window.addEventListener('pageshow',()=>{
   </div>
 </div>
 
-<footer style="border-top:0.5px solid rgba(255,255,255,0.06);padding:28px 60px;display:flex;justify-content:space-between;align-items:center;background:var(--dark,#0a0a0a)"><span style="font-family:Cormorant Garamond,serif;font-size:16px;letter-spacing:0.2em;color:#c9a96e">Photoczaro</span><a href="/privacy-policy" style="font-size:11px;color:rgba(138,134,128,0.5);letter-spacing:0.1em;text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.5)'">Privacy Policy</a><span style="font-size:11px;color:rgba(138,134,128,0.4);letter-spacing:0.1em;">© <span class="js-year">2026</span> Photoczaro</span><script src="/js/site-year.js" defer></script><style>
+<footer style="border-top:0.5px solid rgba(255,255,255,0.06);padding:28px 60px;display:flex;justify-content:space-between;align-items:center;background:var(--dark,#0a0a0a)"><span style="font-family:Cormorant Garamond,serif;font-size:16px;letter-spacing:0.2em;color:#c9a96e">Photoczaro</span><a href="/privacy-policy" style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.95)'">Privacy Policy</a><span style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;">© <span class="js-year">2026</span> Photoczaro</span><script src="/js/site-year.js" defer></script><style>
   .lang-switch { position: relative; display: inline-block; }
   .lang-switch-btn {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(138,134,128,0.55);
+    color: rgba(138,134,128,0.95);
     font-size: 10px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -522,7 +525,7 @@ window.addEventListener('pageshow',()=>{
   .lang-switch-menu a.active { color: #c9a96e; }
 </style>
 <div class="lang-switch">
-  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="Change language">FR ▾</button>
+  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="FR, change language">FR ▾</button>
   <div class="lang-switch-menu" role="menu">
       <a href="/blog/malvie-magazine-interview" hreflang="en">English</a>
       <a href="/fr/blog/malvie-magazine-interview" hreflang="fr" class="active">Français</a>

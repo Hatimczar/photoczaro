@@ -10,6 +10,8 @@
   gtag("config", "G-K0ZSGEKSDS");
 </script>
 <script src="/js/analytics-events.js" defer></script>
+<script src="/js/sticky-cta.js" defer></script>
+<noscript><style>.sticky-mobile-cta{transform:none!important;pointer-events:auto!important;}</style></noscript>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Modeling & Talent Agencies: International Booking | Photoczaro</title>
@@ -206,7 +208,7 @@
     transform: translateY(-1px);
     box-shadow: 0 8px 22px rgba(201,169,110,0.4), inset 0 1px 0 rgba(255,255,255,0.4);
   }
-  .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: none; padding: 4px; z-index: 101; }
+  .nav-hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; background: none; border: none; cursor: none; padding: 15px 10px; z-index: 101; }
   .nav-hamburger span { display: block; width: 24px; height: 1px; background: var(--white); transition: transform 0.4s var(--ease), opacity 0.3s; }
   .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
   .nav-hamburger.open span:nth-child(2) { opacity: 0; }
@@ -288,7 +290,7 @@
   .wm-footer-back:hover { color: var(--gold); }
   .wm-footer-back::before { content: '← '; }
   .wm-footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 14px; letter-spacing: 0.2em; color: var(--gold); text-decoration: none; }
-  .wm-footer-copy { font-size: 10px; letter-spacing: 0.15em; color: rgba(138,134,128,0.4); }
+  .wm-footer-copy { font-size: 10px; letter-spacing: 0.15em; color: rgba(138,134,128,0.95); }
 
   /* Sticky mobile CTA */
   .sticky-mobile-cta { display: none; }
@@ -315,7 +317,8 @@
     .wm-faq h2 { font-size: 26px; }
     .wm-final { padding: 64px 24px; }
     .wm-footer { padding: 32px 24px; flex-direction: column; gap: 16px; text-align: center; }
-    .sticky-mobile-cta { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: rgba(10,10,10,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 0.5px solid rgba(201,169,110,0.25); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); gap: 10px; }
+    .sticky-mobile-cta { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: rgba(10,10,10,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 0.5px solid rgba(201,169,110,0.25); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); gap: 10px; transform: translateY(120%); transition: transform 0.3s ease; pointer-events: none; }
+    .sticky-mobile-cta.is-visible { transform: translateY(0); pointer-events: auto; }
     .sticky-mobile-cta a { flex: 1; text-align: center; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 14px 10px; font-weight: 500; border-radius: 999px; backdrop-filter: blur(14px) saturate(180%); -webkit-backdrop-filter: blur(14px) saturate(180%); }
     .sticky-mobile-cta a.sticky-cta-primary { background: linear-gradient(135deg, rgba(201,169,110,0.9), rgba(232,213,163,0.8)); color: var(--dark); box-shadow: 0 4px 16px rgba(201,169,110,0.3), inset 0 1px 0 rgba(255,255,255,0.35); }
     .sticky-mobile-cta a.sticky-cta-secondary { background: rgba(255,255,255,0.08); color: var(--gold-light); border: 1px solid rgba(255,255,255,0.18); }
@@ -346,7 +349,7 @@
     <li><a href="work-with-me" class="nav-cta-btn">Work With Me</a></li>
 
     <li><div class="lang-switch lang-switch-nav">
-      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="Change language">EN <span class="lsn-caret">▾</span></button>
+      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="EN, change language">EN <span class="lsn-caret">▾</span></button>
       <div class="lang-switch-menu" role="menu">
         <a href="/for-agencies" hreflang="en" class="active">English</a>
         <a href="/fr/" hreflang="fr">Français</a>
@@ -566,7 +569,7 @@
   .lang-switch-btn {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(138,134,128,0.55);
+    color: rgba(138,134,128,0.95);
     font-size: 10px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -614,7 +617,7 @@
   .lang-switch-menu a.active { color: #c9a96e; }
 </style>
 <div class="lang-switch">
-  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="Change language">EN ▾</button>
+  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="EN, change language">EN ▾</button>
   <div class="lang-switch-menu" role="menu">
       <a href="/for-agencies" hreflang="en" class="active">English</a>
       <a href="/fr/" hreflang="fr">Français</a>

@@ -284,12 +284,12 @@
   /* Hamburger */
   .nav-hamburger {
     display: none;
-    flex-direction: column;
+    flex-direction: column; justify-content: center; align-items: center;
     gap: 5px;
     background: none;
     border: none;
     cursor: none;
-    padding: 4px;
+    padding: 15px 10px;
     z-index: 101;
   }
   .nav-hamburger span {
@@ -538,7 +538,7 @@
   .journal-footer-copy {
     font-size: 10px;
     letter-spacing: 0.15em;
-    color: rgba(138,134,128,0.5);
+    color: rgba(138,134,128,0.95);
   }
 
   /* Responsive */
@@ -590,7 +590,7 @@
     <li><a href="/work-with-me" class="nav-cta-btn">Trabaja conmigo</a></li>
   
     <li><div class="lang-switch lang-switch-nav">
-      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="Change language">ES <span class="lsn-caret">▾</span></button>
+      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="ES, change language">ES <span class="lsn-caret">▾</span></button>
       <div class="lang-switch-menu" role="menu">
         <a href="/journal" hreflang="en">English</a>
         <a href="/fr/journal" hreflang="fr">Français</a>
@@ -841,7 +841,7 @@
   .lang-switch-btn {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(138,134,128,0.55);
+    color: rgba(138,134,128,0.95);
     font-size: 10px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -889,7 +889,7 @@
   .lang-switch-menu a.active { color: #c9a96e; }
 </style>
 <div class="lang-switch">
-  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="Change language">ES ▾</button>
+  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="ES, change language">ES ▾</button>
   <div class="lang-switch-menu" role="menu">
       <a href="/journal" hreflang="en">English</a>
       <a href="/fr/journal" hreflang="fr">Français</a>

@@ -531,7 +531,7 @@
     margin-top: 32px;
     font-size: 14px;
     letter-spacing: 0.12em;
-    color: rgba(245,240,235,0.65);
+    color: rgba(245,240,235,0.85);
     font-weight: 300;
     opacity: 0;
     transform: translateY(20px);
@@ -804,7 +804,7 @@
   #magazines { background: var(--dark-2); }
   .magazine-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
     align-items: start;
   }
@@ -1140,7 +1140,7 @@
   #blog { background: var(--dark-2); }
   .blog-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 2px;
   }
   .blog-card {
@@ -1278,7 +1278,7 @@
   }
   .footer-copy {
     font-size: 11px;
-    color: rgba(138,134,128,0.5);
+    color: rgba(138,134,128,0.95);
     letter-spacing: 0.1em;
   }
 
@@ -1368,7 +1368,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 15px;
     font-style: italic;
-    color: rgba(201,169,110,0.4);
+    color: rgba(201,169,110,0.8);
     letter-spacing: 0.25em;
     margin: 0 40px;
   }
@@ -1387,11 +1387,13 @@
   .nav-hamburger {
     display: none;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 6px;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 4px;
+    padding: 15px 10px;
     z-index: 101;
   }
   .nav-hamburger span {
@@ -1503,8 +1505,16 @@
     .nav-links { display: none !important; }
     .carousel-arrow { cursor: pointer; }
 
-    .hero { padding: 0 24px 80px; }
-    .hero-scroll { right: 24px; bottom: 60px; }
+    .hero {
+      height: auto;
+      min-height: 100svh;
+      min-height: 100dvh;
+      padding: calc(92px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+    }
+    .hero-eyebrow { display: none; }
+    .hero-title { font-size: clamp(40px, 15vw, 60px); }
+    .hero-tagline { margin-top: 14px; font-size: 15px; }
+    .hero-scroll { display: none; }
 
     section { padding: 72px 20px; }
     .section-header { gap: 12px; margin-bottom: 40px; }
@@ -1512,7 +1522,7 @@
 
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 
-    .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .magazine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 
     .projects-grid { grid-template-columns: 1fr; gap: 10px; }
 
@@ -1545,7 +1555,7 @@
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .model-block { width: 100%; }
     .gallery-grid .model-toggle { white-space: nowrap; font-size: 8px; letter-spacing: 0.12em; padding: 10px 12px; }
-    .magazine-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .magazine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     .about-stats { flex-wrap: wrap; gap: 24px; }
   }
 </style>
@@ -1585,7 +1595,7 @@
     <li><a href="/work-with-me" class="nav-cta-btn">Работать со мной</a></li>
   
     <li><div class="lang-switch lang-switch-nav">
-      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="Change language">RU <span class="lsn-caret">▾</span></button>
+      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="RU, change language">RU <span class="lsn-caret">▾</span></button>
       <div class="lang-switch-menu" role="menu">
         <a href="/" hreflang="en">English</a>
         <a href="/fr/" hreflang="fr">Français</a>
@@ -1921,13 +1931,13 @@
 
 <footer>
   <span class="footer-logo">Photoczaro</span>
-  <a href="/privacy-policy" style="font-size:11px;color:rgba(138,134,128,0.5);letter-spacing:0.1em;text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.5)'">Privacy Policy</a><span class="footer-copy">© <span class="js-year">2026</span> Photoczaro - Все права защищены</span><script src="/js/site-year.js" defer></script>
+  <a href="/privacy-policy" style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.95)'">Privacy Policy</a><span class="footer-copy">© <span class="js-year">2026</span> Photoczaro - Все права защищены</span><script src="/js/site-year.js" defer></script>
 <style>
   .lang-switch { position: relative; display: inline-block; }
   .lang-switch-btn {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(138,134,128,0.55);
+    color: rgba(138,134,128,0.95);
     font-size: 10px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -1975,7 +1985,7 @@
   .lang-switch-menu a.active { color: #c9a96e; }
 </style>
 <div class="lang-switch">
-  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="Change language">RU ▾</button>
+  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="RU, change language">RU ▾</button>
   <div class="lang-switch-menu" role="menu">
       <a href="/" hreflang="en">English</a>
       <a href="/fr/" hreflang="fr">Français</a>

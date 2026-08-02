@@ -10,6 +10,8 @@
   gtag("config", "G-K0ZSGEKSDS");
 </script>
 <script src="/js/analytics-events.js" defer></script>
+<script src="/js/sticky-cta.js" defer></script>
+<noscript><style>.sticky-mobile-cta{transform:none!important;pointer-events:auto!important;}</style></noscript>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1326,7 +1328,7 @@
   }
   .footer-copy {
     font-size: 11px;
-    color: rgba(138,134,128,0.5);
+    color: rgba(138,134,128,0.95);
     letter-spacing: 0.1em;
   }
 
@@ -1416,7 +1418,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 15px;
     font-style: italic;
-    color: rgba(201,169,110,0.4);
+    color: rgba(201,169,110,0.8);
     letter-spacing: 0.25em;
     margin: 0 40px;
   }
@@ -1435,11 +1437,13 @@
   .nav-hamburger {
     display: none;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 6px;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 4px;
+    padding: 15px 10px;
     z-index: 101;
   }
   .nav-hamburger span {
@@ -1551,10 +1555,31 @@
     .nav-links { display: none !important; }
     .carousel-arrow { cursor: pointer; }
 
-    .hero { padding: 0 24px 80px; }
-    .hero-scroll { right: 24px; bottom: 60px; }
-    .hero-ctas { gap: 10px; }
+    .hero {
+      height: auto;
+      min-height: 100svh;
+      min-height: 100dvh;
+      padding: calc(92px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+    }
+    .hero-eyebrow { display: none; }
+    .hero-title { font-size: clamp(40px, 15vw, 60px); }
+    .hero-descriptor { margin-top: 12px; font-size: clamp(16px, 4.6vw, 20px); }
+    .hero-tagline { margin-top: 10px; font-size: 13px; }
+    .hero-scroll { display: none; }
+    .hero-ctas { gap: 10px; margin-top: 24px; flex-direction: column; align-items: stretch; }
     .hero-ctas .cta-btn { flex: 1 1 auto; text-align: center; }
+    .hero-cta-secondary {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      padding: 16px 12px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      color: rgba(245,240,235,0.75);
+    }
+    .hero-cta-secondary:hover { background: transparent; transform: none; box-shadow: none; color: var(--gold-light); }
 
     section { padding: 72px 20px; }
     .section-header { gap: 12px; margin-bottom: 40px; }
@@ -1580,7 +1605,8 @@
 
     footer { padding: 24px; flex-direction: column; gap: 10px; text-align: center; padding-bottom: 110px; }
 
-    .sticky-mobile-cta { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: rgba(10,10,10,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 0.5px solid rgba(201,169,110,0.25); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); gap: 10px; }
+    .sticky-mobile-cta { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: rgba(10,10,10,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 0.5px solid rgba(201,169,110,0.25); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); gap: 10px; transform: translateY(120%); transition: transform 0.3s ease; pointer-events: none; }
+    .sticky-mobile-cta.is-visible { transform: translateY(0); pointer-events: auto; }
     .sticky-mobile-cta a { flex: 1; text-align: center; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 14px 10px; font-weight: 500; border-radius: 999px; backdrop-filter: blur(14px) saturate(180%); -webkit-backdrop-filter: blur(14px) saturate(180%); }
     .sticky-mobile-cta a.sticky-cta-primary { background: linear-gradient(135deg, rgba(201,169,110,0.9), rgba(232,213,163,0.8)); color: var(--dark); box-shadow: 0 4px 16px rgba(201,169,110,0.3), inset 0 1px 0 rgba(255,255,255,0.35); }
     .sticky-mobile-cta a.sticky-cta-secondary { background: rgba(255,255,255,0.08); color: var(--gold-light); border: 1px solid rgba(255,255,255,0.18); }
@@ -1656,7 +1682,7 @@
     <li><a href="work-with-me" class="nav-cta-btn" data-analytics-event="homepage_primary_cta_click" data-analytics-param-cta_location="desktop_navigation" data-analytics-param-target_service_id="work_with_me">Work With Me</a></li>
 
     <li><div class="lang-switch lang-switch-nav">
-      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="Change language">EN <span class="lsn-caret">▾</span></button>
+      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="EN, change language">EN <span class="lsn-caret">▾</span></button>
       <div class="lang-switch-menu" role="menu">
         <a href="/" hreflang="en" class="active">English</a>
         <a href="/fr/" hreflang="fr">Français</a>
@@ -1817,7 +1843,7 @@
     <p class="hero-tagline">Internationally published photography for portraits, model portfolios and editorial stories.</p>
     <div class="hero-ctas">
       <a href="work-with-me" class="cta-btn cta-btn-primary" data-analytics-event="homepage_primary_cta_click" data-analytics-param-cta_location="hero" data-analytics-param-target_service_id="work_with_me">Plan Your Photoshoot &rarr;</a>
-      <a href="#portraits" class="cta-btn" data-analytics-event="homepage_portfolio_cta_click" data-analytics-param-cta_location="hero" data-analytics-param-target_service_id="portrait_portfolio">View Portrait Portfolio</a>
+      <a href="#portraits" class="cta-btn hero-cta-secondary" data-analytics-event="homepage_portfolio_cta_click" data-analytics-param-cta_location="hero" data-analytics-param-target_service_id="portrait_portfolio">View Portrait Portfolio</a>
     </div>
   </div>
   <div class="hero-scroll">
@@ -2054,7 +2080,7 @@
       magazine commissions &amp; commercial work across Dubai and beyond.
     </p>
     <div class="cta-buttons reveal reveal-delay-2">
-      <a href="https://wa.me/971508065253" target="_blank" class="cta-btn cta-btn-primary" data-cta-location="contact_section">WhatsApp Me →</a>
+      <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%27d%20like%20to%20enquire%20about%20a%20photoshoot" target="_blank" class="cta-btn cta-btn-primary" data-cta-location="contact_section">WhatsApp Me →</a>
       <a href="tel:+971508065253" class="cta-btn" data-cta-location="contact_section">Call →</a>
       <a href="mailto:info@photoczaro.com" class="cta-btn" data-cta-location="contact_section">Email →</a>
     </div>
@@ -2073,7 +2099,7 @@
   .lang-switch-btn {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(138,134,128,0.55);
+    color: rgba(138,134,128,0.95);
     font-size: 10px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -2121,7 +2147,7 @@
   .lang-switch-menu a.active { color: #c9a96e; }
 </style>
 <div class="lang-switch">
-  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="Change language">EN ▾</button>
+  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="EN, change language">EN ▾</button>
   <div class="lang-switch-menu" role="menu">
       <a href="/" hreflang="en" class="active">English</a>
       <a href="/fr/" hreflang="fr">Français</a>
@@ -2152,7 +2178,7 @@
 </footer>
 
 <div class="sticky-mobile-cta">
-  <a href="https://wa.me/971508065253" target="_blank" class="sticky-cta-primary" data-cta-location="sticky_mobile_cta">WhatsApp Me</a>
+  <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%27d%20like%20to%20enquire%20about%20a%20photoshoot" target="_blank" class="sticky-cta-primary" data-cta-location="sticky_mobile_cta">WhatsApp Me</a>
   <a href="tel:+971508065253" class="sticky-cta-secondary" data-cta-location="sticky_mobile_cta">Call</a>
 </div>
 

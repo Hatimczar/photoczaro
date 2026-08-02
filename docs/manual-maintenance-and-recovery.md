@@ -83,14 +83,16 @@ git push origin main
 
 ## 9. How production deployment works
 
-Production is a **Cloudflare Pages** project named `photoczaro`, connected to this GitHub repository's `main` branch.
+Production is a **Cloudflare Pages "Direct Upload"** project named `photoczaro`. It is **not** connected to this GitHub repository for automatic builds — GitHub here is the durable source of truth and recoverability record, but pushing to `main` does not, by itself, deploy anything.
 
-- **Automatic deployment**: pushing to `main` on GitHub triggers a Cloudflare Pages build automatically. No build command runs (`pages_build_output_dir = "."` in `wrangler.toml` — the repository root is served as-is). This normally completes within a minute or two of the push.
-- **Manual deployment** (if automatic deployment is ever unavailable, e.g. the GitHub↔Cloudflare connection breaks): from the repository root, with the Cloudflare `wrangler` CLI installed and authenticated —
+- **Deploying**: from a local checkout of `main`, with a clean working tree and the Cloudflare `wrangler` CLI installed and authenticated —
   ```bash
+  git pull                        # make sure local main is up to date
+  git status                      # confirm the working tree is clean before deploying
   npx wrangler pages deploy . --project-name photoczaro --commit-dirty=false
   ```
-  `--commit-dirty=false` refuses to deploy if there are uncommitted local changes, which keeps the deployed source traceable to an exact git commit.
+  `--commit-dirty=false` refuses to deploy if there are uncommitted local changes, which keeps the deployed source traceable to an exact git commit. No build command runs — `pages_build_output_dir = "."` in `wrangler.toml` means the repository root is served as-is.
+- **Every deploy is "manual" in the sense that a human or script must run the command above** after pushing to GitHub. There is no separate "automatic" path today. If GitHub↔Cloudflare auto-deploy is ever configured in the future (via the Cloudflare dashboard, Pages project → Settings → Builds & deployments), update this section to describe it — until then, assume nothing deploys until the command above is run.
 
 ### Verifying which commit is actually live
 
@@ -144,7 +146,7 @@ Never delete or move an existing rollback tag or a rollback-designated Cloudflar
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Push to `main` doesn't trigger a deploy | GitHub↔Cloudflare connection broken, or Cloudflare Pages build paused | Check Cloudflare Pages dashboard → project → Settings → Builds; redeploy manually (§9) as a stopgap |
+| Pushed to `main` but production still looks old | Expected — this project does not auto-deploy on push (§9). Run the manual deploy command | `npx wrangler pages deploy . --project-name photoczaro --commit-dirty=false` from a clean, up-to-date `main` checkout |
 | `photoczaro.com` shows an older version after deploying | DNS/CDN cache, or the canonical deployment didn't update | Wait a minute and hard-refresh; if it persists, re-check `canonical_deployment.id` (§9) — if it's still the old deployment, the new one may have failed a build stage |
 | Publisher signup/login returns a 500 error | `SESSION_SECRET` or `ADMIN_PASSWORD` missing/misconfigured in Cloudflare env vars, or the `PUBLISHERS_KV` namespace binding in `wrangler.toml` doesn't match a namespace that exists in the account | Check Cloudflare dashboard → Pages project → Settings → Environment variables and → Functions → KV namespace bindings |
 | A page looks broken only on mobile | Check for horizontal overflow (`document.documentElement.scrollWidth` vs `clientWidth` in the browser console) and confirm no CSS `width`/`grid-template-columns` rule was widened without `minmax(0, ...)` — this exact class of bug has recurred twice in this site's history (see `docs/post-audit-implementation-report.md`) | Compare the affected page's relevant CSS block against a known-good page (e.g. `index.html`) |

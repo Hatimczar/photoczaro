@@ -50,7 +50,7 @@ Then open `http://localhost:8000/index.html`. Cloudflare's clean-URL rewriting (
 
 ## Deployment
 
-Production deploys via Cloudflare Pages, connected to the `main` branch of this repository. Pushing to `main` triggers an automatic build/deploy. A manual deploy (e.g. from a local machine) uses:
+Production is a Cloudflare Pages **Direct Upload** project — it is not connected to this GitHub repository for automatic builds. Pushing to `main` alone does **not** deploy anything; every deployment is a manual (or manually-scripted) upload from a local checkout of `main`:
 
 ```bash
 npx wrangler pages deploy . --project-name photoczaro --commit-dirty=false

@@ -1485,7 +1485,7 @@
     font-size: 10px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(138,134,128,0.6);
+    color: rgba(138,134,128,0.95);
     text-decoration: none;
     transition: color 0.3s;
   }
@@ -1605,7 +1605,7 @@
       </div>
     </div></li>
   </ul>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
     <span></span><span></span><span></span>
   </button>
 <style>
@@ -2864,17 +2864,29 @@ document.addEventListener('keydown', e => {
 // Hamburger menu
 const hamburger = document.getElementById('nav-hamburger');
 const mobileMenu = document.getElementById('mobile-menu');
-hamburger.addEventListener('click', () => {
-  const isOpen = hamburger.classList.toggle('open');
+function setMobileMenuOpen(isOpen) {
+  hamburger.classList.toggle('open', isOpen);
   mobileMenu.classList.toggle('open', isOpen);
+  hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   document.body.style.overflow = isOpen ? 'hidden' : '';
+  Array.prototype.forEach.call(document.body.children, function(el){
+    if (el === mobileMenu) return;
+    if (isOpen) { el.setAttribute('inert', ''); } else { el.removeAttribute('inert'); }
+  });
+}
+hamburger.addEventListener('click', () => {
+  setMobileMenuOpen(!hamburger.classList.contains('open'));
 });
 document.getElementById('mobile-menu-nav').querySelectorAll('a').forEach(a => {
   a.addEventListener('click', () => {
-    hamburger.classList.remove('open');
-    mobileMenu.classList.remove('open');
-    document.body.style.overflow = '';
+    setMobileMenuOpen(false);
   });
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+    setMobileMenuOpen(false);
+    hamburger.focus();
+  }
 });
 
 // Intersection Observer for reveal animations

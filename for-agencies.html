@@ -359,7 +359,7 @@
       </div>
     </div></li>
   </ul>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
     <span></span><span></span><span></span>
   </button>
 <style>
@@ -410,10 +410,11 @@
 })();
 </script>
 </nav>
+<main>
 
 <!-- Mobile menu -->
 <div class="mobile-menu-overlay" id="mobile-menu">
-  <ul class="mobile-menu-nav">
+  <ul class="mobile-menu-nav" id="mobile-menu-nav">
     <li><a href="index.html#portraits"><span>Portraits</span></a></li>
     <li><a href="index.html#projects"><span>Projects</span></a></li>
     <li><a href="journal"><span>Journal</span></a></li>
@@ -560,6 +561,7 @@
 </section>
 
 <!-- Footer -->
+</main>
 <footer class="wm-footer">
   <a href="index" class="wm-footer-back">Back to Portfolio</a>
   <a href="index" class="wm-footer-brand">Photoczaro</a>
@@ -690,17 +692,29 @@ window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scro
 // Mobile menu
 const hamburger=document.getElementById('nav-hamburger');
 const mobileMenu=document.getElementById('mobile-menu');
+function setMobileMenuOpen(isOpen) {
+  hamburger.classList.toggle('open', isOpen);
+  mobileMenu.classList.toggle('open', isOpen);
+  hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+  Array.prototype.forEach.call(document.body.children, function(el){
+    if (el === mobileMenu) return;
+    if (isOpen) { el.setAttribute('inert', ''); } else { el.removeAttribute('inert'); }
+  });
+}
 hamburger.addEventListener('click',()=>{
-  hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('open');
-  document.body.style.overflow=mobileMenu.classList.contains('open')?'hidden':'';
+  setMobileMenuOpen(!hamburger.classList.contains('open'));
 });
 mobileMenu.querySelectorAll('a').forEach(a=>{
   a.addEventListener('click',()=>{
-    hamburger.classList.remove('open');
-    mobileMenu.classList.remove('open');
-    document.body.style.overflow='';
+    setMobileMenuOpen(false);
   });
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+    setMobileMenuOpen(false);
+    hamburger.focus();
+  }
 });
 </script>
 </body>

@@ -240,7 +240,7 @@
 
   .pp-section-number {
     font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
-    color: var(--gold); opacity: 0.6; margin-bottom: 12px; display: block;
+    color: var(--gold); opacity: 0.85; margin-bottom: 12px; display: block;
   }
   .pp-section h2 {
     font-family: 'Cormorant Garamond', serif;
@@ -376,7 +376,7 @@
 
 <!-- Mobile menu -->
 <div class="mobile-menu-overlay" id="mobile-menu">
-  <ul class="mobile-menu-nav">
+  <ul class="mobile-menu-nav" id="mobile-menu-nav">
     <li><a href="index.html#magazines">Publications</a></li>
     <li><a href="index.html#portraits">Portraits</a></li>
     <li><a href="index.html#projects">Projects</a></li>
@@ -417,7 +417,7 @@
       </div>
     </div></li>
   </ul>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
     <span></span><span></span><span></span>
   </button>
 <style>
@@ -516,7 +516,7 @@
       <p><strong>Data Controller:</strong> Hatim Champeli (Photoczaro)</p>
       <p><strong>Location:</strong> Dubai, United Arab Emirates</p>
       <p><strong>Website:</strong> <a href="https://photoczaro.com">photoczaro.com</a></p>
-      <p><strong>Contact:</strong> <a href="mailto:info@photoczaro.com">info@photoczaro.com</a></p>
+      <p><strong>Contact:</strong> <a href="mailto:info@photoczaro.com" style="color:var(--gold);text-decoration:underline;">info@photoczaro.com</a></p>
     </div>
   </section>
 
@@ -759,7 +759,7 @@
       <li>Photoczaro does not knowingly collect personal data from minors through the website. If we discover that a minor has contacted us without parental knowledge, we will delete the communication upon becoming aware of it.</li>
     </ul>
     <div class="pp-callout">
-      <p>If you believe that a photograph of a minor has been published without proper consent, please contact us immediately at <a href="mailto:info@photoczaro.com">info@photoczaro.com</a>. We will investigate and act within 48 hours.</p>
+      <p>If you believe that a photograph of a minor has been published without proper consent, please contact us immediately at <a href="mailto:info@photoczaro.com" style="color:var(--gold);text-decoration:underline;">info@photoczaro.com</a>. We will investigate and act within 48 hours.</p>
     </div>
   </section>
 
@@ -824,7 +824,7 @@
   <section class="pp-section" id="s14">
     <span class="pp-section-number">14</span>
     <h2>Your Rights</h2>
-    <p>Under the UAE PDPL, you have the following rights regarding your personal data. You may exercise any of these rights by contacting us at <a href="mailto:info@photoczaro.com" style="color:var(--gold);text-decoration:none;">info@photoczaro.com</a>.</p>
+    <p>Under the UAE PDPL, you have the following rights regarding your personal data. You may exercise any of these rights by contacting us at <a href="mailto:info@photoczaro.com" style="color:var(--gold);text-decoration:underline;">info@photoczaro.com</a>.</p>
 
     <div class="pp-rights-grid">
       <div class="pp-right-card">
@@ -884,7 +884,7 @@
       <li>Device and browser type</li>
       <li>Approximate geographic location (country/city level, derived from IP: the full IP address is not stored)</li>
     </ul>
-    <p>GA4 data is processed by Google and subject to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;">Google's Privacy Policy</a>. You can opt out of GA4 tracking by installing the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;">Google Analytics Opt-out Browser Add-on</a> or by disabling JavaScript.</p>
+    <p>GA4 data is processed by Google and subject to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;">Google's Privacy Policy</a>. You can opt out of GA4 tracking by installing the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;">Google Analytics Opt-out Browser Add-on</a> or by disabling JavaScript.</p>
 
     <h3>Managing Cookies</h3>
     <p>You can control and delete cookies through your browser settings. Disabling the analytics cookie will not affect your ability to use the website. Disabling the language redirect cookie may cause you to be redirected on each visit.</p>
@@ -921,7 +921,7 @@
 
     <div class="pp-contact-block">
       <p><strong>Hatim Champeli: Photoczaro</strong></p>
-      <p>Email: <a href="mailto:info@photoczaro.com">info@photoczaro.com</a></p>
+      <p>Email: <a href="mailto:info@photoczaro.com" style="color:var(--gold);text-decoration:underline;">info@photoczaro.com</a></p>
       <p>Website: <a href="https://photoczaro.com">photoczaro.com</a></p>
       <p>Location: Dubai, United Arab Emirates</p>
     </div>
@@ -1040,15 +1040,31 @@
 
   // Mobile menu
   const hamburger = document.getElementById('nav-hamburger');
-  const menu = document.getElementById('mobile-menu');
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('open');
-    menu.classList.toggle('open');
-    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+const menu = document.getElementById('mobile-menu');
+function setMobileMenuOpen(isOpen) {
+  hamburger.classList.toggle('open', isOpen);
+  menu.classList.toggle('open', isOpen);
+  hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+  Array.prototype.forEach.call(document.body.children, function(el){
+    if (el === menu) return;
+    if (isOpen) { el.setAttribute('inert', ''); } else { el.removeAttribute('inert'); }
   });
-  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    hamburger.classList.remove('open'); menu.classList.remove('open'); document.body.style.overflow = '';
-  }));
+}
+hamburger.addEventListener('click', () => {
+  setMobileMenuOpen(!hamburger.classList.contains('open'));
+});
+menu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    setMobileMenuOpen(false);
+  });
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && menu.classList.contains('open')) {
+    setMobileMenuOpen(false);
+    hamburger.focus();
+  }
+});
 </script>
 </body>
 </html>

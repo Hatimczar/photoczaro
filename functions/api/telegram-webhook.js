@@ -17,6 +17,16 @@ export async function onRequestGet({ request, env }) {
   if (url.searchParams.get('diag') !== env.TELEGRAM_WEBHOOK_SECRET) {
     return new Response('Forbidden', { status: 401 });
   }
+
+  if (url.searchParams.get('action') === 'reregister') {
+    const result = await tg(env.TELEGRAM_BOT_TOKEN, 'setWebhook', {
+      url: `${url.origin}/api/telegram-webhook`,
+      secret_token: env.TELEGRAM_WEBHOOK_SECRET,
+      allowed_updates: ['chat_join_request', 'callback_query'],
+    });
+    return json(result);
+  }
+
   const info = await tg(env.TELEGRAM_BOT_TOKEN, 'getWebhookInfo', {});
   return json(info);
 }

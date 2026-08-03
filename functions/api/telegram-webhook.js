@@ -27,6 +27,13 @@ export async function onRequestGet({ request, env }) {
     return json(result);
   }
 
+  if (url.searchParams.get('action') === 'chatinfo') {
+    const chatId = url.searchParams.get('chat_id');
+    const chat = await tg(env.TELEGRAM_BOT_TOKEN, 'getChat', { chat_id: chatId });
+    const count = await tg(env.TELEGRAM_BOT_TOKEN, 'getChatMemberCount', { chat_id: chatId });
+    return json({ chat, count });
+  }
+
   const info = await tg(env.TELEGRAM_BOT_TOKEN, 'getWebhookInfo', {});
   return json(info);
 }

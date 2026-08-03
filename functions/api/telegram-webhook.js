@@ -38,6 +38,19 @@ async function sendWelcome(token, env, chatId, from) {
   });
 }
 
+export async function onRequestGet({ request, env }) {
+  const url = new URL(request.url);
+  if (url.searchParams.get('diag') !== env.TELEGRAM_WEBHOOK_SECRET) {
+    return new Response('Forbidden', { status: 401 });
+  }
+  const result = await tg(env.TELEGRAM_BOT_TOKEN, 'setWebhook', {
+    url: `${url.origin}/api/telegram-webhook`,
+    secret_token: env.TELEGRAM_WEBHOOK_SECRET,
+    allowed_updates: ['chat_join_request', 'callback_query', 'message'],
+  });
+  return json(result);
+}
+
 export async function onRequestPost({ request, env }) {
   const secret = request.headers.get('X-Telegram-Bot-Api-Secret-Token');
   if (!env.TELEGRAM_WEBHOOK_SECRET || secret !== env.TELEGRAM_WEBHOOK_SECRET) {

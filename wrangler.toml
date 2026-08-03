@@ -5,3 +5,7 @@ compatibility_date = "2026-07-01"
 [[kv_namespaces]]
 binding = "PUBLISHERS_KV"
 id = "25ad1257e9f44539b1d8bc02f72100eb"
+
+[[kv_namespaces]]
+binding = "TELEGRAM_KV"
+id = "1319392a2b3d4557a3ec98fbdac5b3e6"

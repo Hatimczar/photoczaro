@@ -12,30 +12,30 @@ const ROLE_LABELS = {
   none: 'Just here to follow',
 };
 
-export async function onRequestGet({ request, env }) {
-  const url = new URL(request.url);
-  if (url.searchParams.get('diag') !== env.TELEGRAM_WEBHOOK_SECRET) {
-    return new Response('Forbidden', { status: 401 });
-  }
+async function sendWelcome(token, env, chatId, from) {
+  await env.TELEGRAM_KV.put(
+    `tguser:${from.id}`,
+    JSON.stringify({
+      username: from.username || null,
+      firstName: from.first_name || null,
+      role: null,
+      joinedAt: new Date().toISOString(),
+    })
+  );
 
-  if (url.searchParams.get('action') === 'reregister') {
-    const result = await tg(env.TELEGRAM_BOT_TOKEN, 'setWebhook', {
-      url: `${url.origin}/api/telegram-webhook`,
-      secret_token: env.TELEGRAM_WEBHOOK_SECRET,
-      allowed_updates: ['chat_join_request', 'callback_query'],
-    });
-    return json(result);
-  }
-
-  if (url.searchParams.get('action') === 'chatinfo') {
-    const chatId = url.searchParams.get('chat_id');
-    const chat = await tg(env.TELEGRAM_BOT_TOKEN, 'getChat', { chat_id: chatId });
-    const count = await tg(env.TELEGRAM_BOT_TOKEN, 'getChatMemberCount', { chat_id: chatId });
-    return json({ chat, count });
-  }
-
-  const info = await tg(env.TELEGRAM_BOT_TOKEN, 'getWebhookInfo', {});
-  return json(info);
+  await tg(token, 'sendMessage', {
+    chat_id: chatId,
+    text: WELCOME_TEXT,
+    reply_markup: {
+      inline_keyboard: [
+        [
+          { text: 'Model', callback_data: 'role:model' },
+          { text: 'Agency', callback_data: 'role:agency' },
+        ],
+        [{ text: 'Just here to follow', callback_data: 'role:none' }],
+      ],
+    },
+  });
 }
 
 export async function onRequestPost({ request, env }) {
@@ -61,30 +61,13 @@ export async function onRequestPost({ request, env }) {
       user_id: from.id,
     });
 
-    await env.TELEGRAM_KV.put(
-      `tguser:${from.id}`,
-      JSON.stringify({
-        username: from.username || null,
-        firstName: from.first_name || null,
-        role: null,
-        joinedAt: new Date().toISOString(),
-      })
-    );
+    await sendWelcome(token, env, from.id, from);
 
-    await tg(token, 'sendMessage', {
-      chat_id: from.id,
-      text: WELCOME_TEXT,
-      reply_markup: {
-        inline_keyboard: [
-          [
-            { text: 'Model', callback_data: 'role:model' },
-            { text: 'Agency', callback_data: 'role:agency' },
-          ],
-          [{ text: 'Just here to follow', callback_data: 'role:none' }],
-        ],
-      },
-    });
+    return json({ ok: true });
+  }
 
+  if (update.message && update.message.chat.type === 'private' && update.message.text === '/start') {
+    await sendWelcome(token, env, update.message.chat.id, update.message.from);
     return json({ ok: true });
   }
 

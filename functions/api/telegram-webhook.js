@@ -12,6 +12,15 @@ const ROLE_LABELS = {
   none: 'Just here to follow',
 };
 
+export async function onRequestGet({ request, env }) {
+  const url = new URL(request.url);
+  if (url.searchParams.get('diag') !== env.TELEGRAM_WEBHOOK_SECRET) {
+    return new Response('Forbidden', { status: 401 });
+  }
+  const info = await tg(env.TELEGRAM_BOT_TOKEN, 'getWebhookInfo', {});
+  return json(info);
+}
+
 export async function onRequestPost({ request, env }) {
   const secret = request.headers.get('X-Telegram-Bot-Api-Secret-Token');
   if (!env.TELEGRAM_WEBHOOK_SECRET || secret !== env.TELEGRAM_WEBHOOK_SECRET) {

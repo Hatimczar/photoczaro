@@ -77,7 +77,7 @@
     <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/journal"/>
     <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/journal"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/journal"/>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -90,7 +90,7 @@
     <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/journal"/>
     <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/journal"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/journal"/>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -103,7 +103,7 @@
     <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/journal"/>
     <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/journal"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/journal"/>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -116,7 +116,7 @@
     <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/journal"/>
     <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/journal"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/journal"/>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -129,7 +129,7 @@
     <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/journal"/>
     <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/journal"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/journal"/>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1072,12 +1072,8 @@
   <url>
     <loc>https://photoczaro.com/privacy-policy</loc>
     <xhtml:link rel="alternate" hreflang="en"        href="https://photoczaro.com/privacy-policy"/>
-    <xhtml:link rel="alternate" hreflang="fr"        href="https://photoczaro.com/privacy-policy"/>
-    <xhtml:link rel="alternate" hreflang="ru"        href="https://photoczaro.com/privacy-policy"/>
-    <xhtml:link rel="alternate" hreflang="es"        href="https://photoczaro.com/privacy-policy"/>
-    <xhtml:link rel="alternate" hreflang="cs"        href="https://photoczaro.com/privacy-policy"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/privacy-policy"/>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>

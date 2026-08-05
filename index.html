@@ -2543,9 +2543,17 @@ const galleries = {};
     'images/Portraits__Zaraish - The Beach__DSC_0596.webp',
   ];
 
-function makeCarousel(imgs, labelFn, trackClass, itemClass) {
+// Lazy carousel: shell is inserted into the DOM immediately (no images),
+// full gallery images are only created the first time it is opened.
+function makeCarouselShell() {
   const wrap = document.createElement('div');
   wrap.className = 'carousel-wrap';
+  return wrap;
+}
+
+function populateCarousel(wrap, imgs, labelFn, trackClass, itemClass) {
+  if (wrap.dataset.populated === '1') return;
+  wrap.dataset.populated = '1';
 
   const arrowBar = document.createElement('div');
   arrowBar.className = 'carousel-arrows';
@@ -2642,9 +2650,10 @@ function buildPortraits() { portraits.forEach((p, i) => {
   toggle.className = 'model-toggle';
   toggle.innerHTML = `<span>Explore &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length}</em></span><em class="toggle-icon">+</em>`;
 
-  const carousel = makeCarousel(imgs, j => p.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
+  const carousel = makeCarouselShell();
 
   toggle.addEventListener('click', () => {
+    populateCarousel(carousel, imgs, j => p.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
     const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
   });
@@ -2868,9 +2877,10 @@ function buildMagazines() { magazines.forEach((m, i) => {
   toggle.className = 'model-toggle';
   toggle.innerHTML = `<span>Explore the Edit &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length} frames</em></span><em class="toggle-icon">+</em>`;
 
-  const carousel = makeCarousel(imgs, j => m.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
+  const carousel = makeCarouselShell();
 
   toggle.addEventListener('click', () => {
+    populateCarousel(carousel, imgs, j => m.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
     const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
   });
@@ -2977,9 +2987,10 @@ function buildProjects() { projectsData.forEach((proj, i) => {
   toggle.className = 'model-toggle';
   toggle.innerHTML = `<span>Explore the Project &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${proj.images.length} frames</em></span><em class="toggle-icon">+</em>`;
 
-  const carousel = makeCarousel(proj.images, j => proj.name + ' ' + (j + 1), 'project-gallery', 'project-gallery-item');
+  const carousel = makeCarouselShell();
 
   toggle.addEventListener('click', () => {
+    populateCarousel(carousel, proj.images, j => proj.name + ' ' + (j + 1), 'project-gallery', 'project-gallery-item');
     const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
   });

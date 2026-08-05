@@ -2573,10 +2573,11 @@ function populateCarousel(wrap, imgs, labelFn, trackClass, itemClass) {
   imgs.forEach((src, j) => {
     const item = document.createElement('div');
     item.className = itemClass;
-    item.innerHTML = `<img src="${src}" alt="${labelFn(j)}" loading="lazy">`;
+    item.innerHTML = `<img src="${src}" alt="${labelFn(j)}" loading="lazy" class="reveal">`;
     item.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: labelFn(j) })), j));
     track.appendChild(item);
   });
+  observeNewRevealEls(track);
 
   // Dot indicators
   const dotsRow = document.createElement('div');

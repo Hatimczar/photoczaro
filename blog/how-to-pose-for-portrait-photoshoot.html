@@ -220,7 +220,7 @@
   .post-gallery { display: grid; gap: 8px; margin: 40px 0; }
   .post-gallery.cols-2 { grid-template-columns: 1fr 1fr; }
   .post-gallery.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-  .post-gallery img { width: 100%; display: block; object-fit: cover; }
+  .post-gallery img { width: 100%; height: auto; aspect-ratio: 4/5; display: block; object-fit: cover; object-position: center top; }
   .post-gallery-caption { font-size: 11px; letter-spacing: 0.12em; color: var(--grey); text-align: center; margin-top: 10px; margin-bottom: 0; font-style: italic; }
   @media (max-width: 600px) { .post-gallery.cols-3 { grid-template-columns: 1fr 1fr; } }
   .post-footer { border-top: 0.5px solid rgba(255,255,255,0.07); padding: 60px; max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }

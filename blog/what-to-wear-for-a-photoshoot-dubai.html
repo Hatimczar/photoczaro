@@ -28,6 +28,10 @@
 <link rel="canonical" href="https://photoczaro.com/blog/what-to-wear-for-a-photoshoot-dubai">
 
 <link rel="alternate" hreflang="en" href="https://photoczaro.com/blog/what-to-wear-for-a-photoshoot-dubai">
+<link rel="alternate" hreflang="fr" href="https://photoczaro.com/fr/blog/what-to-wear-for-a-photoshoot-dubai">
+<link rel="alternate" hreflang="ru" href="https://photoczaro.com/ru/blog/what-to-wear-for-a-photoshoot-dubai">
+<link rel="alternate" hreflang="es" href="https://photoczaro.com/es/blog/what-to-wear-for-a-photoshoot-dubai">
+<link rel="alternate" hreflang="cs" href="https://photoczaro.com/cs/blog/what-to-wear-for-a-photoshoot-dubai">
 <link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/what-to-wear-for-a-photoshoot-dubai">
 
 <!-- Open Graph -->
@@ -312,7 +316,64 @@ window.addEventListener('pageshow',()=>{
   <a href="../index" class="nav-logo">Photoczaro</a>
   <div class="nav-back-group">
   <a href="../journal" class="nav-back">Back to Journal</a>
+  <div class="lang-switch lang-switch-nav">
+      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="EN, change language">EN <span class="lsn-caret">▾</span></button>
+      <div class="lang-switch-menu" role="menu">
+        <a href="/blog/what-to-wear-for-a-photoshoot-dubai" hreflang="en" class="active">English</a>
+        <a href="/fr/blog/what-to-wear-for-a-photoshoot-dubai" hreflang="fr">Français</a>
+        <a href="/ru/blog/what-to-wear-for-a-photoshoot-dubai" hreflang="ru">Русский</a>
+        <a href="/es/blog/what-to-wear-for-a-photoshoot-dubai" hreflang="es">Español</a>
+        <a href="/cs/blog/what-to-wear-for-a-photoshoot-dubai" hreflang="cs">Čeština</a>
+      </div>
+    </div>
   </div>
+<style>
+  .lang-switch-nav.lang-switch { display: inline-flex; align-items: center; }
+  .lang-switch-btn-nav {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--grey);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 5px 11px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .lang-switch-btn-nav:hover { color: var(--gold); border-color: rgba(201,169,110,0.35); }
+  .lang-switch-nav .lang-switch-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    bottom: auto;
+    right: 0;
+    left: auto;
+    transform: translateY(6px);
+  }
+  @media (max-width: 900px) {
+    .lang-switch-nav { display: none !important; }
+  }
+</style>
+<script>
+(function(){
+  document.querySelectorAll('.lang-switch-btn-nav').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = btn.closest('.lang-switch');
+      var open = w.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+  document.addEventListener('click', function(){
+    document.querySelectorAll('.lang-switch-nav.open').forEach(function(w){
+      w.classList.remove('open');
+      var b = w.querySelector('.lang-switch-btn-nav');
+      if(b) b.setAttribute('aria-expanded','false');
+    });
+  });
+})();
+</script>
 </nav>
 
 <div class="post-hero">
@@ -573,7 +634,88 @@ window.addEventListener('pageshow',()=>{
   </div>
 </div>
 
-<footer style="border-top:0.5px solid rgba(255,255,255,0.06);padding:28px 60px;display:flex;justify-content:space-between;align-items:center;background:var(--dark,#0a0a0a)"><span style="font-family:Cormorant Garamond,serif;font-size:16px;letter-spacing:0.2em;color:#c9a96e">Photoczaro</span><a href="../privacy-policy" style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.95)'">Privacy Policy</a><span style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;">© <span class="js-year">2026</span> Photoczaro</span><script src="/js/site-year.js" defer></script></footer>
+<footer style="border-top:0.5px solid rgba(255,255,255,0.06);padding:28px 60px;display:flex;justify-content:space-between;align-items:center;background:var(--dark,#0a0a0a)"><span style="font-family:Cormorant Garamond,serif;font-size:16px;letter-spacing:0.2em;color:#c9a96e">Photoczaro</span><a href="../privacy-policy" style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.95)'">Privacy Policy</a><span style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;">© <span class="js-year">2026</span> Photoczaro</span><script src="/js/site-year.js" defer></script><style>
+  .lang-switch { position: relative; display: inline-block; }
+  .lang-switch-btn {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(138,134,128,0.95);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    transition: color 0.3s, border-color 0.3s;
+    font-family: inherit;
+  }
+  .lang-switch-btn:hover { color: #c9a96e; border-color: rgba(201,169,110,0.3); }
+  .lang-switch-menu {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    background: rgba(18,16,14,0.9);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 6px;
+    min-width: 140px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 500;
+  }
+  .lang-switch.open .lang-switch-menu {
+    opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0);
+  }
+  .lang-switch-menu a {
+    display: block;
+    padding: 8px 12px;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: rgba(230,228,224,0.7);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .lang-switch-menu a:hover { background: rgba(201,169,110,0.12); color: #c9a96e; }
+  .lang-switch-menu a.active { color: #c9a96e; }
+</style>
+<div class="lang-switch">
+  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="EN, change language">EN ▾</button>
+  <div class="lang-switch-menu" role="menu">
+      <a href="/blog/what-to-wear-for-a-photoshoot-dubai" hreflang="en" class="active">English</a>
+      <a href="/fr/blog/what-to-wear-for-a-photoshoot-dubai" hreflang="fr">Français</a>
+      <a href="/ru/blog/what-to-wear-for-a-photoshoot-dubai" hreflang="ru">Русский</a>
+      <a href="/es/blog/what-to-wear-for-a-photoshoot-dubai" hreflang="es">Español</a>
+      <a href="/cs/blog/what-to-wear-for-a-photoshoot-dubai" hreflang="cs">Čeština</a>
+  </div>
+</div>
+<script>
+(function(){
+  document.querySelectorAll('.lang-switch-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = btn.closest('.lang-switch');
+      var open = w.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+  document.addEventListener('click', function(){
+    document.querySelectorAll('.lang-switch.open').forEach(function(w){
+      w.classList.remove('open');
+      var b = w.querySelector('.lang-switch-btn');
+      if(b) b.setAttribute('aria-expanded','false');
+    });
+  });
+})();
+</script>
+</footer>
 <div class="sticky-mobile-cta">
   <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%20am%20planning%20a%20photoshoot%20in%20Dubai%20and%20would%20like%20help%20choosing%20my%20outfit." target="_blank" class="sticky-cta-primary">WhatsApp Me</a>
   <a href="tel:+971508065253" class="sticky-cta-secondary">Call</a>

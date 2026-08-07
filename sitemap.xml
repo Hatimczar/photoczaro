@@ -276,6 +276,16 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Professional headshots in Dubai -->
+  <url>
+    <loc>https://photoczaro.com/blog/professional-headshots-dubai-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/blog/professional-headshots-dubai-guide"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/professional-headshots-dubai-guide"/>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- How to pose for a portrait photoshoot blog post (all languages) -->
   <url>
     <loc>https://photoczaro.com/blog/how-to-pose-for-portrait-photoshoot</loc>

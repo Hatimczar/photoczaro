@@ -130,7 +130,7 @@
   .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.4s var(--ease); }
   .nav-links a:hover { color: var(--white); }
   .nav-links a:hover::after { width: 100%; }
-  .nav-cta-btn {
+  .nav-cta-btn { white-space: nowrap;
     color: var(--dark) !important;
     background: linear-gradient(135deg, rgba(201,169,110,0.92), rgba(232,213,163,0.85));
     padding: 9px 20px;
@@ -368,7 +368,12 @@
   @media (max-width: 480px) {
     .pp-rights-grid { grid-template-columns: 1fr; }
   }
+  @media (max-width: 1560px) {
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+  }
 </style>
+<link rel="stylesheet" href="/a11y.css">
 </head>
 <body>
 

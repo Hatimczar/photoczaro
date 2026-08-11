@@ -444,7 +444,7 @@
   .nav-links a:hover::after { width: 100%; }
   .nav-links a.active { color: var(--white); }
   .nav-links a.active::after { width: 100%; background: var(--gold); }
-  .nav-cta-btn {
+  .nav-cta-btn { white-space: nowrap;
     color: var(--dark) !important;
     background: linear-gradient(135deg, rgba(201,169,110,0.92), rgba(232,213,163,0.85));
     padding: 9px 20px;
@@ -1641,6 +1641,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="stylesheet" href="/a11y.css">
 </head>
 <body>
 
@@ -1903,7 +1904,7 @@
   </div>
   <div class="about-layout">
     <div class="about-image-wrap reveal">
-      <img src="images/About__Lucia-Curio-Heritage.webp" alt="Photoczaro portrait" loading="lazy">
+      <img src="images/About__Lucia-Curio-Heritage.webp" srcset="images/About__Lucia-Curio-Heritage@640w.webp 640w, images/About__Lucia-Curio-Heritage@1200w.webp 1200w, images/About__Lucia-Curio-Heritage.webp 1350w" sizes="(max-width: 768px) 90vw, 45vw" alt="Photoczaro portrait" loading="lazy">
       <div class="about-image-frame"></div>
     </div>
     <div class="about-text reveal reveal-delay-2">
@@ -2143,6 +2144,10 @@
   }
   .lang-switch-menu a:hover { background: rgba(201,169,110,0.12); color: #c9a96e; }
   .lang-switch-menu a.active { color: #c9a96e; }
+  @media (max-width: 1250px) {
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+  }
 </style>
 <div class="lang-switch">
   <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="EN, change language">EN ▾</button>
@@ -2190,6 +2195,13 @@
 </div>
 
 <script>
+// Responsive image helper: builds a srcset from the @640w/@1200w tiers generated
+// alongside every source image, falling back to the original as the largest candidate.
+function srcsetFor(src) {
+  const base = src.replace(/\.webp$/, '');
+  return `${base}@640w.webp 640w, ${base}@1200w.webp 1200w, ${src} 1800w`;
+}
+
 // Custom cursor: Montoya-style
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
@@ -2574,7 +2586,7 @@ function populateCarousel(wrap, imgs, labelFn, trackClass, itemClass) {
   imgs.forEach((src, j) => {
     const item = document.createElement('div');
     item.className = itemClass;
-    item.innerHTML = `<img src="${src}" alt="${labelFn(j)}" loading="lazy" class="reveal">`;
+    item.innerHTML = `<img src="${src}" srcset="${srcsetFor(src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${labelFn(j)}" loading="lazy" class="reveal">`;
     item.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: labelFn(j) })), j));
     track.appendChild(item);
   });
@@ -2642,7 +2654,7 @@ function buildPortraits() { portraits.forEach((p, i) => {
 
   const cover = document.createElement('div');
   cover.className = 'gallery-item';
-  cover.innerHTML = `<img src="${p.src}" alt="${p.alt || p.name}" loading="lazy">
+  cover.innerHTML = `<img src="${p.src}" srcset="${srcsetFor(p.src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${p.alt || p.name}" loading="lazy">
     <div class="gallery-item-overlay">
       <span class="gallery-item-name">${p.name}</span>
     </div>`;
@@ -2867,7 +2879,7 @@ function buildMagazines() { magazines.forEach((m, i) => {
   // cover card
   const card = document.createElement('div');
   card.className = 'magazine-card';
-  card.innerHTML = `<img src="${m.src}" alt="Editorial feature in ${m.pub}, Dubai portrait and fashion photography by Photoczaro" loading="lazy">
+  card.innerHTML = `<img src="${m.src}" srcset="${srcsetFor(m.src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="Editorial feature in ${m.pub}, Dubai portrait and fashion photography by Photoczaro" loading="lazy">
     <div class="magazine-card-info">
       <p class="magazine-pub">${m.pub}</p>
       <p class="magazine-title">${m.name}</p>

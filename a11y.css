@@ -1,0 +1,10 @@
+/* Sitewide accessibility: visible keyboard focus states.
+   Kept as a separate stylesheet so it applies uniformly across all pages. */
+:focus-visible {
+  outline: 2px solid #c9a96e;
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}

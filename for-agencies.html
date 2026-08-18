@@ -245,12 +245,20 @@
   .mobile-menu-socials a:hover { color: var(--white); }
 
   /* Hero */
-  .wm-hero { padding: 200px 60px 80px; max-width: 1000px; }
+  .wm-hero { padding: 200px 60px 80px; max-width: 1400px; margin: 0 auto; }
+  .wm-hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 64px; align-items: center; }
   .wm-eyebrow { font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; }
-  .wm-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px,7vw,96px); font-weight: 300; line-height: 1.02; letter-spacing: -0.02em; color: var(--white); }
+  .wm-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(44px,6vw,84px); font-weight: 300; line-height: 1.02; letter-spacing: -0.02em; color: var(--white); }
   .wm-title em { font-style: italic; color: var(--gold-light); }
   .wm-sub { margin-top: 28px; font-size: 17px; letter-spacing: 0.01em; color: rgba(245,240,235,0.75); max-width: 620px; line-height: 1.8; }
   .wm-hero-cta { margin-top: 40px; }
+  .wm-hero-media { position: relative; border-radius: 4px; overflow: hidden; aspect-ratio: 3/4; }
+  .wm-hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; display: block; }
+  .wm-hero-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.35), rgba(0,0,0,0) 45%); pointer-events: none; }
+  @media (max-width: 900px) {
+    .wm-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .wm-hero-media { max-width: 420px; margin: 0 auto; }
+  }
 
   /* CTA buttons (shared with blog posts) */
   .cta-buttons { display: flex; flex-wrap: wrap; gap: 14px; }
@@ -443,14 +451,21 @@
 
 <!-- Hero -->
 <header class="wm-hero">
-  <p class="wm-eyebrow">For Modeling & Talent Agencies</p>
-  <h1 class="wm-title">Booking Talent<br><em>Wherever They Are</em></h1>
-  <p class="wm-sub">Dubai-based, working internationally. Roster shoots, scouting submissions, and destination bookings for agencies who need reliable, agency-ready images at volume: whether your talent is already here or you're flying me out to you.</p>
-  <div class="wm-hero-cta">
-    <div class="cta-buttons">
-      <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%27m%20reaching%20out%20from%20an%20agency%20about%20a%20shoot" target="_blank" class="cta-btn cta-btn-primary" data-analytics-event="agency_primary_cta_click" data-analytics-param-cta_location="hero" data-analytics-param-destination_type="whatsapp">WhatsApp Me →</a>
-      <a href="tel:+971508065253" class="cta-btn" data-analytics-event="agency_primary_cta_click" data-analytics-param-cta_location="hero" data-analytics-param-destination_type="call">Call →</a>
-      <a href="mailto:info@photoczaro.com" class="cta-btn" data-analytics-event="agency_primary_cta_click" data-analytics-param-cta_location="hero" data-analytics-param-destination_type="email">Email →</a>
+  <div class="wm-hero-grid">
+    <div>
+      <p class="wm-eyebrow">For Modeling & Talent Agencies</p>
+      <h1 class="wm-title">Booking Talent<br><em>Wherever They Are</em></h1>
+      <p class="wm-sub">Dubai-based, working internationally. Roster shoots, scouting submissions, and destination bookings for agencies who need reliable, agency-ready images at volume: whether your talent is already here or you're flying me out to you.</p>
+      <div class="wm-hero-cta">
+        <div class="cta-buttons">
+          <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%27m%20reaching%20out%20from%20an%20agency%20about%20a%20shoot" target="_blank" class="cta-btn cta-btn-primary" data-analytics-event="agency_primary_cta_click" data-analytics-param-cta_location="hero" data-analytics-param-destination_type="whatsapp">WhatsApp Me →</a>
+          <a href="tel:+971508065253" class="cta-btn" data-analytics-event="agency_primary_cta_click" data-analytics-param-cta_location="hero" data-analytics-param-destination_type="call">Call →</a>
+          <a href="mailto:info@photoczaro.com" class="cta-btn" data-analytics-event="agency_primary_cta_click" data-analytics-param-cta_location="hero" data-analytics-param-destination_type="email">Email →</a>
+        </div>
+      </div>
+    </div>
+    <div class="wm-hero-media">
+      <img src="images/Portraits__UC Fashion Week - 3rd November__Maria__DSC09452---Edit.webp" width="1200" height="1800" alt="Roster shoot at UC Fashion Week in Dubai by Photoczaro" loading="eager" fetchpriority="high">
     </div>
   </div>
 </header>

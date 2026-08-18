@@ -275,6 +275,51 @@
         { "@type": "Review", "author": { "@type": "Person", "name": "Jose Immanuel" }, "datePublished": "2023-09", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "reviewBody": "Professional, creative, and simply the best. Photoczaro is the go-to freelance photographer in Dubai." },
         { "@type": "Review", "author": { "@type": "Person", "name": "Syed Basil" }, "datePublished": "2023-09", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "reviewBody": "Stunning photos! Photoczaro's talent shines through in every shot. Best decision for a freelance photographer in Dubai." }
       ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much does a session with Photoczaro cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pricing depends on the type of session, location and how many final images you need, so every quote is custom rather than fixed. Message me with what you're looking for and I'll come back with a package that fits."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need modelling or photoshoot experience?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Direction on posing, expression and movement is provided throughout every session, whether it's your first shoot or your tenth."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long until I receive my final images?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Turnaround depends on the session and package agreed at booking, and is confirmed upfront so there's no guessing after the shoot."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you shoot outside Dubai?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Alongside Dubai and Abu Dhabi, I travel for destination and agency bookings, and offer virtual shoots directed remotely for clients who can't make it in person."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I book a session?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "WhatsApp is the fastest way to reach me with what you're looking for, and I'll help shape the right session from there."
+          }
+        }
+      ]
     }
   ]
 }
@@ -676,6 +721,17 @@
     transition: transform 1.2s var(--ease);
   }
   .section-line.visible { transform: scaleX(1); }
+
+  /* FAQ */
+  #faq { background: var(--dark-2); }
+  .faq-list { max-width: 860px; }
+  .faq-block { margin: 20px 0; border: 0.5px solid rgba(255,255,255,0.08); background: var(--dark); }
+  .faq-q { font-size: 15px; letter-spacing: 0.02em; color: var(--white); padding: 22px 26px; font-weight: 400; border-bottom: 0.5px solid rgba(255,255,255,0.06); }
+  .faq-a { font-size: 14.5px; line-height: 1.8; color: var(--grey); padding: 18px 26px 22px; }
+  @media (max-width: 768px) {
+    .faq-q { font-size: 14px; padding: 18px 20px; }
+    .faq-a { font-size: 13.5px; padding: 14px 20px 18px; }
+  }
 
   /* Image copyright protection */
   img { -webkit-user-drag: none; user-drag: none; -webkit-touch-callout: none; pointer-events: none; }
@@ -1956,10 +2012,6 @@
           <span class="stat-num">Featured</span>
           <span class="stat-label">In International Magazines</span>
         </div>
-        <div>
-          <span class="stat-num">∞</span>
-          <span class="stat-label">Stories Told</span>
-        </div>
       </div>
     <a href="/work-with-me" class="cta-btn cta-btn-primary about-cta reveal reveal-delay-3" data-analytics-event="homepage_primary_cta_click" data-analytics-param-cta_location="about_section" data-analytics-param-target_service_id="work_with_me">Work With Me →</a>
     </div>
@@ -2090,6 +2142,37 @@
     <div class="slider-controls">
       <button class="slider-btn" id="google-prev">←</button>
       <button class="slider-btn" id="google-next">→</button>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header">
+    <span class="section-number reveal">06</span>
+    <h2 class="section-title reveal reveal-delay-1">Common<em> Questions</em></h2>
+    <div class="section-line" id="line-faq"></div>
+  </div>
+  <div class="faq-list">
+    <div class="faq-block reveal">
+      <div class="faq-q">How much does a session with Photoczaro cost?</div>
+      <div class="faq-a">Pricing depends on the type of session, location and how many final images you need, so every quote is custom rather than fixed. Message me with what you're looking for and I'll come back with a package that fits. See <a href="/blog/photoshoot-cost-dubai" style="color:var(--gold);">what typically affects photoshoot pricing in Dubai</a> for a general sense of the range.</div>
+    </div>
+    <div class="faq-block reveal">
+      <div class="faq-q">Do I need modelling or photoshoot experience?</div>
+      <div class="faq-a">No. Direction on posing, expression and movement is provided throughout every session, whether it's your first shoot or your tenth.</div>
+    </div>
+    <div class="faq-block reveal">
+      <div class="faq-q">How long until I receive my final images?</div>
+      <div class="faq-a">Turnaround depends on the session and package agreed at booking, and is confirmed upfront so there's no guessing after the shoot.</div>
+    </div>
+    <div class="faq-block reveal">
+      <div class="faq-q">Do you shoot outside Dubai?</div>
+      <div class="faq-a">Yes. Alongside Dubai and Abu Dhabi, I travel for destination and agency bookings, and offer <a href="/virtual-shoots" style="color:var(--gold);">virtual shoots</a> directed remotely for clients who can't make it in person.</div>
+    </div>
+    <div class="faq-block reveal">
+      <div class="faq-q">How do I book a session?</div>
+      <div class="faq-a">WhatsApp is the fastest way to reach me with what you're looking for, and I'll help shape the right session from there. See <a href="/work-with-me" style="color:var(--gold);">Work With Me</a> for the full range of session types.</div>
     </div>
   </div>
 </section>

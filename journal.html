@@ -427,6 +427,23 @@
 
   /* Blog grid */
   .journal-section { padding: 80px 60px 120px; }
+  .journal-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 48px; }
+  .journal-filter-btn {
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 999px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: color 0.3s, border-color 0.3s, background 0.3s;
+  }
+  .journal-filter-btn:hover { color: var(--gold-light); border-color: rgba(201,169,110,0.4); }
+  .journal-filter-btn.active { color: var(--dark); background: var(--gold); border-color: var(--gold); }
+  .blog-card.is-hidden { display: none; }
   .blog-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -685,11 +702,25 @@
   <p class="journal-hero-eyebrow">Notes & Observations</p>
   <h1 class="journal-hero-title">The<br><em>Journal</em></h1>
   <p class="journal-hero-sub">Gear reviews, shooting notes and things I've figured out the hard way. Written between sessions, not between stock images.</p>
+  <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20notify%20me%20when%20you%20publish%20new%20Journal%20guides" target="_blank" rel="noopener" style="display:inline-block;margin-top:20px;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-light);text-decoration:none;border-bottom:0.5px solid rgba(232,213,163,0.35);padding-bottom:2px;">Get notified when new guides publish →</a>
 </header>
 
 <!-- Posts -->
 <main class="journal-section">
-  <div class="blog-grid">
+  <div class="journal-filters" id="journal-filters">
+    <button type="button" class="journal-filter-btn active" data-category="all">All</button>
+    <button type="button" class="journal-filter-btn" data-category="Location Guide">Location Guide</button>
+    <button type="button" class="journal-filter-btn" data-category="Modeling Guide">Modeling Guide</button>
+    <button type="button" class="journal-filter-btn" data-category="Client Guide">Client Guide</button>
+    <button type="button" class="journal-filter-btn" data-category="Brand Guide">Brand Guide</button>
+    <button type="button" class="journal-filter-btn" data-category="Behind the Scenes">Behind the Scenes</button>
+    <button type="button" class="journal-filter-btn" data-category="Gear Review">Gear Review</button>
+    <button type="button" class="journal-filter-btn" data-category="On Shooting">On Shooting</button>
+    <button type="button" class="journal-filter-btn" data-category="Press &amp; Publications">Press &amp; Publications</button>
+    <button type="button" class="journal-filter-btn" data-category="Pricing Guide">Pricing Guide</button>
+    <button type="button" class="journal-filter-btn" data-category="Client Story">Client Story</button>
+  </div>
+  <div class="blog-grid" id="journal-grid">
 
     <a href="blog/desert-photoshoot-dubai-guide" class="blog-card reveal">
       <div class="blog-card-img"><img src="images/olga-desert.webp" alt="Golden hour portrait session in the Dubai desert by Photoczaro" loading="lazy"></div>
@@ -1112,6 +1143,22 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
   }, { threshold: 0.12 });
   reveals.forEach(el => observer.observe(el));
+
+  // Category filter
+  const filterBtns = document.querySelectorAll('.journal-filter-btn');
+  const cards = document.querySelectorAll('#journal-grid .blog-card');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const category = btn.getAttribute('data-category');
+      cards.forEach(card => {
+        const cardCategory = card.querySelector('.blog-card-category');
+        const match = category === 'all' || (cardCategory && cardCategory.textContent.trim() === category);
+        card.classList.toggle('is-hidden', !match);
+      });
+    });
+  });
 </script>
 </body>
 </html>

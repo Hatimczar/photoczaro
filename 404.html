@@ -23,7 +23,7 @@
     height: 100%;
   }
   body {
-    background: var(--dark);
+    background: var(--dark) url('images/Portraits__Kardelen__DSC_3802-1.webp') center 22% / cover no-repeat;
     color: var(--white);
     font-family: 'Inter', sans-serif;
     font-weight: 300;
@@ -33,8 +33,27 @@
     min-height: 100vh;
     padding: 32px;
     text-align: center;
+    position: relative;
   }
-  .wrap { max-width: 560px; }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.92), rgba(10,10,10,0.72) 45%, rgba(10,10,10,0.55));
+    z-index: 0;
+  }
+  .wrap { max-width: 560px; position: relative; z-index: 1; }
+  .logo-link {
+    display: inline-block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 400;
+    margin-bottom: 40px;
+  }
+  .logo-link:hover { color: var(--gold-light); }
   .eyebrow {
     font-size: 12px;
     letter-spacing: 0.25em;
@@ -97,7 +116,8 @@
 </head>
 <body>
   <div class="wrap">
-    <p class="eyebrow">Photoczaro</p>
+    <a href="/" class="logo-link">Photoczaro</a>
+    <p class="eyebrow">Page Not Found</p>
     <h1>404</h1>
     <p class="lede">This page could not be found. It may have moved, or the link may be out of date.</p>
     <div class="actions">

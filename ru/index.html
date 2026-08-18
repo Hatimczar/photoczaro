@@ -2036,7 +2036,8 @@
 // alongside every source image, falling back to the original as the largest candidate.
 function srcsetFor(src) {
   const base = src.replace(/\.webp$/, '');
-  return `${base}@640w.webp 640w, ${base}@1200w.webp 1200w, ${src} 1800w`;
+  const enc = s => encodeURI(s).replace(/,/g, '%2C');
+  return `${enc(base + '@640w.webp')} 640w, ${enc(base + '@1200w.webp')} 1200w, ${enc(src)} 1800w`;
 }
 
 // Custom cursor: Montoya-style

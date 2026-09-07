@@ -266,6 +266,16 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Acting and casting agencies guide -->
+  <url>
+    <loc>https://photoczaro.com/blog/best-acting-casting-agencies-dubai</loc>
+    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/blog/best-acting-casting-agencies-dubai"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/best-acting-casting-agencies-dubai"/>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Desert photoshoot guide -->
   <url>
     <loc>https://photoczaro.com/blog/desert-photoshoot-dubai-guide</loc>

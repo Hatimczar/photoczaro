@@ -641,7 +641,7 @@
 <!-- 2. Trust strip -->
 <div class="vs-trust">
   <div class="vs-trust-list">
-    <span><em>11</em> sessions directed remotely</span>
+    <span><em>12</em> sessions directed remotely</span>
     <span>Planned before every booking</span>
     <span>International enquiries welcome</span>
   </div>
@@ -736,12 +736,22 @@
   <p class="vs-section-label">Portfolio</p>
   <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(30px,3.6vw,44px);font-weight:300;color:var(--white);margin-bottom:16px;">Selected <em style="font-style:italic;color:var(--gold-light);">Virtual Sessions</em></h2>
   <p class="vs-body-text">Explore selected sessions created through remote direction, individual spaces and different available-light conditions.</p>
-  <p class="vs-count" style="margin-top:18px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(138,134,128,0.95);">11 sessions · click any to explore</p>
+  <p class="vs-count" style="margin-top:18px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(138,134,128,0.95);">12 sessions · click any to explore</p>
 </div>
 
 <!-- Gallery: chronological newest first -->
 <section>
   <div class="vs-grid">
+
+    <div class="vs-item reveal" data-session="laya" data-name="Laya" data-count="20">
+      <img src="images/virtual-shoots/laya.webp" alt="Laya" loading="eager">
+      <div class="vs-item-overlay">
+        <div class="vs-item-name">Laya</div>
+        <div class="vs-item-meta">
+          <div class="vs-item-count">20 images</div>
+        </div>
+      </div>
+    </div>
 
     <div class="vs-item reveal" data-session="valeriia" data-name="Valeriia" data-count="5">
       <img src="images/virtual-shoots/valeriia.webp" alt="Valeriia" loading="eager">
@@ -1183,17 +1193,18 @@ let lastFocusedEl = null;
 
 // Anonymous, order-based identifiers for analytics only — never the client's name.
 const vsAnonSessionIds = {
-  'valeriia': 'session_01',
-  'dinendra': 'session_02',
-  'nadine': 'session_03',
-  'denisa': 'session_04',
-  'anna-prague': 'session_05',
-  'fiona': 'session_06',
-  'belen': 'session_07',
-  'mallory': 'session_08',
-  'laura': 'session_09',
-  'ki': 'session_10',
-  'kiana-pinup': 'session_11'
+  'laya': 'session_01',
+  'valeriia': 'session_02',
+  'dinendra': 'session_03',
+  'nadine': 'session_04',
+  'denisa': 'session_05',
+  'anna-prague': 'session_06',
+  'fiona': 'session_07',
+  'belen': 'session_08',
+  'mallory': 'session_09',
+  'laura': 'session_10',
+  'ki': 'session_11',
+  'kiana-pinup': 'session_12'
 };
 
 function buildImageList(session, count) {

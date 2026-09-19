@@ -334,6 +334,25 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 16px;
+    z-index: 100000;
+    background: #c9a96e;
+    color: #0a0a0a;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: top 0.2s ease;
+  }
+  .skip-link:focus {
+    top: 16px;
+  }
+
   :root {
     --gold: #c9a96e;
     --gold-light: #e8d5a3;
@@ -799,6 +818,16 @@
     line-height: 1.1;
   }
   .gallery-item:hover .gallery-item-name { transform: translateY(0); }
+  .gallery-item:focus-visible,
+  .magazine-card:focus-visible,
+  .project-cover:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: -2px;
+  }
+  .gallery-item:focus-visible .gallery-item-overlay,
+  .project-cover:focus-visible .project-cover-overlay {
+    opacity: 1;
+  }
 
   /* Model gallery toggle */
   .model-toggle {
@@ -815,7 +844,7 @@
     cursor: none;
     color: var(--grey);
     font-family: 'Inter', sans-serif;
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     transition: background 0.3s, color 0.3s, border-color 0.3s;
@@ -850,8 +879,15 @@
     width: 4px; height: 4px;
     border-radius: 50%;
     background: rgba(201,169,110,0.25);
+    border: none;
+    padding: 0;
+    display: block;
     transition: background 0.3s, transform 0.3s;
     cursor: pointer;
+  }
+  .carousel-dot:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
   }
   .carousel-dot.active {
     background: var(--gold);
@@ -1704,7 +1740,7 @@
     section { padding: 60px 16px; }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .model-block { width: 100%; }
-    .gallery-grid .model-toggle { white-space: nowrap; font-size: 8px; letter-spacing: 0.12em; padding: 10px 12px; }
+    .gallery-grid .model-toggle { white-space: nowrap; font-size: 11px; letter-spacing: 0.08em; padding: 10px 12px; }
     .magazine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     .about-stats { flex-wrap: wrap; gap: 24px; }
   }
@@ -1727,6 +1763,8 @@
 <link rel="stylesheet" href="/a11y.css">
 </head>
 <body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
 
 <!-- Page loader -->
 <div class="page-loader" id="page-loader">
@@ -1904,12 +1942,13 @@
   <div class="mobile-menu-footer">
     <span class="mobile-menu-brand">Photoczaro</span>
     <div class="mobile-menu-socials">
-      <a href="https://www.instagram.com/photoczaro_portraits/" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14c-.3.76-.5 1.64-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm6.41-10.85a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44z"/></svg></a>
-      <a href="https://t.me/photoczaro" target="_blank" aria-label="Telegram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.242-1.865-.442-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.12.098.153.228.169.331.016.104.036.335.02.531z"/></svg></a>
+      <a href="https://www.instagram.com/photoczaro_portraits/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14c-.3.76-.5 1.64-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm6.41-10.85a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44z"/></svg></a>
+      <a href="https://t.me/photoczaro" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.242-1.865-.442-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.12.098.153.228.169.331.016.104.036.335.02.531z"/></svg></a>
     </div>
   </div>
 </div>
 
+<main id="main-content">
 <!-- Hero -->
 <section class="hero" id="home">
   <div class="hero-bg" id="hero-bg" role="img" aria-label="Editorial portrait photography by Photoczaro, Dubai"></div>
@@ -1987,7 +2026,7 @@
   </div>
   <div class="about-layout">
     <div class="about-image-wrap reveal">
-      <img src="images/About__Lucia-Curio-Heritage.webp" srcset="images/About__Lucia-Curio-Heritage@640w.webp 640w, images/About__Lucia-Curio-Heritage@1200w.webp 1200w, images/About__Lucia-Curio-Heritage.webp 1350w" sizes="(max-width: 768px) 90vw, 45vw" alt="Photoczaro portrait" loading="lazy">
+      <img src="images/About__Lucia-Curio-Heritage.webp" srcset="images/About__Lucia-Curio-Heritage@640w.webp 640w, images/About__Lucia-Curio-Heritage@1200w.webp 1200w, images/About__Lucia-Curio-Heritage.webp 1350w" sizes="(max-width: 768px) 90vw, 45vw" alt="Photoczaro portrait" loading="lazy" width="1350" height="1800">
       <div class="about-image-frame"></div>
     </div>
     <div class="about-text reveal reveal-delay-2">
@@ -2026,13 +2065,13 @@
     <div class="section-line" id="line-social-proof"></div>
   </div>
 
-  <div class="social-proof-tabs">
-    <button class="proof-tab active" data-panel="mm">ModelManagement · 4.9 ★</button>
-    <button class="proof-tab" data-panel="google">Google Reviews</button>
+  <div class="social-proof-tabs" role="tablist" aria-label="Reviews source">
+    <button type="button" class="proof-tab active" id="tab-mm" data-panel="mm" role="tab" aria-selected="true" aria-controls="panel-mm">ModelManagement · 4.9 ★</button>
+    <button type="button" class="proof-tab" id="tab-google" data-panel="google" role="tab" aria-selected="false" aria-controls="panel-google" tabindex="-1">Google Reviews</button>
   </div>
 
   <!-- ModelManagement Reviews panel -->
-  <div class="proof-panel active" id="panel-mm">
+  <div class="proof-panel active" id="panel-mm" role="tabpanel" aria-labelledby="tab-mm" tabindex="0">
     <div class="reviews-track-wrap" id="mm-track-wrap">
       <div class="reviews-track" id="mm-track">
         <div class="review-card">
@@ -2088,13 +2127,13 @@
       </div>
     </div>
     <div class="slider-controls">
-      <button class="slider-btn" id="mm-prev">←</button>
-      <button class="slider-btn" id="mm-next">→</button>
+      <button class="slider-btn" id="mm-prev" aria-label="Previous review">←</button>
+      <button class="slider-btn" id="mm-next" aria-label="Next review">→</button>
     </div>
   </div>
 
   <!-- Google Reviews panel -->
-  <div class="proof-panel" id="panel-google">
+  <div class="proof-panel" id="panel-google" role="tabpanel" aria-labelledby="tab-google" tabindex="0">
     <div class="reviews-track-wrap" id="google-track-wrap">
       <div class="reviews-track" id="google-track">
         <div class="review-card">
@@ -2140,8 +2179,8 @@
       </div>
     </div>
     <div class="slider-controls">
-      <button class="slider-btn" id="google-prev">←</button>
-      <button class="slider-btn" id="google-next">→</button>
+      <button class="slider-btn" id="google-prev" aria-label="Previous review">←</button>
+      <button class="slider-btn" id="google-next" aria-label="Next review">→</button>
     </div>
   </div>
 </section>
@@ -2188,16 +2227,17 @@
       magazine commissions &amp; commercial work across Dubai and beyond.
     </p>
     <div class="cta-buttons reveal reveal-delay-2">
-      <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%27d%20like%20to%20enquire%20about%20a%20photoshoot" target="_blank" class="cta-btn cta-btn-primary" data-cta-location="contact_section">WhatsApp Me →</a>
+      <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%27d%20like%20to%20enquire%20about%20a%20photoshoot" target="_blank" rel="noopener" class="cta-btn cta-btn-primary" data-cta-location="contact_section">WhatsApp Me →</a>
       <a href="tel:+971508065253" class="cta-btn" data-cta-location="contact_section">Call →</a>
       <a href="mailto:info@photoczaro.com" class="cta-btn" data-cta-location="contact_section">Email →</a>
     </div>
     <div class="contact-socials reveal reveal-delay-3">
-      <a href="https://www.instagram.com/photoczaro_portraits/" target="_blank" aria-label="Instagram" data-analytics-event="external_profile_click" data-analytics-param-platform_id="instagram" data-analytics-param-cta_location="contact_section"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14c-.3.76-.5 1.64-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm6.41-10.85a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44z"/></svg></a>
-      <a href="https://t.me/photoczaro" target="_blank" aria-label="Telegram" data-analytics-event="external_profile_click" data-analytics-param-platform_id="telegram" data-analytics-param-cta_location="contact_section"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.242-1.865-.442-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.12.098.153.228.169.331.016.104.036.335.02.531z"/></svg></a>
+      <a href="https://www.instagram.com/photoczaro_portraits/" target="_blank" rel="noopener" aria-label="Instagram" data-analytics-event="external_profile_click" data-analytics-param-platform_id="instagram" data-analytics-param-cta_location="contact_section"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14c-.3.76-.5 1.64-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm6.41-10.85a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44z"/></svg></a>
+      <a href="https://t.me/photoczaro" target="_blank" rel="noopener" aria-label="Telegram" data-analytics-event="external_profile_click" data-analytics-param-platform_id="telegram" data-analytics-param-cta_location="contact_section"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.242-1.865-.442-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.12.098.153.228.169.331.016.104.036.335.02.531z"/></svg></a>
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <span class="footer-logo">Photoczaro</span>
@@ -2291,16 +2331,16 @@
 </footer>
 
 <div class="sticky-mobile-cta">
-  <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%27d%20like%20to%20enquire%20about%20a%20photoshoot" target="_blank" class="sticky-cta-primary" data-cta-location="sticky_mobile_cta">WhatsApp Me</a>
+  <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%27d%20like%20to%20enquire%20about%20a%20photoshoot" target="_blank" rel="noopener" class="sticky-cta-primary" data-cta-location="sticky_mobile_cta">WhatsApp Me</a>
   <a href="tel:+971508065253" class="sticky-cta-secondary" data-cta-location="sticky_mobile_cta">Call</a>
 </div>
 
 <!-- Lightbox -->
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lb-close">✕</button>
-  <button class="lightbox-nav lightbox-prev" id="lb-prev">‹</button>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" aria-labelledby="lb-caption" tabindex="-1">
+  <button class="lightbox-close" id="lb-close" aria-label="Close image viewer">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="Previous image">‹</button>
   <img src="" alt="" id="lb-img">
-  <button class="lightbox-nav lightbox-next" id="lb-next">›</button>
+  <button class="lightbox-nav lightbox-next" id="lb-next" aria-label="Next image">›</button>
   <div class="lightbox-caption" id="lb-caption"></div>
 </div>
 
@@ -2667,11 +2707,28 @@ const galleries = {};
     'images/Portraits__Zaraish - The Beach__DSC_0596.webp',
   ];
 
+// Accessibility helper: makes a non-native clickable element (div acting as a
+// button) keyboard-operable — focusable, announced as a button, and
+// activatable with Enter or Space, matching native <button> behaviour.
+function makeKeyboardClickable(el, label) {
+  el.setAttribute('role', 'button');
+  el.setAttribute('tabindex', '0');
+  if (label) el.setAttribute('aria-label', label);
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      el.click();
+    }
+  });
+}
+
 // Lazy carousel: shell is inserted into the DOM immediately (no images),
 // full gallery images are only created the first time it is opened.
+let carouselShellCount = 0;
 function makeCarouselShell() {
   const wrap = document.createElement('div');
   wrap.className = 'carousel-wrap';
+  wrap.id = 'carousel-' + (++carouselShellCount);
   return wrap;
 }
 
@@ -2697,7 +2754,7 @@ function populateCarousel(wrap, imgs, labelFn, trackClass, itemClass) {
   imgs.forEach((src, j) => {
     const item = document.createElement('div');
     item.className = itemClass;
-    item.innerHTML = `<img src="${src}" srcset="${srcsetFor(src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${labelFn(j)}" loading="lazy" class="reveal">`;
+    item.innerHTML = `<img src="${src}" srcset="${srcsetFor(src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${labelFn(j)}" loading="lazy" class="reveal" width="900" height="1200">`;
     item.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: labelFn(j) })), j));
     track.appendChild(item);
   });
@@ -2707,8 +2764,10 @@ function populateCarousel(wrap, imgs, labelFn, trackClass, itemClass) {
   const dotsRow = document.createElement('div');
   dotsRow.className = 'carousel-dots';
   const dots = imgs.map((_, j) => {
-    const d = document.createElement('div');
+    const d = document.createElement('button');
+    d.type = 'button';
     d.className = 'carousel-dot' + (j === 0 ? ' active' : '');
+    d.setAttribute('aria-label', `Go to image ${j + 1} of ${imgs.length}`);
     d.addEventListener('click', () => {
       track.scrollTo({ left: track.scrollWidth / imgs.length * j, behavior: 'smooth' });
     });
@@ -2765,22 +2824,27 @@ function buildPortraits() { portraits.forEach((p, i) => {
 
   const cover = document.createElement('div');
   cover.className = 'gallery-item';
-  cover.innerHTML = `<img src="${p.src}" srcset="${srcsetFor(p.src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${p.alt || p.name}" loading="lazy">
+  cover.innerHTML = `<img src="${p.src}" srcset="${srcsetFor(p.src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${p.alt || p.name}" loading="lazy" width="900" height="1200">
     <div class="gallery-item-overlay">
       <span class="gallery-item-name">${p.name}</span>
     </div>`;
   cover.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: p.name, alt: p.alt })), 0));
+  makeKeyboardClickable(cover, `View ${p.name} gallery`);
 
   const toggle = document.createElement('button');
+  toggle.type = 'button';
   toggle.className = 'model-toggle';
   toggle.innerHTML = `<span>Explore &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length}</em></span><em class="toggle-icon">+</em>`;
+  toggle.setAttribute('aria-expanded', 'false');
 
   const carousel = makeCarouselShell();
+  toggle.setAttribute('aria-controls', carousel.id);
 
   toggle.addEventListener('click', () => {
     populateCarousel(carousel, imgs, j => p.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
     const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   });
 
   block.appendChild(cover);
@@ -2990,24 +3054,29 @@ function buildMagazines() { magazines.forEach((m, i) => {
   // cover card
   const card = document.createElement('div');
   card.className = 'magazine-card';
-  card.innerHTML = `<img src="${m.src}" srcset="${srcsetFor(m.src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="Editorial feature in ${m.pub}, Dubai portrait and fashion photography by Photoczaro" loading="lazy">
+  card.innerHTML = `<img src="${m.src}" srcset="${srcsetFor(m.src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="Editorial feature in ${m.pub}, Dubai portrait and fashion photography by Photoczaro" loading="lazy" width="900" height="1200">
     <div class="magazine-card-info">
       <p class="magazine-pub">${m.pub}</p>
       <p class="magazine-title">${m.name}</p>
     </div>`;
   card.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: m.name })), 0));
+  makeKeyboardClickable(card, `View ${m.name} feature in ${m.pub}`);
 
   // toggle
   const toggle = document.createElement('button');
+  toggle.type = 'button';
   toggle.className = 'model-toggle';
   toggle.innerHTML = `<span>Explore the Edit &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length} frames</em></span><em class="toggle-icon">+</em>`;
+  toggle.setAttribute('aria-expanded', 'false');
 
   const carousel = makeCarouselShell();
+  toggle.setAttribute('aria-controls', carousel.id);
 
   toggle.addEventListener('click', () => {
     populateCarousel(carousel, imgs, j => m.name + ' ' + (j + 1), 'model-gallery', 'model-gallery-item');
     const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   });
 
   block.appendChild(card);
@@ -3099,25 +3168,30 @@ function buildProjects() { projectsData.forEach((proj, i) => {
   const cover = document.createElement('div');
   cover.className = 'project-cover';
   cover.innerHTML = `
-    <img src="${proj.cover}" alt="${proj.alt || proj.name}" loading="lazy">
+    <img src="${proj.cover}" alt="${proj.alt || proj.name}" loading="lazy" width="900" height="1200">
     <div class="project-cover-overlay">
       <span class="project-eyebrow">${proj.eyebrow}</span>
       <h3 class="project-name">${proj.name}</h3>
       <span class="project-count">${proj.images.length} photographs</span>
     </div>`;
   cover.addEventListener('click', () => openLightbox(proj.images.map(s => ({ src: s, name: proj.name, alt: proj.alt })), 0));
+  makeKeyboardClickable(cover, `View ${proj.name} gallery`);
 
   // toggle
   const toggle = document.createElement('button');
+  toggle.type = 'button';
   toggle.className = 'model-toggle';
   toggle.innerHTML = `<span>Explore the Project &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${proj.images.length} frames</em></span><em class="toggle-icon">+</em>`;
+  toggle.setAttribute('aria-expanded', 'false');
 
   const carousel = makeCarouselShell();
+  toggle.setAttribute('aria-controls', carousel.id);
 
   toggle.addEventListener('click', () => {
     populateCarousel(carousel, proj.images, j => proj.name + ' ' + (j + 1), 'project-gallery', 'project-gallery-item');
     const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   });
 
   block.appendChild(cover);
@@ -3128,22 +3202,36 @@ function buildProjects() { projectsData.forEach((proj, i) => {
 setTimeout(buildProjects, 100);
 
 // Lightbox
-let lbImages = [], lbIndex = 0;
+let lbImages = [], lbIndex = 0, lbLastFocusedEl = null;
 const lb = document.getElementById('lightbox');
 const lbImg = document.getElementById('lb-img');
 const lbCaption = document.getElementById('lb-caption');
+const lbClose = document.getElementById('lb-close');
+const lbPrevBtn = document.getElementById('lb-prev');
+const lbNextBtn = document.getElementById('lb-next');
+const lbFocusable = [lbClose, lbPrevBtn, lbNextBtn];
 
 function openLightbox(images, index) {
+  lbLastFocusedEl = document.activeElement;
   lbImages = images; lbIndex = index;
   lbImg.src = images[index].src;
   lbImg.alt = images[index].alt || images[index].name;
   lbCaption.textContent = images[index].name;
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
+  Array.prototype.forEach.call(document.body.children, function(el){
+    if (el === lb) return;
+    el.setAttribute('inert', '');
+  });
+  lbClose.focus();
 }
 function closeLightbox() {
   lb.classList.remove('open');
   document.body.style.overflow = '';
+  Array.prototype.forEach.call(document.body.children, function(el){
+    el.removeAttribute('inert');
+  });
+  if (lbLastFocusedEl) lbLastFocusedEl.focus();
 }
 function lbNavigate(dir) {
   lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
@@ -3156,15 +3244,27 @@ function lbNavigate(dir) {
   }, 200);
 }
 lbImg.style.transition = 'opacity 0.2s';
-document.getElementById('lb-close').addEventListener('click', closeLightbox);
-document.getElementById('lb-prev').addEventListener('click', () => lbNavigate(-1));
-document.getElementById('lb-next').addEventListener('click', () => lbNavigate(1));
+lbClose.addEventListener('click', closeLightbox);
+lbPrevBtn.addEventListener('click', () => lbNavigate(-1));
+lbNextBtn.addEventListener('click', () => lbNavigate(1));
 lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
 document.addEventListener('keydown', e => {
   if (!lb.classList.contains('open')) return;
-  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'Escape') { closeLightbox(); return; }
   if (e.key === 'ArrowLeft') lbNavigate(-1);
   if (e.key === 'ArrowRight') lbNavigate(1);
+  if (e.key === 'Tab') {
+    // Focus trap: cycle Tab/Shift+Tab through the lightbox's own controls only.
+    const currentIdx = lbFocusable.indexOf(document.activeElement);
+    let nextIdx;
+    if (e.shiftKey) {
+      nextIdx = currentIdx <= 0 ? lbFocusable.length - 1 : currentIdx - 1;
+    } else {
+      nextIdx = currentIdx === -1 || currentIdx === lbFocusable.length - 1 ? 0 : currentIdx + 1;
+    }
+    e.preventDefault();
+    lbFocusable[nextIdx].focus();
+  }
 });
 
 // Hamburger menu
@@ -3310,13 +3410,27 @@ lb.addEventListener('touchend', e => {
 
 // Social proof tabs + sliders
 (function() {
-  const tabs = document.querySelectorAll('.proof-tab');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.proof-panel').forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+  const tabs = Array.from(document.querySelectorAll('.proof-tab'));
+
+  function activateTab(tab) {
+    tabs.forEach(t => {
+      const isActive = t === tab;
+      t.classList.toggle('active', isActive);
+      t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      t.setAttribute('tabindex', isActive ? '0' : '-1');
+    });
+    document.querySelectorAll('.proof-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => activateTab(tab));
+    tab.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      const nextIdx = e.key === 'ArrowRight' ? (i + 1) % tabs.length : (i - 1 + tabs.length) % tabs.length;
+      tabs[nextIdx].focus();
+      activateTab(tabs[nextIdx]);
     });
   });
 

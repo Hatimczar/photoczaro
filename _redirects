@@ -56,3 +56,10 @@
 /ru/index.html /ru/ 301
 /es/index.html /es/ 301
 /cs/index.html /cs/ 301
+
+# Old posing guide slug -> current slug
+/blog/how-to-pose-for-a-portrait-photoshoot /blog/how-to-pose-for-portrait-photoshoot 301
+/fr/blog/how-to-pose-for-a-portrait-photoshoot /fr/blog/how-to-pose-for-portrait-photoshoot 301
+/ru/blog/how-to-pose-for-a-portrait-photoshoot /ru/blog/how-to-pose-for-portrait-photoshoot 301
+/es/blog/how-to-pose-for-a-portrait-photoshoot /es/blog/how-to-pose-for-portrait-photoshoot 301
+/cs/blog/how-to-pose-for-a-portrait-photoshoot /cs/blog/how-to-pose-for-portrait-photoshoot 301

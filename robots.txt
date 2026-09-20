@@ -6,6 +6,7 @@ Disallow: /for-publishers/signup.html
 Disallow: /for-publishers/login.html
 Disallow: /for-publishers/pending.html
 Disallow: /images/publishers/
+Disallow: /*?p=
 
 User-agent: Yandex
 Allow: /

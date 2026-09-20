@@ -82,6 +82,9 @@
         "@type": "PostalAddress",
         "addressLocality": "Dubai",
         "addressCountry": "AE"
+      },
+      "worksFor": {
+        "@id": "https://photoczaro.com/#business"
       }
     },
     {
@@ -91,37 +94,13 @@
       "name": "Photoczaro",
       "description": "Dubai portrait and editorial photography by Hatim",
       "publisher": {
-        "@id": "https://photoczaro.com/#person"
+        "@id": "https://photoczaro.com/#business"
       },
       "potentialAction": {
         "@type": "SearchAction",
         "target": "https://photoczaro.com/#blog",
         "query-input": "required name=search_term_string"
       }
-    },
-    {
-      "@type": "ProfessionalService",
-      "name": "Photoczaro",
-      "description": "Portrait and editorial photography studio based in Dubai. Specialising in fashion editorials, fine art portraits and magazine commissions.",
-      "url": "https://photoczaro.com",
-      "telephone": "+971508065253",
-      "email": "info@photoczaro.com",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Dubai",
-        "addressCountry": "AE"
-      },
-      "areaServed": [
-        "Dubai",
-        "UAE",
-        "Middle East"
-      ],
-      "serviceType": [
-        "Portrait Photography",
-        "Editorial Photography",
-        "Magazine Photography",
-        "Commercial Photography"
-      ]
     },
     {
       "@type": "WebPage",
@@ -141,8 +120,8 @@
       }
     },
     {
-      "@type": "LocalBusiness",
-      "@id": "https://photoczaro.com/#localbusiness",
+      "@type": ["LocalBusiness", "ProfessionalService"],
+      "@id": "https://photoczaro.com/#business",
       "name": "Photoczaro Photography",
       "alternateName": "Photoczaro",
       "description": "Dubai-based portrait and editorial photographer specialising in fashion, fine art and magazine commissions. Published in international magazines.",
@@ -153,6 +132,9 @@
       "logo": "https://photoczaro.com/favicon-192x192.png",
       "priceRange": "AED 500 - AED 5000",
       "currenciesAccepted": "AED, USD",
+      "founder": {
+        "@id": "https://photoczaro.com/#person"
+      },
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Dubai",
@@ -171,6 +153,12 @@
           "@type": "Country",
           "name": "United Arab Emirates"
         }
+      ],
+      "serviceType": [
+        "Portrait Photography",
+        "Editorial Photography",
+        "Magazine Photography",
+        "Commercial Photography"
       ],
       "geo": {
         "@type": "GeoCoordinates",

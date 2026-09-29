@@ -26,11 +26,9 @@ same brand palette (`css/style.css`).
   placeholders. No real photographs are used anywhere; cards render a gradient swatch +
   initials instead, specifically so nothing here can be mistaken for a real person.
 - **No real portfolio images** — the profile gallery reuses the same placeholder swatch.
-- **Backend handlers are development-only**: `functions/api/book-talent.js` and
-  `functions/api/apply.js` write to KV namespaces that aren't bound yet (see
-  `wrangler.toml` — create `ENQUIRIES_KV` / `APPLICATIONS_KV` and bind them). Until then
-  they fall back to `console.log` and still return success, so the front end can be tested
-  end-to-end.
+- **Backend handlers write to KV** (`ENQUIRIES_KV` / `APPLICATIONS_KV`, bound via
+  `wrangler.toml`). Still development-only in the sense that nothing reviews the records
+  yet — see the next two points.
 - **Uploaded files in the Apply form are NOT persisted** — the handler only records name/
   type/size. Real file storage (e.g. a private Cloudflare R2 bucket, never public) needs
   to be wired before this goes live — see the comment at the top of `functions/api/apply.js`.

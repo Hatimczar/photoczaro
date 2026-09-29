@@ -1,4 +1,4 @@
-/* Shortlist / booking deck — persisted client-side (localStorage) for v1.
+/* Shortlist / booking deck, persisted client-side (localStorage) for v1.
    No private model data is stored here, only slugs. */
 (function () {
   const KEY = "photoczaro_models_shortlist";

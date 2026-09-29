@@ -3,13 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="page-title">Model — Photoczaro Models Dubai</title>
-<meta name="description" id="page-description" content="Model profile — Photoczaro Models Dubai.">
+<title id="page-title">Model | Photoczaro Models Dubai</title>
+<meta name="description" id="page-description" content="Model profile at Photoczaro Models Dubai.">
+<link rel="canonical" id="page-canonical" href="https://models.photoczaro.com/model">
 <meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="profile">
+<meta property="og:title" id="page-og-title" content="Model | Photoczaro Models Dubai">
+<meta property="og:description" id="page-og-description" content="Model profile at Photoczaro Models Dubai.">
+<meta property="og:url" id="page-og-url" content="https://models.photoczaro.com/model">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=3">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -96,11 +106,11 @@
   </div>
   <div class="footer-bottom">
     <span>© <span data-year></span> Photoczaro Models. UAE booking representation.</span>
-    <span>Part of the Photoczaro family — <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
+    <span>Part of the Photoczaro family: <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
   </div>
 </footer>
 
-<script src="js/data.js?v=1"></script>
+<script src="js/data.js?v=2"></script>
 <script src="js/shortlist.js?v=1"></script>
 <script src="js/main.js?v=2"></script>
 <script src="js/magnetic-cta.js?v=1"></script>
@@ -122,6 +132,10 @@
 
   document.title = model.seoTitle;
   document.getElementById("page-description").setAttribute("content", model.seoDescription);
+  document.getElementById("page-canonical").setAttribute("href", `https://models.photoczaro.com/model?slug=${model.slug}`);
+  document.getElementById("page-og-title").setAttribute("content", model.seoTitle);
+  document.getElementById("page-og-description").setAttribute("content", model.seoDescription);
+  document.getElementById("page-og-url").setAttribute("content", `https://models.photoczaro.com/model?slug=${model.slug}`);
 
   const initials = model.name.split(" ").map((p) => p[0]).join("");
   const catLabel = window.PHOTOCZARO_CATEGORY_LABELS[model.categories[0]] || "";
@@ -163,7 +177,7 @@
           </div>
         `).join("")}
       </div>
-      <p class="form-note" style="margin-top:16px;">Placeholder digitals shown — real portfolio images are added per model before launch.</p>
+      <p class="form-note" style="margin-top:16px;">Placeholder digitals shown. Real portfolio images are added per model before launch.</p>
     </section>
 
     <section class="section related-models reveal in" style="border-top:1px solid rgba(255,255,255,0.08);">

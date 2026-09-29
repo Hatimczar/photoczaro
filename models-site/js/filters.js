@@ -1,4 +1,4 @@
-/* Models directory filtering — reads/writes query params so filtered views have clean, shareable URLs. */
+/* Models directory filtering, reads/writes query params so filtered views have clean, shareable URLs. */
 (function () {
   const grid = document.getElementById("models-grid");
   const emptyState = document.getElementById("empty-state");

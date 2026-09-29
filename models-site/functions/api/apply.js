@@ -2,16 +2,16 @@
  * DEVELOPMENT-ONLY submission handler.
  * Stores each roster application's TEXT fields as a JSON record in the
  * APPLICATIONS_KV namespace (bind it in this project's own wrangler.toml /
- * Pages dashboard — separate from the main site's KV namespaces).
+ * Pages dashboard, separate from the main site's KV namespaces).
  *
  * Uploaded files (headshot, full-length digitals, optional portfolio file)
  * are NOT persisted by this handler. Do not add public-directory file
- * storage — the spec explicitly disallows storing sensitive uploads in a
+ * storage. The spec explicitly disallows storing sensitive uploads in a
  * public directory. Before production, wire a private store (e.g. a
  * Cloudflare R2 bucket that is never served publicly, with signed/short-
  * lived access for reviewers only) and persist file keys alongside the KV
  * record. Until that exists, this handler only records each file's name,
- * type and size so reviewers know something was attached — the actual
+ * type and size so reviewers know something was attached; the actual
  * image bytes are discarded.
  *
  * Also still needed before production: spam protection (Turnstile),

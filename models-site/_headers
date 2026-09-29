@@ -1,6 +1,6 @@
 # Same baseline security headers as the main photoczaro.com site.
 # CSP is intentionally stricter here: this site has no third-party analytics/
-# ad scripts wired in yet, so no external allowances are pre-added — extend
+# ad scripts wired in yet, so no external allowances are pre-added. Extend
 # this only when a specific integration (analytics, Turnstile, etc.) needs it.
 /*
   Strict-Transport-Security: max-age=31536000; includeSubDomains

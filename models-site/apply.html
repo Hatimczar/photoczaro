@@ -3,14 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apply to the Roster — Photoczaro Models Dubai</title>
+<title>Apply to the Roster | Photoczaro Models Dubai</title>
 <meta name="description" content="Apply to the Photoczaro roster. UAE residents aged 18 and over only. Non-exclusive representation, no application fee.">
 <link rel="canonical" href="https://models.photoczaro.com/apply">
 <meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Apply to the Roster | Photoczaro Models Dubai">
+<meta property="og:description" content="Apply to the Photoczaro roster. UAE residents aged 18 and over only. Non-exclusive representation, no application fee.">
+<meta property="og:url" content="https://models.photoczaro.com/apply">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=3">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -79,7 +88,7 @@
         <li>Representation is initially non-exclusive.</li>
         <li>Photoczaro does not provide visa sponsorship.</li>
         <li>Photoczaro does not charge a mandatory fee to apply, and paid photography is never a condition of consideration.</li>
-        <li>Never send money in response to unsolicited messages — official communication only comes through verified Photoczaro channels.</li>
+        <li>Never send money in response to unsolicited messages. Official communication only comes through verified Photoczaro channels.</li>
       </ul>
     </div>
 
@@ -125,7 +134,7 @@
         </div>
       </div>
 
-      <p class="form-note" style="margin-top:24px;">Do not include passports, Emirates ID or banking details in this form — those are only ever collected later, through a separate secure process, if you're added to the roster.</p>
+      <p class="form-note" style="margin-top:24px;">Do not include passports, Emirates ID or banking details in this form. Those are only ever collected later, through a separate secure process, if you're added to the roster.</p>
       <button type="submit" class="cta-btn cta-btn-primary" style="margin-top:16px;">Submit Application</button>
       <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
     </form>
@@ -158,11 +167,11 @@
   </div>
   <div class="footer-bottom">
     <span>© <span data-year></span> Photoczaro Models. UAE booking representation.</span>
-    <span>Part of the Photoczaro family — <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
+    <span>Part of the Photoczaro family: <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
   </div>
 </footer>
 
-<script src="js/data.js?v=1"></script>
+<script src="js/data.js?v=2"></script>
 <script src="js/shortlist.js?v=1"></script>
 <script src="js/main.js?v=2"></script>
 <script src="js/magnetic-cta.js?v=1"></script>
@@ -213,7 +222,7 @@
       const res = await fetch("/api/apply", { method: "POST", body: fd });
       if (!res.ok) throw new Error("request_failed");
       status.className = "form-status success";
-      status.textContent = "Thank you — your application has been received. We review applications on a rolling basis and will contact you only through verified Photoczaro channels.";
+      status.textContent = "Thank you. Your application has been received. We review applications on a rolling basis and will contact you only through verified Photoczaro channels.";
       form.reset();
     } catch {
       status.className = "form-status error";

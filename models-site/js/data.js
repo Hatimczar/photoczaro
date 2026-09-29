@@ -1,9 +1,9 @@
 /*
- * MOCK DATA — DEVELOPMENT PLACEHOLDER ONLY.
+ * MOCK DATA: DEVELOPMENT PLACEHOLDER ONLY.
  * Every record below is invented for layout/testing purposes and does not represent
  * a real person. Replace entirely with genuine roster records (routed through a
  * private application/onboarding process) before this site goes live.
- * No photographs are used for placeholder "portraits" — cards render a gradient
+ * No photographs are used for placeholder "portraits"; cards render a gradient
  * swatch + initials instead, so nothing here can be mistaken for a real model.
  */
 window.PHOTOCZARO_MODELS = [
@@ -24,7 +24,7 @@ window.PHOTOCZARO_MODELS = [
     skills: ["Runway", "Editorial", "Swimwear"],
     displayOrder: 1,
     swatch: ["#2b2621", "#14120f"],
-    seoTitle: "Amara H. — Photoczaro Models Dubai",
+    seoTitle: "Amara H. | Photoczaro Models Dubai",
     seoDescription: "Amara H., UAE-based editorial and commercial model available for booking through Photoczaro.",
   },
   {
@@ -44,7 +44,7 @@ window.PHOTOCZARO_MODELS = [
     skills: ["Beauty", "Commercial", "Product"],
     displayOrder: 2,
     swatch: ["#221f1a", "#100e0b"],
-    seoTitle: "Layla N. — Photoczaro Models Dubai",
+    seoTitle: "Layla N. | Photoczaro Models Dubai",
     seoDescription: "Layla N., UAE-based new-face model available for beauty and commercial booking through Photoczaro.",
   },
   {
@@ -64,7 +64,7 @@ window.PHOTOCZARO_MODELS = [
     skills: ["Commercial", "Fitness", "Lifestyle"],
     displayOrder: 3,
     swatch: ["#26221d", "#131110"],
-    seoTitle: "Omar F. — Photoczaro Models Dubai",
+    seoTitle: "Omar F. | Photoczaro Models Dubai",
     seoDescription: "Omar F., UAE-based commercial and fitness model available for booking through Photoczaro.",
   },
   {
@@ -84,7 +84,7 @@ window.PHOTOCZARO_MODELS = [
     skills: ["Editorial", "Runway", "Fashion film"],
     displayOrder: 4,
     swatch: ["#25201a", "#121009"],
-    seoTitle: "Sofia M. — Photoczaro Models Dubai",
+    seoTitle: "Sofia M. | Photoczaro Models Dubai",
     seoDescription: "Sofia M., UAE-based editorial and fashion model available for booking through Photoczaro.",
   },
   {
@@ -104,7 +104,7 @@ window.PHOTOCZARO_MODELS = [
     skills: ["Editorial", "Runway"],
     displayOrder: 5,
     swatch: ["#211d1b", "#100e0d"],
-    seoTitle: "Yusuf A. — Photoczaro Models Dubai",
+    seoTitle: "Yusuf A. | Photoczaro Models Dubai",
     seoDescription: "Yusuf A., UAE-based new-face editorial model available for booking through Photoczaro.",
   },
   {
@@ -124,7 +124,7 @@ window.PHOTOCZARO_MODELS = [
     skills: ["Beauty", "Commercial", "Hand model"],
     displayOrder: 6,
     swatch: ["#241f19", "#110f0a"],
-    seoTitle: "Elena P. — Photoczaro Models Dubai",
+    seoTitle: "Elena P. | Photoczaro Models Dubai",
     seoDescription: "Elena P., UAE-based commercial and beauty model available for booking through Photoczaro.",
   },
   {
@@ -144,7 +144,7 @@ window.PHOTOCZARO_MODELS = [
     skills: ["Commercial", "Corporate", "Lifestyle"],
     displayOrder: 7,
     swatch: ["#231f1c", "#110f0d"],
-    seoTitle: "Khalid M. — Photoczaro Models Dubai",
+    seoTitle: "Khalid M. | Photoczaro Models Dubai",
     seoDescription: "Khalid M., UAE-based commercial model available for booking through Photoczaro.",
   },
   {
@@ -164,7 +164,7 @@ window.PHOTOCZARO_MODELS = [
     skills: ["Editorial", "Beauty", "Runway"],
     displayOrder: 8,
     swatch: ["#221e1a", "#100e0c"],
-    seoTitle: "Noor A. — Photoczaro Models Dubai",
+    seoTitle: "Noor A. | Photoczaro Models Dubai",
     seoDescription: "Noor A., UAE-based new-face editorial and beauty model available for booking through Photoczaro.",
   },
 ];

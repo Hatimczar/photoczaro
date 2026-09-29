@@ -1,4 +1,4 @@
-/* Shared chrome — matches photoczaro.com's cursor/nav/page-transition/reveal system. */
+/* Shared chrome, matches photoczaro.com's cursor/nav/page-transition/reveal system. */
 (function () {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

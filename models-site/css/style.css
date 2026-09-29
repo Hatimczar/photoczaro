@@ -1,7 +1,7 @@
-/* Photoczaro Models — shared design system.
+/* Photoczaro Models: shared design system.
    Deliberately continuous with photoczaro.com: same tokens, same nav/cursor/
    page-transition/button language, same motion signature. Where photoczaro.com
-   duplicates this CSS per-page, this file factors it into one shared sheet —
+   duplicates this CSS per-page, this file factors it into one shared sheet,
    the only intentional divergence, invisible to the visitor. */
 
 :root {
@@ -272,6 +272,8 @@ button.cta-btn { font-family: inherit; border-width: 1px; }
   .hero { padding: 0 24px 60px; }
   .section-header { gap: 12px; margin-bottom: 40px; }
   .section-title { font-size: clamp(30px, 8vw, 48px); }
+  .how-it-works-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .cta-split-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
 }
 
 /* ---------- Reveal-on-scroll ---------- */

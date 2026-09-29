@@ -1,7 +1,7 @@
 /*
  * DEVELOPMENT-ONLY submission handler.
  * Stores each booking enquiry as a JSON record in the ENQUIRIES_KV namespace
- * (bind it in this project's own wrangler.toml / Pages dashboard — it is
+ * (bind it in this project's own wrangler.toml / Pages dashboard, it is
  * intentionally separate from the main photoczaro.com KV namespaces).
  *
  * Before production:
@@ -42,7 +42,7 @@ export async function onRequestPost({ request, env }) {
     const key = `enquiry:${Date.now()}:${crypto.randomUUID()}`;
     await env.ENQUIRIES_KV.put(key, JSON.stringify(record));
   } else {
-    // No KV bound yet — log only, so local/dev testing doesn't hard-fail.
+    // No KV bound yet, log only, so local/dev testing doesn't hard-fail.
     console.log("book-talent enquiry (no KV bound):", record);
   }
 

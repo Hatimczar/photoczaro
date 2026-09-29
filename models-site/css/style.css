@@ -445,6 +445,7 @@ button.cta-btn { font-family: inherit; border-width: 1px; }
 .prose h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 8px; font-style: italic; }
 .prose .dev-note { margin: 24px 0 40px; padding: 16px 18px; border: 1px dashed var(--gold); font-size: 0.82rem; color: var(--gold-light); background: rgba(201,169,110,0.06); }
 .prose h2 { font-size: 1.4rem; margin: 40px 0 14px; }
+.prose h3 { font-size: 1rem; font-style: italic; color: var(--gold-light); margin: 26px 0 10px; font-weight: 400; }
 .prose p, .prose li { color: #cfcac2; margin-bottom: 14px; }
 .prose ul, .prose ol { padding-left: 20px; }
 .prose ul { list-style: disc; }

@@ -175,7 +175,7 @@
     justify-content: center;
     flex-direction: column;
     gap: 20px;
-    transition: opacity 0.8s var(--ease), visibility 0.8s;
+    transition: opacity 0.35s var(--ease), visibility 0.35s;
   }
   .page-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
   .loader-logo {
@@ -1014,9 +1014,7 @@
 
 <script>
   // Loader
-  window.addEventListener('load', () => {
-    setTimeout(() => document.getElementById('page-loader').classList.add('hidden'), 600);
-  });
+  setTimeout(() => document.getElementById('page-loader').classList.add('hidden'), 250);
 
   // Custom cursor: Montoya-style
   const cursor = document.getElementById('cursor');

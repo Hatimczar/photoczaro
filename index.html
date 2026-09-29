@@ -395,7 +395,7 @@
     justify-content: center;
     flex-direction: column;
     gap: 20px;
-    transition: opacity 0.8s var(--ease), visibility 0.8s;
+    transition: opacity 0.35s var(--ease), visibility 0.35s;
   }
   .page-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
   .loader-logo {
@@ -2777,7 +2777,7 @@ function buildPortraits() { portraits.forEach((p, i) => {
 
   const cover = document.createElement('div');
   cover.className = 'gallery-item';
-  cover.innerHTML = `<img src="${p.src}" srcset="${srcsetFor(p.src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${p.alt || p.name}" loading="lazy" width="900" height="1200">
+  cover.innerHTML = `<img src="${p.src}" srcset="${srcsetFor(p.src)}" sizes="(max-width: 640px) calc(50vw - 24px), (max-width: 1024px) calc(50vw - 32px), 30vw" alt="${p.alt || p.name}" loading="lazy" width="900" height="1200">
     <div class="gallery-item-overlay">
       <span class="gallery-item-name">${p.name}</span>
     </div>`;
@@ -3007,7 +3007,7 @@ function buildMagazines() { magazines.forEach((m, i) => {
   // cover card
   const card = document.createElement('div');
   card.className = 'magazine-card';
-  card.innerHTML = `<img src="${m.src}" srcset="${srcsetFor(m.src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="Editorial feature in ${m.pub}, Dubai portrait and fashion photography by Photoczaro" loading="lazy" width="900" height="1200">
+  card.innerHTML = `<img src="${m.src}" srcset="${srcsetFor(m.src)}" sizes="(max-width: 640px) calc(50vw - 24px), (max-width: 1024px) calc(50vw - 32px), 30vw" alt="Editorial feature in ${m.pub}, Dubai portrait and fashion photography by Photoczaro" loading="lazy" width="900" height="1200">
     <div class="magazine-card-info">
       <p class="magazine-pub">${m.pub}</p>
       <p class="magazine-title">${m.name}</p>
@@ -3274,11 +3274,9 @@ window.addEventListener('scroll', checkReveal, { passive: true });
 checkReveal();
 
 // Page loader
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('page-loader').classList.add('hidden');
-  }, 900);
-});
+setTimeout(() => {
+  document.getElementById('page-loader').classList.add('hidden');
+}, 250);
 
 // Scroll progress bar
 const progressBar = document.getElementById('scroll-progress');

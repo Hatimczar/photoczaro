@@ -324,7 +324,7 @@
     justify-content: center;
     flex-direction: column;
     gap: 20px;
-    transition: opacity 0.8s var(--ease), visibility 0.8s;
+    transition: opacity 0.35s var(--ease), visibility 0.35s;
   }
   .page-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
   .loader-logo {
@@ -2921,11 +2921,9 @@ window.addEventListener('scroll', checkReveal, { passive: true });
 checkReveal();
 
 // Page loader
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('page-loader').classList.add('hidden');
-  }, 900);
-});
+setTimeout(() => {
+  document.getElementById('page-loader').classList.add('hidden');
+}, 250);
 
 // Scroll progress bar
 const progressBar = document.getElementById('scroll-progress');

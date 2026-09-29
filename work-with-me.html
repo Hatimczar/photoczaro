@@ -1038,10 +1038,10 @@ document.querySelectorAll('a,button').forEach(el=>{
 
 // Page transitions
 const pt=document.getElementById('page-transition');
-function navigateTo(url){pt.classList.add('slide-in');setTimeout(()=>{window.location.href=url;},620);}
+function navigateTo(url){pt.classList.add('slide-in');setTimeout(()=>{window.location.href=url;},200);}
 document.querySelectorAll('a[href]').forEach(a=>{
   const h=a.getAttribute('href');
-  if(!h||h.startsWith('#')||h.startsWith('mailto')||h.startsWith('tel')||h.startsWith('http')||h.startsWith('//'))return;
+  if(!h||h.startsWith('#')||h.startsWith('mailto')||h.startsWith('tel')||h.startsWith('http')||h.startsWith('//')||a.classList.contains('cta-btn-primary'))return;
   a.addEventListener('click',e=>{e.preventDefault();navigateTo(h);});
 });
 window.addEventListener('pageshow',()=>{

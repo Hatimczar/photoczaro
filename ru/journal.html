@@ -1041,11 +1041,11 @@
   const pageTransition = document.getElementById('page-transition');
   function navigateTo(url) {
     pageTransition.classList.add('slide-in');
-    setTimeout(() => { window.location.href = url; }, 620);
+    setTimeout(() => { window.location.href = url; }, 200);
   }
   document.querySelectorAll('a[href]').forEach(a => {
     const href = a.getAttribute('href');
-    if (!href || href.startsWith('#') || href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('http') || href.startsWith('//')) return;
+    if (!href || href.startsWith('#') || href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('http') || href.startsWith('//') || a.classList.contains('cta-btn-primary')) return;
     a.addEventListener('click', e => { e.preventDefault(); navigateTo(href); });
   });
   window.addEventListener('pageshow', () => {
@@ -1054,14 +1054,20 @@
     setTimeout(() => pageTransition.classList.remove('slide-out'), 700);
   });
 
-  // Scroll progress + nav pill
+  // Scroll progress + nav pill (throttled via requestAnimationFrame)
   const nav = document.getElementById('nav');
   const progress = document.getElementById('scroll-progress');
+  let journalScrollTicking = false;
   window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    progress.style.width = (scrolled / total * 100) + '%';
-    nav.classList.toggle('scrolled', scrolled > 60);
+    if (journalScrollTicking) return;
+    journalScrollTicking = true;
+    requestAnimationFrame(() => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.width = (scrolled / total * 100) + '%';
+      nav.classList.toggle('scrolled', scrolled > 60);
+      journalScrollTicking = false;
+    });
   }, { passive: true });
 
   // Mobile menu

@@ -319,10 +319,10 @@ document.querySelectorAll('a,button').forEach(el=>{
   el.addEventListener('mouseleave',()=>ring.classList.remove('hovered'));
 });
 const pt=document.getElementById('page-transition');
-function nav(url){pt.classList.add('slide-in');setTimeout(()=>{window.location.href=url;},620);}
+function nav(url){pt.classList.add('slide-in');setTimeout(()=>{window.location.href=url;},200);}
 document.querySelectorAll('a[href]').forEach(a=>{
   const h=a.getAttribute('href');
-  if(!h||h.startsWith('#')||h.startsWith('mailto')||h.startsWith('tel')||h.startsWith('http')||h.startsWith('//'))return;
+  if(!h||h.startsWith('#')||h.startsWith('mailto')||h.startsWith('tel')||h.startsWith('http')||h.startsWith('//')||a.classList.contains('cta-btn-primary'))return;
   a.addEventListener('click',e=>{e.preventDefault();nav(h);});
 });
 window.addEventListener('pageshow',()=>{

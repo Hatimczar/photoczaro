@@ -2334,11 +2334,11 @@ const pageTransition = document.getElementById('page-transition');
 function navigateTo(url) {
   if (prefersReducedMotion) { window.location.href = url; return; }
   pageTransition.classList.add('slide-in');
-  setTimeout(() => { window.location.href = url; }, 620);
+  setTimeout(() => { window.location.href = url; }, 200);
 }
 document.querySelectorAll('a[href]').forEach(a => {
   const href = a.getAttribute('href');
-  if (!href || href.startsWith('#') || href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('http') || href.startsWith('//')) return;
+  if (!href || href.startsWith('#') || href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('http') || href.startsWith('//') || a.classList.contains('cta-btn-primary')) return;
   a.addEventListener('click', e => {
     e.preventDefault();
     navigateTo(href);
@@ -2362,11 +2362,16 @@ const heroBg = document.getElementById('hero-bg');
 window.addEventListener('load', () => { heroBg.classList.add('loaded'); });
 heroBg.classList.add('loaded');
 
-// Parallax hero
+// Parallax hero (throttled via requestAnimationFrame)
+let heroParallaxTicking = false;
 window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  heroBg.style.transform = `scale(1) translateY(${y * 0.3}px)`;
-});
+  if (heroParallaxTicking) return;
+  heroParallaxTicking = true;
+  requestAnimationFrame(() => {
+    heroBg.style.transform = `scale(1) translateY(${window.scrollY * 0.3}px)`;
+    heroParallaxTicking = false;
+  });
+}, { passive: true });
 
 // Image data
 const portraits = [
@@ -2805,7 +2810,7 @@ function buildPortraits() { portraits.forEach((p, i) => {
   block.appendChild(carousel);
   pgrid.appendChild(block);
   allPortraits.push({ src: p.src, name: p.name });
-}); observeNewRevealEls(pgrid); checkReveal(); }
+}); observeNewRevealEls(pgrid); }
 setTimeout(buildPortraits, 0);
 
 // Magazine gallery images
@@ -3037,7 +3042,7 @@ function buildMagazines() { magazines.forEach((m, i) => {
   block.appendChild(carousel);
   mgrid.appendChild(block);
   allMagazines.push({ src: m.src, name: m.name });
-}); observeNewRevealEls(mgrid); checkReveal(); }
+}); observeNewRevealEls(mgrid); }
 setTimeout(buildMagazines, 50);
 
 // Build Projects section
@@ -3151,7 +3156,7 @@ function buildProjects() { projectsData.forEach((proj, i) => {
   block.appendChild(toggle);
   block.appendChild(carousel);
   pgridProjects.appendChild(block);
-}); observeNewRevealEls(pgridProjects); checkReveal(); }
+}); observeNewRevealEls(pgridProjects); }
 setTimeout(buildProjects, 100);
 
 // Lightbox
@@ -3262,27 +3267,23 @@ function observeNewRevealEls(container) {
   container.querySelectorAll('.reveal, .section-line').forEach(el => observer.observe(el));
 }
 
-// Scroll fallback: queries live so it catches dynamically-added grid items
-function checkReveal() {
-  document.querySelectorAll('.reveal, .section-line').forEach(el => {
-    if (!el.classList.contains('visible') && el.getBoundingClientRect().top < window.innerHeight * 1.05) {
-      el.classList.add('visible');
-    }
-  });
-}
-window.addEventListener('scroll', checkReveal, { passive: true });
-checkReveal();
+// Reveal animations are handled entirely by the IntersectionObserver above.
 
 // Page loader
 setTimeout(() => {
   document.getElementById('page-loader').classList.add('hidden');
 }, 250);
 
-// Scroll progress bar
+// Scroll progress bar (throttled via requestAnimationFrame)
 const progressBar = document.getElementById('scroll-progress');
+let progressTicking = false;
 window.addEventListener('scroll', () => {
-  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
-  progressBar.style.width = pct + '%';
+  if (progressTicking) return;
+  progressTicking = true;
+  requestAnimationFrame(() => {
+    progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100) + '%';
+    progressTicking = false;
+  });
 }, { passive: true });
 
 // Active nav link on scroll

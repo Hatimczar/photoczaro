@@ -1,0 +1,10 @@
+# Redirect .html to extensionless for canonical URLs (matches the main site's convention).
+/index.html / 301
+/models.html /models 301
+/model.html /model 301
+/book-talent.html /book-talent 301
+/apply.html /apply 301
+/about.html /about 301
+/contact.html /contact 301
+/booking-terms.html /booking-terms 301
+/privacy-policy.html /privacy-policy 301

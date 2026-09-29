@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Model — Photoczaro Models Dubai</title>
+<meta name="description" id="page-description" content="Model profile — Photoczaro Models Dubai.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav id="models-nav">
+  <a href="/" class="nav-brand"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="models">All Models</a></li>
+    <li><a href="models?category=women">Women</a></li>
+    <li><a href="models?category=men">Men</a></li>
+    <li><a href="models?newFace=1">New Faces</a></li>
+    <li><a href="about">About</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-shortlist-btn" data-open-shortlist>Shortlist <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
+    <a href="book-talent" class="btn btn-primary" style="padding:10px 20px;font-size:0.75rem;">Book Talent</a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div id="mobile-menu">
+  <a href="models">All Models</a>
+  <a href="models?category=women">Women</a>
+  <a href="models?category=men">Men</a>
+  <a href="apply">Apply to the Roster</a>
+  <a href="about">About</a>
+  <a href="book-talent">Book Talent</a>
+  <a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+</div>
+<div id="shortlist-overlay"></div>
+<aside id="shortlist-drawer" aria-label="Booking shortlist">
+  <div class="drawer-head"><h3 style="font-size:1.1rem;">Shortlist</h3><button class="drawer-close" id="drawer-close" aria-label="Close shortlist">✕</button></div>
+  <div class="drawer-items" id="drawer-items"></div>
+  <div class="drawer-foot">
+    <a href="book-talent" id="drawer-book-btn" class="btn btn-primary">Submit Booking Enquiry</a>
+    <button class="btn" id="drawer-clear">Clear shortlist</button>
+  </div>
+</aside>
+
+<main id="main">
+  <div id="profile-root">
+    <div class="empty-state"><h3>Loading model profile…</h3></div>
+  </div>
+</main>
+
+<footer id="models-footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="nav-brand" style="margin-bottom:14px;"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></div>
+      <p>A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.</p>
+    </div>
+    <div class="footer-col"><h4>Roster</h4>
+      <a href="models">All Models</a>
+      <a href="models?category=women">Women</a>
+      <a href="models?category=men">Men</a>
+      <a href="models?newFace=1">New Faces</a>
+    </div>
+    <div class="footer-col"><h4>Work With Us</h4>
+      <a href="book-talent">Book Talent</a>
+      <a href="apply">Apply to the Roster</a>
+      <a href="about">About</a>
+      <a href="contact">Contact</a>
+    </div>
+    <div class="footer-col"><h4>Legal</h4>
+      <a href="booking-terms">Booking Terms</a>
+      <a href="privacy-policy">Privacy Policy</a>
+      <a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span data-year></span> Photoczaro Models. UAE booking representation.</span>
+    <span>Part of the Photoczaro family — <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/shortlist.js"></script>
+<script src="js/main.js"></script>
+<script>
+(function () {
+  const slug = new URLSearchParams(window.location.search).get("slug");
+  const model = (window.PHOTOCZARO_MODELS || []).find((m) => m.slug === slug);
+  const root = document.getElementById("profile-root");
+
+  if (!model) {
+    root.innerHTML = `
+      <div class="empty-state">
+        <h3>Model not found</h3>
+        <p>This profile may have been removed or the link is incorrect.</p>
+        <div style="margin-top:20px;"><a href="models" class="btn">Back to All Models</a></div>
+      </div>`;
+    return;
+  }
+
+  document.title = model.seoTitle;
+  document.getElementById("page-description").setAttribute("content", model.seoDescription);
+
+  const initials = model.name.split(" ").map((p) => p[0]).join("");
+  const catLabel = window.PHOTOCZARO_CATEGORY_LABELS[model.categories[0]] || "";
+  const subLabels = model.subcategories.map((s) => window.PHOTOCZARO_SUBCATEGORY_LABELS[s] || s);
+
+  root.innerHTML = `
+    <div class="breadcrumbs"><a href="/">Home</a><span>/</span><a href="models">All Models</a><span>/</span><span>${model.name}</span></div>
+    <section class="profile-hero" style="margin-top:24px;">
+      <div class="profile-media" style="--card-a:${model.swatch[0]};--card-b:${model.swatch[1]}">
+        <span class="initials">${initials}</span>
+      </div>
+      <div class="profile-info">
+        <span class="eyebrow">${catLabel}${model.newFace ? " · New Face" : ""}</span>
+        <h1>${model.name}</h1>
+        <div class="profile-tags">
+          ${subLabels.map((s) => `<span class="profile-tag">${s}</span>`).join("")}
+        </div>
+        <dl class="profile-stats">
+          <div class="profile-stat"><dt>Location</dt><dd>${model.location}</dd></div>
+          <div class="profile-stat"><dt>Height</dt><dd>${model.height}</dd></div>
+          <div class="profile-stat"><dt>Measurements</dt><dd>${model.measurements}</dd></div>
+          <div class="profile-stat"><dt>Hair / Eyes</dt><dd>${model.hair} / ${model.eyes}</dd></div>
+          <div class="profile-stat"><dt>Languages</dt><dd>${model.languages.join(", ")}</dd></div>
+          <div class="profile-stat"><dt>Skills</dt><dd>${model.skills.join(", ")}</dd></div>
+        </dl>
+        <div class="profile-actions">
+          <a href="book-talent?models=${model.slug}" class="btn btn-primary">Check Availability</a>
+          <button class="btn" data-shortlist-toggle="${model.slug}" aria-pressed="false" onclick="window.PhotoczaroShortlist.toggle('${model.slug}')">Add to Booking Deck</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal in">
+      <div class="section-head"><span class="eyebrow">Digitals</span><h2 style="font-size:1.8rem;">Portfolio</h2></div>
+      <div class="profile-gallery">
+        ${[0,1,2,3,4,5].map(() => `
+          <div class="model-card-media" style="--card-a:${model.swatch[0]};--card-b:${model.swatch[1]}">
+            <span class="initials" style="font-size:2.2rem;">${initials}</span>
+          </div>
+        `).join("")}
+      </div>
+      <p class="form-note" style="margin-top:16px;">Placeholder digitals shown — real portfolio images are added per model before launch.</p>
+    </section>
+
+    <section class="section related-models reveal in" style="border-top:1px solid var(--grey-line);">
+      <div class="section-head"><span class="eyebrow">Related</span><h2 style="font-size:1.8rem;">Similar Models</h2></div>
+      <div class="model-grid" id="related-grid"></div>
+    </section>
+  `;
+
+  const related = (window.PHOTOCZARO_MODELS || [])
+    .filter((m) => m.slug !== model.slug && m.categories.some((c) => model.categories.includes(c)))
+    .slice(0, 4);
+  document.getElementById("related-grid").innerHTML = related.map((m) => `
+    <a href="model?slug=${m.slug}" class="model-card">
+      <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
+        <span class="initials">${m.name.split(" ").map((p) => p[0]).join("")}</span>
+      </div>
+      <div class="model-card-info">
+        <h3>${m.name}</h3>
+        <div class="model-card-meta">${window.PHOTOCZARO_CATEGORY_LABELS[m.categories[0]]} · ${m.location.split(",")[0]}</div>
+      </div>
+    </a>
+  `).join("");
+
+  window.PhotoczaroShortlist.render();
+})();
+</script>
+</body>
+</html>

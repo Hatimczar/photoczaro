@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAE Models for Editorial and Commercial Bookings — Photoczaro</title>
+<meta name="description" content="Browse the Photoczaro roster of UAE-based models. Filter by category, location, height and skills, then build a shortlist to book.">
+<link rel="canonical" href="https://models.photoczaro.com/models">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav id="models-nav">
+  <a href="/" class="nav-brand"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="models" aria-current="page">All Models</a></li>
+    <li><a href="models?category=women">Women</a></li>
+    <li><a href="models?category=men">Men</a></li>
+    <li><a href="models?newFace=1">New Faces</a></li>
+    <li><a href="about">About</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-shortlist-btn" data-open-shortlist>Shortlist <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
+    <a href="book-talent" class="btn btn-primary" style="padding:10px 20px;font-size:0.75rem;">Book Talent</a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div id="mobile-menu">
+  <a href="models">All Models</a>
+  <a href="models?category=women">Women</a>
+  <a href="models?category=men">Men</a>
+  <a href="apply">Apply to the Roster</a>
+  <a href="about">About</a>
+  <a href="book-talent">Book Talent</a>
+  <a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+</div>
+<div id="shortlist-overlay"></div>
+<aside id="shortlist-drawer" aria-label="Booking shortlist">
+  <div class="drawer-head"><h3 style="font-size:1.1rem;">Shortlist</h3><button class="drawer-close" id="drawer-close" aria-label="Close shortlist">✕</button></div>
+  <div class="drawer-items" id="drawer-items"></div>
+  <div class="drawer-foot">
+    <a href="book-talent" id="drawer-book-btn" class="btn btn-primary">Submit Booking Enquiry</a>
+    <button class="btn" id="drawer-clear">Clear shortlist</button>
+  </div>
+</aside>
+
+<main id="main">
+  <div class="breadcrumbs"><a href="/">Home</a><span>/</span><span>All Models</span></div>
+  <div class="wrap" style="padding-top:24px;">
+    <span class="eyebrow">Roster</span>
+    <h1 style="font-size:clamp(2rem,4vw,2.8rem);">All Models</h1>
+  </div>
+
+  <form class="filters-bar" id="filters-form" role="search" aria-label="Filter models">
+    <select class="filter-select" id="f-category" aria-label="Category">
+      <option value="">Category — All</option>
+      <option value="women">Women</option>
+      <option value="men">Men</option>
+    </select>
+    <select class="filter-select" id="f-subcategory" aria-label="Specialty">
+      <option value="">Specialty — All</option>
+      <option value="editorial-fashion">Editorial / Fashion</option>
+      <option value="commercial">Commercial</option>
+      <option value="beauty">Beauty</option>
+      <option value="fitness">Fitness</option>
+    </select>
+    <select class="filter-select" id="f-location" aria-label="Location">
+      <option value="">Location — All</option>
+      <option value="Dubai">Dubai</option>
+      <option value="Abu Dhabi">Abu Dhabi</option>
+      <option value="Sharjah">Sharjah</option>
+    </select>
+    <select class="filter-select" id="f-height" aria-label="Height range">
+      <option value="">Height — All</option>
+      <option value="0-172">Up to 172 cm</option>
+      <option value="173-180">173–180 cm</option>
+      <option value="181-999">181 cm+</option>
+    </select>
+    <label style="display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--grey);">
+      <input type="checkbox" id="f-newface"> New Faces only
+    </label>
+    <button type="button" class="filter-reset" id="f-reset">Reset filters</button>
+    <span class="filter-count" id="f-count"></span>
+  </form>
+
+  <div class="wrap" style="padding-top:28px;">
+    <div class="model-grid" id="models-grid"></div>
+    <div class="empty-state" id="empty-state" hidden>
+      <h3>No models match these filters.</h3>
+      <p>Try clearing a filter, or reset to see the full roster.</p>
+    </div>
+  </div>
+</main>
+
+<footer id="models-footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="nav-brand" style="margin-bottom:14px;"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></div>
+      <p>A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.</p>
+    </div>
+    <div class="footer-col"><h4>Roster</h4>
+      <a href="models">All Models</a>
+      <a href="models?category=women">Women</a>
+      <a href="models?category=men">Men</a>
+      <a href="models?newFace=1">New Faces</a>
+    </div>
+    <div class="footer-col"><h4>Work With Us</h4>
+      <a href="book-talent">Book Talent</a>
+      <a href="apply">Apply to the Roster</a>
+      <a href="about">About</a>
+      <a href="contact">Contact</a>
+    </div>
+    <div class="footer-col"><h4>Legal</h4>
+      <a href="booking-terms">Booking Terms</a>
+      <a href="privacy-policy">Privacy Policy</a>
+      <a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span data-year></span> Photoczaro Models. UAE booking representation.</span>
+    <span>Part of the Photoczaro family — <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/shortlist.js"></script>
+<script src="js/main.js"></script>
+<script src="js/filters.js"></script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply to the Roster — Photoczaro Models Dubai</title>
+<meta name="description" content="Apply to the Photoczaro roster. UAE residents aged 18 and over only. Non-exclusive representation, no application fee.">
+<link rel="canonical" href="https://models.photoczaro.com/apply">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav id="models-nav">
+  <a href="/" class="nav-brand"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="models">All Models</a></li>
+    <li><a href="models?category=women">Women</a></li>
+    <li><a href="models?category=men">Men</a></li>
+    <li><a href="models?newFace=1">New Faces</a></li>
+    <li><a href="about">About</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-shortlist-btn" data-open-shortlist>Shortlist <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
+    <a href="book-talent" class="btn btn-primary" style="padding:10px 20px;font-size:0.75rem;">Book Talent</a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div id="mobile-menu">
+  <a href="models">All Models</a>
+  <a href="models?category=women">Women</a>
+  <a href="models?category=men">Men</a>
+  <a href="apply">Apply to the Roster</a>
+  <a href="about">About</a>
+  <a href="book-talent">Book Talent</a>
+  <a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+</div>
+<div id="shortlist-overlay"></div>
+<aside id="shortlist-drawer" aria-label="Booking shortlist">
+  <div class="drawer-head"><h3 style="font-size:1.1rem;">Shortlist</h3><button class="drawer-close" id="drawer-close" aria-label="Close shortlist">✕</button></div>
+  <div class="drawer-items" id="drawer-items"></div>
+  <div class="drawer-foot">
+    <a href="book-talent" id="drawer-book-btn" class="btn btn-primary">Submit Booking Enquiry</a>
+    <button class="btn" id="drawer-clear">Clear shortlist</button>
+  </div>
+</aside>
+
+<main id="main">
+  <div class="breadcrumbs"><a href="/">Home</a><span>/</span><span>Apply to the Roster</span></div>
+  <div class="wrap" style="padding-top:24px;max-width:900px;">
+    <span class="eyebrow">For Models</span>
+    <h1 style="font-size:clamp(2rem,4vw,2.8rem);">Apply to the Roster</h1>
+
+    <div style="margin:24px 0 32px;padding:20px 22px;border:1px solid var(--grey-line);background:var(--dark-2);">
+      <ul style="margin:0;padding-left:20px;color:#cfcac2;line-height:1.8;font-size:0.9rem;">
+        <li>You must be at least 18 years old.</li>
+        <li>You must currently reside in the UAE.</li>
+        <li>Applying does not guarantee acceptance or bookings.</li>
+        <li>Representation is initially non-exclusive.</li>
+        <li>Photoczaro does not provide visa sponsorship.</li>
+        <li>Photoczaro does not charge a mandatory fee to apply, and paid photography is never a condition of consideration.</li>
+        <li>Never send money in response to unsolicited messages — official communication only comes through verified Photoczaro channels.</li>
+      </ul>
+    </div>
+
+    <form id="apply-form" novalidate>
+      <div class="form-grid">
+        <div class="form-field"><label for="prof-name">Professional name *</label><input type="text" id="prof-name" name="professionalName" required><span class="form-error" data-error-for="prof-name"></span></div>
+        <div class="form-field"><label for="legal-name">Legal name (kept private) *</label><input type="text" id="legal-name" name="legalName" required><span class="form-error" data-error-for="legal-name"></span></div>
+
+        <div class="form-field"><label for="apply-email">Email *</label><input type="email" id="apply-email" name="email" required><span class="form-error" data-error-for="apply-email"></span></div>
+        <div class="form-field"><label for="apply-phone">Telephone *</label><input type="tel" id="apply-phone" name="telephone" required><span class="form-error" data-error-for="apply-phone"></span></div>
+
+        <div class="form-field"><label for="uae-city">UAE city *</label><input type="text" id="uae-city" name="uaeCity" required><span class="form-error" data-error-for="uae-city"></span></div>
+        <div class="form-field"><label for="experience">Experience level</label>
+          <select id="experience" name="experience"><option value="">Select one</option><option>New face</option><option>Some experience</option><option>Experienced</option></select>
+        </div>
+
+        <div class="form-field full">
+          <label class="form-checkbox"><input type="checkbox" id="age-confirm" name="ageConfirm" required> I confirm I am at least 18 years old. *</label>
+          <label class="form-checkbox"><input type="checkbox" id="residency-confirm" name="residencyConfirm" required> I confirm I currently reside in the UAE. *</label>
+        </div>
+
+        <div class="form-field"><label for="apply-height">Height *</label><input type="text" id="apply-height" name="height" required><span class="form-error" data-error-for="apply-height"></span></div>
+        <div class="form-field"><label for="apply-measurements">Measurements</label><input type="text" id="apply-measurements" name="measurements"></div>
+
+        <div class="form-field"><label for="apply-hair">Hair colour</label><input type="text" id="apply-hair" name="hair"></div>
+        <div class="form-field"><label for="apply-eyes">Eye colour</label><input type="text" id="apply-eyes" name="eyes"></div>
+
+        <div class="form-field"><label for="apply-languages">Languages</label><input type="text" id="apply-languages" name="languages" placeholder="e.g. English, Arabic"></div>
+        <div class="form-field"><label for="apply-skills">Skills</label><input type="text" id="apply-skills" name="skills" placeholder="e.g. runway, swimwear"></div>
+
+        <div class="form-field full"><label for="portfolio-url">Instagram or portfolio URL (optional)</label><input type="url" id="portfolio-url" name="portfolioUrl" placeholder="https://"></div>
+
+        <div class="form-field"><label for="file-headshot">Headshot *</label><input type="file" id="file-headshot" name="headshot" accept="image/*" required><span class="form-error" data-error-for="file-headshot"></span></div>
+        <div class="form-field"><label for="file-front">Full-length front digital *</label><input type="file" id="file-front" name="fullFront" accept="image/*" required><span class="form-error" data-error-for="file-front"></span></div>
+        <div class="form-field"><label for="file-side">Full-length side digital *</label><input type="file" id="file-side" name="fullSide" accept="image/*" required><span class="form-error" data-error-for="file-side"></span></div>
+        <div class="form-field"><label for="file-extra">Existing portfolio (optional)</label><input type="file" id="file-extra" name="portfolioFile" accept="image/*,application/pdf"></div>
+
+        <div class="form-field full"><label for="intro">Short introduction</label><textarea id="intro" name="introduction" maxlength="600"></textarea></div>
+
+        <div class="form-field full">
+          <label class="form-checkbox"><input type="checkbox" id="apply-accuracy" name="accuracyConfirm" required> I confirm the information submitted is accurate. *</label>
+          <label class="form-checkbox"><input type="checkbox" id="apply-privacy" name="privacyConsent" required> I consent to the <a href="privacy-policy" style="color:var(--gold-light);text-decoration:underline;">Privacy Policy</a>. *</label>
+        </div>
+      </div>
+
+      <p class="form-note" style="margin-top:24px;">Do not include passports, Emirates ID or banking details in this form — those are only ever collected later, through a separate secure process, if you're added to the roster.</p>
+      <button type="submit" class="btn btn-primary" style="margin-top:16px;">Submit Application</button>
+      <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+</main>
+
+<footer id="models-footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="nav-brand" style="margin-bottom:14px;"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></div>
+      <p>A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.</p>
+    </div>
+    <div class="footer-col"><h4>Roster</h4>
+      <a href="models">All Models</a><a href="models?category=women">Women</a><a href="models?category=men">Men</a><a href="models?newFace=1">New Faces</a>
+    </div>
+    <div class="footer-col"><h4>Work With Us</h4>
+      <a href="book-talent">Book Talent</a><a href="apply">Apply to the Roster</a><a href="about">About</a><a href="contact">Contact</a>
+    </div>
+    <div class="footer-col"><h4>Legal</h4>
+      <a href="booking-terms">Booking Terms</a><a href="privacy-policy">Privacy Policy</a><a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span data-year></span> Photoczaro Models. UAE booking representation.</span>
+    <span>Part of the Photoczaro family — <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/shortlist.js"></script>
+<script src="js/main.js"></script>
+<script>
+(function () {
+  const form = document.getElementById("apply-form");
+  const status = document.getElementById("form-status");
+  const MAX_BYTES = 8 * 1024 * 1024;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    document.querySelectorAll(".form-error").forEach((el) => (el.textContent = ""));
+    let valid = true;
+
+    form.querySelectorAll("[required]").forEach((field) => {
+      const isEmpty = field.type === "checkbox" ? !field.checked : field.type === "file" ? field.files.length === 0 : !field.value.trim();
+      if (isEmpty) {
+        valid = false;
+        const err = document.querySelector(`[data-error-for="${field.id}"]`);
+        if (err) err.textContent = "Required.";
+      }
+    });
+
+    form.querySelectorAll('input[type="file"]').forEach((field) => {
+      if (field.files[0] && field.files[0].size > MAX_BYTES) {
+        valid = false;
+        const err = document.querySelector(`[data-error-for="${field.id}"]`);
+        if (err) err.textContent = "File too large (8MB max).";
+      }
+    });
+
+    const emailField = document.getElementById("apply-email");
+    if (emailField.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
+      valid = false;
+      document.querySelector('[data-error-for="apply-email"]').textContent = "Enter a valid email.";
+    }
+
+    if (!valid) {
+      status.className = "form-status error";
+      status.textContent = "Please fix the highlighted fields.";
+      return;
+    }
+
+    status.className = "form-status";
+    status.textContent = "Sending…";
+    try {
+      const fd = new FormData(form);
+      const res = await fetch("/api/apply", { method: "POST", body: fd });
+      if (!res.ok) throw new Error("request_failed");
+      status.className = "form-status success";
+      status.textContent = "Thank you — your application has been received. We review applications on a rolling basis and will contact you only through verified Photoczaro channels.";
+      form.reset();
+    } catch {
+      status.className = "form-status error";
+      status.textContent = "Something went wrong sending this application. Please try again.";
+    }
+  });
+
+  window.PhotoczaroShortlist.render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+name = "photoczaro-models"
+pages_build_output_dir = "."
+compatibility_date = "2026-07-01"
+
+# Create these two KV namespaces (`wrangler kv namespace create ENQUIRIES_KV`,
+# `wrangler kv namespace create APPLICATIONS_KV`) and paste their ids below —
+# or bind them in the Cloudflare Pages dashboard for this project — before
+# functions/api/book-talent.js and functions/api/apply.js can persist
+# submissions. Until bound, both handlers fall back to console.log only.
+#
+# [[kv_namespaces]]
+# binding = "ENQUIRIES_KV"
+# id = ""
+#
+# [[kv_namespaces]]
+# binding = "APPLICATIONS_KV"
+# id = ""

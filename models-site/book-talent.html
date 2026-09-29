@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Talent — Photoczaro Models Dubai</title>
+<meta name="description" content="Submit a booking enquiry for one or more Photoczaro models. Availability and a quotation follow within 24 hours.">
+<link rel="canonical" href="https://models.photoczaro.com/book-talent">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav id="models-nav">
+  <a href="/" class="nav-brand"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="models">All Models</a></li>
+    <li><a href="models?category=women">Women</a></li>
+    <li><a href="models?category=men">Men</a></li>
+    <li><a href="models?newFace=1">New Faces</a></li>
+    <li><a href="about">About</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-shortlist-btn" data-open-shortlist>Shortlist <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
+    <a href="book-talent" class="btn btn-primary" style="padding:10px 20px;font-size:0.75rem;" aria-current="page">Book Talent</a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div id="mobile-menu">
+  <a href="models">All Models</a>
+  <a href="models?category=women">Women</a>
+  <a href="models?category=men">Men</a>
+  <a href="apply">Apply to the Roster</a>
+  <a href="about">About</a>
+  <a href="book-talent">Book Talent</a>
+  <a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+</div>
+<div id="shortlist-overlay"></div>
+<aside id="shortlist-drawer" aria-label="Booking shortlist">
+  <div class="drawer-head"><h3 style="font-size:1.1rem;">Shortlist</h3><button class="drawer-close" id="drawer-close" aria-label="Close shortlist">✕</button></div>
+  <div class="drawer-items" id="drawer-items"></div>
+  <div class="drawer-foot">
+    <a href="book-talent" id="drawer-book-btn" class="btn btn-primary">Submit Booking Enquiry</a>
+    <button class="btn" id="drawer-clear">Clear shortlist</button>
+  </div>
+</aside>
+
+<main id="main">
+  <div class="breadcrumbs"><a href="/">Home</a><span>/</span><span>Book Talent</span></div>
+  <div class="wrap" style="padding-top:24px;max-width:900px;">
+    <span class="eyebrow">For Clients</span>
+    <h1 style="font-size:clamp(2rem,4vw,2.8rem);">Book Talent</h1>
+    <p style="color:var(--grey);margin-top:16px;max-width:620px;">Tell us about the production and the models you're considering. Submitting this enquiry does not confirm a booking — availability must be verified, and Photoczaro will follow up with confirmed availability and a quotation, usually within 24 hours. Rates depend on the production and usage.</p>
+
+    <div id="selected-models" style="margin:28px 0;display:flex;gap:10px;flex-wrap:wrap;"></div>
+
+    <form id="booking-form" novalidate style="margin-top:20px;">
+      <div class="form-grid">
+        <div class="form-field"><label for="client-name">Your name *</label><input type="text" id="client-name" name="clientName" required><span class="form-error" data-error-for="client-name"></span></div>
+        <div class="form-field"><label for="company">Company *</label><input type="text" id="company" name="company" required><span class="form-error" data-error-for="company"></span></div>
+        <div class="form-field"><label for="work-email">Work email *</label><input type="email" id="work-email" name="workEmail" required><span class="form-error" data-error-for="work-email"></span></div>
+        <div class="form-field"><label for="telephone">Telephone *</label><input type="tel" id="telephone" name="telephone" required><span class="form-error" data-error-for="telephone"></span></div>
+
+        <div class="form-field full"><label for="project-name">Project / campaign name *</label><input type="text" id="project-name" name="projectName" required><span class="form-error" data-error-for="project-name"></span></div>
+
+        <div class="form-field"><label for="production-type">Production type *</label>
+          <select id="production-type" name="productionType" required>
+            <option value="">Select one</option>
+            <option>Editorial</option><option>Commercial / Advertising</option><option>E-commerce</option>
+            <option>Fashion film / Video</option><option>Event</option><option>Other</option>
+          </select><span class="form-error" data-error-for="production-type"></span>
+        </div>
+        <div class="form-field"><label for="photo-video">Photo, video or both *</label>
+          <select id="photo-video" name="photoVideo" required>
+            <option value="">Select one</option><option>Photo</option><option>Video</option><option>Both</option>
+          </select><span class="form-error" data-error-for="photo-video"></span>
+        </div>
+
+        <div class="form-field"><label for="shoot-date">Shoot date *</label><input type="date" id="shoot-date" name="shootDate" required><span class="form-error" data-error-for="shoot-date"></span></div>
+        <div class="form-field"><label for="alt-date">Alternative date</label><input type="date" id="alt-date" name="altDate"></div>
+
+        <div class="form-field"><label for="location">Location *</label><input type="text" id="location" name="location" placeholder="Studio, city or venue" required><span class="form-error" data-error-for="location"></span></div>
+        <div class="form-field"><label for="working-hours">Working hours</label><input type="text" id="working-hours" name="workingHours" placeholder="e.g. 09:00–17:00"></div>
+
+        <div class="form-field full"><label for="wardrobe">Wardrobe / content description</label><textarea id="wardrobe" name="wardrobe"></textarea></div>
+        <div class="form-field full"><label for="required-skills">Required skills</label><input type="text" id="required-skills" name="requiredSkills" placeholder="e.g. runway, swimwear, fluent Arabic"></div>
+
+        <div class="form-field full">
+          <label>Usage channels</label>
+          <div style="display:flex;flex-wrap:wrap;gap:16px;">
+            <label class="form-checkbox"><input type="checkbox" name="usageOrganic" value="1"> Organic social</label>
+            <label class="form-checkbox"><input type="checkbox" name="usagePaid" value="1"> Paid advertising</label>
+            <label class="form-checkbox"><input type="checkbox" name="usageWeb" value="1"> Website / e-commerce</label>
+            <label class="form-checkbox"><input type="checkbox" name="usagePrint" value="1"> Print</label>
+            <label class="form-checkbox"><input type="checkbox" name="usageOOH" value="1"> Outdoor / OOH</label>
+          </div>
+        </div>
+
+        <div class="form-field"><label for="usage-territory">Usage territory</label><input type="text" id="usage-territory" name="usageTerritory" placeholder="e.g. UAE, GCC, worldwide"></div>
+        <div class="form-field"><label for="usage-duration">Usage duration</label><input type="text" id="usage-duration" name="usageDuration" placeholder="e.g. 6 months, 1 year"></div>
+        <div class="form-field"><label for="exclusivity">Category exclusivity</label><input type="text" id="exclusivity" name="exclusivity" placeholder="If required"></div>
+        <div class="form-field"><label for="budget">Approximate budget</label><input type="text" id="budget" name="budget" placeholder="Optional"></div>
+
+        <div class="form-field full"><label for="notes">Additional notes</label><textarea id="notes" name="notes"></textarea></div>
+
+        <div class="form-field full">
+          <label class="form-checkbox"><input type="checkbox" name="accuracyConfirm" id="accuracy-confirm" required> I confirm the information above is accurate. *</label>
+          <label class="form-checkbox"><input type="checkbox" name="privacyConsent" id="privacy-consent" required> I consent to the <a href="privacy-policy" style="color:var(--gold-light);text-decoration:underline;">Privacy Policy</a>. *</label>
+        </div>
+      </div>
+
+      <p class="form-note" style="margin-top:24px;">Submitting an enquiry does not confirm a booking. Photoczaro will verify model availability and respond with a quotation.</p>
+      <button type="submit" class="btn btn-primary" style="margin-top:16px;">Submit Enquiry</button>
+      <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+</main>
+
+<footer id="models-footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="nav-brand" style="margin-bottom:14px;"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></div>
+      <p>A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.</p>
+    </div>
+    <div class="footer-col"><h4>Roster</h4>
+      <a href="models">All Models</a><a href="models?category=women">Women</a><a href="models?category=men">Men</a><a href="models?newFace=1">New Faces</a>
+    </div>
+    <div class="footer-col"><h4>Work With Us</h4>
+      <a href="book-talent">Book Talent</a><a href="apply">Apply to the Roster</a><a href="about">About</a><a href="contact">Contact</a>
+    </div>
+    <div class="footer-col"><h4>Legal</h4>
+      <a href="booking-terms">Booking Terms</a><a href="privacy-policy">Privacy Policy</a><a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span data-year></span> Photoczaro Models. UAE booking representation.</span>
+    <span>Part of the Photoczaro family — <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/shortlist.js"></script>
+<script src="js/main.js"></script>
+<script>
+(function () {
+  const slugs = (new URLSearchParams(window.location.search).get("models") || "").split(",").filter(Boolean);
+  const models = (window.PHOTOCZARO_MODELS || []).filter((m) => slugs.includes(m.slug));
+  const box = document.getElementById("selected-models");
+  if (models.length) {
+    box.innerHTML = `<span class="eyebrow" style="width:100%;">Selected models</span>` + models.map((m) => `<span class="profile-tag">${m.name}</span>`).join("");
+  }
+
+  const form = document.getElementById("booking-form");
+  const status = document.getElementById("form-status");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    document.querySelectorAll(".form-error").forEach((el) => (el.textContent = ""));
+    let valid = true;
+    form.querySelectorAll("[required]").forEach((field) => {
+      if ((field.type === "checkbox" && !field.checked) || (field.type !== "checkbox" && !field.value.trim())) {
+        valid = false;
+        const err = document.querySelector(`[data-error-for="${field.id}"]`);
+        if (err) err.textContent = "Required.";
+        else field.closest(".form-field")?.querySelector(".form-error")?.append?.("Required.");
+      }
+    });
+    const emailField = document.getElementById("work-email");
+    if (emailField.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
+      valid = false;
+      document.querySelector('[data-error-for="work-email"]').textContent = "Enter a valid email.";
+    }
+    if (!valid) {
+      status.className = "form-status error";
+      status.textContent = "Please fix the highlighted fields.";
+      return;
+    }
+
+    const payload = Object.fromEntries(new FormData(form).entries());
+    payload.selectedModels = models.map((m) => m.slug);
+
+    status.className = "form-status";
+    status.textContent = "Sending…";
+    try {
+      const res = await fetch("/api/book-talent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("request_failed");
+      status.className = "form-status success";
+      status.textContent = "Thank you — your enquiry has been received. Photoczaro will confirm availability and a quotation within 24 hours.";
+      form.reset();
+      box.innerHTML = "";
+    } catch {
+      status.className = "form-status error";
+      status.textContent = "Something went wrong sending this enquiry. Please try again, or contact us directly.";
+    }
+  });
+
+  window.PhotoczaroShortlist.render();
+})();
+</script>
+</body>
+</html>

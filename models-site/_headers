@@ -1,0 +1,17 @@
+# Same baseline security headers as the main photoczaro.com site.
+# CSP is intentionally stricter here: this site has no third-party analytics/
+# ad scripts wired in yet, so no external allowances are pre-added — extend
+# this only when a specific integration (analytics, Turnstile, etc.) needs it.
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'
+  X-Robots-Tag: noindex
+
+/css/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/js/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400

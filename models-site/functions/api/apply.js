@@ -30,7 +30,13 @@ export async function onRequestPost({ request, env }) {
 
   const email = (form.get("email") || "").toString().trim().toLowerCase();
   const professionalName = (form.get("professionalName") || "").toString().trim();
-  if (!professionalName || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  const category = (form.get("category") || "").toString().trim().toLowerCase();
+  if (
+    !professionalName ||
+    !email ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+    !["women", "men"].includes(category)
+  ) {
     return respondError(isNativeSubmit, "Missing or invalid required fields.", 400);
   }
 
@@ -50,6 +56,7 @@ export async function onRequestPost({ request, env }) {
   const record = {
     professionalName,
     legalName: (form.get("legalName") || "").toString(),
+    category,
     email,
     telephone: (form.get("telephone") || "").toString(),
     uaeCity: (form.get("uaeCity") || "").toString(),

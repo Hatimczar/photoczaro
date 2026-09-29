@@ -105,18 +105,23 @@
         <div class="form-field"><label for="apply-email">Email *</label><input type="email" id="apply-email" name="email" required><span class="form-error" data-error-for="apply-email"></span></div>
         <div class="form-field"><label for="apply-phone">Telephone *</label><input type="tel" id="apply-phone" name="telephone" required><span class="form-error" data-error-for="apply-phone"></span></div>
 
+        <div class="form-field"><label for="apply-category">Applying as *</label>
+          <select id="apply-category" name="category" required><option value="">Select one</option><option value="women">Women</option><option value="men">Men</option></select>
+          <span class="form-error" data-error-for="apply-category"></span>
+        </div>
         <div class="form-field"><label for="uae-city">UAE city *</label><input type="text" id="uae-city" name="uaeCity" required><span class="form-error" data-error-for="uae-city"></span></div>
+
         <div class="form-field"><label for="experience">Experience level</label>
           <select id="experience" name="experience"><option value="">Select one</option><option>New face</option><option>Some experience</option><option>Experienced</option></select>
         </div>
+        <div class="form-field"><label for="apply-height">Height *</label><input type="text" id="apply-height" name="height" required><span class="form-error" data-error-for="apply-height"></span></div>
 
         <div class="form-field full">
           <label class="form-checkbox"><input type="checkbox" id="age-confirm" name="ageConfirm" required> I confirm I am at least 18 years old. *</label>
           <label class="form-checkbox"><input type="checkbox" id="residency-confirm" name="residencyConfirm" required> I confirm I currently reside in the UAE. *</label>
         </div>
 
-        <div class="form-field"><label for="apply-height">Height *</label><input type="text" id="apply-height" name="height" required><span class="form-error" data-error-for="apply-height"></span></div>
-        <div class="form-field"><label for="apply-measurements">Measurements</label><input type="text" id="apply-measurements" name="measurements"></div>
+        <div class="form-field full"><label for="apply-measurements" id="apply-measurements-label">Measurements</label><input type="text" id="apply-measurements" name="measurements" placeholder="Select a category above first"></div>
 
         <div class="form-field"><label for="apply-hair">Hair colour</label><input type="text" id="apply-hair" name="hair"></div>
         <div class="form-field"><label for="apply-eyes">Eye colour</label><input type="text" id="apply-eyes" name="eyes"></div>
@@ -185,6 +190,26 @@
   const form = document.getElementById("apply-form");
   const status = document.getElementById("form-status");
   const MAX_BYTES = 8 * 1024 * 1024;
+
+  /* Measurements mean different things per category; update the label and
+     placeholder to match instead of asking a one-size-fits-all question. */
+  const categoryField = document.getElementById("apply-category");
+  const measurementsLabel = document.getElementById("apply-measurements-label");
+  const measurementsField = document.getElementById("apply-measurements");
+  const measurementsByCategory = {
+    women: { label: "Measurements (bust-waist-hips)", placeholder: "e.g. 81-61-88 cm" },
+    men: { label: "Measurements (chest/waist)", placeholder: "e.g. Chest 98 / Waist 81 cm" },
+  };
+  categoryField.addEventListener("change", () => {
+    const preset = measurementsByCategory[categoryField.value];
+    if (preset) {
+      measurementsLabel.textContent = preset.label;
+      measurementsField.placeholder = preset.placeholder;
+    } else {
+      measurementsLabel.textContent = "Measurements";
+      measurementsField.placeholder = "Select a category above first";
+    }
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();

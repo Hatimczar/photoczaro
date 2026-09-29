@@ -10,9 +10,14 @@
 <meta property="og:description" content="A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://models.photoczaro.com/">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://models.photoczaro.com/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://models.photoczaro.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="noindex, nofollow">
 <!-- DEV NOTE: noindex while in development mock-data state; remove once real roster + legal review is complete. -->
+<link rel="preload" as="image" href="images/hero.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -20,7 +25,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -28,6 +33,7 @@
 <div class="page-transition" id="page-transition"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
+<script>if (sessionStorage.getItem("pczVisited")) document.write('<style>#page-loader{display:none}</style>');</script>
 <div class="page-loader" id="page-loader">
   <div class="loader-logo">Photoczaro</div>
   <div class="loader-bar"></div>
@@ -77,9 +83,9 @@
 
 <main id="main">
   <section class="hero">
-    <div class="hero-grid-bg" aria-hidden="true">
-      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    </div>
+    <div class="hero-bg" id="hero-bg" role="img" aria-label="Photoczaro directing a model during a studio shoot"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-overlay-bottom"></div>
     <div class="hero-content">
       <span class="hero-eyebrow">Curated Booking Roster, UAE</span>
       <h1 class="hero-title"><span class="hero-word"><span>Talent,</span></span> <span class="hero-word"><span><em>booked</em></span></span> <span class="hero-word"><span>with clarity.</span></span></h1>
@@ -97,6 +103,7 @@
       <h2 class="section-title">Selected From <em>The Roster</em></h2>
       <div class="section-line"></div>
     </div>
+    <div class="roster-sample-notice"><strong>Roster onboarding in progress.</strong> The profiles shown are sample data for demonstration only, not real people available for booking.</div>
     <div class="model-grid" id="home-model-grid"></div>
     <div style="margin-top:32px;"><a href="models" class="cta-btn">View Full Roster</a></div>
   </section>
@@ -130,7 +137,7 @@
     <div>
       <span class="eyebrow">For Clients</span>
       <h2 style="font-size:2rem;margin-bottom:16px;font-style:italic;">Booking a shoot?</h2>
-      <p style="color:var(--grey);margin-bottom:24px;">Tell us the production, the usage and the dates. We'll confirm availability and a quotation within 24 hours.</p>
+      <p style="color:var(--grey);margin-bottom:24px;">Tell us the production, the usage and the dates. We'll typically confirm availability and a quotation within one business day.</p>
       <a href="book-talent" class="cta-btn cta-btn-primary">Book Talent</a>
     </div>
     <div>
@@ -172,19 +179,28 @@
   </div>
 </footer>
 
-<script src="js/data.js?v=2"></script>
+<script src="js/data.js?v=3"></script>
 <script src="js/shortlist.js?v=1"></script>
-<script src="js/main.js?v=2"></script>
+<script src="js/main.js?v=3"></script>
 <script src="js/magnetic-cta.js?v=1"></script>
+<script>
+  (function () {
+    const heroBg = document.getElementById("hero-bg");
+    if (heroBg) {
+      window.addEventListener("load", () => heroBg.classList.add("loaded"));
+      heroBg.classList.add("loaded");
+    }
+  })();
+</script>
 <script>
   (function () {
     const grid = document.getElementById("home-model-grid");
     const featured = (window.PHOTOCZARO_MODELS || []).filter((m) => m.featured).sort((a, b) => a.displayOrder - b.displayOrder).slice(0, 4);
     grid.innerHTML = featured.map((m) => `
-      <a href="model?slug=${m.slug}" class="model-card">
+      <a href="/models/${m.slug}" class="model-card">
         <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
-          <span class="initials">${m.name.split(" ").map((p) => p[0]).join("")}</span>
-          ${m.newFace ? '<span class="model-card-badge">New Face</span>' : ""}
+          <span class="initials">${m.name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase()}</span>
+          ${m.sample ? '<span class="model-card-badge sample-badge">Sample profile</span>' : m.newFace ? '<span class="model-card-badge">New Face</span>' : ""}
           <button class="model-card-shortlist" data-shortlist-toggle="${m.slug}" aria-pressed="false" aria-label="Add to shortlist" onclick="event.preventDefault();window.PhotoczaroShortlist.toggle('${m.slug}')">♡</button>
           <div class="model-card-overlay"><span class="model-card-name">${m.name}</span></div>
         </div>

@@ -4,14 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book Talent | Photoczaro Models Dubai</title>
-<meta name="description" content="Submit a booking enquiry for one or more Photoczaro models. Availability and a quotation follow within 24 hours.">
+<meta name="description" content="Submit a booking enquiry for one or more Photoczaro models. Availability and a quotation typically follow within one business day.">
 <link rel="canonical" href="https://models.photoczaro.com/book-talent">
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Book Talent | Photoczaro Models Dubai">
-<meta property="og:description" content="Submit a booking enquiry for one or more Photoczaro models. Availability and a quotation follow within 24 hours.">
+<meta property="og:description" content="Submit a booking enquiry for one or more Photoczaro models. Availability and a quotation typically follow within one business day.">
 <meta property="og:url" content="https://models.photoczaro.com/book-talent">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://models.photoczaro.com/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://models.photoczaro.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -19,7 +23,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -27,6 +31,7 @@
 <div class="page-transition" id="page-transition"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
+<script>if (sessionStorage.getItem("pczVisited")) document.write('<style>#page-loader{display:none}</style>');</script>
 <div class="page-loader" id="page-loader">
   <div class="loader-logo">Photoczaro</div>
   <div class="loader-bar"></div>
@@ -79,11 +84,11 @@
   <div class="wrap" style="padding-top:24px;max-width:900px;">
     <span class="eyebrow">For Clients</span>
     <h1 style="font-size:clamp(2rem,4vw,2.8rem);">Book Talent</h1>
-    <p style="color:var(--grey);margin-top:16px;max-width:620px;">Tell us about the production and the models you're considering. Submitting this enquiry does not confirm a booking; availability must be verified, and Photoczaro will follow up with confirmed availability and a quotation, usually within 24 hours. Rates depend on the production and usage.</p>
+    <p style="color:var(--grey);margin-top:16px;max-width:620px;">Tell us about the production and the models you're considering. Submitting this enquiry does not confirm a booking; availability must be verified, and Photoczaro will typically follow up with confirmed availability and a quotation within one business day. Rates depend on the production and usage.</p>
 
     <div id="selected-models" style="margin:28px 0;display:flex;gap:10px;flex-wrap:wrap;"></div>
 
-    <form id="booking-form" novalidate style="margin-top:20px;">
+    <form id="booking-form" novalidate method="post" action="/api/book-talent" style="margin-top:20px;">
       <div class="form-grid">
         <div class="form-field"><label for="client-name">Your name *</label><input type="text" id="client-name" name="clientName" required><span class="form-error" data-error-for="client-name"></span></div>
         <div class="form-field"><label for="company">Company *</label><input type="text" id="company" name="company" required><span class="form-error" data-error-for="company"></span></div>
@@ -175,9 +180,9 @@
   </div>
 </footer>
 
-<script src="js/data.js?v=2"></script>
+<script src="js/data.js?v=3"></script>
 <script src="js/shortlist.js?v=1"></script>
-<script src="js/main.js?v=2"></script>
+<script src="js/main.js?v=3"></script>
 <script src="js/magnetic-cta.js?v=1"></script>
 <script>
 (function () {
@@ -227,7 +232,7 @@
       });
       if (!res.ok) throw new Error("request_failed");
       status.className = "form-status success";
-      status.textContent = "Thank you. Your enquiry has been received. Photoczaro will confirm availability and a quotation within 24 hours.";
+      status.textContent = "Thank you. Your enquiry has been received. Photoczaro will typically confirm availability and a quotation within one business day.";
       form.reset();
       box.innerHTML = "";
     } catch {

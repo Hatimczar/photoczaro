@@ -59,10 +59,13 @@
     }
   }, { passive: true });
 
-  /* Page loader */
+  /* Page loader: full pulsing loader only on the first page of a session; a much
+     shorter fade on subsequent internal navigations (avoids the "loading every
+     click" feel on a otherwise-instant static site). */
   const loader = document.getElementById('page-loader');
   if (loader) {
-    setTimeout(() => loader.classList.add('hidden'), 250);
+    const seen = sessionStorage.getItem('pczVisited');
+    setTimeout(() => { loader.classList.add('hidden'); sessionStorage.setItem('pczVisited', '1'); }, seen ? 0 : 250);
   }
 
   /* Hamburger + mobile menu */

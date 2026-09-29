@@ -11,7 +11,11 @@
 <meta property="og:title" content="UAE Models for Editorial and Commercial Bookings | Photoczaro">
 <meta property="og:description" content="Browse the Photoczaro roster of UAE-based models. Filter by category, location, height and skills, then build a shortlist to book.">
 <meta property="og:url" content="https://models.photoczaro.com/models">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://models.photoczaro.com/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://models.photoczaro.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -19,7 +23,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -27,6 +31,7 @@
 <div class="page-transition" id="page-transition"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
+<script>if (sessionStorage.getItem("pczVisited")) document.write('<style>#page-loader{display:none}</style>');</script>
 <div class="page-loader" id="page-loader">
   <div class="loader-logo">Photoczaro</div>
   <div class="loader-bar"></div>
@@ -79,6 +84,7 @@
   <div class="wrap" style="padding-top:24px;">
     <span class="eyebrow">Roster</span>
     <h1 style="font-size:clamp(2rem,4vw,2.8rem);">All Models</h1>
+    <div class="roster-sample-notice"><strong>Roster onboarding in progress.</strong> The two profiles below are sample data used to demonstrate this layout, not real people available for booking. Real talent will replace them once onboarding is complete.</div>
   </div>
 
   <form class="filters-bar" id="filters-form" role="search" aria-label="Filter models">
@@ -152,10 +158,10 @@
   </div>
 </footer>
 
-<script src="js/data.js?v=2"></script>
+<script src="js/data.js?v=3"></script>
 <script src="js/shortlist.js?v=1"></script>
-<script src="js/main.js?v=2"></script>
+<script src="js/main.js?v=3"></script>
 <script src="js/magnetic-cta.js?v=1"></script>
-<script src="js/filters.js?v=2"></script>
+<script src="js/filters.js?v=3"></script>
 </body>
 </html>

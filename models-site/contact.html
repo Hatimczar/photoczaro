@@ -11,7 +11,11 @@
 <meta property="og:title" content="Contact | Photoczaro Models Dubai">
 <meta property="og:description" content="Contact Photoczaro Models for booking enquiries, roster applications, or general questions.">
 <meta property="og:url" content="https://models.photoczaro.com/contact">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://models.photoczaro.com/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://models.photoczaro.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -19,7 +23,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -27,6 +31,7 @@
 <div class="page-transition" id="page-transition"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
+<script>if (sessionStorage.getItem("pczVisited")) document.write('<style>#page-loader{display:none}</style>');</script>
 <div class="page-loader" id="page-loader">
   <div class="loader-logo">Photoczaro</div>
   <div class="loader-bar"></div>
@@ -81,13 +86,11 @@
     <p style="margin-top:20px;color:#cfcac2;">For a booking enquiry, use <a href="book-talent" style="color:var(--gold-light);text-decoration:underline;">Book Talent</a> so we capture the production details up front. For a roster application, use <a href="apply" style="color:var(--gold-light);text-decoration:underline;">Apply to the Roster</a>. For anything else, reach us directly:</p>
 
     <div style="margin-top:32px;display:flex;flex-direction:column;gap:14px;">
-      <div><span class="eyebrow" style="margin-bottom:4px;">Email</span><p style="color:var(--white);">models@photoczaro.com</p></div>
+      <div><span class="eyebrow" style="margin-bottom:4px;">Email</span><p style="color:var(--white);"><a href="mailto:info@photoczaro.com" style="color:var(--gold-light);text-decoration:underline;">info@photoczaro.com</a></p></div>
       <div><span class="eyebrow" style="margin-bottom:4px;">Based in</span><p style="color:var(--white);">Dubai, United Arab Emirates</p></div>
     </div>
 
-    <p class="dev-note" style="margin-top:32px;">Development note: this email address is a placeholder pending the client's confirmation of a monitored inbox for the roster.</p>
-
-    <div style="margin-top:20px;display:flex;gap:16px;flex-wrap:wrap;">
+    <div style="margin-top:32px;display:flex;gap:16px;flex-wrap:wrap;">
       <a href="book-talent" class="cta-btn cta-btn-primary">Book Talent</a>
       <a href="apply" class="cta-btn">Apply to the Roster</a>
     </div>
@@ -123,9 +126,9 @@
     <span>Part of the Photoczaro family: <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
   </div>
 </footer>
-<script src="js/data.js?v=2"></script>
+<script src="js/data.js?v=3"></script>
 <script src="js/shortlist.js?v=1"></script>
-<script src="js/main.js?v=2"></script>
+<script src="js/main.js?v=3"></script>
 <script src="js/magnetic-cta.js?v=1"></script>
 </body>
 </html>

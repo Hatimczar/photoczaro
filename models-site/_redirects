@@ -1,3 +1,8 @@
+# Clean model-profile URLs: /models/:slug rewrites (200, URL stays) to the
+# templated model.html, which reads the slug from the path (see model.html's
+# inline script). /model?slug=... keeps working for old shared links.
+/models/:slug /model?slug=:slug 200
+
 # Redirect .html to extensionless for canonical URLs (matches the main site's convention).
 /index.html / 301
 /models.html /models 301

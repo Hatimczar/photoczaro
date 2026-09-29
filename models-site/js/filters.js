@@ -73,10 +73,10 @@
     emptyState.hidden = results.length !== 0;
 
     grid.innerHTML = results.map((m) => `
-      <a href="model?slug=${m.slug}" class="model-card">
+      <a href="/models/${m.slug}" class="model-card">
         <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
           <span class="initials">${initialsOf(m.name)}</span>
-          ${m.newFace ? '<span class="model-card-badge">New Face</span>' : ""}
+          ${m.sample ? '<span class="model-card-badge sample-badge">Sample profile</span>' : m.newFace ? '<span class="model-card-badge">New Face</span>' : ""}
           <button class="model-card-shortlist" data-shortlist-toggle="${m.slug}" aria-pressed="false" aria-label="Add to shortlist" onclick="event.preventDefault();window.PhotoczaroShortlist.toggle('${m.slug}')">♡</button>
           <div class="model-card-overlay"><span class="model-card-name">${m.name}</span></div>
         </div>

@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- This page is also served (rewritten, URL unchanged) at /models/:slug for
+     clean profile URLs. <base> keeps every relative asset/link resolving to
+     site root regardless of which path served this file. -->
+<base href="/">
 <title id="page-title">Model | Photoczaro Models Dubai</title>
 <meta name="description" id="page-description" content="Model profile at Photoczaro Models Dubai.">
 <link rel="canonical" id="page-canonical" href="https://models.photoczaro.com/model">
@@ -11,7 +15,14 @@
 <meta property="og:title" id="page-og-title" content="Model | Photoczaro Models Dubai">
 <meta property="og:description" id="page-og-description" content="Model profile at Photoczaro Models Dubai.">
 <meta property="og:url" id="page-og-url" content="https://models.photoczaro.com/model">
-<meta name="twitter:card" content="summary">
+<!-- Falls back to the general share image until real per-model photography
+     exists; per-profile OG images need real portfolio images to generate
+     from, same gate as the roster photos themselves (see js/data.js). -->
+<meta property="og:image" content="https://models.photoczaro.com/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://models.photoczaro.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -19,7 +30,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -27,6 +38,7 @@
 <div class="page-transition" id="page-transition"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
+<script>if (sessionStorage.getItem("pczVisited")) document.write('<style>#page-loader{display:none}</style>');</script>
 <div class="page-loader" id="page-loader">
   <div class="loader-logo">Photoczaro</div>
   <div class="loader-bar"></div>
@@ -110,13 +122,14 @@
   </div>
 </footer>
 
-<script src="js/data.js?v=2"></script>
+<script src="js/data.js?v=3"></script>
 <script src="js/shortlist.js?v=1"></script>
-<script src="js/main.js?v=2"></script>
+<script src="js/main.js?v=3"></script>
 <script src="js/magnetic-cta.js?v=1"></script>
 <script>
 (function () {
-  const slug = new URLSearchParams(window.location.search).get("slug");
+  const pathMatch = window.location.pathname.match(/^\/models\/([^/]+)\/?$/);
+  const slug = (pathMatch && decodeURIComponent(pathMatch[1])) || new URLSearchParams(window.location.search).get("slug");
   const model = (window.PHOTOCZARO_MODELS || []).find((m) => m.slug === slug);
   const root = document.getElementById("profile-root");
 
@@ -132,17 +145,18 @@
 
   document.title = model.seoTitle;
   document.getElementById("page-description").setAttribute("content", model.seoDescription);
-  document.getElementById("page-canonical").setAttribute("href", `https://models.photoczaro.com/model?slug=${model.slug}`);
+  document.getElementById("page-canonical").setAttribute("href", `https://models.photoczaro.com/models/${model.slug}`);
   document.getElementById("page-og-title").setAttribute("content", model.seoTitle);
   document.getElementById("page-og-description").setAttribute("content", model.seoDescription);
-  document.getElementById("page-og-url").setAttribute("content", `https://models.photoczaro.com/model?slug=${model.slug}`);
+  document.getElementById("page-og-url").setAttribute("content", `https://models.photoczaro.com/models/${model.slug}`);
 
-  const initials = model.name.split(" ").map((p) => p[0]).join("");
+  const initials = model.name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
   const catLabel = window.PHOTOCZARO_CATEGORY_LABELS[model.categories[0]] || "";
   const subLabels = model.subcategories.map((s) => window.PHOTOCZARO_SUBCATEGORY_LABELS[s] || s);
 
   root.innerHTML = `
     <div class="breadcrumbs"><a href="/">Home</a><span>/</span><a href="models">All Models</a><span>/</span><span>${model.name}</span></div>
+    ${model.sample ? `<div class="profile-sample-notice"><strong>Sample profile.</strong> Shown for demonstration only. Not a real person and not available for booking.</div>` : ""}
     <section class="profile-hero" style="margin-top:24px;">
       <div class="profile-media" style="--card-a:${model.swatch[0]};--card-b:${model.swatch[1]}">
         <span class="initials">${initials}</span>
@@ -180,7 +194,7 @@
       <p class="form-note" style="margin-top:16px;">Placeholder digitals shown. Real portfolio images are added per model before launch.</p>
     </section>
 
-    <section class="section related-models reveal in" style="border-top:1px solid rgba(255,255,255,0.08);">
+    <section class="section related-models reveal in" id="related-section" style="border-top:1px solid rgba(255,255,255,0.08);">
       <div class="section-head"><span class="eyebrow">Related</span><h2 style="font-size:1.8rem;">Similar Models</h2></div>
       <div class="model-grid" id="related-grid"></div>
     </section>
@@ -189,10 +203,13 @@
   const related = (window.PHOTOCZARO_MODELS || [])
     .filter((m) => m.slug !== model.slug && m.categories.some((c) => model.categories.includes(c)))
     .slice(0, 4);
+  if (related.length === 0) {
+    document.getElementById("related-section").style.display = "none";
+  }
   document.getElementById("related-grid").innerHTML = related.map((m) => `
-    <a href="model?slug=${m.slug}" class="model-card">
+    <a href="/models/${m.slug}" class="model-card">
       <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
-        <span class="initials">${m.name.split(" ").map((p) => p[0]).join("")}</span>
+        <span class="initials">${m.name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase()}</span>
       </div>
       <div class="model-card-info">
         <h3>${m.name}</h3>

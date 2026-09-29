@@ -2,13 +2,20 @@ https://:project.pages.dev/*
   X-Robots-Tag: noindex
 
 # Baseline security headers for every response.
+# CSP connect-src/script-src/img-src allowances below were tuned against
+# actual report-only console violations on the live site: GA4's real
+# collection endpoints (analytics.google.com, stats.g.doubleclick.net)
+# beyond the two originally assumed, Cloudflare's own auto-injected
+# beacon script, and Google's ads-audience remarketing pixel, which
+# hits a per-visitor-region google.<tld> domain (seen as google.ae)
+# that can't be enumerated - hence img-src allows https: generally.
 /*
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self' https://wa.me
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self' https://wa.me
 
 # Static portrait/magazine/project photography is not filename-versioned,
 # so a moderate (not "immutable") browser cache bounds staleness risk if a

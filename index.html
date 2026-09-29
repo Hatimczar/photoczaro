@@ -175,7 +175,7 @@
           "telephone": "+971508065253",
           "email": "info@photoczaro.com",
           "url": "https://wa.me/971508065253",
-          "availableLanguage": ["English", "Russian", "French", "Spanish", "Czech"],
+          "availableLanguage": "English",
           "areaServed": "AE"
         }
       ],
@@ -1987,7 +1987,8 @@
         tells a story - timeless, cinematic, deeply personal.
       </p>
       <p class="about-bio">
-        Published across international titles including <strong>Marika Magazine</strong>,
+        Published across international titles including <strong>UNTAMED</strong>,
+        <strong>Marika Magazine</strong>,
         <strong>Malvie</strong>, <strong>Ellas</strong>, <strong>GMARO</strong>,
         <strong>Beautica</strong>, <strong>Charisma</strong>, and <strong>Quadro Magazine</strong> -
         Photoczaro brings a distinct visual identity to every collaboration.
@@ -2398,6 +2399,7 @@ const portraits = [
 ];
 
 const magazines = [
+  { name: 'Untamed', pub: 'UNTAMED Magazine', src: "images/untamed-olga/untamed-olga-cover.webp" },
   { name: 'Ammar-Batul - Artells', pub: 'Artells Magazine', src: "images/Magazines__Ammar-Batul Artells Magazine__620-41 -kopia.webp" },
   { name: 'Artego Magazine', pub: 'Artego', src: 'images/Magazines__Artego - Darya__13.webp' },
   { name: 'Artells Magazine', pub: 'Artells', src: 'images/Magazines__Artells - Elizabeth__3464-14 copy.webp' },
@@ -2815,6 +2817,15 @@ setTimeout(buildPortraits, 0);
 
 // Magazine gallery images
 const magGalleries = {};
+  magGalleries['Untamed'] = [
+    "images/untamed-olga/untamed-olga-cover.webp",
+    "images/untamed-olga/untamed-olga-contents.webp",
+    "images/untamed-olga/untamed-olga-spread1.webp",
+    "images/untamed-olga/untamed-olga-spread2.webp",
+    "images/untamed-olga/untamed-olga-spread3.webp",
+    "images/untamed-olga/untamed-olga-spread4.webp",
+    "images/untamed-olga/untamed-olga-spread5.webp",
+  ];
   magGalleries['Ammar-Batul - Artells'] = [
     "images/Magazines__Ammar-Batul Artells Magazine__620-1 -kopia.webp",
     "images/Magazines__Ammar-Batul Artells Magazine__620-2 -kopia.webp",

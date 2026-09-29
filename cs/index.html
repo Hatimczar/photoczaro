@@ -1753,7 +1753,7 @@
         <strong>Photoczaro</strong> je dubajský fotograf výtvarného umění a portrétu specializující se na high-end editorially, módní fotografii a magazínovou fotografii. S ostrým okem pro světlo, emoci a kompozici každý snímek vypráví příběh: nadčasový, filmový, hluboce osobní.
       </p>
       <p class="about-bio">
-        Publikováno v mezinárodních titulech včetně <strong>Marika Magazine</strong>, <strong>Malvie</strong>, <strong>Ellas</strong>, <strong>GMARO</strong>, <strong>Beautica</strong>, <strong>Charisma</strong> a <strong>Quadro Magazine</strong>: Photoczaro přináší do každé spolupráce výraznou vizuální identitu.
+        Publikováno v mezinárodních titulech včetně <strong>UNTAMED</strong>, <strong>Marika Magazine</strong>, <strong>Malvie</strong>, <strong>Ellas</strong>, <strong>GMARO</strong>, <strong>Beautica</strong>, <strong>Charisma</strong> a <strong>Quadro Magazine</strong>: Photoczaro přináší do každé spolupráce výraznou vizuální identitu.
       </p>
       <p class="about-bio">
         Mnoho modelek vyfocených zde si aktivně buduje portfolio pro dubajské agentury - podívejte se na průvodce <a href="/cs/blog/best-modeling-agencies-dubai" style="color:var(--gold);">nejlepšími modelingovými agenturami v Dubaji</a>, abyste zjistili, co každá z nich skutečně hledá.
@@ -2121,6 +2121,7 @@ const portraits = [
 ];
 
 const magazines = [
+  { name: 'Untamed', pub: 'UNTAMED Magazine', src: "/images/untamed-olga/untamed-olga-cover.webp" },
   { name: 'Ammar-Batul - Artells', pub: 'Artells Magazine', src: "/images/Magazines__Ammar-Batul Artells Magazine__620-41 -kopia.webp" },
   { name: 'Artego Magazine', pub: 'Artego', src: '/images/Magazines__Artego - Darya__13.webp' },
   { name: 'Artells Magazine', pub: 'Artells', src: '/images/Magazines__Artells - Elizabeth__3464-14 copy.webp' },
@@ -2504,6 +2505,15 @@ setTimeout(buildPortraits, 0);
 
 // Magazine gallery images
 const magGalleries = {};
+  magGalleries['Untamed'] = [
+    "/images/untamed-olga/untamed-olga-cover.webp",
+    "/images/untamed-olga/untamed-olga-contents.webp",
+    "/images/untamed-olga/untamed-olga-spread1.webp",
+    "/images/untamed-olga/untamed-olga-spread2.webp",
+    "/images/untamed-olga/untamed-olga-spread3.webp",
+    "/images/untamed-olga/untamed-olga-spread4.webp",
+    "/images/untamed-olga/untamed-olga-spread5.webp",
+  ];
   magGalleries['Ammar-Batul - Artells'] = [
     "/images/Magazines__Ammar-Batul Artells Magazine__620-1 -kopia.webp",
     "/images/Magazines__Ammar-Batul Artells Magazine__620-2 -kopia.webp",

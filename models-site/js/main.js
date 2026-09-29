@@ -29,7 +29,7 @@
   function navigateTo(url) {
     if (prefersReducedMotion || !pageTransition) { window.location.href = url; return; }
     pageTransition.classList.add('slide-in');
-    setTimeout(() => { window.location.href = url; }, 200);
+    setTimeout(() => { window.location.href = url; }, 150);
   }
   document.querySelectorAll('a[href]').forEach((a) => {
     const href = a.getAttribute('href');
@@ -44,7 +44,7 @@
     if (!pageTransition) return;
     pageTransition.classList.remove('slide-in');
     requestAnimationFrame(() => requestAnimationFrame(() => pageTransition.classList.add('slide-out')));
-    setTimeout(() => pageTransition.classList.remove('slide-out'), 700);
+    setTimeout(() => pageTransition.classList.remove('slide-out'), 450);
   });
 
   /* Nav scroll state + scroll progress */

@@ -19,17 +19,19 @@
  * same open items).
  */
 export async function onRequestPost({ request, env }) {
+  const isNativeSubmit = request.headers.get("x-requested-with") !== "fetch";
+
   let form;
   try {
     form = await request.formData();
   } catch {
-    return json({ error: "Invalid request." }, 400);
+    return respondError(isNativeSubmit, "Invalid request.", 400);
   }
 
   const email = (form.get("email") || "").toString().trim().toLowerCase();
   const professionalName = (form.get("professionalName") || "").toString().trim();
   if (!professionalName || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return json({ error: "Missing or invalid required fields." }, 400);
+    return respondError(isNativeSubmit, "Missing or invalid required fields.", 400);
   }
 
   const MAX_BYTES = 8 * 1024 * 1024;
@@ -39,7 +41,7 @@ export async function onRequestPost({ request, env }) {
     const file = form.get(field);
     if (file && typeof file === "object" && "size" in file) {
       if (file.size > MAX_BYTES) {
-        return json({ error: `${field} exceeds the 8MB limit.` }, 400);
+        return respondError(isNativeSubmit, `${field} exceeds the 8MB limit.`, 400);
       }
       files[field] = { name: file.name, type: file.type, size: file.size, stored: false };
     }
@@ -74,7 +76,21 @@ export async function onRequestPost({ request, env }) {
     console.log("roster application (no KV bound):", record);
   }
 
+  if (isNativeSubmit) {
+    return htmlResponse(
+      "Application received",
+      "Thank you. Your application has been received. We review applications on a rolling basis and will contact you only through verified Photoczaro channels.",
+      "apply"
+    );
+  }
   return json({ ok: true });
+}
+
+function respondError(isNativeSubmit, message, status) {
+  if (isNativeSubmit) {
+    return htmlResponse("Something went wrong", message, "apply", status);
+  }
+  return json({ error: message }, status);
 }
 
 function json(data, status = 200) {
@@ -82,4 +98,14 @@ function json(data, status = 200) {
     status,
     headers: { "Content-Type": "application/json" },
   });
+}
+
+function htmlResponse(title, message, backPath, status = 200) {
+  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow"><title>${title} | Photoczaro Models</title>
+<style>body{background:#0a0a0a;color:#f5f0eb;font-family:sans-serif;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;}
+p{max-width:480px;color:#8a8680;margin:16px 0 28px;}a{color:#0a0a0a;background:#c9a96e;padding:12px 24px;border-radius:999px;text-decoration:none;}</style>
+</head><body><h1>${title}</h1><p>${message}</p><a href="/${backPath}">Back</a></body></html>`;
+  return new Response(html, { status, headers: { "Content-Type": "text/html; charset=UTF-8" } });
 }

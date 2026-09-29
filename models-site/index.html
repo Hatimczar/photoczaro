@@ -14,41 +14,58 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-<nav id="models-nav">
-  <a href="/" class="nav-brand"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></a>
+<div class="scroll-progress" id="scroll-progress"></div>
+<div class="page-transition" id="page-transition"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div class="page-loader" id="page-loader">
+  <div class="loader-logo">Photoczaro</div>
+  <div class="loader-bar"></div>
+</div>
+<nav id="site-nav">
+  <a href="/" class="nav-logo">Photoczaro <span class="nav-logo-sub">Models</span></a>
   <ul class="nav-links" id="nav-links">
-    <li><a href="models" aria-current="page">All Models</a></li>
+    <li><a href="models">All Models</a></li>
     <li><a href="models?category=women">Women</a></li>
     <li><a href="models?category=men">Men</a></li>
     <li><a href="models?newFace=1">New Faces</a></li>
     <li><a href="about">About</a></li>
   </ul>
-  <div class="nav-actions">
+  <div class="nav-actions" style="display:flex;align-items:center;gap:14px;">
     <button class="nav-shortlist-btn" data-open-shortlist>Shortlist <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
-    <a href="book-talent" class="btn btn-primary" style="padding:10px 20px;font-size:0.75rem;">Book Talent</a>
+    <a href="book-talent" class="cta-btn cta-btn-primary" style="padding:9px 20px;">Book Talent</a>
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
-<div id="mobile-menu">
-  <a href="models">All Models</a>
-  <a href="models?category=women">Women</a>
-  <a href="models?category=men">Men</a>
-  <a href="apply">Apply to the Roster</a>
-  <a href="about">About</a>
-  <a href="book-talent">Book Talent</a>
-  <a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+
+<div class="mobile-menu-overlay" id="mobile-menu">
+  <ul class="mobile-menu-nav" id="mobile-menu-nav">
+    <li><a href="models"><span class="menu-link-text">All Models</span></a></li>
+    <li><a href="models?category=women"><span class="menu-link-text">Women</span></a></li>
+    <li><a href="models?category=men"><span class="menu-link-text">Men</span></a></li>
+    <li><a href="models?newFace=1"><span class="menu-link-text">New Faces</span></a></li>
+    <li><a href="apply"><span class="menu-link-text">Apply</span></a></li>
+    <li><a href="about"><span class="menu-link-text">About</span></a></li>
+    <li><a href="contact"><span class="menu-link-text">Contact</span></a></li>
+    <li><a href="https://photoczaro.com"><span class="menu-link-text">Photography ↗</span></a></li>
+    <li class="mobile-menu-cta-item"><a href="book-talent" class="mobile-menu-cta"><span class="menu-link-text">Book Talent</span></a></li>
+  </ul>
+  <div class="mobile-menu-footer">
+    <span class="mobile-menu-brand">Photoczaro Models</span>
+  </div>
 </div>
+
 <div id="shortlist-overlay"></div>
 <aside id="shortlist-drawer" aria-label="Booking shortlist">
-  <div class="drawer-head"><h3 style="font-size:1.1rem;">Shortlist</h3><button class="drawer-close" id="drawer-close" aria-label="Close shortlist">✕</button></div>
+  <div class="drawer-head"><h3>Shortlist</h3><button class="drawer-close" id="drawer-close" aria-label="Close shortlist">✕</button></div>
   <div class="drawer-items" id="drawer-items"></div>
   <div class="drawer-foot">
-    <a href="book-talent" id="drawer-book-btn" class="btn btn-primary">Submit Booking Enquiry</a>
-    <button class="btn" id="drawer-clear">Clear shortlist</button>
+    <a href="book-talent" id="drawer-book-btn" class="cta-btn cta-btn-primary">Submit Booking Enquiry</a>
+    <button class="cta-btn" id="drawer-clear">Clear shortlist</button>
   </div>
 </aside>
 
@@ -58,69 +75,71 @@
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
     </div>
     <div class="hero-content">
-      <span class="eyebrow">Curated Booking Roster — UAE</span>
-      <h1>Talent, <em>booked</em> with clarity.</h1>
-      <p class="hero-lede">A curated, non-exclusive roster of UAE-based models for editorial, fashion, beauty and commercial productions. Photoczaro coordinates availability, negotiates usage and handles the booking end to end.</p>
-      <div class="hero-actions">
-        <a href="models" class="btn btn-primary">View Models</a>
-        <a href="book-talent" class="btn">Book Talent</a>
+      <span class="hero-eyebrow">Curated Booking Roster — UAE</span>
+      <h1 class="hero-title"><span class="hero-word"><span>Talent,</span></span> <span class="hero-word"><span><em>booked</em></span></span> <span class="hero-word"><span>with clarity.</span></span></h1>
+      <p class="hero-tagline">A curated, non-exclusive roster of UAE-based models for editorial, fashion, beauty and commercial productions. Photoczaro coordinates availability, negotiates usage and handles the booking end to end.</p>
+      <div class="hero-ctas">
+        <a href="models" class="cta-btn cta-btn-primary">View Models</a>
+        <a href="book-talent" class="cta-btn">Book Talent</a>
       </div>
     </div>
   </section>
 
   <section class="section reveal">
-    <div class="section-head">
-      <span class="eyebrow">Selected From The Roster</span>
-      <h2>A short introduction to the talent.</h2>
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">Selected From <em>The Roster</em></h2>
+      <div class="section-line"></div>
     </div>
     <div class="model-grid" id="home-model-grid"></div>
-    <div style="margin-top:32px;"><a href="models" class="btn">View Full Roster</a></div>
+    <div style="margin-top:32px;"><a href="models" class="cta-btn">View Full Roster</a></div>
   </section>
 
-  <section class="section reveal" style="border-top:1px solid var(--grey-line);">
-    <div class="section-head">
-      <span class="eyebrow">How Booking Works</span>
-      <h2>Three steps from shortlist to set.</h2>
+  <section class="section reveal" style="border-top:0.5px solid rgba(255,255,255,0.08);">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">How <em>Booking</em> Works</h2>
+      <div class="section-line"></div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;">
       <div>
         <span class="eyebrow">01</span>
-        <h3 style="font-size:1.3rem;margin-bottom:10px;">Shortlist &amp; enquire</h3>
+        <h3 style="font-size:1.3rem;margin-bottom:10px;font-style:italic;">Shortlist &amp; enquire</h3>
         <p style="color:var(--grey);">Browse the roster, add models to a shortlist, and submit one enquiry with your project details.</p>
       </div>
       <div>
         <span class="eyebrow">02</span>
-        <h3 style="font-size:1.3rem;margin-bottom:10px;">Availability &amp; quotation</h3>
+        <h3 style="font-size:1.3rem;margin-bottom:10px;font-style:italic;">Availability &amp; quotation</h3>
         <p style="color:var(--grey);">Photoczaro checks availability, negotiates the fee and usage rights, and returns a quotation.</p>
       </div>
       <div>
         <span class="eyebrow">03</span>
-        <h3 style="font-size:1.3rem;margin-bottom:10px;">Booking &amp; delivery</h3>
+        <h3 style="font-size:1.3rem;margin-bottom:10px;font-style:italic;">Booking &amp; delivery</h3>
         <p style="color:var(--grey);">Photoczaro administers the booking agreement, invoices the production, and pays the model.</p>
       </div>
     </div>
   </section>
 
-  <section class="section reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;border-top:1px solid var(--grey-line);align-items:center;">
+  <section class="section reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;border-top:0.5px solid rgba(255,255,255,0.08);align-items:center;">
     <div>
       <span class="eyebrow">For Clients</span>
-      <h2 style="font-size:2rem;margin-bottom:16px;">Booking a shoot?</h2>
+      <h2 style="font-size:2rem;margin-bottom:16px;font-style:italic;">Booking a shoot?</h2>
       <p style="color:var(--grey);margin-bottom:24px;">Tell us the production, the usage and the dates — we'll confirm availability and a quotation within 24 hours.</p>
-      <a href="book-talent" class="btn btn-primary">Book Talent</a>
+      <a href="book-talent" class="cta-btn cta-btn-primary">Book Talent</a>
     </div>
     <div>
       <span class="eyebrow">For Models</span>
-      <h2 style="font-size:2rem;margin-bottom:16px;">UAE-based and 18+?</h2>
+      <h2 style="font-size:2rem;margin-bottom:16px;font-style:italic;">UAE-based and 18+?</h2>
       <p style="color:var(--grey);margin-bottom:24px;">Apply to the Photoczaro roster. Representation is non-exclusive and there is no application fee.</p>
-      <a href="apply" class="btn">Apply to the Roster</a>
+      <a href="apply" class="cta-btn">Apply to the Roster</a>
     </div>
   </section>
 </main>
 
-<footer id="models-footer">
+<footer id="site-footer">
   <div class="footer-grid">
     <div class="footer-col">
-      <div class="nav-brand" style="margin-bottom:14px;"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></div>
+      <div class="footer-logo">Photoczaro Models</div>
       <p>A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.</p>
     </div>
     <div class="footer-col"><h4>Roster</h4>
@@ -147,9 +166,10 @@
   </div>
 </footer>
 
-<script src="js/data.js"></script>
-<script src="js/shortlist.js"></script>
-<script src="js/main.js"></script>
+<script src="js/data.js?v=1"></script>
+<script src="js/shortlist.js?v=1"></script>
+<script src="js/main.js?v=2"></script>
+<script src="js/magnetic-cta.js?v=1"></script>
 <script>
   (function () {
     const grid = document.getElementById("home-model-grid");
@@ -160,6 +180,7 @@
           <span class="initials">${m.name.split(" ").map((p) => p[0]).join("")}</span>
           ${m.newFace ? '<span class="model-card-badge">New Face</span>' : ""}
           <button class="model-card-shortlist" data-shortlist-toggle="${m.slug}" aria-pressed="false" aria-label="Add to shortlist" onclick="event.preventDefault();window.PhotoczaroShortlist.toggle('${m.slug}')">♡</button>
+          <div class="model-card-overlay"><span class="model-card-name">${m.name}</span></div>
         </div>
         <div class="model-card-info">
           <h3>${m.name}</h3>

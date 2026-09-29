@@ -10,12 +10,20 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-<nav id="models-nav">
-  <a href="/" class="nav-brand"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></a>
+<div class="scroll-progress" id="scroll-progress"></div>
+<div class="page-transition" id="page-transition"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div class="page-loader" id="page-loader">
+  <div class="loader-logo">Photoczaro</div>
+  <div class="loader-bar"></div>
+</div>
+<nav id="site-nav">
+  <a href="/" class="nav-logo">Photoczaro <span class="nav-logo-sub">Models</span></a>
   <ul class="nav-links" id="nav-links">
     <li><a href="models">All Models</a></li>
     <li><a href="models?category=women">Women</a></li>
@@ -23,22 +31,38 @@
     <li><a href="models?newFace=1">New Faces</a></li>
     <li><a href="about">About</a></li>
   </ul>
-  <div class="nav-actions">
+  <div class="nav-actions" style="display:flex;align-items:center;gap:14px;">
     <button class="nav-shortlist-btn" data-open-shortlist>Shortlist <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
-    <a href="book-talent" class="btn btn-primary" style="padding:10px 20px;font-size:0.75rem;">Book Talent</a>
+    <a href="book-talent" class="cta-btn cta-btn-primary" style="padding:9px 20px;">Book Talent</a>
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
-<div id="mobile-menu">
-  <a href="models">All Models</a><a href="models?category=women">Women</a><a href="models?category=men">Men</a>
-  <a href="apply">Apply to the Roster</a><a href="about">About</a><a href="book-talent">Book Talent</a>
-  <a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+
+<div class="mobile-menu-overlay" id="mobile-menu">
+  <ul class="mobile-menu-nav" id="mobile-menu-nav">
+    <li><a href="models"><span class="menu-link-text">All Models</span></a></li>
+    <li><a href="models?category=women"><span class="menu-link-text">Women</span></a></li>
+    <li><a href="models?category=men"><span class="menu-link-text">Men</span></a></li>
+    <li><a href="models?newFace=1"><span class="menu-link-text">New Faces</span></a></li>
+    <li><a href="apply"><span class="menu-link-text">Apply</span></a></li>
+    <li><a href="about"><span class="menu-link-text">About</span></a></li>
+    <li><a href="contact"><span class="menu-link-text">Contact</span></a></li>
+    <li><a href="https://photoczaro.com"><span class="menu-link-text">Photography ↗</span></a></li>
+    <li class="mobile-menu-cta-item"><a href="book-talent" class="mobile-menu-cta"><span class="menu-link-text">Book Talent</span></a></li>
+  </ul>
+  <div class="mobile-menu-footer">
+    <span class="mobile-menu-brand">Photoczaro Models</span>
+  </div>
 </div>
+
 <div id="shortlist-overlay"></div>
 <aside id="shortlist-drawer" aria-label="Booking shortlist">
-  <div class="drawer-head"><h3 style="font-size:1.1rem;">Shortlist</h3><button class="drawer-close" id="drawer-close" aria-label="Close shortlist">✕</button></div>
+  <div class="drawer-head"><h3>Shortlist</h3><button class="drawer-close" id="drawer-close" aria-label="Close shortlist">✕</button></div>
   <div class="drawer-items" id="drawer-items"></div>
-  <div class="drawer-foot"><a href="book-talent" id="drawer-book-btn" class="btn btn-primary">Submit Booking Enquiry</a><button class="btn" id="drawer-clear">Clear shortlist</button></div>
+  <div class="drawer-foot">
+    <a href="book-talent" id="drawer-book-btn" class="cta-btn cta-btn-primary">Submit Booking Enquiry</a>
+    <button class="cta-btn" id="drawer-clear">Clear shortlist</button>
+  </div>
 </aside>
 
 <main id="main">
@@ -55,23 +79,44 @@
     <p class="dev-note" style="margin-top:32px;">Development note: this email address is a placeholder pending the client's confirmation of a monitored inbox for the roster.</p>
 
     <div style="margin-top:20px;display:flex;gap:16px;flex-wrap:wrap;">
-      <a href="book-talent" class="btn btn-primary">Book Talent</a>
-      <a href="apply" class="btn">Apply to the Roster</a>
+      <a href="book-talent" class="cta-btn cta-btn-primary">Book Talent</a>
+      <a href="apply" class="cta-btn">Apply to the Roster</a>
     </div>
   </div>
 </main>
 
-<footer id="models-footer">
+<footer id="site-footer">
   <div class="footer-grid">
-    <div class="footer-col"><div class="nav-brand" style="margin-bottom:14px;"><span>PHOTOCZARO</span><span class="divider">/</span><small>MODELS</small></div><p>A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.</p></div>
-    <div class="footer-col"><h4>Roster</h4><a href="models">All Models</a><a href="models?category=women">Women</a><a href="models?category=men">Men</a><a href="models?newFace=1">New Faces</a></div>
-    <div class="footer-col"><h4>Work With Us</h4><a href="book-talent">Book Talent</a><a href="apply">Apply to the Roster</a><a href="about">About</a><a href="contact">Contact</a></div>
-    <div class="footer-col"><h4>Legal</h4><a href="booking-terms">Booking Terms</a><a href="privacy-policy">Privacy Policy</a><a href="https://photoczaro.com">Photoczaro Photography ↗</a></div>
+    <div class="footer-col">
+      <div class="footer-logo">Photoczaro Models</div>
+      <p>A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.</p>
+    </div>
+    <div class="footer-col"><h4>Roster</h4>
+      <a href="models">All Models</a>
+      <a href="models?category=women">Women</a>
+      <a href="models?category=men">Men</a>
+      <a href="models?newFace=1">New Faces</a>
+    </div>
+    <div class="footer-col"><h4>Work With Us</h4>
+      <a href="book-talent">Book Talent</a>
+      <a href="apply">Apply to the Roster</a>
+      <a href="about">About</a>
+      <a href="contact">Contact</a>
+    </div>
+    <div class="footer-col"><h4>Legal</h4>
+      <a href="booking-terms">Booking Terms</a>
+      <a href="privacy-policy">Privacy Policy</a>
+      <a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+    </div>
   </div>
-  <div class="footer-bottom"><span>© <span data-year></span> Photoczaro Models. UAE booking representation.</span><span>Part of the Photoczaro family — <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span></div>
+  <div class="footer-bottom">
+    <span>© <span data-year></span> Photoczaro Models. UAE booking representation.</span>
+    <span>Part of the Photoczaro family — <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
+  </div>
 </footer>
-<script src="js/data.js"></script>
-<script src="js/shortlist.js"></script>
-<script src="js/main.js"></script>
+<script src="js/data.js?v=1"></script>
+<script src="js/shortlist.js?v=1"></script>
+<script src="js/main.js?v=2"></script>
+<script src="js/magnetic-cta.js?v=1"></script>
 </body>
 </html>

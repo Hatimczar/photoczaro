@@ -78,6 +78,7 @@
           <span class="initials">${initialsOf(m.name)}</span>
           ${m.newFace ? '<span class="model-card-badge">New Face</span>' : ""}
           <button class="model-card-shortlist" data-shortlist-toggle="${m.slug}" aria-pressed="false" aria-label="Add to shortlist" onclick="event.preventDefault();window.PhotoczaroShortlist.toggle('${m.slug}')">♡</button>
+          <div class="model-card-overlay"><span class="model-card-name">${m.name}</span></div>
         </div>
         <div class="model-card-info">
           <h3>${m.name}</h3>

@@ -116,7 +116,6 @@
       <h2 class="section-title" data-i18n-html="home.section1Title">Selected From <em>The Roster</em></h2>
       <div class="section-line"></div>
     </div>
-    <div class="roster-sample-notice"><strong data-i18n="home.sampleNoticeStrong">Roster onboarding in progress.</strong> <span data-i18n="home.sampleNoticeBody">The profiles shown are sample data for demonstration only, not real people available for booking.</span></div>
     <div class="model-grid" id="home-model-grid"></div>
     <div style="margin-top:32px;"><a href="models" class="cta-btn" data-i18n="home.viewFullRoster">View Full Roster</a></div>
   </section>
@@ -210,9 +209,9 @@
 <script>
   window.PhotoczaroModelsReady.then(function () {
     const grid = document.getElementById("home-model-grid");
-    const featured = (window.PHOTOCZARO_MODELS || []).filter((m) => m.featured).sort((a, b) => a.displayOrder - b.displayOrder).slice(0, 4);
+    const topModels = (window.PHOTOCZARO_MODELS || []).sort((a, b) => a.displayOrder - b.displayOrder).slice(0, 12);
     const i18n = window.PhotoczaroI18n;
-    grid.innerHTML = featured.map((m) => `
+    grid.innerHTML = topModels.map((m) => `
       <a href="${i18n.path("/models/" + m.slug)}" class="model-card">
         <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
           ${window.PhotoczaroCardMedia(m)}

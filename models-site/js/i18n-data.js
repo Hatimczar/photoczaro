@@ -228,6 +228,7 @@ en: {
   "apply.submit": "Submit Application",
   "apply.thankYou": "Thank you. Your application has been received. We review applications on a rolling basis and will contact you only through verified Photoczaro channels.",
   "apply.sendError": "Something went wrong sending this application. Please try again.",
+  "apply.thankYouPartial": "Thank you. Your application has been received, but one or more photos could not be used (unsupported format or file size) and were not attached. We'll follow up by email if we need you to resend them.",
 },
 fr: {
   "a11y.home": "Accueil",
@@ -446,6 +447,7 @@ fr: {
   "apply.submit": "Envoyer la candidature",
   "apply.thankYou": "Merci. Votre candidature a été reçue. Nous examinons les candidatures en continu et ne vous contacterons que par des canaux Photoczaro vérifiés.",
   "apply.sendError": "Une erreur s'est produite lors de l'envoi de cette candidature. Veuillez réessayer.",
+  "apply.thankYouPartial": "Merci. Votre candidature a été reçue, mais une ou plusieurs photos n'ont pas pu être utilisées (format non pris en charge ou taille du fichier) et n'ont pas été jointes. Nous vous contacterons par e-mail si nous avons besoin que vous les renvoyiez.",
 },
 ru: {
   "a11y.home": "Главная",
@@ -664,6 +666,7 @@ ru: {
   "apply.submit": "Отправить заявку",
   "apply.thankYou": "Спасибо. Ваша заявка получена. Мы рассматриваем заявки на постоянной основе и свяжемся с вами только через проверенные каналы Photoczaro.",
   "apply.sendError": "Произошла ошибка при отправке заявки. Попробуйте ещё раз.",
+  "apply.thankYouPartial": "Спасибо. Ваша заявка получена, но одно или несколько фото не удалось использовать (неподдерживаемый формат или размер файла), и они не были прикреплены. Мы свяжемся с вами по электронной почте, если потребуется отправить их повторно.",
 },
 es: {
   "a11y.home": "Inicio",
@@ -882,6 +885,7 @@ es: {
   "apply.submit": "Enviar solicitud",
   "apply.thankYou": "Gracias. Tu solicitud ha sido recibida. Revisamos las solicitudes de forma continua y te contactaremos solo a través de canales verificados de Photoczaro.",
   "apply.sendError": "Algo salió mal al enviar esta solicitud. Inténtalo de nuevo.",
+  "apply.thankYouPartial": "Gracias. Tu solicitud ha sido recibida, pero una o más fotos no se pudieron utilizar (formato no compatible o tamaño de archivo) y no se adjuntaron. Te contactaremos por correo electrónico si necesitamos que las reenvíes.",
 },
 cs: {
   "a11y.home": "Domů",
@@ -1100,6 +1104,7 @@ cs: {
   "apply.submit": "Odeslat přihlášku",
   "apply.thankYou": "Děkujeme. Vaše přihláška byla přijata. Přihlášky posuzujeme průběžně a ozveme se vám pouze prostřednictvím ověřených kanálů Photoczaro.",
   "apply.sendError": "Při odesílání přihlášky došlo k chybě. Zkuste to prosím znovu.",
+  "apply.thankYouPartial": "Děkujeme. Vaše přihláška byla přijata, ale jednu nebo více fotografií se nepodařilo použít (nepodporovaný formát nebo velikost souboru) a nebyly přiloženy. Pokud je budeme potřebovat znovu zaslat, ozveme se e-mailem.",
 },
 ar: {
   "a11y.home": "الرئيسية",
@@ -1318,5 +1323,6 @@ ar: {
   "apply.submit": "إرسال الطلب",
   "apply.thankYou": "شكرًا لك. تم استلام طلبك. نراجع الطلبات بشكل مستمر وسنتواصل معك فقط عبر قنوات Photoczaro الموثّقة.",
   "apply.sendError": "حدث خطأ أثناء إرسال هذا الطلب. يرجى المحاولة مرة أخرى.",
+  "apply.thankYouPartial": "شكرًا لك. تم استلام طلبك، ولكن تعذر استخدام صورة واحدة أو أكثر (تنسيق غير مدعوم أو حجم ملف كبير) ولم يتم إرفاقها. سنتواصل معك عبر البريد الإلكتروني إذا احتجنا إلى إعادة إرسالها.",
 },
 };

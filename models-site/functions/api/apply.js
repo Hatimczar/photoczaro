@@ -50,16 +50,28 @@ export async function onRequestPost({ request, env }) {
   }
 
   const applicationId = `${Date.now()}-${crypto.randomUUID()}`;
-  const EXT_FOR_TYPE = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "application/pdf": "pdf" };
+  const EXT_FOR_TYPE = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+    "image/heic": "heic",
+    "application/pdf": "pdf",
+  };
+  // A rejected photo (wrong format, too large, corrupt) must never cost us
+  // the applicant's contact details: skip that one file, note it as an
+  // error on the record, and keep going. Losing a lead over one bad file is
+  // worse than reviewing an application with a missing photo.
   const imageFields = ["headshot", "fullFront", "fullSide"];
   const files = {};
+  const fileErrors = {};
   for (const field of [...imageFields, "portfolioFile"]) {
     const file = form.get(field);
     if (!file || typeof file !== "object" || !("size" in file) || file.size === 0) continue;
 
     const validation = field === "portfolioFile" ? await validatePortfolioUpload(file) : await validateImageUpload(file);
     if (!validation.ok) {
-      return respondError(isNativeSubmit, `${field}: ${validation.error}`, 400);
+      fileErrors[field] = validation.error;
+      continue;
     }
 
     const ext = EXT_FOR_TYPE[validation.contentType] || "bin";
@@ -102,6 +114,7 @@ export async function onRequestPost({ request, env }) {
     privacyConsent: form.get("privacyConsent") === "on",
     termsConsent: form.get("termsConsent") === "on",
     files,
+    fileErrors,
     receivedAt: new Date().toISOString(),
     status: "pending_review",
   };
@@ -112,14 +125,14 @@ export async function onRequestPost({ request, env }) {
     console.log("roster application (no KV bound):", record);
   }
 
+  const hasFileErrors = Object.keys(fileErrors).length > 0;
   if (isNativeSubmit) {
-    return htmlResponse(
-      "Application received",
-      "Thank you. Your application has been received. We review applications on a rolling basis and will contact you only through verified Photoczaro channels.",
-      "apply"
-    );
+    const message = hasFileErrors
+      ? "Thank you. Your application has been received, but one or more photos could not be used (unsupported format or file size) and were not attached. We'll follow up by email if we need you to resend them."
+      : "Thank you. Your application has been received. We review applications on a rolling basis and will contact you only through verified Photoczaro channels.";
+    return htmlResponse("Application received", message, "apply");
   }
-  return json({ ok: true });
+  return json({ ok: true, fileErrors: hasFileErrors ? fileErrors : undefined });
 }
 
 function respondError(isNativeSubmit, message, status) {

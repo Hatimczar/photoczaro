@@ -306,8 +306,9 @@
       const fd = new FormData(form);
       const res = await fetch("/api/apply", { method: "POST", headers: { "X-Requested-With": "fetch" }, body: fd });
       if (!res.ok) throw new Error("request_failed");
+      const data = await res.json().catch(() => ({}));
       status.className = "form-status success";
-      status.textContent = i18n.t("apply.thankYou");
+      status.textContent = data.fileErrors ? i18n.t("apply.thankYouPartial") : i18n.t("apply.thankYou");
       form.reset();
     } catch {
       status.className = "form-status error";

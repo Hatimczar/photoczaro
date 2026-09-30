@@ -160,6 +160,21 @@ a:focus-visible {
 .admin-review-image { width: 150px; }
 .admin-review-image img { width: 150px; height: 190px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); }
 .admin-review-image-label { font-size: 11px; color: var(--grey); margin-top: 4px; }
+.admin-review-image-missing {
+  width: 150px;
+  height: 190px;
+  border-radius: 6px;
+  border: 1px dashed var(--border);
+  background: rgba(220, 90, 70, 0.08);
+  color: #b9503a;
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
 
 .admin-note { color: var(--grey); font-size: 12.5px; line-height: 1.6; }
 

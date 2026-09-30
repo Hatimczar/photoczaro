@@ -354,8 +354,21 @@
 
   function reviewImage(app, field, label) {
     const meta = app.files?.[field];
-    if (!meta?.key) return "";
-    const isImage = (meta.type || "").startsWith("image/");
+    const fileError = app.fileErrors?.[field];
+    if (!meta?.key) {
+      if (!fileError) return "";
+      // The file was rejected server-side (bad format/size) and never stored,
+      // so there's nothing to preview here - surface why instead of a blank slot,
+      // so a reviewer knows to follow up with the applicant rather than assuming
+      // she just skipped this photo.
+      return `<div class="admin-review-image">
+        <div class="admin-review-image-missing">Not usable: ${esc(fileError)}</div>
+        <div class="admin-review-image-label">${esc(label)}</div>
+      </div>`;
+    }
+    // Browser support for inline HEIC/HEIF rendering is inconsistent outside
+    // Safari, so link out to it instead of risking a broken <img>.
+    const isImage = (meta.type || "").startsWith("image/") && meta.type !== "image/heic";
     return `<div class="admin-review-image">
       ${isImage
         ? `<img src="/api/admin/media/${esc(meta.key)}" alt="">`

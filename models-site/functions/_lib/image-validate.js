@@ -23,6 +23,12 @@ const SIGNATURES = [
   { type: "image/webp", bytes: [0x52, 0x49, 0x46, 0x46], webp: true },
 ];
 
+// HEIC/HEIF: iPhone cameras save photos in this format by default, so a
+// model applying from her phone is the normal case, not the exception.
+// It's an ISOBMFF container (same family as MP4): bytes 4-7 are "ftyp",
+// followed by a 4-byte brand identifying the specific flavor.
+const HEIF_BRANDS = ["heic", "heix", "hevc", "hevx", "heim", "heis", "hevm", "hevs", "mif1", "msf1"];
+
 function matchSignature(bytes) {
   for (const sig of SIGNATURES) {
     if (sig.bytes.every((b, i) => bytes[i] === b)) {
@@ -32,6 +38,10 @@ function matchSignature(bytes) {
       }
       return sig.type;
     }
+  }
+  if (bytes.length >= 12 && String.fromCharCode(...bytes.slice(4, 8)) === "ftyp") {
+    const brand = String.fromCharCode(...bytes.slice(8, 12)).toLowerCase();
+    if (HEIF_BRANDS.includes(brand)) return "image/heic";
   }
   return null;
 }
@@ -89,7 +99,7 @@ export async function validateImageUpload(file) {
   const head = new Uint8Array(await file.slice(0, 32).arrayBuffer());
   const sniffedType = matchSignature(head);
   if (!sniffedType) {
-    return { ok: false, error: "Unsupported file. Only JPEG, PNG or WEBP images are accepted." };
+    return { ok: false, error: "Unsupported file. Only JPEG, PNG, WEBP or HEIC images are accepted." };
   }
 
   let dims = null;
@@ -122,7 +132,7 @@ export async function validatePortfolioUpload(file) {
 
   const sniffedType = matchSignature(head);
   if (!sniffedType) {
-    return { ok: false, error: "Unsupported file. Only JPEG, PNG, WEBP or PDF are accepted." };
+    return { ok: false, error: "Unsupported file. Only JPEG, PNG, WEBP, HEIC or PDF are accepted." };
   }
   return { ok: true, contentType: sniffedType };
 }

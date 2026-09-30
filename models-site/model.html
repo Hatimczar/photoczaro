@@ -253,6 +253,11 @@ window.PhotoczaroModelsReady.then(function () {
   `).join("");
 
   window.PhotoczaroShortlist.render();
+
+  /* main.js's IntersectionObserver only scans .reveal elements present at
+     page load, but this profile content is injected afterward, so it would
+     otherwise stay stuck at opacity:0 forever. */
+  root.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
 });
 </script>
 </body>

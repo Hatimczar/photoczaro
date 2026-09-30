@@ -364,6 +364,27 @@
     });
   }
 
+  function reviewGalleryImages(app) {
+    const gallery = Array.isArray(app.files?.gallery) ? app.files.gallery : [];
+    const errors = Array.isArray(app.fileErrors?.gallery) ? app.fileErrors.gallery : [];
+    const items = gallery
+      .filter((meta) => meta?.key)
+      .map((meta, i) => {
+        const isImage = (meta.type || "").startsWith("image/") && meta.type !== "image/heic";
+        return `<div class="admin-review-image">
+          ${isImage
+            ? `<img src="/api/admin/media/${esc(meta.key)}" alt="">`
+            : `<a class="admin-btn" href="/api/admin/media/${esc(meta.key)}" target="_blank" rel="noopener noreferrer">Open file</a>`}
+          <div class="admin-review-image-label">Gallery ${i + 1}</div>
+        </div>`;
+      })
+      .join("");
+    const errorNote = errors.length
+      ? `<div class="admin-review-image"><div class="admin-review-image-missing">${errors.length} gallery photo(s) not usable (bad format or size)</div></div>`
+      : "";
+    return items + errorNote;
+  }
+
   function reviewImage(app, field, label) {
     const meta = app.files?.[field];
     const fileError = app.fileErrors?.[field];
@@ -420,6 +441,7 @@
         ${reviewImage(app, "fullFront", "Full length, front")}
         ${reviewImage(app, "fullSide", "Full length, side")}
         ${reviewImage(app, "portfolioFile", "Portfolio")}
+        ${reviewGalleryImages(app)}
       </div>
 
       <div class="admin-section-title">Details</div>

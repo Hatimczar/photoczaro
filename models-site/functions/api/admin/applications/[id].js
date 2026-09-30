@@ -55,6 +55,24 @@ export async function onRequestPost({ request, env, params }) {
       }
     }
 
+    const galleryMeta = Array.isArray(record.files?.gallery) ? record.files.gallery : [];
+    const gallery = [];
+    for (let i = 0; i < galleryMeta.length; i++) {
+      const meta = galleryMeta[i];
+      if (meta?.key && env.MEDIA) {
+        const object = await env.MEDIA.get(meta.key);
+        if (object) {
+          const ext = meta.key.split(".").pop();
+          const destKey = `models/${slug}/gallery-${i}.${ext}`;
+          await env.MEDIA.put(destKey, object.body, {
+            httpMetadata: { contentType: object.httpMetadata?.contentType || meta.type },
+          });
+          gallery.push(destKey);
+        }
+      }
+    }
+    if (gallery.length) images.gallery = gallery;
+
     const measurementUnit = record.measurementUnit || "cm";
     const measurements =
       record.category === "men"

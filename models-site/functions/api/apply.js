@@ -84,6 +84,30 @@ export async function onRequestPost({ request, env }) {
     files[field] = { name: file.name, type: validation.contentType, size: file.size, key: env.MEDIA ? key : null };
   }
 
+  // Additional gallery photos, submitted as repeated "gallery" fields (up to
+  // MAX_GALLERY_PHOTOS). Same skip-and-note-the-error handling as the named
+  // slots above: one bad photo shouldn't sink the whole application.
+  const MAX_GALLERY_PHOTOS = 12;
+  const galleryUploads = form.getAll("gallery").filter((f) => f && typeof f === "object" && "size" in f && f.size > 0).slice(0, MAX_GALLERY_PHOTOS);
+  const gallery = [];
+  const galleryErrors = [];
+  for (let i = 0; i < galleryUploads.length; i++) {
+    const file = galleryUploads[i];
+    const validation = await validateImageUpload(file);
+    if (!validation.ok) {
+      galleryErrors.push(validation.error);
+      continue;
+    }
+    const ext = EXT_FOR_TYPE[validation.contentType] || "bin";
+    const key = `applications/${applicationId}/gallery-${i}.${ext}`;
+    if (env.MEDIA) {
+      await env.MEDIA.put(key, file.stream(), { httpMetadata: { contentType: validation.contentType } });
+    }
+    gallery.push({ name: file.name, type: validation.contentType, size: file.size, key: env.MEDIA ? key : null });
+  }
+  files.gallery = gallery;
+  if (galleryErrors.length) fileErrors.gallery = galleryErrors;
+
   const record = {
     id: applicationId,
     professionalName,

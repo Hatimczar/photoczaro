@@ -175,6 +175,18 @@
         <div class="form-field"><label for="file-side" data-i18n="apply.fullSide">Full-length side digital *</label><input type="file" id="file-side" name="fullSide" accept="image/*" required><span class="form-error" data-error-for="file-side"></span></div>
         <div class="form-field"><label for="file-extra" data-i18n="apply.existingPortfolio">Existing portfolio (optional)</label><input type="file" id="file-extra" name="portfolioFile" accept="image/*,application/pdf"></div>
 
+        <div class="form-field full">
+          <label data-i18n="apply.galleryPhotos">Additional photos (optional, up to 12)</label>
+          <div class="apply-gallery-grid" id="apply-gallery-grid">
+            <label class="apply-gallery-add" id="apply-gallery-add-tile">
+              <span aria-hidden="true">+</span>
+              <span class="apply-gallery-add-label" data-i18n="apply.addPhotos">Add photos</span>
+              <input type="file" id="file-gallery-input" accept="image/*" multiple>
+            </label>
+          </div>
+          <p class="form-note" id="apply-gallery-count">0 / 12 <span data-i18n="apply.photosAdded">photos added</span></p>
+        </div>
+
         <div class="form-field full"><label for="intro" data-i18n="apply.shortIntro">Short introduction</label><textarea id="intro" name="introduction" maxlength="600"></textarea></div>
 
         <div class="form-field full">
@@ -233,6 +245,110 @@
   const form = document.getElementById("apply-form");
   const status = document.getElementById("form-status");
   const MAX_BYTES = 8 * 1024 * 1024;
+  const MAX_GALLERY_PHOTOS = 12;
+  const WEBP_MAX_DIMENSION = 2400;
+  const WEBP_QUALITY = 0.82;
+
+  /* Re-encode every photo to WebP client-side before it ever reaches the
+     server: smaller uploads for applicants on mobile data, and the roster
+     never has to store or serve a mixed bag of JPEG/PNG/HEIC originals.
+     Falls back to the original file untouched if the browser can't decode
+     it (e.g. HEIC outside Safari) rather than blocking the submission. */
+  async function toWebp(file) {
+    if (!file || !(file.type || "").startsWith("image/") || file.type === "image/webp") return file;
+    try {
+      const bitmap = await createImageBitmap(file);
+      let { width, height } = bitmap;
+      if (width > WEBP_MAX_DIMENSION || height > WEBP_MAX_DIMENSION) {
+        const scale = WEBP_MAX_DIMENSION / Math.max(width, height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
+      bitmap.close?.();
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", WEBP_QUALITY));
+      if (!blob) return file;
+      const newName = file.name.replace(/\.[^.]+$/, "") + ".webp";
+      return new File([blob], newName, { type: "image/webp" });
+    } catch {
+      return file;
+    }
+  }
+
+  /* Tracks in-flight conversions so the submit handler can wait for them;
+     converting is async (canvas decode + encode) but file inputs resolve
+     their `change` event synchronously. */
+  let pendingConversions = 0;
+  async function convertFileInput(input) {
+    if (!input.files || !input.files[0]) return;
+    pendingConversions++;
+    try {
+      const converted = await toWebp(input.files[0]);
+      if (converted !== input.files[0]) {
+        const dt = new DataTransfer();
+        dt.items.add(converted);
+        input.files = dt.files;
+      }
+    } finally {
+      pendingConversions--;
+    }
+  }
+  ["file-headshot", "file-front", "file-side", "file-extra"].forEach((id) => {
+    const input = document.getElementById(id);
+    input.addEventListener("change", () => convertFileInput(input));
+  });
+
+  /* Additional gallery photos (up to 12): a custom add/remove grid rather
+     than a single native multiple-file input, since the native control has
+     no way to add more photos to an existing selection or drop just one. */
+  let galleryFiles = [];
+  const galleryGrid = document.getElementById("apply-gallery-grid");
+  const galleryAddTile = document.getElementById("apply-gallery-add-tile");
+  const galleryInput = document.getElementById("file-gallery-input");
+  const galleryCount = document.getElementById("apply-gallery-count");
+
+  function renderGallery() {
+    galleryGrid.querySelectorAll(".apply-gallery-item").forEach((el) => el.remove());
+    galleryFiles.forEach((file, index) => {
+      const item = document.createElement("div");
+      item.className = "apply-gallery-item";
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+      img.alt = "";
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "apply-gallery-remove";
+      remove.setAttribute("aria-label", "Remove this photo");
+      remove.textContent = "✕";
+      remove.addEventListener("click", () => {
+        galleryFiles.splice(index, 1);
+        renderGallery();
+      });
+      item.appendChild(img);
+      item.appendChild(remove);
+      galleryGrid.insertBefore(item, galleryAddTile);
+    });
+    const full = galleryFiles.length >= MAX_GALLERY_PHOTOS;
+    galleryAddTile.style.display = full ? "none" : "";
+    galleryCount.firstChild.textContent = `${galleryFiles.length} / ${MAX_GALLERY_PHOTOS} `;
+  }
+
+  galleryInput.addEventListener("change", async () => {
+    const picked = Array.from(galleryInput.files || []);
+    galleryInput.value = "";
+    const room = MAX_GALLERY_PHOTOS - galleryFiles.length;
+    pendingConversions++;
+    try {
+      const converted = await Promise.all(picked.slice(0, room).map((f) => toWebp(f)));
+      galleryFiles.push(...converted);
+      renderGallery();
+    } finally {
+      pendingConversions--;
+    }
+  });
 
   /* Measurements mean different fields per category (bust/waist/hips vs
      neck/chest/waist/sleeve/inseam); show the matching group and disable
@@ -269,6 +385,13 @@
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     document.querySelectorAll(".form-error").forEach((el) => (el.textContent = ""));
+
+    if (pendingConversions > 0) {
+      status.className = "form-status";
+      status.textContent = i18n.t("form.sending");
+      while (pendingConversions > 0) await new Promise((r) => setTimeout(r, 50));
+    }
+
     let valid = true;
 
     form.querySelectorAll("[required]").forEach((field) => {
@@ -304,12 +427,15 @@
     status.textContent = i18n.t("form.sending");
     try {
       const fd = new FormData(form);
+      galleryFiles.forEach((file) => fd.append("gallery", file, file.name));
       const res = await fetch("/api/apply", { method: "POST", headers: { "X-Requested-With": "fetch" }, body: fd });
       if (!res.ok) throw new Error("request_failed");
       const data = await res.json().catch(() => ({}));
       status.className = "form-status success";
       status.textContent = data.fileErrors ? i18n.t("apply.thankYouPartial") : i18n.t("apply.thankYou");
       form.reset();
+      galleryFiles = [];
+      renderGallery();
     } catch {
       status.className = "form-status error";
       status.textContent = i18n.t("apply.sendError");

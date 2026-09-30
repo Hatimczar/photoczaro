@@ -27,6 +27,15 @@
     return (s ?? "").toString().replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
 
+  /* Applications submitted after the experience <select> got stable value
+     attributes carry one of these slugs; older submissions may still carry
+     the raw (possibly translated) label text, so unknown values just pass
+     through as-is rather than showing blank. */
+  const EXPERIENCE_LABELS = { "new-face": "New face", "some-experience": "Some experience", experienced: "Experienced" };
+  function experienceLabel(value) {
+    return EXPERIENCE_LABELS[value] || value;
+  }
+
   /* ---------- Tabs ---------- */
   document.getElementById("admin-tabs").addEventListener("click", (e) => {
     const btn = e.target.closest(".admin-tab");
@@ -111,7 +120,7 @@
         <div class="admin-field"><label>Email</label><div>${esc(app.email)}</div></div>
         <div class="admin-field"><label>Telephone</label><div>${esc(app.telephone)}</div></div>
         <div class="admin-field"><label>UAE city</label><div>${esc(app.uaeCity)}</div></div>
-        <div class="admin-field"><label>Experience</label><div>${esc(app.experience) || "n/a"}</div></div>
+        <div class="admin-field"><label>Experience</label><div>${esc(experienceLabel(app.experience)) || "n/a"}</div></div>
         <div class="admin-field"><label>Height</label><div>${esc(app.height)} ${esc(app.measurementUnit)}</div></div>
         <div class="admin-field"><label>Hair / Eyes</label><div>${esc(app.hair)} / ${esc(app.eyes)}</div></div>
         <div class="admin-field"><label>Languages</label><div>${esc(app.languages) || "n/a"}</div></div>

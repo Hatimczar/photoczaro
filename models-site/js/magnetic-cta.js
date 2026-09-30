@@ -16,13 +16,15 @@
 
   btns.forEach(function (btn) {
     var raf = null;
+    var rect = null;
 
     btn.addEventListener('mouseenter', function () {
       btn.style.willChange = 'transform';
+      rect = btn.getBoundingClientRect();
     });
 
     btn.addEventListener('mousemove', function (e) {
-      var rect = btn.getBoundingClientRect();
+      if (!rect) rect = btn.getBoundingClientRect();
       var cx = rect.left + rect.width / 2;
       var cy = rect.top + rect.height / 2;
       var dx = e.clientX - cx;
@@ -39,6 +41,7 @@
 
     btn.addEventListener('mouseleave', function () {
       if (raf) cancelAnimationFrame(raf);
+      rect = null;
       btn.style.transition = SETTLE_TRANSITION;
       btn.style.transform = '';
       setTimeout(function () {

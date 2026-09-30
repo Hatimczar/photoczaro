@@ -7,7 +7,7 @@ const EXT_FOR_TYPE = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "w
 
 export async function onRequestPost({ request, env, params }) {
   if (!requireSameOrigin(request)) return json({ error: "Cross-origin request blocked." }, 403);
-  const actor = requireAccessIdentity(request);
+  const actor = await requireAccessIdentity(request);
   if (!actor) return json({ error: "Unauthorized" }, 401);
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });
   if (!model) return json({ error: "Not found" }, 404);
@@ -52,7 +52,7 @@ export async function onRequestPost({ request, env, params }) {
 
 export async function onRequestDelete({ request, env, params }) {
   if (!requireSameOrigin(request)) return json({ error: "Cross-origin request blocked." }, 403);
-  const actor = requireAccessIdentity(request);
+  const actor = await requireAccessIdentity(request);
   if (!actor) return json({ error: "Unauthorized" }, 401);
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });
   if (!model) return json({ error: "Not found" }, 404);

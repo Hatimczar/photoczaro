@@ -4,7 +4,7 @@ import { requireSameOrigin } from "../../../_lib/origin-check.js";
 import { slugify, uniqueSlug } from "../../../_lib/slug.js";
 
 export async function onRequestGet({ request, env }) {
-  if (!requireAccessIdentity(request)) return json({ error: "Unauthorized" }, 401);
+  if (!(await requireAccessIdentity(request))) return json({ error: "Unauthorized" }, 401);
   if (!env.ROSTER_KV) return json([]);
 
   const url = new URL(request.url);
@@ -21,7 +21,7 @@ export async function onRequestGet({ request, env }) {
 
 export async function onRequestPost({ request, env }) {
   if (!requireSameOrigin(request)) return json({ error: "Cross-origin request blocked." }, 403);
-  const actor = requireAccessIdentity(request);
+  const actor = await requireAccessIdentity(request);
   if (!actor) return json({ error: "Unauthorized" }, 401);
 
   let body = {};

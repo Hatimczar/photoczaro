@@ -7,7 +7,7 @@
 import { requireAccessIdentity } from "../../../_lib/admin-auth.js";
 
 export async function onRequestGet({ request, env, params }) {
-  if (!requireAccessIdentity(request)) return new Response("Unauthorized", { status: 401 });
+  if (!(await requireAccessIdentity(request))) return new Response("Unauthorized", { status: 401 });
 
   const path = Array.isArray(params.path) ? params.path.join("/") : params.path || "";
   if (!env.MEDIA || (!path.startsWith("applications/") && !path.startsWith("models/"))) {

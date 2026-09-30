@@ -9,7 +9,7 @@ import { publishReadiness } from "../../../../_lib/publish-check.js";
 // instead of one checkbox among many in a large form save.
 export async function onRequestPost({ request, env, params }) {
   if (!requireSameOrigin(request)) return json({ error: "Cross-origin request blocked." }, 403);
-  const actor = requireAccessIdentity(request);
+  const actor = await requireAccessIdentity(request);
   if (!actor) return json({ error: "Unauthorized" }, 401);
 
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });

@@ -4,7 +4,7 @@ import { requireSameOrigin } from "../../../_lib/origin-check.js";
 import { slugify, uniqueSlug } from "../../../_lib/slug.js";
 
 export async function onRequestGet({ request, env, params }) {
-  if (!requireAccessIdentity(request)) return json({ error: "Unauthorized" }, 401);
+  if (!(await requireAccessIdentity(request))) return json({ error: "Unauthorized" }, 401);
   const record = await getApplication(env, params.id);
   if (!record) return json({ error: "Not found" }, 404);
   return json(record);
@@ -12,7 +12,7 @@ export async function onRequestGet({ request, env, params }) {
 
 export async function onRequestPost({ request, env, params }) {
   if (!requireSameOrigin(request)) return json({ error: "Cross-origin request blocked." }, 403);
-  const actor = requireAccessIdentity(request);
+  const actor = await requireAccessIdentity(request);
   if (!actor) return json({ error: "Unauthorized" }, 401);
 
   const record = await getApplication(env, params.id);

@@ -13,7 +13,7 @@ const EDITABLE_FIELDS = [
 ];
 
 export async function onRequestGet({ request, env, params }) {
-  if (!requireAccessIdentity(request)) return json({ error: "Unauthorized" }, 401);
+  if (!(await requireAccessIdentity(request))) return json({ error: "Unauthorized" }, 401);
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });
   if (!model) return json({ error: "Not found" }, 404);
   return json(model);
@@ -27,7 +27,7 @@ function pushHistory(model, entry) {
 
 export async function onRequestPut({ request, env, params }) {
   if (!requireSameOrigin(request)) return json({ error: "Cross-origin request blocked." }, 403);
-  const actor = requireAccessIdentity(request);
+  const actor = await requireAccessIdentity(request);
   if (!actor) return json({ error: "Unauthorized" }, 401);
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });
   if (!model) return json({ error: "Not found" }, 404);
@@ -56,7 +56,7 @@ export async function onRequestPut({ request, env, params }) {
 // models/[slug]/restore.js for the reverse action.
 export async function onRequestDelete({ request, env, params }) {
   if (!requireSameOrigin(request)) return json({ error: "Cross-origin request blocked." }, 403);
-  const actor = requireAccessIdentity(request);
+  const actor = await requireAccessIdentity(request);
   if (!actor) return json({ error: "Unauthorized" }, 401);
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });
   if (!model) return json({ error: "Not found" }, 404);

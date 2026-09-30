@@ -1,22 +1,25 @@
 # Same baseline security headers as the main photoczaro.com site.
 # CSP is intentionally stricter here: this site has no third-party analytics/
-# ad scripts wired in yet, so no external allowances are pre-added. Extend
-# this only when a specific integration (analytics, Turnstile, etc.) needs it.
+# ad scripts wired in yet, so no external allowances are pre-added beyond
+# what's needed. Extend this only when a specific integration (Turnstile,
+# etc.) needs it.
 #
-# Enforced (not Report-Only): audited every external resource this site
-# actually loads (Google Fonts only, already allowlisted below; no external
-# fetch/XHR targets, no iframes) before flipping. 'unsafe-inline' stays for
-# now on both script-src and style-src: removing it needs nonces/hashes
-# added to every inline <script> and style="" attribute across ~10 pages
-# plus the admin panel, which is a real refactor, not a quick toggle - do
-# that as deliberate follow-up work, not folded into an unrelated change.
+# Enforced (not Report-Only). static.cloudflareinsights.com/
+# cloudflareinsights.com are Cloudflare's own zone-level Web Analytics
+# beacon, auto-injected at the edge (not something in this repo's HTML),
+# discovered only after enforcing turned up a real console violation on
+# first production check - allowlisted rather than left broken.
+# 'unsafe-inline' stays for now on both script-src and style-src: removing
+# it needs nonces/hashes added to every inline <script> and style=""
+# attribute across ~10 pages plus the admin panel, which is a real refactor,
+# not a quick toggle - do that as deliberate follow-up work.
 /*
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'
   X-Robots-Tag: noindex
 
 /css/*

@@ -54,7 +54,7 @@
     list.innerHTML = state.applications.map((a) => `
       <div class="admin-row ${a.id === state.selectedAppId ? "selected" : ""}" data-id="${esc(a.id)}">
         <div class="admin-row-title">${esc(a.professionalName)}</div>
-        <div class="admin-row-meta">${esc(a.category)} · ${esc(a.uaeCity || "—")} · ${new Date(a.receivedAt).toLocaleDateString()}</div>
+        <div class="admin-row-meta">${esc(a.category)} · ${esc(a.uaeCity || "n/a")} · ${new Date(a.receivedAt).toLocaleDateString()}</div>
         <span class="admin-badge ${a.status === "pending_review" ? "pending" : a.status}">${a.status.replace("_", " ")}</span>
       </div>
     `).join("");
@@ -111,22 +111,22 @@
         <div class="admin-field"><label>Email</label><div>${esc(app.email)}</div></div>
         <div class="admin-field"><label>Telephone</label><div>${esc(app.telephone)}</div></div>
         <div class="admin-field"><label>UAE city</label><div>${esc(app.uaeCity)}</div></div>
-        <div class="admin-field"><label>Experience</label><div>${esc(app.experience) || "—"}</div></div>
+        <div class="admin-field"><label>Experience</label><div>${esc(app.experience) || "n/a"}</div></div>
         <div class="admin-field"><label>Height</label><div>${esc(app.height)} ${esc(app.measurementUnit)}</div></div>
         <div class="admin-field"><label>Hair / Eyes</label><div>${esc(app.hair)} / ${esc(app.eyes)}</div></div>
-        <div class="admin-field"><label>Languages</label><div>${esc(app.languages) || "—"}</div></div>
-        <div class="admin-field"><label>Skills</label><div>${esc(app.skills) || "—"}</div></div>
-        <div class="admin-field"><label>Portfolio URL</label><div>${app.portfolioUrl ? `<a href="${esc(app.portfolioUrl)}" target="_blank" rel="noopener">${esc(app.portfolioUrl)}</a>` : "—"}</div></div>
+        <div class="admin-field"><label>Languages</label><div>${esc(app.languages) || "n/a"}</div></div>
+        <div class="admin-field"><label>Skills</label><div>${esc(app.skills) || "n/a"}</div></div>
+        <div class="admin-field"><label>Portfolio URL</label><div>${app.portfolioUrl ? `<a href="${esc(app.portfolioUrl)}" target="_blank" rel="noopener">${esc(app.portfolioUrl)}</a>` : "n/a"}</div></div>
         <div class="admin-field"><label>Age / residency confirmed</label><div>${app.ageConfirm ? "Yes" : "No"} / ${app.residencyConfirm ? "Yes" : "No"}</div></div>
       </div>
 
       <div class="admin-section-title">Measurements (${esc(app.measurementUnit)})</div>
       <div class="admin-grid">
-        ${measureFields.map(([label, val]) => `<div class="admin-field"><label>${label}</label><div>${esc(val) || "—"}</div></div>`).join("")}
+        ${measureFields.map(([label, val]) => `<div class="admin-field"><label>${label}</label><div>${esc(val) || "n/a"}</div></div>`).join("")}
       </div>
 
       <div class="admin-section-title">Introduction</div>
-      <p class="admin-note">${esc(app.introduction) || "—"}</p>
+      <p class="admin-note">${esc(app.introduction) || "n/a"}</p>
 
       ${app.rosterSlug ? `<p class="admin-note">Approved onto the roster as <a href="/models/${esc(app.rosterSlug)}" target="_blank" rel="noopener">${esc(app.rosterSlug)}</a>.</p>` : ""}
       ${app.rejectionReason ? `<p class="admin-note">Rejection note: ${esc(app.rejectionReason)}</p>` : ""}

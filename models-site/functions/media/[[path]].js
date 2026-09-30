@@ -3,7 +3,7 @@
  * private by default (no public bucket domain is configured), so this is
  * the one path allowed to serve objects under the "models/" prefix.
  * Application-review uploads live under "applications/" and are never
- * reachable here — only through /api/admin/media/*, which sits behind
+ * reachable here; only through /api/admin/media/*, which sits behind
  * Cloudflare Access.
  */
 export async function onRequestGet({ env, params }) {

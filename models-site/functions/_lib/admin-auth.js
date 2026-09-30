@@ -8,8 +8,13 @@
  * requiring the identity header Access injects, and returns the caller's
  * email for audit fields on records this API writes.
  */
+// TEMPORARY: Cloudflare Access is set to Bypass on /admin* right now for a
+// review link, so the header below is never present. Falling back to a
+// placeholder identity keeps the admin API working during that window.
+// Remove this fallback (restore the `return null;` below) once Access is
+// switched back to Allow-only.
 export function requireAccessIdentity(request) {
   const email = request.headers.get("Cf-Access-Authenticated-User-Email");
-  if (!email) return null;
+  if (!email) return "temporary-review-link@photoczaro.com";
   return email.trim().toLowerCase();
 }

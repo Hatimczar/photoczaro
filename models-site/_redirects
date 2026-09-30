@@ -3,6 +3,65 @@
 # inline script). /model?slug=... keeps working for old shared links.
 /models/:slug /model?slug=:slug 200
 
+# Language-prefixed routes (matching photoczaro.com's own /fr/ /ru/ /es/ /cs/
+# convention, plus /ar/ for Arabic). Each rewrites (200, URL keeps the
+# prefix) onto the same English source file; js/i18n.js detects the prefix
+# client-side and swaps the visible text and <html dir> to match.
+/fr/ / 200
+/fr/models/:slug /model?slug=:slug 200
+/fr/models /models 200
+/fr/model /model 200
+/fr/book-talent /book-talent 200
+/fr/apply /apply 200
+/fr/about /about 200
+/fr/contact /contact 200
+/fr/booking-terms /booking-terms 200
+/fr/privacy-policy /privacy-policy 200
+
+/ru/ / 200
+/ru/models/:slug /model?slug=:slug 200
+/ru/models /models 200
+/ru/model /model 200
+/ru/book-talent /book-talent 200
+/ru/apply /apply 200
+/ru/about /about 200
+/ru/contact /contact 200
+/ru/booking-terms /booking-terms 200
+/ru/privacy-policy /privacy-policy 200
+
+/es/ / 200
+/es/models/:slug /model?slug=:slug 200
+/es/models /models 200
+/es/model /model 200
+/es/book-talent /book-talent 200
+/es/apply /apply 200
+/es/about /about 200
+/es/contact /contact 200
+/es/booking-terms /booking-terms 200
+/es/privacy-policy /privacy-policy 200
+
+/cs/ / 200
+/cs/models/:slug /model?slug=:slug 200
+/cs/models /models 200
+/cs/model /model 200
+/cs/book-talent /book-talent 200
+/cs/apply /apply 200
+/cs/about /about 200
+/cs/contact /contact 200
+/cs/booking-terms /booking-terms 200
+/cs/privacy-policy /privacy-policy 200
+
+/ar/ / 200
+/ar/models/:slug /model?slug=:slug 200
+/ar/models /models 200
+/ar/model /model 200
+/ar/book-talent /book-talent 200
+/ar/apply /apply 200
+/ar/about /about 200
+/ar/contact /contact 200
+/ar/booking-terms /booking-terms 200
+/ar/privacy-policy /privacy-policy 200
+
 # Redirect .html to extensionless for canonical URLs (matches the main site's convention).
 /index.html / 301
 /models.html /models 301

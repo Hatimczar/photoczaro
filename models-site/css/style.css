@@ -130,6 +130,42 @@ nav#site-nav.scrolled {
 .nav-links a:hover::after { width: 100%; }
 .nav-links a[aria-current="page"] { color: var(--white); }
 .nav-links a[aria-current="page"]::after { width: 100%; background: var(--gold); }
+
+/* ---------- Language switcher (desktop nav + mobile menu) ---------- */
+.lang-switch { position: relative; display: inline-block; }
+.lang-switch-btn {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); color: var(--grey);
+  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px;
+  cursor: pointer; backdrop-filter: blur(12px); transition: color 0.3s, border-color 0.3s; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.lang-switch-btn:hover { color: var(--gold); border-color: rgba(201,169,110,0.35); }
+.lang-switch-caret { font-size: 8px; }
+.lang-switch-menu {
+  position: absolute; top: calc(100% + 8px); right: 0; background: rgba(18,16,14,0.94);
+  backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+  padding: 6px; min-width: 140px; opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translateY(6px); transition: opacity 0.25s var(--ease), transform 0.25s var(--ease); z-index: 500;
+}
+.lang-switch.open .lang-switch-menu { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+.lang-switch-menu-item {
+  display: block; padding: 9px 12px; font-size: 12px; letter-spacing: 0.02em; color: rgba(230,228,224,0.75);
+  text-decoration: none; border-radius: 8px; transition: background 0.2s, color 0.2s; white-space: nowrap;
+}
+.lang-switch-menu-item:hover { background: rgba(201,169,110,0.14); color: var(--gold-light); }
+.lang-switch-menu-item.active { color: var(--gold); }
+@media (max-width: 1250px) { #lang-switch-slot { display: none; } }
+
+/* The mobile menu numbers every <li> and renders its links in giant italic
+   serif via .mobile-menu-nav a; the language switcher is a utility, not a
+   destination, so it opts out of both. */
+.mobile-menu-nav li:has(#lang-switch-slot-mobile) { counter-increment: none; border-top: none; padding: 20px 0 4px; }
+.mobile-menu-nav li:has(#lang-switch-slot-mobile) a::before { content: none; }
+#lang-switch-slot-mobile .lang-switch-btn { font-size: 11px; padding: 8px 16px; }
+#lang-switch-slot-mobile .lang-switch-menu-item {
+  font-family: 'Inter', sans-serif; font-size: 13px; font-style: normal; padding: 10px 14px;
+}
+#lang-switch-slot-mobile .lang-switch-menu { right: auto; left: 0; }
 .nav-cta-btn {
   white-space: nowrap; color: var(--dark) !important;
   background: linear-gradient(135deg, rgba(201,169,110,0.92), rgba(232,213,163,0.85));
@@ -493,3 +529,42 @@ footer#site-footer { background: var(--dark); border-top: 0.5px solid rgba(255,2
 /* ---------- Utility ---------- */
 .empty-state { text-align: center; padding: 100px 24px; color: var(--grey); }
 .empty-state h3 { color: var(--white); margin-bottom: 12px; font-style: italic; }
+
+/* ---------- RTL (Arabic) ----------
+   Flexbox/grid main-axis order already mirrors automatically under
+   dir="rtl" (CSS "start"/"end" follow the writing direction), so most of
+   the nav, forms, footer and card grids need no extra rules. This block
+   covers: Arabic-capable typefaces (Cormorant Garamond and Inter have no
+   Arabic glyphs at all), directional animations authored with explicit
+   left/right transforms, and a handful of hard-coded left/right values. */
+html[dir="rtl"] body {
+  font-family: 'Noto Sans Arabic', 'Inter', sans-serif;
+}
+html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3, html[dir="rtl"] h4,
+html[dir="rtl"] .nav-logo, html[dir="rtl"] .loader-logo, html[dir="rtl"] .menu-link-text,
+html[dir="rtl"] .footer-logo, html[dir="rtl"] .hero-title, html[dir="rtl"] .section-title,
+html[dir="rtl"] .lang-switch-menu-item, html[dir="rtl"] .mobile-menu-brand {
+  font-family: 'Amiri', 'Noto Sans Arabic', serif;
+}
+html[dir="rtl"] em { font-style: italic; }
+
+/* Custom cursor tracks the pointer in raw viewport coordinates, unaffected
+   by direction; disable only the two authored sweep animations below. */
+html[dir="rtl"] .page-transition { transform: translateX(100%); }
+html[dir="rtl"] .page-transition.slide-in { transform: translateX(0%); }
+html[dir="rtl"] .page-transition.slide-out { transform: translateX(-100%); }
+
+html[dir="rtl"] .section-line { transform-origin: right; }
+
+html[dir="rtl"] .scroll-progress { left: auto; right: 0; }
+
+html[dir="rtl"] .lang-switch-menu { right: auto; left: 0; }
+html[dir="rtl"] #lang-switch-slot-mobile .lang-switch-menu { left: auto; right: 0; }
+
+html[dir="rtl"] .nav-shortlist-count { margin-right: 0; margin-left: 6px; }
+
+/* Hero grid-bg / mobile-menu counters and model-card overlays use only
+   vertical gradients and flex gap, so they mirror correctly on their own. */
+@media (max-width: 560px) {
+  html[dir="rtl"] .nav-shortlist-btn { padding: 8px 10px 8px 10px; }
+}

@@ -8,21 +8,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Arabic:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=16">
+<link rel="stylesheet" href="/css/style.css?v=18">
 </head>
 <body>
 <main style="min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;">
   <span class="eyebrow">404</span>
-  <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin-bottom:16px;">This page isn't on the roster.</h1>
-  <p style="color:var(--grey);max-width:420px;margin-bottom:32px;">The page you're looking for doesn't exist or has moved.</p>
+  <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin-bottom:16px;" data-i18n="notFound.title">This page isn't on the roster.</h1>
+  <p style="color:var(--grey);max-width:420px;margin-bottom:32px;" data-i18n="notFound.body">The page you're looking for doesn't exist or has moved.</p>
   <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
-    <a href="/" class="cta-btn cta-btn-primary">Back Home</a>
-    <a href="/models" class="cta-btn">View Models</a>
+    <a href="/" class="cta-btn cta-btn-primary" id="notfound-home" data-i18n="notFound.backHome">Back Home</a>
+    <a href="/models" class="cta-btn" id="notfound-models" data-i18n="notFound.viewModels">View Models</a>
   </div>
 </main>
+<script src="/js/i18n-data.js?v=2"></script>
+<script src="/js/i18n.js?v=1"></script>
+<script>
+  document.getElementById("notfound-home").href = window.PhotoczaroI18n.path("/");
+  document.getElementById("notfound-models").href = window.PhotoczaroI18n.path("/models");
+</script>
 </body>
 </html>

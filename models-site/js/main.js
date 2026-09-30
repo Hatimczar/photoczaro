@@ -2,6 +2,24 @@
 (function () {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* Pages served under a language prefix (see js/i18n.js) set <base> so
+     relative assets resolve correctly at that nested path. That also
+     changes what a bare href="#id" resolves to: instead of "stay on this
+     page, jump to id", the browser resolves it against <base> (the
+     language root), navigating away entirely. Handle same-page anchors
+     ourselves so they keep working regardless of <base>. */
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    const id = a.getAttribute('href').slice(1);
+    if (!id) return;
+    a.addEventListener('click', (e) => {
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+      history.pushState(null, '', '#' + id);
+    });
+  });
+
   /* Custom cursor */
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursor-ring');

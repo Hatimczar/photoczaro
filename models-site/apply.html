@@ -6,6 +6,13 @@
 <title>Apply to the Roster | Photoczaro Models Dubai</title>
 <meta name="description" content="Apply to the Photoczaro roster. UAE residents aged 18 and over only. Non-exclusive representation, no application fee.">
 <link rel="canonical" href="https://models.photoczaro.com/apply">
+<link rel="alternate" hreflang="en" href="https://models.photoczaro.com/apply">
+<link rel="alternate" hreflang="fr" href="https://models.photoczaro.com/fr/apply">
+<link rel="alternate" hreflang="ru" href="https://models.photoczaro.com/ru/apply">
+<link rel="alternate" hreflang="es" href="https://models.photoczaro.com/es/apply">
+<link rel="alternate" hreflang="cs" href="https://models.photoczaro.com/cs/apply">
+<link rel="alternate" hreflang="ar" href="https://models.photoczaro.com/ar/apply">
+<link rel="alternate" hreflang="x-default" href="https://models.photoczaro.com/apply">
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Apply to the Roster | Photoczaro Models Dubai">
@@ -19,14 +26,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Arabic:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=16">
+<link rel="stylesheet" href="/css/style.css?v=18">
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main" data-i18n="a11y.skipToContent">Skip to content</a>
 <div class="scroll-progress" id="scroll-progress"></div>
 <div class="page-transition" id="page-transition"></div>
 <div class="cursor" id="cursor"></div>
@@ -37,32 +45,34 @@
   <div class="loader-bar"></div>
 </div>
 <nav id="site-nav">
-  <a href="/" class="nav-logo">Photoczaro <span class="nav-logo-sub">Models</span></a>
+  <a href="/" class="nav-logo">Photoczaro <span class="nav-logo-sub" data-i18n="nav.models">Models</span></a>
   <ul class="nav-links" id="nav-links">
-    <li><a href="models">All Models</a></li>
-    <li><a href="models?category=women">Women</a></li>
-    <li><a href="models?category=men">Men</a></li>
-    <li><a href="models?newFace=1">New Faces</a></li>
-    <li><a href="about">About</a></li>
+    <li><a href="models" data-i18n="nav.allModels">All Models</a></li>
+    <li><a href="models?category=women" data-i18n="nav.women">Women</a></li>
+    <li><a href="models?category=men" data-i18n="nav.men">Men</a></li>
+    <li><a href="models?newFace=1" data-i18n="nav.newFaces">New Faces</a></li>
+    <li><a href="about" data-i18n="nav.about">About</a></li>
+    <li id="lang-switch-slot"></li>
   </ul>
   <div class="nav-actions" style="display:flex;align-items:center;gap:14px;">
-    <button class="nav-shortlist-btn" data-open-shortlist>Shortlist <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
-    <a href="book-talent" class="cta-btn cta-btn-primary" style="padding:9px 20px;">Book Talent</a>
+    <button class="nav-shortlist-btn" data-open-shortlist><span data-i18n="nav.shortlist">Shortlist</span> <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
+    <a href="book-talent" class="cta-btn cta-btn-primary" style="padding:9px 20px;" data-i18n="nav.bookTalent">Book Talent</a>
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
 <div class="mobile-menu-overlay" id="mobile-menu">
   <ul class="mobile-menu-nav" id="mobile-menu-nav">
-    <li><a href="models"><span class="menu-link-text">All Models</span></a></li>
-    <li><a href="models?category=women"><span class="menu-link-text">Women</span></a></li>
-    <li><a href="models?category=men"><span class="menu-link-text">Men</span></a></li>
-    <li><a href="models?newFace=1"><span class="menu-link-text">New Faces</span></a></li>
-    <li><a href="apply"><span class="menu-link-text">Apply</span></a></li>
-    <li><a href="about"><span class="menu-link-text">About</span></a></li>
-    <li><a href="contact"><span class="menu-link-text">Contact</span></a></li>
-    <li><a href="https://photoczaro.com"><span class="menu-link-text">Photography ↗</span></a></li>
-    <li class="mobile-menu-cta-item"><a href="book-talent" class="mobile-menu-cta"><span class="menu-link-text">Book Talent</span></a></li>
+    <li><a href="models"><span class="menu-link-text" data-i18n="nav.allModels">All Models</span></a></li>
+    <li><a href="models?category=women"><span class="menu-link-text" data-i18n="nav.women">Women</span></a></li>
+    <li><a href="models?category=men"><span class="menu-link-text" data-i18n="nav.men">Men</span></a></li>
+    <li><a href="models?newFace=1"><span class="menu-link-text" data-i18n="nav.newFaces">New Faces</span></a></li>
+    <li><a href="apply"><span class="menu-link-text" data-i18n="nav.apply">Apply</span></a></li>
+    <li><a href="about"><span class="menu-link-text" data-i18n="nav.about">About</span></a></li>
+    <li><a href="contact"><span class="menu-link-text" data-i18n="nav.contact">Contact</span></a></li>
+    <li><a href="https://photoczaro.com"><span class="menu-link-text" data-i18n="nav.photography">Photography ↗</span></a></li>
+    <li class="mobile-menu-cta-item"><a href="book-talent" class="mobile-menu-cta"><span class="menu-link-text" data-i18n="nav.bookTalent">Book Talent</span></a></li>
+    <li id="lang-switch-slot-mobile"></li>
   </ul>
   <div class="mobile-menu-footer">
     <span class="mobile-menu-brand">Photoczaro Models</span>
@@ -70,23 +80,23 @@
 </div>
 
 <div id="shortlist-overlay"></div>
-<aside id="shortlist-drawer" aria-label="Booking shortlist">
-  <div class="drawer-head"><h3>Shortlist</h3><button class="drawer-close" id="drawer-close" aria-label="Close shortlist">✕</button></div>
+<aside id="shortlist-drawer" aria-label="Booking shortlist" data-i18n-aria-label="drawer.ariaLabel">
+  <div class="drawer-head"><h3 data-i18n="drawer.title">Shortlist</h3><button class="drawer-close" id="drawer-close" aria-label="Close shortlist" data-i18n-aria-label="drawer.close">✕</button></div>
   <div class="drawer-items" id="drawer-items"></div>
   <div class="drawer-foot">
-    <a href="book-talent" id="drawer-book-btn" class="cta-btn cta-btn-primary">Submit Booking Enquiry</a>
-    <button class="cta-btn" id="drawer-clear">Clear shortlist</button>
+    <a href="book-talent" id="drawer-book-btn" class="cta-btn cta-btn-primary" data-i18n="drawer.submit">Submit Booking Enquiry</a>
+    <button class="cta-btn" id="drawer-clear" data-i18n="drawer.clear">Clear shortlist</button>
   </div>
 </aside>
 
 <main id="main">
-  <div class="breadcrumbs"><a href="/">Home</a><span>/</span><span>Apply to the Roster</span></div>
+  <div class="breadcrumbs"><a href="/" data-i18n="a11y.home">Home</a><span>/</span><span data-i18n="apply.title">Apply to the Roster</span></div>
   <div class="wrap" style="padding-top:24px;max-width:900px;">
-    <span class="eyebrow">For Models</span>
-    <h1 style="font-size:clamp(2rem,4vw,2.8rem);">Apply to the Roster</h1>
+    <span class="eyebrow" data-i18n="apply.eyebrow">For Models</span>
+    <h1 style="font-size:clamp(2rem,4vw,2.8rem);" data-i18n="apply.title">Apply to the Roster</h1>
 
     <div style="margin:24px 0 32px;padding:20px 22px;border:1px solid rgba(255,255,255,0.08);background:var(--dark-2);">
-      <ul style="margin:0;padding-left:20px;color:#cfcac2;line-height:1.8;font-size:0.9rem;">
+      <ul style="margin:0;padding-left:20px;color:#cfcac2;line-height:1.8;font-size:0.9rem;" data-i18n-html="apply.eligibilityList">
         <li>You must be at least 18 years old.</li>
         <li>You must currently reside in the UAE.</li>
         <li>Applying does not guarantee acceptance or bookings.</li>
@@ -99,53 +109,53 @@
 
     <form id="apply-form" novalidate method="post" action="/api/apply" enctype="multipart/form-data">
       <div class="form-grid">
-        <div class="form-field"><label for="prof-name">Professional name *</label><input type="text" id="prof-name" name="professionalName" required><span class="form-error" data-error-for="prof-name"></span></div>
-        <div class="form-field"><label for="legal-name">Legal name (kept private) *</label><input type="text" id="legal-name" name="legalName" required><span class="form-error" data-error-for="legal-name"></span></div>
+        <div class="form-field"><label for="prof-name" data-i18n="apply.professionalName">Professional name *</label><input type="text" id="prof-name" name="professionalName" required><span class="form-error" data-error-for="prof-name"></span></div>
+        <div class="form-field"><label for="legal-name" data-i18n="apply.legalName">Legal name (kept private) *</label><input type="text" id="legal-name" name="legalName" required><span class="form-error" data-error-for="legal-name"></span></div>
 
-        <div class="form-field"><label for="apply-email">Email *</label><input type="email" id="apply-email" name="email" required><span class="form-error" data-error-for="apply-email"></span></div>
-        <div class="form-field"><label for="apply-phone">Telephone *</label><input type="tel" id="apply-phone" name="telephone" required><span class="form-error" data-error-for="apply-phone"></span></div>
+        <div class="form-field"><label for="apply-email" data-i18n="form.email">Email *</label><input type="email" id="apply-email" name="email" required><span class="form-error" data-error-for="apply-email"></span></div>
+        <div class="form-field"><label for="apply-phone" data-i18n="form.telephone">Telephone *</label><input type="tel" id="apply-phone" name="telephone" required><span class="form-error" data-error-for="apply-phone"></span></div>
 
-        <div class="form-field"><label for="apply-category">Applying as *</label>
-          <select id="apply-category" name="category" required><option value="">Select one</option><option value="women">Women</option><option value="men">Men</option></select>
+        <div class="form-field"><label for="apply-category" data-i18n="apply.applyingAs">Applying as *</label>
+          <select id="apply-category" name="category" required><option value="" data-i18n="form.selectOne">Select one</option><option value="women" data-i18n="nav.women">Women</option><option value="men" data-i18n="nav.men">Men</option></select>
           <span class="form-error" data-error-for="apply-category"></span>
         </div>
-        <div class="form-field"><label for="uae-city">UAE city *</label><input type="text" id="uae-city" name="uaeCity" required><span class="form-error" data-error-for="uae-city"></span></div>
+        <div class="form-field"><label for="uae-city" data-i18n="apply.uaeCity">UAE city *</label><input type="text" id="uae-city" name="uaeCity" required><span class="form-error" data-error-for="uae-city"></span></div>
 
-        <div class="form-field"><label for="experience">Experience level</label>
-          <select id="experience" name="experience"><option value="">Select one</option><option>New face</option><option>Some experience</option><option>Experienced</option></select>
+        <div class="form-field"><label for="experience" data-i18n="apply.experienceLevel">Experience level</label>
+          <select id="experience" name="experience"><option value="" data-i18n="form.selectOne">Select one</option><option data-i18n="apply.newFace">New face</option><option data-i18n="apply.someExperience">Some experience</option><option data-i18n="apply.experienced">Experienced</option></select>
         </div>
-        <div class="form-field"><label for="apply-height">Height *</label><input type="text" id="apply-height" name="height" required><span class="form-error" data-error-for="apply-height"></span></div>
+        <div class="form-field"><label for="apply-height" data-i18n="apply.height">Height *</label><input type="text" id="apply-height" name="height" required><span class="form-error" data-error-for="apply-height"></span></div>
 
         <div class="form-field full">
-          <label class="form-checkbox"><input type="checkbox" id="age-confirm" name="ageConfirm" required> I confirm I am at least 18 years old. *</label>
-          <label class="form-checkbox"><input type="checkbox" id="residency-confirm" name="residencyConfirm" required> I confirm I currently reside in the UAE. *</label>
+          <label class="form-checkbox"><input type="checkbox" id="age-confirm" name="ageConfirm" required> <span data-i18n="apply.ageConfirm">I confirm I am at least 18 years old. *</span></label>
+          <label class="form-checkbox"><input type="checkbox" id="residency-confirm" name="residencyConfirm" required> <span data-i18n="apply.residencyConfirm">I confirm I currently reside in the UAE. *</span></label>
         </div>
 
-        <div class="form-field full"><label for="apply-measurements" id="apply-measurements-label">Measurements</label><input type="text" id="apply-measurements" name="measurements" placeholder="Select a category above first"></div>
+        <div class="form-field full"><label for="apply-measurements" id="apply-measurements-label" data-i18n="apply.measurements">Measurements</label><input type="text" id="apply-measurements" name="measurements" placeholder="Select a category above first" data-i18n-placeholder="apply.measurementsPlaceholderDefault"></div>
 
-        <div class="form-field"><label for="apply-hair">Hair colour</label><input type="text" id="apply-hair" name="hair"></div>
-        <div class="form-field"><label for="apply-eyes">Eye colour</label><input type="text" id="apply-eyes" name="eyes"></div>
+        <div class="form-field"><label for="apply-hair" data-i18n="apply.hairColour">Hair colour</label><input type="text" id="apply-hair" name="hair"></div>
+        <div class="form-field"><label for="apply-eyes" data-i18n="apply.eyeColour">Eye colour</label><input type="text" id="apply-eyes" name="eyes"></div>
 
-        <div class="form-field"><label for="apply-languages">Languages</label><input type="text" id="apply-languages" name="languages" placeholder="e.g. English, Arabic"></div>
-        <div class="form-field"><label for="apply-skills">Skills</label><input type="text" id="apply-skills" name="skills" placeholder="e.g. runway, swimwear"></div>
+        <div class="form-field"><label for="apply-languages" data-i18n="apply.languages">Languages</label><input type="text" id="apply-languages" name="languages" placeholder="e.g. English, Arabic" data-i18n-placeholder="apply.languagesPlaceholder"></div>
+        <div class="form-field"><label for="apply-skills" data-i18n="apply.skills">Skills</label><input type="text" id="apply-skills" name="skills" placeholder="e.g. runway, swimwear" data-i18n-placeholder="bookTalent.requiredSkillsPlaceholder"></div>
 
-        <div class="form-field full"><label for="portfolio-url">Instagram or portfolio URL (optional)</label><input type="url" id="portfolio-url" name="portfolioUrl" placeholder="https://"></div>
+        <div class="form-field full"><label for="portfolio-url" data-i18n="apply.portfolioUrl">Instagram or portfolio URL (optional)</label><input type="url" id="portfolio-url" name="portfolioUrl" placeholder="https://"></div>
 
-        <div class="form-field"><label for="file-headshot">Headshot *</label><input type="file" id="file-headshot" name="headshot" accept="image/*" required><span class="form-error" data-error-for="file-headshot"></span></div>
-        <div class="form-field"><label for="file-front">Full-length front digital *</label><input type="file" id="file-front" name="fullFront" accept="image/*" required><span class="form-error" data-error-for="file-front"></span></div>
-        <div class="form-field"><label for="file-side">Full-length side digital *</label><input type="file" id="file-side" name="fullSide" accept="image/*" required><span class="form-error" data-error-for="file-side"></span></div>
-        <div class="form-field"><label for="file-extra">Existing portfolio (optional)</label><input type="file" id="file-extra" name="portfolioFile" accept="image/*,application/pdf"></div>
+        <div class="form-field"><label for="file-headshot" data-i18n="apply.headshot">Headshot *</label><input type="file" id="file-headshot" name="headshot" accept="image/*" required><span class="form-error" data-error-for="file-headshot"></span></div>
+        <div class="form-field"><label for="file-front" data-i18n="apply.fullFront">Full-length front digital *</label><input type="file" id="file-front" name="fullFront" accept="image/*" required><span class="form-error" data-error-for="file-front"></span></div>
+        <div class="form-field"><label for="file-side" data-i18n="apply.fullSide">Full-length side digital *</label><input type="file" id="file-side" name="fullSide" accept="image/*" required><span class="form-error" data-error-for="file-side"></span></div>
+        <div class="form-field"><label for="file-extra" data-i18n="apply.existingPortfolio">Existing portfolio (optional)</label><input type="file" id="file-extra" name="portfolioFile" accept="image/*,application/pdf"></div>
 
-        <div class="form-field full"><label for="intro">Short introduction</label><textarea id="intro" name="introduction" maxlength="600"></textarea></div>
+        <div class="form-field full"><label for="intro" data-i18n="apply.shortIntro">Short introduction</label><textarea id="intro" name="introduction" maxlength="600"></textarea></div>
 
         <div class="form-field full">
-          <label class="form-checkbox"><input type="checkbox" id="apply-accuracy" name="accuracyConfirm" required> I confirm the information submitted is accurate. *</label>
-          <label class="form-checkbox"><input type="checkbox" id="apply-privacy" name="privacyConsent" required> I consent to the <a href="privacy-policy" style="color:var(--gold-light);text-decoration:underline;">Privacy Policy</a>. *</label>
+          <label class="form-checkbox"><input type="checkbox" id="apply-accuracy" name="accuracyConfirm" required> <span data-i18n="apply.accuracyConfirm">I confirm the information submitted is accurate. *</span></label>
+          <label class="form-checkbox"><input type="checkbox" id="apply-privacy" name="privacyConsent" required> <span data-i18n-html="form.privacyConsent">I consent to the <a href="privacy-policy" style="color:var(--gold-light);text-decoration:underline;">Privacy Policy</a>. *</span></label>
         </div>
       </div>
 
-      <p class="form-note" style="margin-top:24px;">Do not include passports, Emirates ID or banking details in this form. Those are only ever collected later, through a separate secure process, if you're added to the roster.</p>
-      <button type="submit" class="cta-btn cta-btn-primary" style="margin-top:16px;">Submit Application</button>
+      <p class="form-note" style="margin-top:24px;" data-i18n="apply.formNote">Do not include passports, Emirates ID or banking details in this form. Those are only ever collected later, through a separate secure process, if you're added to the roster.</p>
+      <button type="submit" class="cta-btn cta-btn-primary" style="margin-top:16px;" data-i18n="apply.submit">Submit Application</button>
       <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
     </form>
   </div>
@@ -155,38 +165,41 @@
   <div class="footer-grid">
     <div class="footer-col">
       <div class="footer-logo">Photoczaro Models</div>
-      <p>A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.</p>
+      <p data-i18n="footer.tagline">A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.</p>
     </div>
-    <div class="footer-col"><h4>Roster</h4>
-      <a href="models">All Models</a>
-      <a href="models?category=women">Women</a>
-      <a href="models?category=men">Men</a>
-      <a href="models?newFace=1">New Faces</a>
+    <div class="footer-col"><h4 data-i18n="footer.roster">Roster</h4>
+      <a href="models" data-i18n="nav.allModels">All Models</a>
+      <a href="models?category=women" data-i18n="nav.women">Women</a>
+      <a href="models?category=men" data-i18n="nav.men">Men</a>
+      <a href="models?newFace=1" data-i18n="nav.newFaces">New Faces</a>
     </div>
-    <div class="footer-col"><h4>Work With Us</h4>
-      <a href="book-talent">Book Talent</a>
-      <a href="apply">Apply to the Roster</a>
-      <a href="about">About</a>
-      <a href="contact">Contact</a>
+    <div class="footer-col"><h4 data-i18n="footer.workWithUs">Work With Us</h4>
+      <a href="book-talent" data-i18n="nav.bookTalent">Book Talent</a>
+      <a href="apply" data-i18n="footer.applyFull">Apply to the Roster</a>
+      <a href="about" data-i18n="nav.about">About</a>
+      <a href="contact" data-i18n="nav.contact">Contact</a>
     </div>
-    <div class="footer-col"><h4>Legal</h4>
-      <a href="booking-terms">Booking Terms</a>
-      <a href="privacy-policy">Privacy Policy</a>
-      <a href="https://photoczaro.com">Photoczaro Photography ↗</a>
+    <div class="footer-col"><h4 data-i18n="footer.legal">Legal</h4>
+      <a href="booking-terms" data-i18n="footer.bookingTerms">Booking Terms</a>
+      <a href="privacy-policy" data-i18n="footer.privacyPolicy">Privacy Policy</a>
+      <a href="https://photoczaro.com" data-i18n="footer.photography">Photoczaro Photography ↗</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© <span data-year></span> Photoczaro Models. UAE booking representation.</span>
-    <span>Part of the Photoczaro family: <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
+    <span>© <span data-year></span> <span data-i18n="footer.copyright">Photoczaro Models. UAE booking representation.</span></span>
+    <span><span data-i18n="footer.partOfFamily">Part of the Photoczaro family:</span> <a href="https://photoczaro.com" style="color:var(--gold-light);">photoczaro.com</a></span>
   </div>
 </footer>
 
-<script src="js/data.js?v=3"></script>
-<script src="js/shortlist.js?v=1"></script>
-<script src="js/main.js?v=4"></script>
-<script src="js/magnetic-cta.js?v=1"></script>
+<script src="/js/data.js?v=3"></script>
+<script src="/js/shortlist.js?v=1"></script>
+<script src="/js/i18n-data.js?v=2"></script>
+<script src="/js/i18n.js?v=1"></script>
+<script src="/js/main.js?v=5"></script>
+<script src="/js/magnetic-cta.js?v=1"></script>
 <script>
 (function () {
+  const i18n = window.PhotoczaroI18n;
   const form = document.getElementById("apply-form");
   const status = document.getElementById("form-status");
   const MAX_BYTES = 8 * 1024 * 1024;
@@ -196,18 +209,13 @@
   const categoryField = document.getElementById("apply-category");
   const measurementsLabel = document.getElementById("apply-measurements-label");
   const measurementsField = document.getElementById("apply-measurements");
-  const measurementsByCategory = {
-    women: { label: "Measurements (bust-waist-hips)", placeholder: "e.g. 81-61-88 cm" },
-    men: { label: "Measurements (chest/waist)", placeholder: "e.g. Chest 98 / Waist 81 cm" },
-  };
   categoryField.addEventListener("change", () => {
-    const preset = measurementsByCategory[categoryField.value];
-    if (preset) {
-      measurementsLabel.textContent = preset.label;
-      measurementsField.placeholder = preset.placeholder;
+    if (categoryField.value === "women" || categoryField.value === "men") {
+      measurementsLabel.textContent = i18n.t("apply.measurementsLabel." + categoryField.value);
+      measurementsField.placeholder = i18n.t("apply.measurementsPlaceholder." + categoryField.value);
     } else {
-      measurementsLabel.textContent = "Measurements";
-      measurementsField.placeholder = "Select a category above first";
+      measurementsLabel.textContent = i18n.t("apply.measurements");
+      measurementsField.placeholder = i18n.t("apply.measurementsPlaceholderDefault");
     }
   });
 
@@ -221,7 +229,7 @@
       if (isEmpty) {
         valid = false;
         const err = document.querySelector(`[data-error-for="${field.id}"]`);
-        if (err) err.textContent = "Required.";
+        if (err) err.textContent = i18n.t("form.required");
       }
     });
 
@@ -229,34 +237,34 @@
       if (field.files[0] && field.files[0].size > MAX_BYTES) {
         valid = false;
         const err = document.querySelector(`[data-error-for="${field.id}"]`);
-        if (err) err.textContent = "File too large (8MB max).";
+        if (err) err.textContent = i18n.t("form.fileTooLarge");
       }
     });
 
     const emailField = document.getElementById("apply-email");
     if (emailField.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
       valid = false;
-      document.querySelector('[data-error-for="apply-email"]').textContent = "Enter a valid email.";
+      document.querySelector('[data-error-for="apply-email"]').textContent = i18n.t("form.invalidEmail");
     }
 
     if (!valid) {
       status.className = "form-status error";
-      status.textContent = "Please fix the highlighted fields.";
+      status.textContent = i18n.t("form.fixHighlighted");
       return;
     }
 
     status.className = "form-status";
-    status.textContent = "Sending…";
+    status.textContent = i18n.t("form.sending");
     try {
       const fd = new FormData(form);
       const res = await fetch("/api/apply", { method: "POST", headers: { "X-Requested-With": "fetch" }, body: fd });
       if (!res.ok) throw new Error("request_failed");
       status.className = "form-status success";
-      status.textContent = "Thank you. Your application has been received. We review applications on a rolling basis and will contact you only through verified Photoczaro channels.";
+      status.textContent = i18n.t("apply.thankYou");
       form.reset();
     } catch {
       status.className = "form-status error";
-      status.textContent = "Something went wrong sending this application. Please try again.";
+      status.textContent = i18n.t("apply.sendError");
     }
   });
 

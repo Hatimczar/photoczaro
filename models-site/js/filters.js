@@ -69,20 +69,22 @@
 
     results.sort((a, b) => a.displayOrder - b.displayOrder);
 
-    countEl.textContent = `${results.length} model${results.length === 1 ? "" : "s"}`;
+    const i18n = window.PhotoczaroI18n;
+    const countWord = i18n.t(results.length === 1 ? "filters.countSingular" : "filters.countPlural");
+    countEl.textContent = `${results.length} ${countWord}`;
     emptyState.hidden = results.length !== 0;
 
     grid.innerHTML = results.map((m) => `
-      <a href="/models/${m.slug}" class="model-card">
+      <a href="${i18n.path("/models/" + m.slug)}" class="model-card">
         <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
           <span class="initials">${initialsOf(m.name)}</span>
-          ${m.sample ? '<span class="model-card-badge sample-badge">Sample profile</span>' : m.newFace ? '<span class="model-card-badge">New Face</span>' : ""}
-          <button class="model-card-shortlist" data-shortlist-toggle="${m.slug}" aria-pressed="false" aria-label="Add to shortlist" onclick="event.preventDefault();window.PhotoczaroShortlist.toggle('${m.slug}')">♡</button>
+          ${m.sample ? `<span class="model-card-badge sample-badge">${i18n.t("badge.sampleProfile")}</span>` : m.newFace ? `<span class="model-card-badge">${i18n.t("badge.newFace")}</span>` : ""}
+          <button class="model-card-shortlist" data-shortlist-toggle="${m.slug}" aria-pressed="false" aria-label="${i18n.t("shortlist.addAriaLabel")}" onclick="event.preventDefault();window.PhotoczaroShortlist.toggle('${m.slug}')">♡</button>
           <div class="model-card-overlay"><span class="model-card-name">${m.name}</span></div>
         </div>
         <div class="model-card-info">
           <h3>${m.name}</h3>
-          <div class="model-card-meta">${window.PHOTOCZARO_CATEGORY_LABELS[m.categories[0]]} · ${m.location.split(",")[0]} · ${m.height}</div>
+          <div class="model-card-meta">${i18n.t("category." + m.categories[0])} · ${m.location.split(",")[0]} · ${m.height}</div>
         </div>
       </a>
     `).join("");

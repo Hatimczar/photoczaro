@@ -286,7 +286,11 @@ button.cta-btn { font-family: inherit; border-width: 1px; }
 }
 .hero-content { position: relative; z-index: 2; max-width: 720px; }
 @media (max-width: 768px) {
-  .hero-bg { background-position: center 15%; }
+  /* hero.webp is a wide 4:3 shot with the photographer and model far apart
+     at the edges; on a narrow portrait screen "center" crops to the empty
+     backdrop between them, showing only their nearest hands. Shift the
+     focal point onto the model so the crop reads as a full portrait. */
+  .hero-bg { background-position: 97% 12%; }
   .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.75) 0%, rgba(10,10,10,0.55) 45%, rgba(10,10,10,0.85) 100%); }
 }
 .hero-eyebrow {

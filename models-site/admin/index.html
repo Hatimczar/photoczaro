@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | Photoczaro Models</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="/admin/admin.css?v=1">
+</head>
+<body>
+<header class="admin-topbar">
+  <div class="admin-brand">Photoczaro <span>Models Admin</span></div>
+  <nav class="admin-tabs" id="admin-tabs">
+    <button class="admin-tab active" data-tab="applications">Applications <span class="admin-tab-count" id="tab-count-applications"></span></button>
+    <button class="admin-tab" data-tab="models">Models <span class="admin-tab-count" id="tab-count-models"></span></button>
+  </nav>
+</header>
+
+<main class="admin-main">
+  <section class="admin-panel" id="panel-applications">
+    <div class="admin-panel-list" id="applications-list"></div>
+    <div class="admin-panel-detail" id="applications-detail">
+      <div class="admin-empty">Select an application to review it.</div>
+    </div>
+  </section>
+
+  <section class="admin-panel" id="panel-models" hidden>
+    <div class="admin-panel-list">
+      <button class="admin-new-btn" id="new-model-btn">+ New model</button>
+      <div id="models-list"></div>
+    </div>
+    <div class="admin-panel-detail" id="models-detail">
+      <div class="admin-empty">Select a model to edit, or create a new one.</div>
+    </div>
+  </section>
+</main>
+
+<div class="admin-toast" id="admin-toast" hidden></div>
+
+<script src="/admin/app.js?v=1"></script>
+</body>
+</html>

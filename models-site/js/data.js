@@ -1,58 +1,36 @@
 /*
- * SAMPLE DATA: NOT REAL PEOPLE.
- * These two records exist only to demonstrate the roster layout, filters,
- * shortlist and booking flow while real talent onboarding is in progress.
- * Every card and profile page also carries a visible "Sample profile" badge
- * (see .sample-badge in css/style.css) so this is never mistaken for a real,
- * bookable model, on-page and not just in this comment. Replace entirely with
- * genuine roster records, routed through a private application/onboarding
- * process, before removing the site-wide noindex block.
- * No photographs are used; cards render a gradient swatch + initials instead.
+ * Live roster feed. Model records are approved and edited through the
+ * admin panel (/admin) and stored in Cloudflare KV; this file fetches the
+ * public /api/models feed instead of bundling a static array, so approving
+ * a model in the admin panel makes them appear on the site immediately.
+ *
+ * window.PhotoczaroModelsReady resolves once window.PHOTOCZARO_MODELS is
+ * populated. Rendering code that used to assume the array was already
+ * present (it used to be a synchronous inline script) should now do:
+ *   window.PhotoczaroModelsReady.then(() => { ...render... });
+ * A "photoczaro:models-ready" event fires at the same time for listeners
+ * that were already attached before this script ran.
  */
-window.PHOTOCZARO_MODELS = [
-  {
-    slug: "sample-profile-women",
-    name: "Sample Profile (Women)",
-    sample: true,
-    status: "active",
-    categories: ["women"],
-    subcategories: ["editorial-fashion", "commercial"],
-    newFace: false,
-    featured: true,
-    location: "Dubai, UAE",
-    height: "177 cm",
-    measurements: "81-61-88 cm",
-    hair: "Black",
-    eyes: "Brown",
-    languages: ["English", "Arabic"],
-    skills: ["Runway", "Editorial", "Swimwear"],
-    displayOrder: 1,
-    swatch: ["#2b2621", "#14120f"],
-    seoTitle: "Sample Profile (Women) | Photoczaro Models Dubai",
-    seoDescription: "A sample roster profile shown to demonstrate the Photoczaro Models layout. Not a real person and not available for booking.",
-  },
-  {
-    slug: "sample-profile-men",
-    name: "Sample Profile (Men)",
-    sample: true,
-    status: "active",
-    categories: ["men"],
-    subcategories: ["commercial", "fitness"],
-    newFace: false,
-    featured: true,
-    location: "Dubai, UAE",
-    height: "186 cm",
-    measurements: "Chest 98 / Waist 81 cm",
-    hair: "Black",
-    eyes: "Brown",
-    languages: ["English", "Arabic", "French"],
-    skills: ["Commercial", "Fitness", "Lifestyle"],
-    displayOrder: 2,
-    swatch: ["#26221d", "#131110"],
-    seoTitle: "Sample Profile (Men) | Photoczaro Models Dubai",
-    seoDescription: "A sample roster profile shown to demonstrate the Photoczaro Models layout. Not a real person and not available for booking.",
-  },
-];
+window.PHOTOCZARO_MODELS = [];
+window.PhotoczaroModelsReady = fetch("/api/models")
+  .then((res) => (res.ok ? res.json() : []))
+  .catch(() => [])
+  .then((data) => {
+    window.PHOTOCZARO_MODELS = Array.isArray(data) ? data : [];
+    window.dispatchEvent(new CustomEvent("photoczaro:models-ready"));
+    return window.PHOTOCZARO_MODELS;
+  });
+
+/* Renders a model's card/profile media: a real headshot when the admin
+   panel has uploaded one, otherwise the gradient-swatch + initials
+   placeholder used for sample and not-yet-photographed records. */
+window.PhotoczaroCardMedia = function (m) {
+  if (m.images && m.images.headshot) {
+    return `<img src="/media/${m.images.headshot}" alt="" loading="lazy">`;
+  }
+  const initials = (m.name || "").split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+  return `<span class="initials">${initials}</span>`;
+};
 
 window.PHOTOCZARO_CATEGORY_LABELS = {
   women: "Women",

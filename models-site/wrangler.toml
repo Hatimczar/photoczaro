@@ -12,3 +12,18 @@ id = "ee1d67faa2874a0eaed08c35ba3e8399"
 [[kv_namespaces]]
 binding = "APPLICATIONS_KV"
 id = "5d3b60592c3d4952a365e44cb73d347b"
+
+# Live model roster, read by /api/models and written by the admin panel.
+# Created via `wrangler kv namespace create ROSTER_KV`.
+[[kv_namespaces]]
+binding = "ROSTER_KV"
+id = "248fb268a2d34eadbd4e0bc3f473d542"
+
+# Private object storage for application uploads and published model images.
+# Created via `wrangler r2 bucket create photoczaro-models-media`. Never made
+# publicly readable directly; functions/media/[[path]].js proxies published
+# model images only, and the admin API proxies application-review images
+# behind Cloudflare Access.
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "photoczaro-models-media"

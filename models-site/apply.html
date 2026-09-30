@@ -31,7 +31,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/css/style.css?v=18">
+<link rel="stylesheet" href="/css/style.css?v=20">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipToContent">Skip to content</a>
@@ -108,6 +108,15 @@
     </div>
 
     <form id="apply-form" novalidate method="post" action="/api/apply" enctype="multipart/form-data">
+      <div class="unit-toggle-field">
+        <label data-i18n="apply.unitLabel">Measurement units</label>
+        <div class="unit-toggle" role="group" id="unit-toggle" aria-label="Measurement units">
+          <button type="button" class="unit-toggle-btn active" data-unit="cm" data-i18n="apply.unitCm">CM</button>
+          <button type="button" class="unit-toggle-btn" data-unit="in" data-i18n="apply.unitIn">IN</button>
+        </div>
+        <input type="hidden" id="apply-unit" name="measurementUnit" value="cm">
+      </div>
+
       <div class="form-grid">
         <div class="form-field"><label for="prof-name" data-i18n="apply.professionalName">Professional name *</label><input type="text" id="prof-name" name="professionalName" required><span class="form-error" data-error-for="prof-name"></span></div>
         <div class="form-field"><label for="legal-name" data-i18n="apply.legalName">Legal name (kept private) *</label><input type="text" id="legal-name" name="legalName" required><span class="form-error" data-error-for="legal-name"></span></div>
@@ -124,14 +133,31 @@
         <div class="form-field"><label for="experience" data-i18n="apply.experienceLevel">Experience level</label>
           <select id="experience" name="experience"><option value="" data-i18n="form.selectOne">Select one</option><option data-i18n="apply.newFace">New face</option><option data-i18n="apply.someExperience">Some experience</option><option data-i18n="apply.experienced">Experienced</option></select>
         </div>
-        <div class="form-field"><label for="apply-height" data-i18n="apply.height">Height *</label><input type="text" id="apply-height" name="height" required><span class="form-error" data-error-for="apply-height"></span></div>
+        <div class="form-field"><label for="apply-height"><span data-i18n="apply.height">Height *</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="apply-height" name="height" required data-ph-cm="e.g. 178" data-ph-in="e.g. 70" placeholder="e.g. 178"><span class="form-error" data-error-for="apply-height"></span></div>
 
         <div class="form-field full">
           <label class="form-checkbox"><input type="checkbox" id="age-confirm" name="ageConfirm" required> <span data-i18n="apply.ageConfirm">I confirm I am at least 18 years old. *</span></label>
           <label class="form-checkbox"><input type="checkbox" id="residency-confirm" name="residencyConfirm" required> <span data-i18n="apply.residencyConfirm">I confirm I currently reside in the UAE. *</span></label>
         </div>
 
-        <div class="form-field full"><label for="apply-measurements" id="apply-measurements-label" data-i18n="apply.measurements">Measurements</label><input type="text" id="apply-measurements" name="measurements" placeholder="Select a category above first" data-i18n-placeholder="apply.measurementsPlaceholderDefault"></div>
+        <div class="form-field full" id="measurements-section">
+          <label data-i18n="apply.measurements">Measurements</label>
+          <p class="measurements-hint" id="measurements-hint" data-i18n="apply.measurementsPlaceholderDefault">Select a category above first</p>
+
+          <div class="measure-grid" id="measure-women" style="display:none;">
+            <div class="form-field"><label for="mw-bust"><span data-i18n="apply.bust">Bust</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mw-bust" name="bust" disabled data-ph-cm="e.g. 86" data-ph-in="e.g. 34"></div>
+            <div class="form-field"><label for="mw-waist"><span data-i18n="apply.waist">Waist</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mw-waist" name="waist" disabled data-ph-cm="e.g. 61" data-ph-in="e.g. 24"></div>
+            <div class="form-field"><label for="mw-hips"><span data-i18n="apply.hips">Hips</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mw-hips" name="hips" disabled data-ph-cm="e.g. 91" data-ph-in="e.g. 36"></div>
+          </div>
+
+          <div class="measure-grid" id="measure-men" style="display:none;">
+            <div class="form-field"><label for="mm-neck"><span data-i18n="apply.neck">Neck</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mm-neck" name="neck" disabled data-ph-cm="e.g. 38" data-ph-in="e.g. 15"></div>
+            <div class="form-field"><label for="mm-chest"><span data-i18n="apply.chest">Chest</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mm-chest" name="chest" disabled data-ph-cm="e.g. 98" data-ph-in="e.g. 39"></div>
+            <div class="form-field"><label for="mm-waist"><span data-i18n="apply.waist">Waist</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mm-waist" name="waist" disabled data-ph-cm="e.g. 81" data-ph-in="e.g. 32"></div>
+            <div class="form-field"><label for="mm-sleeve"><span data-i18n="apply.sleeve">Sleeve</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mm-sleeve" name="sleeve" disabled data-ph-cm="e.g. 86" data-ph-in="e.g. 34"></div>
+            <div class="form-field"><label for="mm-inseam"><span data-i18n="apply.inseam">Inseam</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mm-inseam" name="inseam" disabled data-ph-cm="e.g. 81" data-ph-in="e.g. 32"></div>
+          </div>
+        </div>
 
         <div class="form-field"><label for="apply-hair" data-i18n="apply.hairColour">Hair colour</label><input type="text" id="apply-hair" name="hair"></div>
         <div class="form-field"><label for="apply-eyes" data-i18n="apply.eyeColour">Eye colour</label><input type="text" id="apply-eyes" name="eyes"></div>
@@ -191,7 +217,7 @@
   </div>
 </footer>
 
-<script src="/js/data.js?v=3"></script>
+<script src="/js/data.js?v=4"></script>
 <script src="/js/shortlist.js?v=1"></script>
 <script src="/js/i18n-data.js?v=2"></script>
 <script src="/js/i18n.js?v=1"></script>
@@ -204,19 +230,36 @@
   const status = document.getElementById("form-status");
   const MAX_BYTES = 8 * 1024 * 1024;
 
-  /* Measurements mean different things per category; update the label and
-     placeholder to match instead of asking a one-size-fits-all question. */
+  /* Measurements mean different fields per category (bust/waist/hips vs
+     neck/chest/waist/sleeve/inseam); show the matching group and disable
+     the other so only the relevant fields are submitted. */
   const categoryField = document.getElementById("apply-category");
-  const measurementsLabel = document.getElementById("apply-measurements-label");
-  const measurementsField = document.getElementById("apply-measurements");
+  const measurementsHint = document.getElementById("measurements-hint");
+  const measureGroups = { women: document.getElementById("measure-women"), men: document.getElementById("measure-men") };
   categoryField.addEventListener("change", () => {
-    if (categoryField.value === "women" || categoryField.value === "men") {
-      measurementsLabel.textContent = i18n.t("apply.measurementsLabel." + categoryField.value);
-      measurementsField.placeholder = i18n.t("apply.measurementsPlaceholder." + categoryField.value);
-    } else {
-      measurementsLabel.textContent = i18n.t("apply.measurements");
-      measurementsField.placeholder = i18n.t("apply.measurementsPlaceholderDefault");
-    }
+    const active = measureGroups[categoryField.value];
+    Object.values(measureGroups).forEach((group) => {
+      const shown = group === active;
+      group.style.display = shown ? "" : "none";
+      group.querySelectorAll("input").forEach((input) => { input.disabled = !shown; });
+    });
+    measurementsHint.style.display = active ? "none" : "";
+  });
+
+  /* Height and body-measurement fields are entered in whichever unit the
+     applicant picks (cm or in); the choice travels with the submission as
+     measurementUnit so reviewers can interpret the numbers correctly. */
+  const unitToggle = document.getElementById("unit-toggle");
+  const unitField = document.getElementById("apply-unit");
+  const unitFields = form.querySelectorAll("[data-ph-cm]");
+  unitToggle.addEventListener("click", (e) => {
+    const btn = e.target.closest(".unit-toggle-btn");
+    if (!btn) return;
+    const unit = btn.dataset.unit;
+    unitToggle.querySelectorAll(".unit-toggle-btn").forEach((b) => b.classList.toggle("active", b === btn));
+    unitField.value = unit;
+    unitFields.forEach((field) => { field.placeholder = field.dataset[unit === "in" ? "phIn" : "phCm"]; });
+    form.querySelectorAll("[data-unit-suffix]").forEach((el) => { el.textContent = "(" + unit + ")"; });
   });
 
   form.addEventListener("submit", async (e) => {

@@ -1,23 +1,17 @@
 /*
- * DEVELOPMENT-ONLY submission handler.
- * Stores each roster application's TEXT fields as a JSON record in the
- * APPLICATIONS_KV namespace (bind it in this project's own wrangler.toml /
- * Pages dashboard, separate from the main site's KV namespaces).
+ * Roster application submission handler.
+ * Stores each application's fields as a JSON record in APPLICATIONS_KV, and
+ * uploaded files (headshot, full-length digitals, optional portfolio file)
+ * as private objects in the MEDIA R2 bucket under applications/<id>/<field>.
+ * Those objects are never served publicly; the admin panel proxies them
+ * through /api/admin/media/*, which sits behind Cloudflare Access.
  *
- * Uploaded files (headshot, full-length digitals, optional portfolio file)
- * are NOT persisted by this handler. Do not add public-directory file
- * storage. The spec explicitly disallows storing sensitive uploads in a
- * public directory. Before production, wire a private store (e.g. a
- * Cloudflare R2 bucket that is never served publicly, with signed/short-
- * lived access for reviewers only) and persist file keys alongside the KV
- * record. Until that exists, this handler only records each file's name,
- * type and size so reviewers know something was attached; the actual
- * image bytes are discarded.
- *
- * Also still needed before production: spam protection (Turnstile),
- * rate-limiting, and a reviewer notification (see book-talent.js for the
- * same open items).
+ * Still needed before production: spam protection (Turnstile), rate-
+ * limiting, and a reviewer notification (see book-talent.js for the same
+ * open items).
  */
+import { json, htmlResponse } from "../_lib/http.js";
+
 export async function onRequestPost({ request, env }) {
   const isNativeSubmit = request.headers.get("x-requested-with") !== "fetch";
 
@@ -40,20 +34,29 @@ export async function onRequestPost({ request, env }) {
     return respondError(isNativeSubmit, "Missing or invalid required fields.", 400);
   }
 
+  const applicationId = `${Date.now()}-${crypto.randomUUID()}`;
   const MAX_BYTES = 8 * 1024 * 1024;
   const fileFields = ["headshot", "fullFront", "fullSide", "portfolioFile"];
   const files = {};
   for (const field of fileFields) {
     const file = form.get(field);
-    if (file && typeof file === "object" && "size" in file) {
+    if (file && typeof file === "object" && "size" in file && file.size > 0) {
       if (file.size > MAX_BYTES) {
         return respondError(isNativeSubmit, `${field} exceeds the 8MB limit.`, 400);
       }
-      files[field] = { name: file.name, type: file.type, size: file.size, stored: false };
+      const ext = (file.name || "").split(".").pop()?.toLowerCase().slice(0, 8) || "bin";
+      const key = `applications/${applicationId}/${field}.${ext}`;
+      if (env.MEDIA) {
+        await env.MEDIA.put(key, file.stream(), {
+          httpMetadata: { contentType: file.type || "application/octet-stream" },
+        });
+      }
+      files[field] = { name: file.name, type: file.type, size: file.size, key: env.MEDIA ? key : null };
     }
   }
 
   const record = {
+    id: applicationId,
     professionalName,
     legalName: (form.get("legalName") || "").toString(),
     category,
@@ -62,7 +65,14 @@ export async function onRequestPost({ request, env }) {
     uaeCity: (form.get("uaeCity") || "").toString(),
     experience: (form.get("experience") || "").toString(),
     height: (form.get("height") || "").toString(),
-    measurements: (form.get("measurements") || "").toString(),
+    measurementUnit: (form.get("measurementUnit") || "cm").toString(),
+    bust: (form.get("bust") || "").toString(),
+    waist: (form.get("waist") || "").toString(),
+    hips: (form.get("hips") || "").toString(),
+    neck: (form.get("neck") || "").toString(),
+    chest: (form.get("chest") || "").toString(),
+    sleeve: (form.get("sleeve") || "").toString(),
+    inseam: (form.get("inseam") || "").toString(),
     hair: (form.get("hair") || "").toString(),
     eyes: (form.get("eyes") || "").toString(),
     languages: (form.get("languages") || "").toString(),
@@ -77,8 +87,7 @@ export async function onRequestPost({ request, env }) {
   };
 
   if (env.APPLICATIONS_KV) {
-    const key = `application:${Date.now()}:${crypto.randomUUID()}`;
-    await env.APPLICATIONS_KV.put(key, JSON.stringify(record));
+    await env.APPLICATIONS_KV.put(`application:${applicationId}`, JSON.stringify(record));
   } else {
     console.log("roster application (no KV bound):", record);
   }
@@ -98,21 +107,4 @@ function respondError(isNativeSubmit, message, status) {
     return htmlResponse("Something went wrong", message, "apply", status);
   }
   return json({ error: message }, status);
-}
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
-}
-
-function htmlResponse(title, message, backPath, status = 200) {
-  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow"><title>${title} | Photoczaro Models</title>
-<style>body{background:#0a0a0a;color:#f5f0eb;font-family:sans-serif;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;}
-p{max-width:480px;color:#8a8680;margin:16px 0 28px;}a{color:#0a0a0a;background:#c9a96e;padding:12px 24px;border-radius:999px;text-decoration:none;}</style>
-</head><body><h1>${title}</h1><p>${message}</p><a href="/${backPath}">Back</a></body></html>`;
-  return new Response(html, { status, headers: { "Content-Type": "text/html; charset=UTF-8" } });
 }

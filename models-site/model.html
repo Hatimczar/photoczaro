@@ -45,7 +45,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/css/style.css?v=18">
+<link rel="stylesheet" href="/css/style.css?v=20">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipToContent">Skip to content</a>
@@ -139,14 +139,14 @@
   </div>
 </footer>
 
-<script src="/js/data.js?v=3"></script>
+<script src="/js/data.js?v=4"></script>
 <script src="/js/shortlist.js?v=1"></script>
 <script src="/js/i18n-data.js?v=2"></script>
 <script src="/js/i18n.js?v=1"></script>
 <script src="/js/main.js?v=5"></script>
 <script src="/js/magnetic-cta.js?v=1"></script>
 <script>
-(function () {
+window.PhotoczaroModelsReady.then(function () {
   const pathMatch = window.location.pathname.match(/^\/(?:fr|ru|es|cs|ar)\/models\/([^/]+)\/?$/) || window.location.pathname.match(/^\/models\/([^/]+)\/?$/);
   const slug = (pathMatch && decodeURIComponent(pathMatch[1])) || new URLSearchParams(window.location.search).get("slug");
   const model = (window.PHOTOCZARO_MODELS || []).find((m) => m.slug === slug);
@@ -185,7 +185,7 @@
     ${model.sample ? `<div class="profile-sample-notice"><strong>${i18n.t("profile.sampleStrong")}</strong> ${i18n.t("profile.sampleBody")}</div>` : ""}
     <section class="profile-hero" style="margin-top:24px;">
       <div class="profile-media" style="--card-a:${model.swatch[0]};--card-b:${model.swatch[1]}">
-        <span class="initials">${initials}</span>
+        ${window.PhotoczaroCardMedia(model)}
       </div>
       <div class="profile-info">
         <span class="eyebrow">${catLabel}${model.newFace ? " · " + i18n.t("badge.newFace") : ""}</span>
@@ -211,13 +211,16 @@
     <section class="section reveal in">
       <div class="section-head"><span class="eyebrow">${i18n.t("profile.digitals")}</span><h2 style="font-size:1.8rem;">${i18n.t("profile.portfolio")}</h2></div>
       <div class="profile-gallery">
-        ${[0,1,2,3,4,5].map(() => `
-          <div class="model-card-media" style="--card-a:${model.swatch[0]};--card-b:${model.swatch[1]}">
-            <span class="initials" style="font-size:2.2rem;">${initials}</span>
-          </div>
-        `).join("")}
+        ${(function () {
+          const shots = [model.images?.fullFront, model.images?.fullSide, ...(model.images?.gallery || [])].filter(Boolean);
+          const boxes = Math.max(shots.length, 6);
+          return Array.from({ length: boxes }).map((_, i) => shots[i]
+            ? `<div class="model-card-media" style="--card-a:${model.swatch[0]};--card-b:${model.swatch[1]}"><img src="/media/${shots[i]}" alt="" loading="lazy"></div>`
+            : `<div class="model-card-media" style="--card-a:${model.swatch[0]};--card-b:${model.swatch[1]}"><span class="initials" style="font-size:2.2rem;">${initials}</span></div>`
+          ).join("");
+        })()}
       </div>
-      <p class="form-note" style="margin-top:16px;">${i18n.t("profile.placeholderDigitalsNote")}</p>
+      ${(!model.images?.fullFront && !model.images?.gallery?.length) ? `<p class="form-note" style="margin-top:16px;">${i18n.t("profile.placeholderDigitalsNote")}</p>` : ""}
     </section>
 
     <section class="section related-models reveal in" id="related-section" style="border-top:1px solid rgba(255,255,255,0.08);">
@@ -235,7 +238,7 @@
   document.getElementById("related-grid").innerHTML = related.map((m) => `
     <a href="${i18n.path("/models/" + m.slug)}" class="model-card">
       <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
-        <span class="initials">${m.name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase()}</span>
+        ${window.PhotoczaroCardMedia(m)}
       </div>
       <div class="model-card-info">
         <h3>${m.name}</h3>
@@ -245,7 +248,7 @@
   `).join("");
 
   window.PhotoczaroShortlist.render();
-})();
+});
 </script>
 </body>
 </html>

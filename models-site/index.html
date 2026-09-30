@@ -33,7 +33,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/css/style.css?v=18">
+<link rel="stylesheet" href="/css/style.css?v=20">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipToContent">Skip to content</a>
@@ -189,7 +189,7 @@
   </div>
 </footer>
 
-<script src="/js/data.js?v=3"></script>
+<script src="/js/data.js?v=4"></script>
 <script src="/js/shortlist.js?v=1"></script>
 <script src="/js/i18n-data.js?v=2"></script>
 <script src="/js/i18n.js?v=1"></script>
@@ -205,14 +205,14 @@
   })();
 </script>
 <script>
-  (function () {
+  window.PhotoczaroModelsReady.then(function () {
     const grid = document.getElementById("home-model-grid");
     const featured = (window.PHOTOCZARO_MODELS || []).filter((m) => m.featured).sort((a, b) => a.displayOrder - b.displayOrder).slice(0, 4);
     const i18n = window.PhotoczaroI18n;
     grid.innerHTML = featured.map((m) => `
       <a href="${i18n.path("/models/" + m.slug)}" class="model-card">
         <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
-          <span class="initials">${m.name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase()}</span>
+          ${window.PhotoczaroCardMedia(m)}
           ${m.sample ? `<span class="model-card-badge sample-badge">${i18n.t("badge.sampleProfile")}</span>` : m.newFace ? `<span class="model-card-badge">${i18n.t("badge.newFace")}</span>` : ""}
           <button class="model-card-shortlist" data-shortlist-toggle="${m.slug}" aria-pressed="false" aria-label="${i18n.t("shortlist.addAriaLabel")}" onclick="event.preventDefault();window.PhotoczaroShortlist.toggle('${m.slug}')">♡</button>
           <div class="model-card-overlay"><span class="model-card-name">${m.name}</span></div>
@@ -224,7 +224,7 @@
       </a>
     `).join("");
     window.PhotoczaroShortlist.render();
-  })();
+  });
 </script>
 </body>
 </html>

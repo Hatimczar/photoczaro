@@ -45,10 +45,6 @@
     window.history.replaceState({}, "", url);
   }
 
-  function initialsOf(name) {
-    return name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
-  }
-
   function render() {
     const filters = currentFilters();
     updateURL(filters);
@@ -77,7 +73,7 @@
     grid.innerHTML = results.map((m) => `
       <a href="${i18n.path("/models/" + m.slug)}" class="model-card">
         <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
-          <span class="initials">${initialsOf(m.name)}</span>
+          ${window.PhotoczaroCardMedia(m)}
           ${m.sample ? `<span class="model-card-badge sample-badge">${i18n.t("badge.sampleProfile")}</span>` : m.newFace ? `<span class="model-card-badge">${i18n.t("badge.newFace")}</span>` : ""}
           <button class="model-card-shortlist" data-shortlist-toggle="${m.slug}" aria-pressed="false" aria-label="${i18n.t("shortlist.addAriaLabel")}" onclick="event.preventDefault();window.PhotoczaroShortlist.toggle('${m.slug}')">♡</button>
           <div class="model-card-overlay"><span class="model-card-name">${m.name}</span></div>
@@ -106,5 +102,5 @@
   });
 
   applyParamsToForm(paramsFromURL());
-  render();
+  window.PhotoczaroModelsReady.then(render);
 })();

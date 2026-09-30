@@ -213,7 +213,7 @@ window.PhotoczaroModelsReady.then(function () {
       </div>
     </section>
 
-    <section class="section reveal in">
+    <section class="section reveal">
       <div class="section-head"><span class="eyebrow">${i18n.t("profile.digitals")}</span><h2 style="font-size:1.8rem;">${i18n.t("profile.portfolio")}</h2></div>
       <div class="profile-gallery">
         ${(function () {
@@ -228,7 +228,7 @@ window.PhotoczaroModelsReady.then(function () {
       ${(!model.images?.fullFront && !model.images?.gallery?.length) ? `<p class="form-note" style="margin-top:16px;">${i18n.t("profile.placeholderDigitalsNote")}</p>` : ""}
     </section>
 
-    <section class="section related-models reveal in" id="related-section" style="border-top:1px solid rgba(255,255,255,0.08);">
+    <section class="section related-models reveal" id="related-section" style="border-top:1px solid rgba(255,255,255,0.08);">
       <div class="section-head"><span class="eyebrow">${i18n.t("profile.related")}</span><h2 style="font-size:1.8rem;">${i18n.t("profile.similarModels")}</h2></div>
       <div class="model-grid" id="related-grid"></div>
     </section>

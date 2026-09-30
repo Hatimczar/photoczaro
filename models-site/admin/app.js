@@ -7,6 +7,7 @@
 
   async function api(path, opts) {
     const res = await fetch(path, opts);
+    if (res.status === 401) renderSignedOut();
     if (!res.ok) {
       let message = `Request failed (${res.status})`;
       try {
@@ -231,13 +232,24 @@
   });
 
   /* ---------- Session ---------- */
+  // Cloudflare Access normally intercepts a fully signed-out visit before
+  // this page ever loads, but a session can also expire while the panel is
+  // already open in a tab; that shows up as a 401 from some API call mid-use
+  // rather than a redirect. Either way, the topbar should always offer a way
+  // back in rather than just going blank.
+  function renderSignedOut() {
+    const el = document.getElementById("admin-session");
+    if (!el) return;
+    el.innerHTML = `<span class="admin-session-email">Signed out</span> · <a href="/admin/">Sign in</a>`;
+  }
+
   async function loadSession() {
     const el = document.getElementById("admin-session");
     try {
       const me = await api("/api/admin/whoami");
       el.innerHTML = `<span class="admin-session-email" title="${esc(me.email)}">${esc(me.email)}</span> · <a href="/cdn-cgi/access/logout">Log out</a>`;
     } catch {
-      el.innerHTML = "";
+      renderSignedOut();
     }
   }
 

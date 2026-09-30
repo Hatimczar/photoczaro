@@ -14,6 +14,7 @@
 
 const MAX_BYTES = 8 * 1024 * 1024;
 const MAX_DIMENSION = 6000; // sanity cap, not a design constraint
+const JPEG_SCAN_BYTES = 512 * 1024; // enough to reach the SOF marker in the vast majority of real photos
 
 const SIGNATURES = [
   { type: "image/jpeg", bytes: [0xff, 0xd8, 0xff] },
@@ -35,15 +36,47 @@ function matchSignature(bytes) {
   return null;
 }
 
-// Best-effort dimension check. PNG stores width/height at a fixed offset in
-// its IHDR chunk, so this is exact for PNG. JPEG/WEBP dimension parsing is
-// more involved (segment/chunk scanning); skipped for now rather than
-// half-implemented, so those two formats only get the size + signature checks.
+// PNG stores width/height at a fixed offset in its IHDR chunk, so this is exact.
 function readPngDimensions(bytes) {
   if (bytes.length < 24) return null;
   const width = (bytes[16] << 24) | (bytes[17] << 16) | (bytes[18] << 8) | bytes[19];
   const height = (bytes[20] << 24) | (bytes[21] << 16) | (bytes[22] << 8) | bytes[23];
   return { width, height };
+}
+
+// Walks JPEG marker segments looking for a Start-Of-Frame marker (0xC0-0xCF,
+// excluding the DHT/JPG-ext/DAC markers which reuse that range), which
+// stores height/width right after its 2-byte length field. Returns null if
+// no SOF is found within the scanned window rather than throwing; callers
+// treat that as "couldn't determine dimensions" and don't block the upload
+// on it, since this is a sanity cap, not a hard requirement.
+function readJpegDimensions(bytes) {
+  let offset = 2; // skip the SOI marker (0xFFD8)
+  while (offset + 3 < bytes.length) {
+    if (bytes[offset] !== 0xff) { offset++; continue; }
+    const marker = bytes[offset + 1];
+    if (marker === 0xff) { offset++; continue; } // fill byte
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) {
+      offset += 2; // markers with no length/data field
+      continue;
+    }
+    if (marker === 0xd9) break; // EOI
+    const segLength = (bytes[offset + 2] << 8) | bytes[offset + 3];
+    const isSOF = marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc;
+    if (isSOF) {
+      if (offset + 8 >= bytes.length) return null;
+      const height = (bytes[offset + 5] << 8) | bytes[offset + 6];
+      const width = (bytes[offset + 7] << 8) | bytes[offset + 8];
+      return { width, height };
+    }
+    if (marker === 0xda) break; // Start Of Scan: no SOF found before actual image data
+    offset += 2 + segLength;
+  }
+  return null;
+}
+
+function exceedsMaxDimension(dims) {
+  return !!dims && (dims.width > MAX_DIMENSION || dims.height > MAX_DIMENSION);
 }
 
 export async function validateImageUpload(file) {
@@ -59,11 +92,15 @@ export async function validateImageUpload(file) {
     return { ok: false, error: "Unsupported file. Only JPEG, PNG or WEBP images are accepted." };
   }
 
+  let dims = null;
   if (sniffedType === "image/png") {
-    const dims = readPngDimensions(head);
-    if (dims && (dims.width > MAX_DIMENSION || dims.height > MAX_DIMENSION)) {
-      return { ok: false, error: `Image dimensions exceed the ${MAX_DIMENSION}px limit.` };
-    }
+    dims = readPngDimensions(head);
+  } else if (sniffedType === "image/jpeg") {
+    const scanBuf = new Uint8Array(await file.slice(0, Math.min(file.size, JPEG_SCAN_BYTES)).arrayBuffer());
+    dims = readJpegDimensions(scanBuf);
+  }
+  if (exceedsMaxDimension(dims)) {
+    return { ok: false, error: `Image dimensions exceed the ${MAX_DIMENSION}px limit.` };
   }
 
   return { ok: true, contentType: sniffedType };

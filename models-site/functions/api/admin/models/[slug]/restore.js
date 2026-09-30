@@ -1,9 +1,11 @@
 import { json } from "../../../../_lib/http.js";
 import { requireAccessIdentity } from "../../../../_lib/admin-auth.js";
+import { requireSameOrigin } from "../../../../_lib/origin-check.js";
 
 // Reverses the soft-delete in [slug].js's onRequestDelete. Restored models
 // come back unpublished so an admin reviews them before they go live again.
 export async function onRequestPost({ request, env, params }) {
+  if (!requireSameOrigin(request)) return json({ error: "Cross-origin request blocked." }, 403);
   const actor = requireAccessIdentity(request);
   if (!actor) return json({ error: "Unauthorized" }, 401);
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });

@@ -1,10 +1,12 @@
 import { json } from "../../../../_lib/http.js";
 import { requireAccessIdentity } from "../../../../_lib/admin-auth.js";
+import { requireSameOrigin } from "../../../../_lib/origin-check.js";
 import { validateImageUpload } from "../../../../_lib/image-validate.js";
 
 const EXT_FOR_TYPE = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
 
 export async function onRequestPost({ request, env, params }) {
+  if (!requireSameOrigin(request)) return json({ error: "Cross-origin request blocked." }, 403);
   const actor = requireAccessIdentity(request);
   if (!actor) return json({ error: "Unauthorized" }, 401);
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });
@@ -49,6 +51,7 @@ export async function onRequestPost({ request, env, params }) {
 }
 
 export async function onRequestDelete({ request, env, params }) {
+  if (!requireSameOrigin(request)) return json({ error: "Cross-origin request blocked." }, 403);
   const actor = requireAccessIdentity(request);
   if (!actor) return json({ error: "Unauthorized" }, 401);
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });

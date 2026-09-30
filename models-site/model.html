@@ -35,8 +35,11 @@
 <meta property="og:image" content="https://models.photoczaro.com/images/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta name="twitter:image" content="https://models.photoczaro.com/images/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@photoczaro">
+<meta name="twitter:title" id="page-twitter-title" content="Model | Photoczaro Models Dubai">
+<meta name="twitter:description" id="page-twitter-description" content="Model profile at Photoczaro Models Dubai.">
+<meta name="twitter:image" content="https://models.photoczaro.com/images/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -171,6 +174,8 @@ window.PhotoczaroModelsReady.then(function () {
   document.getElementById("page-og-title").setAttribute("content", model.seoTitle);
   document.getElementById("page-og-description").setAttribute("content", model.seoDescription);
   document.getElementById("page-og-url").setAttribute("content", canonicalUrl);
+  document.getElementById("page-twitter-title").setAttribute("content", model.seoTitle);
+  document.getElementById("page-twitter-description").setAttribute("content", model.seoDescription);
   ["en", "fr", "ru", "es", "cs", "ar", "x-default"].forEach((code) => {
     const prefix = code === "x-default" || code === "en" ? "" : "/" + code;
     document.getElementById("hreflang-" + code)?.setAttribute("href", `https://models.photoczaro.com${prefix}/models/${model.slug}`);

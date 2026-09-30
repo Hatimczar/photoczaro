@@ -14,7 +14,7 @@ export async function onRequestGet({ env }) {
     list.keys.map((k) => env.ROSTER_KV.get(k.name, { type: "json" }))
   );
   const published = records
-    .filter((m) => m && m.published)
+    .filter((m) => m && m.published && !m.archived)
     .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
 
   return json(published, 200, { "Cache-Control": "public, max-age=60" });

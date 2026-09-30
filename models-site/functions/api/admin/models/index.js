@@ -6,9 +6,15 @@ export async function onRequestGet({ request, env }) {
   if (!requireAccessIdentity(request)) return json({ error: "Unauthorized" }, 401);
   if (!env.ROSTER_KV) return json([]);
 
+  const url = new URL(request.url);
+  const includeArchived = url.searchParams.get("includeArchived") === "true";
+
   const list = await env.ROSTER_KV.list({ prefix: "model:" });
   const records = await Promise.all(list.keys.map((k) => env.ROSTER_KV.get(k.name, { type: "json" })));
-  const models = records.filter(Boolean).sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
+  const models = records
+    .filter(Boolean)
+    .filter((m) => includeArchived || !m.archived)
+    .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
   return json(models);
 }
 
@@ -61,6 +67,8 @@ export async function onRequestPost({ request, env }) {
     images: {},
     seoTitle: `${name} | Photoczaro Models Dubai`,
     seoDescription: `${name}, a Photoczaro Models roster talent based in the UAE.`,
+    archived: false,
+    history: [{ action: "created", actor, at: new Date().toISOString() }],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };

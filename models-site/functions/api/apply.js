@@ -11,6 +11,21 @@
  * open items).
  */
 import { json, htmlResponse } from "../_lib/http.js";
+import { validateImageUpload, validatePortfolioUpload } from "../_lib/image-validate.js";
+
+// Only accept a plain https:// link (Photoczaro doesn't need portfolios
+// served over http, and a stray javascript:/data: URL stored here would
+// otherwise render as a raw href in the admin panel).
+function sanitizePortfolioUrl(value) {
+  const trimmed = (value || "").toString().trim();
+  if (!trimmed) return "";
+  try {
+    const url = new URL(trimmed);
+    return url.protocol === "https:" ? url.toString() : "";
+  } catch {
+    return "";
+  }
+}
 
 export async function onRequestPost({ request, env }) {
   const isNativeSubmit = request.headers.get("x-requested-with") !== "fetch";
@@ -35,24 +50,26 @@ export async function onRequestPost({ request, env }) {
   }
 
   const applicationId = `${Date.now()}-${crypto.randomUUID()}`;
-  const MAX_BYTES = 8 * 1024 * 1024;
-  const fileFields = ["headshot", "fullFront", "fullSide", "portfolioFile"];
+  const EXT_FOR_TYPE = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "application/pdf": "pdf" };
+  const imageFields = ["headshot", "fullFront", "fullSide"];
   const files = {};
-  for (const field of fileFields) {
+  for (const field of [...imageFields, "portfolioFile"]) {
     const file = form.get(field);
-    if (file && typeof file === "object" && "size" in file && file.size > 0) {
-      if (file.size > MAX_BYTES) {
-        return respondError(isNativeSubmit, `${field} exceeds the 8MB limit.`, 400);
-      }
-      const ext = (file.name || "").split(".").pop()?.toLowerCase().slice(0, 8) || "bin";
-      const key = `applications/${applicationId}/${field}.${ext}`;
-      if (env.MEDIA) {
-        await env.MEDIA.put(key, file.stream(), {
-          httpMetadata: { contentType: file.type || "application/octet-stream" },
-        });
-      }
-      files[field] = { name: file.name, type: file.type, size: file.size, key: env.MEDIA ? key : null };
+    if (!file || typeof file !== "object" || !("size" in file) || file.size === 0) continue;
+
+    const validation = field === "portfolioFile" ? await validatePortfolioUpload(file) : await validateImageUpload(file);
+    if (!validation.ok) {
+      return respondError(isNativeSubmit, `${field}: ${validation.error}`, 400);
     }
+
+    const ext = EXT_FOR_TYPE[validation.contentType] || "bin";
+    const key = `applications/${applicationId}/${field}.${ext}`;
+    if (env.MEDIA) {
+      await env.MEDIA.put(key, file.stream(), {
+        httpMetadata: { contentType: validation.contentType },
+      });
+    }
+    files[field] = { name: file.name, type: validation.contentType, size: file.size, key: env.MEDIA ? key : null };
   }
 
   const record = {
@@ -77,7 +94,7 @@ export async function onRequestPost({ request, env }) {
     eyes: (form.get("eyes") || "").toString(),
     languages: (form.get("languages") || "").toString(),
     skills: (form.get("skills") || "").toString(),
-    portfolioUrl: (form.get("portfolioUrl") || "").toString(),
+    portfolioUrl: sanitizePortfolioUrl(form.get("portfolioUrl")),
     introduction: (form.get("introduction") || "").toString(),
     ageConfirm: form.get("ageConfirm") === "on",
     residencyConfirm: form.get("residencyConfirm") === "on",

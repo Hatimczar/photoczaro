@@ -6,28 +6,30 @@
 <title>Admin | Photoczaro Models</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="stylesheet" href="/admin/admin.css?v=1">
+<link rel="stylesheet" href="/admin/admin.css?v=2">
 </head>
 <body>
 <header class="admin-topbar">
   <div class="admin-brand">Photoczaro <span>Models Admin</span></div>
-  <nav class="admin-tabs" id="admin-tabs">
-    <button class="admin-tab active" data-tab="applications">Applications <span class="admin-tab-count" id="tab-count-applications"></span></button>
-    <button class="admin-tab" data-tab="models">Models <span class="admin-tab-count" id="tab-count-models"></span></button>
+  <nav class="admin-tabs" id="admin-tabs" role="tablist" aria-label="Admin sections">
+    <button class="admin-tab active" data-tab="applications" role="tab" id="tab-applications" aria-selected="true" aria-controls="panel-applications">Applications <span class="admin-tab-count" id="tab-count-applications"></span></button>
+    <button class="admin-tab" data-tab="models" role="tab" id="tab-models" aria-selected="false" aria-controls="panel-models" tabindex="-1">Models <span class="admin-tab-count" id="tab-count-models"></span></button>
   </nav>
+  <div class="admin-session" id="admin-session"></div>
 </header>
 
 <main class="admin-main">
-  <section class="admin-panel" id="panel-applications">
+  <section class="admin-panel" id="panel-applications" role="tabpanel" aria-labelledby="tab-applications">
     <div class="admin-panel-list" id="applications-list"></div>
     <div class="admin-panel-detail" id="applications-detail">
       <div class="admin-empty">Select an application to review it.</div>
     </div>
   </section>
 
-  <section class="admin-panel" id="panel-models" hidden>
+  <section class="admin-panel" id="panel-models" role="tabpanel" aria-labelledby="tab-models" hidden>
     <div class="admin-panel-list">
       <button class="admin-new-btn" id="new-model-btn">+ New model</button>
+      <label class="admin-archived-toggle"><input type="checkbox" id="show-archived-toggle"> Show archived</label>
       <div id="models-list"></div>
     </div>
     <div class="admin-panel-detail" id="models-detail">
@@ -36,8 +38,12 @@
   </section>
 </main>
 
-<div class="admin-toast" id="admin-toast" hidden></div>
+<div class="admin-toast" id="admin-toast" role="status" aria-live="polite" hidden></div>
 
-<script src="/admin/app.js?v=1"></script>
+<div class="admin-modal-backdrop" id="admin-modal-backdrop" hidden>
+  <div class="admin-modal" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title"></div>
+</div>
+
+<script src="/admin/app.js?v=2"></script>
 </body>
 </html>

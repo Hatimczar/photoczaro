@@ -67,7 +67,7 @@ export async function onRequestPost({ request, env, params }) {
       name: record.professionalName,
       sample: false,
       status: "active",
-      published: true,
+      published: false,
       categories: [record.category],
       subcategories: [],
       newFace: true,
@@ -93,6 +93,8 @@ export async function onRequestPost({ request, env, params }) {
       seoTitle: `${record.professionalName} | Photoczaro Models Dubai`,
       seoDescription: `${record.professionalName}, a Photoczaro Models roster talent based in the UAE.`,
       sourceApplicationId: record.id,
+      archived: false,
+      history: [{ action: "created_from_application", actor, at: new Date().toISOString(), applicationId: record.id }],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

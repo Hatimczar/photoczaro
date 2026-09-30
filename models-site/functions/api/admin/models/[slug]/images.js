@@ -1,10 +1,12 @@
 import { json } from "../../../../_lib/http.js";
 import { requireAccessIdentity } from "../../../../_lib/admin-auth.js";
+import { validateImageUpload } from "../../../../_lib/image-validate.js";
 
-const MAX_BYTES = 8 * 1024 * 1024;
+const EXT_FOR_TYPE = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
 
 export async function onRequestPost({ request, env, params }) {
-  if (!requireAccessIdentity(request)) return json({ error: "Unauthorized" }, 401);
+  const actor = requireAccessIdentity(request);
+  if (!actor) return json({ error: "Unauthorized" }, 401);
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });
   if (!model) return json({ error: "Not found" }, 404);
   if (!env.MEDIA) return json({ error: "Media storage not configured." }, 500);
@@ -18,34 +20,37 @@ export async function onRequestPost({ request, env, params }) {
 
   const file = form.get("image");
   const slot = (form.get("slot") || "").toString();
-  if (!file || typeof file !== "object" || !("size" in file) || file.size === 0) {
-    return json({ error: "No file provided." }, 400);
-  }
-  if (file.size > MAX_BYTES) return json({ error: "File exceeds the 8MB limit." }, 400);
 
-  const ext = (file.name || "").split(".").pop()?.toLowerCase().slice(0, 8) || "jpg";
+  const validation = await validateImageUpload(file);
+  if (!validation.ok) return json({ error: validation.error }, 400);
+  const ext = EXT_FOR_TYPE[validation.contentType];
+
   const images = model.images || {};
 
   if (["headshot", "fullFront", "fullSide"].includes(slot)) {
     const key = `models/${params.slug}/${slot}.${ext}`;
-    await env.MEDIA.put(key, file.stream(), { httpMetadata: { contentType: file.type || "application/octet-stream" } });
+    await env.MEDIA.put(key, file.stream(), { httpMetadata: { contentType: validation.contentType } });
     images[slot] = key;
   } else {
     const gallery = images.gallery || [];
     const key = `models/${params.slug}/gallery-${Date.now()}.${ext}`;
-    await env.MEDIA.put(key, file.stream(), { httpMetadata: { contentType: file.type || "application/octet-stream" } });
+    await env.MEDIA.put(key, file.stream(), { httpMetadata: { contentType: validation.contentType } });
     gallery.push(key);
     images.gallery = gallery;
   }
 
   model.images = images;
   model.updatedAt = new Date().toISOString();
+  const history = Array.isArray(model.history) ? model.history : [];
+  history.push({ action: `image_uploaded:${slot}`, actor, at: model.updatedAt });
+  model.history = history.slice(-50);
   await env.ROSTER_KV.put(`model:${params.slug}`, JSON.stringify(model));
   return json({ ok: true, model });
 }
 
 export async function onRequestDelete({ request, env, params }) {
-  if (!requireAccessIdentity(request)) return json({ error: "Unauthorized" }, 401);
+  const actor = requireAccessIdentity(request);
+  if (!actor) return json({ error: "Unauthorized" }, 401);
   const model = await env.ROSTER_KV?.get(`model:${params.slug}`, { type: "json" });
   if (!model) return json({ error: "Not found" }, 404);
 
@@ -72,6 +77,9 @@ export async function onRequestDelete({ request, env, params }) {
   if (env.MEDIA) await env.MEDIA.delete(key);
   model.images = images;
   model.updatedAt = new Date().toISOString();
+  const history = Array.isArray(model.history) ? model.history : [];
+  history.push({ action: "image_removed", actor, at: model.updatedAt });
+  model.history = history.slice(-50);
   await env.ROSTER_KV.put(`model:${params.slug}`, JSON.stringify(model));
   return json({ ok: true, model });
 }

@@ -49,6 +49,20 @@ export async function onRequestPost({ request, env }) {
     return respondError(isNativeSubmit, "Missing or invalid required fields.", 400);
   }
 
+  // Double-tap guard: a repeat submission from the same email within a
+  // minute is treated as already received. The marker is set before the
+  // (slow) uploads so a near-simultaneous second request sees it.
+  const dedupeKey = `dedupe:${email}`;
+  if (env.APPLICATIONS_KV) {
+    if (await env.APPLICATIONS_KV.get(dedupeKey)) {
+      if (isNativeSubmit) {
+        return htmlResponse("Application received", "Thank you. Your application has been received.", "apply");
+      }
+      return json({ ok: true });
+    }
+    await env.APPLICATIONS_KV.put(dedupeKey, "1", { expirationTtl: 60 });
+  }
+
   const applicationId = `${Date.now()}-${crypto.randomUUID()}`;
   const EXT_FOR_TYPE = {
     "image/jpeg": "jpg",

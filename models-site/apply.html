@@ -382,8 +382,25 @@
     form.querySelectorAll("[data-unit-suffix]").forEach((el) => { el.textContent = "(" + unit + ")"; });
   });
 
+  /* Uploads can take several seconds; without this guard an impatient second
+     tap creates a duplicate application. */
+  let isSubmitting = false;
+  const submitButton = form.querySelector('button[type="submit"]');
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    isSubmitting = true;
+    if (submitButton) submitButton.disabled = true;
+    try {
+      await handleSubmit();
+    } finally {
+      isSubmitting = false;
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
+
+  async function handleSubmit() {
     document.querySelectorAll(".form-error").forEach((el) => (el.textContent = ""));
 
     if (pendingConversions > 0) {
@@ -440,7 +457,7 @@
       status.className = "form-status error";
       status.textContent = i18n.t("apply.sendError");
     }
-  });
+  }
 
   window.PhotoczaroShortlist.render();
 })();

@@ -144,7 +144,7 @@
 
 <script src="/js/data.js?v=4"></script>
 <script src="/js/shortlist.js?v=1"></script>
-<script src="/js/i18n-data.js?v=3"></script>
+<script src="/js/i18n-data.js?v=4"></script>
 <script src="/js/i18n.js?v=1"></script>
 <script src="/js/main.js?v=5"></script>
 <script src="/js/magnetic-cta.js?v=1"></script>
@@ -209,6 +209,7 @@ window.PhotoczaroModelsReady.then(function () {
         <div class="profile-actions">
           <a href="book-talent?models=${model.slug}" class="cta-btn cta-btn-primary">${i18n.t("profile.checkAvailability")}</a>
           <button class="cta-btn" data-shortlist-toggle="${model.slug}" aria-pressed="false" onclick="window.PhotoczaroShortlist.toggle('${model.slug}')">${i18n.t("profile.addToBookingDeck")}</button>
+          <button class="cta-btn" id="share-profile" type="button" data-copied="${i18n.t("profile.linkCopied")}">${i18n.t("profile.share")}</button>
         </div>
       </div>
     </section>
@@ -253,6 +254,28 @@ window.PhotoczaroModelsReady.then(function () {
   `).join("");
 
   window.PhotoczaroShortlist.render();
+
+  /* Native share sheet where available (phones), otherwise copy the link. */
+  const shareBtn = document.getElementById("share-profile");
+  shareBtn.addEventListener("click", async () => {
+    const shareUrl = canonicalUrl;
+    if (navigator.share) {
+      try { await navigator.share({ title: model.seoTitle, url: shareUrl }); } catch (e) { /* dismissed */ }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch (e) {
+      const ta = document.createElement("textarea");
+      ta.value = shareUrl; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (err) { /* nothing more to try */ }
+      ta.remove();
+    }
+    const label = shareBtn.textContent;
+    shareBtn.textContent = shareBtn.dataset.copied;
+    setTimeout(() => { shareBtn.textContent = label; }, 2000);
+  });
 
   /* main.js's IntersectionObserver only scans .reveal elements present at
      page load, but this profile content is injected afterward, so it would

@@ -27,3 +27,6 @@ Thumbs.db
 # Test/build artifacts, if a headless test run is ever performed in-repo.
 test-results/
 playwright-report/
+
+# SEO-GOD local state: secrets, run markers, Docker scratch. Never committed.
+.seo-god/

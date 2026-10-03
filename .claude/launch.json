@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "photoczaro-static",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8811"],
+      "port": 8811
+    },
+    {
+      "name": "photoczaro-models",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["wrangler", "pages", "dev", "models-site", "--port", "8812"],
+      "port": 8812
+    }
+  ]
+}

@@ -212,7 +212,7 @@ h1.pub-title {
 
 .pub-card:hover { border-color: rgba(201,169,110,0.3); }
 
-.pub-card h3 {
+.pub-card h2 {
   font-family: 'Cormorant Garamond', serif;
   font-size: 22px;
   color: var(--gold);

@@ -298,3 +298,10 @@ body { background: var(--dark); }
   .admin-review-image img { width: 100%; height: auto; aspect-ratio: 4 / 5; }
   .admin-review-image-missing { width: 100%; }
 }
+@media (pointer: coarse), (max-width: 640px) {
+  .admin-tab { min-height: 44px; }
+  .admin-btn, .admin-new-btn { min-height: 44px; }
+  .admin-image-remove { padding: 8px 10px; font-size: 12px; }
+  .admin-archived-toggle { min-height: 44px; }
+  .admin-session a { padding: 12px 4px; }
+}

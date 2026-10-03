@@ -48,6 +48,11 @@
         btn.setAttribute("aria-label", pressed ? "Remove from shortlist" : "Add to shortlist");
       });
 
+      const tr = (key, fallback) => {
+        const i18n = window.PhotoczaroI18n;
+        const v = i18n && i18n.t ? i18n.t(key) : "";
+        return v && v !== key ? v : fallback;
+      };
       const itemsEl = document.getElementById("drawer-items");
       if (itemsEl) {
         if (models.length === 0) {
@@ -55,10 +60,10 @@
         } else {
           itemsEl.innerHTML = models.map((m) => `
             <div class="drawer-item">
-              <div class="drawer-item-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">${initials(m.name)}</div>
+              <div class="drawer-item-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">${m.images && m.images.headshot ? `<img src="/media/${m.images.headshot}" alt="">` : initials(m.name)}</div>
               <div class="drawer-item-info">
                 <h4>${m.name}</h4>
-                <span>${window.PHOTOCZARO_CATEGORY_LABELS[m.categories[0]] || ""}${m.newFace ? " · New Face" : ""}</span>
+                <span>${tr("category." + m.categories[0], window.PHOTOCZARO_CATEGORY_LABELS[m.categories[0]] || "")}${m.newFace ? " · " + tr("badge.newFace", "New Face") : ""}</span>
               </div>
               <button class="drawer-item-remove" data-remove-slug="${m.slug}" aria-label="Remove ${m.name} from shortlist">✕</button>
             </div>

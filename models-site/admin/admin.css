@@ -305,3 +305,6 @@ body { background: var(--dark); }
   .admin-archived-toggle { min-height: 44px; }
   .admin-session a { padding: 12px 4px; }
 }
+
+/* Icons (Unicons line set via /images/icons-v1.svg) */
+.icon { width: 1.15em; height: 1.15em; fill: currentColor; flex-shrink: 0; vertical-align: -0.2em; margin-right: 4px; }

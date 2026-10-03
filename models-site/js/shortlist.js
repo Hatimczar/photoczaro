@@ -44,8 +44,13 @@
         const slug = btn.getAttribute("data-shortlist-toggle");
         const pressed = slugs.includes(slug);
         btn.setAttribute("aria-pressed", pressed ? "true" : "false");
-        btn.textContent = pressed ? "♥" : "♡";
-        btn.setAttribute("aria-label", pressed ? "Remove from shortlist" : "Add to shortlist");
+        /* Only the small heart buttons on cards swap their glyph; the labelled
+           "Add to Booking Deck" button on a profile keeps its text and shows its
+           state through aria-pressed (styled in style.css). */
+        if (btn.classList.contains("model-card-shortlist")) {
+          btn.textContent = pressed ? "♥" : "♡";
+          btn.setAttribute("aria-label", pressed ? "Remove from shortlist" : "Add to shortlist");
+        }
       });
 
       const tr = (key, fallback) => {

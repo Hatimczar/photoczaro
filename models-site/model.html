@@ -48,7 +48,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/css/style.css?v=27">
+<link rel="stylesheet" href="/css/style.css?v=29">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipToContent">Skip to content</a>
@@ -143,7 +143,7 @@
 </footer>
 
 <script src="/js/data.js?v=4"></script>
-<script src="/js/shortlist.js?v=2"></script>
+<script src="/js/shortlist.js?v=3"></script>
 <script src="/js/i18n-data.js?v=4"></script>
 <script src="/js/i18n.js?v=1"></script>
 <script src="/js/main.js?v=5"></script>
@@ -199,17 +199,17 @@ window.PhotoczaroModelsReady.then(function () {
           ${subLabels.map((s) => `<span class="profile-tag">${s}</span>`).join("")}
         </div>
         <dl class="profile-stats">
-          <div class="profile-stat"><dt>${i18n.t("profile.location")}</dt><dd>${model.location}</dd></div>
-          <div class="profile-stat"><dt>${i18n.t("profile.height")}</dt><dd>${model.height}</dd></div>
-          <div class="profile-stat"><dt>${i18n.t("profile.measurements")}</dt><dd>${model.measurements}</dd></div>
-          <div class="profile-stat"><dt>${i18n.t("profile.hairEyes")}</dt><dd>${model.hair} / ${model.eyes}</dd></div>
-          <div class="profile-stat"><dt>${i18n.t("profile.languages")}</dt><dd>${model.languages.join(", ")}</dd></div>
-          <div class="profile-stat"><dt>${i18n.t("profile.skills")}</dt><dd>${model.skills.join(", ")}</dd></div>
+          <div class="profile-stat"><dt><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-pin"></use></svg>${i18n.t("profile.location")}</dt><dd>${model.location}</dd></div>
+          <div class="profile-stat"><dt><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-ruler"></use></svg>${i18n.t("profile.height")}</dt><dd>${model.height}</dd></div>
+          <div class="profile-stat"><dt><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-ruler"></use></svg>${i18n.t("profile.measurements")}</dt><dd>${model.measurements}</dd></div>
+          <div class="profile-stat"><dt><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-eye"></use></svg>${i18n.t("profile.hairEyes")}</dt><dd>${model.hair} / ${model.eyes}</dd></div>
+          <div class="profile-stat"><dt><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-globe"></use></svg>${i18n.t("profile.languages")}</dt><dd>${model.languages.join(", ")}</dd></div>
+          <div class="profile-stat"><dt><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-star"></use></svg>${i18n.t("profile.skills")}</dt><dd>${model.skills.join(", ")}</dd></div>
         </dl>
         <div class="profile-actions">
           <a href="book-talent?models=${model.slug}" class="cta-btn cta-btn-primary">${i18n.t("profile.checkAvailability")}</a>
           <button class="cta-btn" data-shortlist-toggle="${model.slug}" aria-pressed="false" onclick="window.PhotoczaroShortlist.toggle('${model.slug}')">${i18n.t("profile.addToBookingDeck")}</button>
-          <button class="cta-btn" id="share-profile" type="button" data-copied="${i18n.t("profile.linkCopied")}">${i18n.t("profile.share")}</button>
+          <button class="cta-btn" id="share-profile" type="button" data-copied="${i18n.t("profile.linkCopied")}"><span class="share-label"><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-share"></use></svg>${i18n.t("profile.share")}</span></button>
         </div>
       </div>
     </section>
@@ -272,9 +272,9 @@ window.PhotoczaroModelsReady.then(function () {
       try { document.execCommand("copy"); } catch (err) { /* nothing more to try */ }
       ta.remove();
     }
-    const label = shareBtn.textContent;
-    shareBtn.textContent = shareBtn.dataset.copied;
-    setTimeout(() => { shareBtn.textContent = label; }, 2000);
+    const labelHtml = shareBtn.innerHTML;
+    shareBtn.innerHTML = '<span class="share-label"><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-check"></use></svg>' + shareBtn.dataset.copied + '</span>';
+    setTimeout(() => { shareBtn.innerHTML = labelHtml; }, 2000);
   });
 
   /* main.js's IntersectionObserver only scans .reveal elements present at

@@ -751,3 +751,17 @@ footer#site-footer { padding: 24px var(--bento-pad) 24px; border-top: none; }
 .drawer-item-media { overflow: hidden; border-radius: 12px; }
 .drawer-item-media img { width: 100%; height: 100%; object-fit: cover; }
 @media (max-width: 560px) { .nav-shortlist-btn { width: 44px; height: 44px; } }
+
+/* ---------- Icons (Unicons line set via images/icons-v1.svg) ---------- */
+.icon { width: 1.15em; height: 1.15em; fill: currentColor; flex-shrink: 0; vertical-align: -0.2em; }
+.icon-badge {
+  display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px;
+  border-radius: 16px; margin-bottom: 20px; color: var(--gold-light);
+  background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.28);
+}
+.icon-badge .icon { width: 24px; height: 24px; }
+.profile-stat dt { display: flex; align-items: center; gap: 8px; }
+.profile-stat dt .icon { width: 14px; height: 14px; color: var(--gold); }
+.share-label { display: inline-flex; align-items: center; gap: 8px; }
+.share-label .icon { width: 16px; height: 16px; }
+.profile-actions .cta-btn[aria-pressed="true"] { background: rgba(201,169,110,0.2); border-color: rgba(201,169,110,0.6); }

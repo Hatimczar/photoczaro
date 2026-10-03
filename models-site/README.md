@@ -67,3 +67,7 @@ npx wrangler pages dev . --port 8812
 ```
 
 (Also registered as the `photoczaro-models` launch config for the Browser pane.)
+
+## Credits
+
+Icons: Unicons (line style) by IconScout, used under the IconScout Simple License (commercial use allowed, attribution optional). Sprite: `images/icons-v1.svg`; bump the filename if the sprite changes (images are cached long-term).

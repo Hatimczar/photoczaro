@@ -859,6 +859,37 @@
     } catch (err) { toast(err.message, true); }
   });
 
+  /* Bento layout: the detail panes are rendered as a flat run of headings and
+     fields. Whenever one is (re)rendered, group each heading and what follows
+     it into a card so the pane reads as a grid of tiles. Moves the existing
+     nodes rather than copying them, so ids and listeners are untouched. */
+  const CARD_SPAN = { details: "s7", measurements: "s5", photos: "s7", gallery: "s5", profile: "s7", stats: "s5" };
+  function bentoize(detail) {
+    if (!detail.querySelector(":scope > .admin-section-title")) return;
+    const nodes = Array.from(detail.childNodes);
+    const grid = document.createElement("div");
+    grid.className = "admin-bento";
+    let card = null;
+    const newCard = (title) => {
+      card = document.createElement("section");
+      const key = title ? title.textContent.trim().toLowerCase().replace(/\s*\(.*$/, "") : "";
+      card.className = "admin-card " + (CARD_SPAN[key] || "");
+      grid.appendChild(card);
+    };
+    nodes.forEach((node) => {
+      if (node.nodeType !== 1) { if (card) card.appendChild(node); return; }
+      if (node.classList.contains("admin-detail-head")) { card = null; grid.appendChild(node); return; }
+      if (node.classList.contains("admin-section-title")) { newCard(node); card.appendChild(node); return; }
+      if (!card) newCard(null);
+      card.appendChild(node);
+    });
+    detail.appendChild(grid);
+  }
+  ["applications-detail", "models-detail"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) new MutationObserver(() => bentoize(el)).observe(el, { childList: true });
+  });
+
   loadSession();
   loadApplications().catch((err) => toast(err.message, true));
   loadModels().catch((err) => toast(err.message, true));

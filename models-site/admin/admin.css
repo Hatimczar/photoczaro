@@ -238,3 +238,63 @@ a:focus-visible {
   .admin-detail-head { flex-wrap: wrap; }
   .admin-actions { flex-wrap: wrap; }
 }
+
+/* ==========================================================================
+   Bento layer: the panes become rounded cards on a 16px grid, matching the
+   public site. Rows are tiles; the detail pane is grouped into cards by
+   bentoize() in app.js.
+   ========================================================================== */
+:root { --radius: 24px; --radius-sm: 16px; --tile: #111111; --tile-2: #171717; }
+body { background: var(--dark); }
+.admin-topbar {
+  margin: 12px 12px 0; padding: 12px 20px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--tile); box-shadow: inset 0 1px 0 rgba(255,255,255,0.06); max-width: none;
+}
+.admin-brand { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; letter-spacing: 0.04em; color: var(--gold); }
+.admin-brand span { font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-left: 6px; }
+.admin-tabs { gap: 6px; }
+.admin-tab { border-radius: 999px; padding: 9px 18px; }
+.admin-main { padding: 12px; }
+.admin-panel { gap: 12px; min-height: calc(100vh - 100px); }
+.admin-panel-list, .admin-panel-detail {
+  background: var(--tile); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06); max-height: calc(100vh - 100px);
+}
+.admin-panel-list { padding: 8px; }
+.admin-panel-detail { padding: 20px; }
+.admin-row { border: 1px solid transparent; border-radius: var(--radius-sm); margin-bottom: 4px; padding: 14px 16px; width: 100%; transition: border-color 0.25s, background 0.25s; }
+.admin-row:hover { background: var(--tile-2); border-color: var(--border); }
+.admin-row.selected { background: var(--tile-2); border: 1px solid rgba(201,169,110,0.5); }
+.admin-new-btn, .admin-btn { border-radius: 999px; }
+.admin-new-btn { width: calc(100% - 8px); margin: 4px; }
+.admin-btn { padding: 9px 18px; }
+.admin-field input, .admin-field select, .admin-field textarea { border-radius: 12px; background: var(--tile-2); }
+.admin-image-box, .admin-gallery-add, .admin-gallery-item, .admin-review-image img, .admin-review-image-missing { border-radius: 14px; }
+.admin-modal { border-radius: var(--radius); }
+.admin-toast { border-radius: 999px; }
+
+.admin-bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px; }
+.admin-bento > .admin-detail-head { grid-column: 1 / -1; margin: 4px 4px 4px; }
+.admin-card {
+  grid-column: span 12; min-width: 0; background: var(--tile-2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.admin-card.s7 { grid-column: span 7; }
+.admin-card.s5 { grid-column: span 5; }
+.admin-card .admin-section-title { margin: 0 0 14px; padding-top: 0; border-top: none; }
+.admin-card .admin-grid:last-child, .admin-card .admin-images-grid:last-child, .admin-card .admin-review-images:last-child { margin-bottom: 0; }
+.admin-card .admin-review-images { margin-top: 0; }
+.admin-card.s5 .admin-grid { grid-template-columns: 1fr; }
+@media (max-width: 1100px) { .admin-card.s7, .admin-card.s5 { grid-column: span 12; } }
+@media (max-width: 860px) {
+  .admin-panel { min-height: 0; }
+  .admin-panel-list, .admin-panel-detail { max-height: none; }
+  .admin-panel-detail { padding: 14px; }
+}
+@media (max-width: 640px) {
+  .admin-card { padding: 14px; }
+  .admin-panel-detail { padding: 10px; }
+  .admin-review-image { width: calc(50% - 7px); }
+  .admin-review-image img { width: 100%; height: auto; aspect-ratio: 4 / 5; }
+  .admin-review-image-missing { width: 100%; }
+}

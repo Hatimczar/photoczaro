@@ -80,6 +80,9 @@
       const v = t(el.getAttribute("data-i18n-content"));
       if (v != null) el.setAttribute("content", v);
     });
+    document.querySelectorAll("[data-blog-guide]").forEach((el) => {
+      el.setAttribute("href", "https://photoczaro.com" + (lang === "en" ? "" : "/" + lang) + "/blog/book-models-dubai-uae-photoczaro-models-roster");
+    });
     renderSwitchers();
     window.dispatchEvent(new CustomEvent("photoczaro:i18n-applied", { detail: { lang } }));
   }

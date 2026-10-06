@@ -765,3 +765,9 @@ footer#site-footer { padding: 24px var(--bento-pad) 24px; border-top: none; }
 .share-label { display: inline-flex; align-items: center; gap: 8px; }
 .share-label .icon { width: 16px; height: 16px; }
 .profile-actions .cta-btn[aria-pressed="true"] { background: rgba(201,169,110,0.2); border-color: rgba(201,169,110,0.6); }
+
+/* Link to the blog guide (home + about) */
+.guide-link-row { margin-top: 28px; font-size: 14px; line-height: 1.7; }
+.guide-link-row a { color: var(--gold-light); border-bottom: 1px solid rgba(201,169,110,0.4); padding-bottom: 2px; transition: color 0.3s, border-color 0.3s; }
+.guide-link-row a:hover { color: var(--white); border-color: var(--gold); }
+.about-guide, .prose .guide-link-row { margin-bottom: 8px; }

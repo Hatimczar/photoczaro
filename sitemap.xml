@@ -134,10 +134,85 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Photoczaro Models roster blog post (English only) -->
+  <!-- Photoczaro Models roster blog post (translated) -->
   <url>
     <loc>https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster</loc>
-    <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="fr"        href="https://photoczaro.com/fr/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ru"        href="https://photoczaro.com/ru/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="es"        href="https://photoczaro.com/es/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="cs"        href="https://photoczaro.com/cs/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://photoczaro.com/ar/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/fr/blog/book-models-dubai-uae-photoczaro-models-roster</loc>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="fr"        href="https://photoczaro.com/fr/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ru"        href="https://photoczaro.com/ru/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="es"        href="https://photoczaro.com/es/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="cs"        href="https://photoczaro.com/cs/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://photoczaro.com/ar/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/ru/blog/book-models-dubai-uae-photoczaro-models-roster</loc>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="fr"        href="https://photoczaro.com/fr/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ru"        href="https://photoczaro.com/ru/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="es"        href="https://photoczaro.com/es/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="cs"        href="https://photoczaro.com/cs/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://photoczaro.com/ar/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/es/blog/book-models-dubai-uae-photoczaro-models-roster</loc>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="fr"        href="https://photoczaro.com/fr/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ru"        href="https://photoczaro.com/ru/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="es"        href="https://photoczaro.com/es/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="cs"        href="https://photoczaro.com/cs/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://photoczaro.com/ar/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/cs/blog/book-models-dubai-uae-photoczaro-models-roster</loc>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="fr"        href="https://photoczaro.com/fr/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ru"        href="https://photoczaro.com/ru/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="es"        href="https://photoczaro.com/es/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="cs"        href="https://photoczaro.com/cs/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://photoczaro.com/ar/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://photoczaro.com/ar/blog/book-models-dubai-uae-photoczaro-models-roster</loc>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="fr"        href="https://photoczaro.com/fr/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ru"        href="https://photoczaro.com/ru/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="es"        href="https://photoczaro.com/es/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="cs"        href="https://photoczaro.com/cs/blog/book-models-dubai-uae-photoczaro-models-roster"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://photoczaro.com/ar/blog/book-models-dubai-uae-photoczaro-models-roster"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster"/>
     <lastmod>2026-10-06</lastmod>
     <changefreq>monthly</changefreq>

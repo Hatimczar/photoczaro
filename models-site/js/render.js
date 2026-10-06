@@ -15,7 +15,7 @@
   else root.PhotoczaroRender = api;
 })(typeof self !== "undefined" ? self : this, function () {
   /* ---------- Cities ---------- */
-  const UAE_CITIES = ["Abu Dhabi", "Ajman", "Al Ain", "Dubai", "Fujairah", "Ras Al Khaimah", "Sharjah", "Umm Al Quwain"];
+  const UAE_CITIES = ["Dubai", "Abu Dhabi", "Al Ain", "Sharjah", "Ajman", "Umm Al Quwain", "Ras Al Khaimah", "Fujairah"];
   const squash = (s) => String(s || "").normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z]/g, "");
   const CITY_BY_KEY = {};
   UAE_CITIES.forEach((c) => { CITY_BY_KEY[squash(c)] = c; });
@@ -142,10 +142,10 @@
     }
     return out.sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
   }
-  /* Location filter options come from the published roster, not a fixed list. */
-  function cityOptions(models) {
-    const present = new Set(models.filter((m) => m.status === "active").map((m) => canonicalCity(m.location)).filter(Boolean));
-    return UAE_CITIES.filter((c) => present.has(c));
+  /* The location filter lists every emirate, in a fixed order, whether or not
+     anyone is published there yet. */
+  function cityOptions() {
+    return UAE_CITIES.slice();
   }
   function locationOptionsHtml(models, selected, t) {
     t = t || identityT;

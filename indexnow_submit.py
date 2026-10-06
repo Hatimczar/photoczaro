@@ -24,6 +24,7 @@ URLS = [
     "https://photoczaro.com/blog/sony-a7cr-portrait-photographer",
     "https://photoczaro.com/blog/modeling-portfolio-dubai-guide",
     "https://photoczaro.com/blog/start-modeling-dubai-no-experience",
+    "https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster",
     "https://photoczaro.com/blog/photoshoot-cost-dubai",
     # French
     "https://photoczaro.com/fr/",

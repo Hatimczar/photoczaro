@@ -119,10 +119,15 @@ nav#site-nav.scrolled {
   font-family: 'Cormorant Garamond', serif; font-size: 22px; letter-spacing: 0.15em;
   color: var(--gold); font-weight: 400; display: flex; align-items: baseline; gap: 6px;
 }
-.nav-logo .nav-logo-sub { font-size: 10px; letter-spacing: 0.3em; color: var(--grey); font-family: 'Inter', sans-serif; text-transform: uppercase; }
-.nav-links { display: flex; gap: 40px; list-style: none; align-items: center; }
+.nav-logo .nav-logo-sub { font-size: 10px; letter-spacing: 0.3em; color: rgba(245,240,235,0.8); text-shadow: 0 1px 3px rgba(0,0,0,0.55); font-family: 'Inter', sans-serif; text-transform: uppercase; }
+.nav-links {
+  display: flex; gap: 32px; list-style: none; align-items: center;
+  /* Soft dark pill so the links stay readable over the hero photograph. */
+  padding: 10px 28px; border-radius: 100px; background: rgba(12,10,7,0.5);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 0.5px solid rgba(255,255,255,0.08);
+}
 .nav-links a {
-  color: var(--grey); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(245,240,235,0.88); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
   transition: color 0.3s; position: relative; text-shadow: 0 1px 3px rgba(0,0,0,0.55);
 }
 .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.4s var(--ease); }

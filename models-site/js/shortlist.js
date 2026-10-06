@@ -15,6 +15,11 @@
     try { localStorage.setItem(KEY, JSON.stringify(slugs)); } catch {}
   }
 
+  /* Lets a page that mirrors the shortlist (the booking form) follow edits. */
+  function announce(action, slug) {
+    window.dispatchEvent(new CustomEvent("photoczaro:shortlist-changed", { detail: { action, slug } }));
+  }
+
   const Shortlist = {
     list() { return read(); },
     has(slug) { return read().includes(slug); },
@@ -22,15 +27,17 @@
       const s = read();
       if (!s.includes(slug)) { s.push(slug); write(s); }
       Shortlist.render();
+      announce("add", slug);
     },
     remove(slug) {
       write(read().filter((x) => x !== slug));
       Shortlist.render();
+      announce("remove", slug);
     },
     toggle(slug) {
       Shortlist.has(slug) ? Shortlist.remove(slug) : Shortlist.add(slug);
     },
-    clear() { write([]); Shortlist.render(); },
+    clear() { write([]); Shortlist.render(); announce("clear"); },
     render() {
       const slugs = read();
       const status = window.PHOTOCZARO_MODELS_STATUS || "loading";

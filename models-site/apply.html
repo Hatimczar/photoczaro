@@ -34,7 +34,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/css/style.css?v=31">
+<link rel="stylesheet" href="/css/style.css?v=32">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipToContent">Skip to content</a>
@@ -236,7 +236,7 @@
 
 <script src="/js/render.js?v=3"></script>
 <script src="/js/data.js?v=6"></script>
-<script src="/js/shortlist.js?v=5"></script>
+<script src="/js/shortlist.js?v=6"></script>
 <script src="/js/i18n-data.js?v=7"></script>
 <script src="/js/i18n.js?v=3"></script>
 <script src="/js/main.js?v=8"></script>
@@ -374,10 +374,29 @@
   const unitToggle = document.getElementById("unit-toggle");
   const unitField = document.getElementById("apply-unit");
   const unitFields = form.querySelectorAll("[data-ph-cm]");
+  let currentUnit = "cm";
+  unitFields.forEach((field) => field.addEventListener("input", () => {
+    const n = parseFloat(field.value);
+    if (Number.isFinite(n)) field.dataset.cm = String(currentUnit === "in" ? n * 2.54 : n); else delete field.dataset.cm;
+  }));
   unitToggle.addEventListener("click", (e) => {
     const btn = e.target.closest(".unit-toggle-btn");
     if (!btn) return;
     const unit = btn.dataset.unit;
+    /* Numbers already entered are converted, not relabelled: 170 cm becomes
+       66.9 in (and back). Fields are converted even while hidden. */
+    if (unit !== currentUnit) {
+      unitFields.forEach((field) => {
+        const n = parseFloat(field.value);
+        if (field.value === "" || !Number.isFinite(n)) return;
+        /* Convert from the exact centimetre value that was typed, so flipping
+           back and forth never drifts (170 cm stays 170 cm). */
+        const cm = field.dataset.cm ? parseFloat(field.dataset.cm) : (currentUnit === "in" ? n * 2.54 : n);
+        field.dataset.cm = String(cm);
+        field.value = String(Math.round((unit === "in" ? cm / 2.54 : cm) * 10) / 10);
+      });
+      currentUnit = unit;
+    }
     unitToggle.querySelectorAll(".unit-toggle-btn").forEach((b) => b.classList.toggle("active", b === btn));
     unitField.value = unit;
     unitFields.forEach((field) => { field.placeholder = field.dataset[unit === "in" ? "phIn" : "phCm"]; });

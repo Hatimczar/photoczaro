@@ -76,11 +76,24 @@
     return `alt="${esc(text)}" data-i18n-alt="${keys[kind]}" data-alt-vars="${esc(vars)}"`;
   }
 
+  /* Optimised photos are stored as <name>-1200.webp with a <name>-600.webp
+     sibling; those get a srcset so phones fetch the small one. Older
+     uploads (any other key) are served as they are. */
+  function srcAttrs(key, sizes) {
+    const src = "/media/" + esc(key);
+    if (!/-1200\.webp$/.test(key)) return `src="${src}"`;
+    const small = "/media/" + esc(key.replace(/-1200\.webp$/, "-600.webp"));
+    return `src="${src}" srcset="${small} 600w, ${src} 1200w" sizes="${esc(sizes)}"`;
+  }
+  const CARD_SIZES = "(max-width: 600px) 50vw, (max-width: 1100px) 33vw, 400px";
+  const HERO_SIZES = "(max-width: 880px) 100vw, 50vw";
+  const GALLERY_SIZES = "(max-width: 880px) 50vw, 33vw";
+
   /* ---------- Cards ---------- */
-  function mediaHtml(m, t) {
+  function mediaHtml(m, t, sizes) {
     t = t || identityT;
     if (m.images && m.images.headshot) {
-      return `<img src="/media/${esc(m.images.headshot)}" ${altAttrs(m, "based", 0, t)} loading="lazy">`;
+      return `<img ${srcAttrs(m.images.headshot, sizes || CARD_SIZES)} ${altAttrs(m, "based", 0, t)} loading="lazy" decoding="async">`;
     }
     return `<span class="initials">${esc(initialsOf(m.name))}</span>`;
   }
@@ -166,7 +179,7 @@
     if (model.images?.fullSide) shots.push({ src: model.images.fullSide, kind: "side" });
     (model.images?.gallery || []).forEach((src) => shots.push({ src, kind: "photo" }));
     const gallery = shots.length
-      ? `<div class="profile-gallery">${shots.map((s, i) => `<div class="model-card-media" style="--card-a:${esc(model.swatch[0])};--card-b:${esc(model.swatch[1])}"><img src="/media/${esc(s.src)}" ${altAttrs(model, s.kind, i + 1, t)} loading="lazy"></div>`).join("")}</div>`
+      ? `<div class="profile-gallery">${shots.map((s, i) => `<div class="model-card-media" style="--card-a:${esc(model.swatch[0])};--card-b:${esc(model.swatch[1])}"><img ${srcAttrs(s.src, GALLERY_SIZES)} ${altAttrs(model, s.kind, i + 1, t)} loading="lazy" decoding="async"></div>`).join("")}</div>`
       : `<p class="form-note gallery-note" data-i18n="profile.noPhotos">${esc(t("profile.noPhotos", "More photographs are available on request."))}</p>`;
 
     const related = (opts.models || []).filter((m) => m.slug !== model.slug && m.categories.some((c) => model.categories.includes(c))).slice(0, 4);
@@ -186,7 +199,7 @@
     ${model.sample ? `<div class="profile-sample-notice"><strong data-i18n="profile.sampleStrong">${esc(t("profile.sampleStrong", "Sample profile."))}</strong> <span data-i18n="profile.sampleBody">${esc(t("profile.sampleBody", "Shown for demonstration only. Not a real person and not available for booking."))}</span></div>` : ""}
     <section class="profile-hero" style="margin-top:24px;">
       <div class="profile-media" style="--card-a:${esc(model.swatch[0])};--card-b:${esc(model.swatch[1])}">
-        ${mediaHtml(model, t)}
+        ${mediaHtml(model, t, HERO_SIZES)}
       </div>
       <div class="profile-info">
         <span class="eyebrow"><span data-i18n="category.${esc(cat)}">${esc(t("category." + cat, CATEGORY_FALLBACK[cat] || ""))}</span>${model.newFace ? ` · <span data-i18n="badge.newFace">${esc(t("badge.newFace", "New Face"))}</span>` : ""}</span>

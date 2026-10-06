@@ -7,6 +7,7 @@
  */
 import Render from "../../js/render.js";
 import { loadPublishedModels } from "./public-model.js";
+import { localizeHead } from "./page-meta.js";
 
 export const LANGS = ["fr", "ru", "es", "cs", "ar"];
 
@@ -38,7 +39,9 @@ export async function renderHomePage(context, lang) {
   const models = await loadPublishedModels(context.env);
   const top = models.slice(0, 12);
   const html = Render.gridHtml(top, { path: pathFor(lang) });
-  const res = new HTMLRewriter()
+  let rewriter = new HTMLRewriter();
+  if (lang) rewriter = localizeHead(rewriter, lang, "home");
+  const res = rewriter
     .on("#home-model-grid", { element(el) { el.setInnerContent(html, { html: true }); el.setAttribute("data-key", top.map((m) => m.slug).join(",")); } })
     .transform(template);
   return finish(res);
@@ -61,7 +64,24 @@ export async function renderModelsPage(context, lang) {
   const menOnly = filters.category === "men" && Render.noMalesPublished(models);
   const html = Render.gridHtml(results, { path: pathFor(lang), showHeight: true });
 
-  const res = new HTMLRewriter()
+  let rewriter = new HTMLRewriter();
+  if (lang) rewriter = localizeHead(rewriter, lang, "models");
+  // Structured list of the roster for search engines.
+  const origin = "https://models.photoczaro.com";
+  const prefix = lang ? `/${lang}` : "";
+  const itemList = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Photoczaro Models roster",
+    url: `${origin}${prefix}/models`,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: models.length,
+      itemListElement: models.map((m, i) => ({ "@type": "ListItem", position: i + 1, url: `${origin}${prefix}/models/${m.slug}`, name: m.name })),
+    },
+  }).replace(/</g, "\\u003c");
+  const res = rewriter
+    .on("head", { element(el) { el.append(`<script type="application/ld+json">${itemList}</script>`, { html: true }); } })
     .on("#models-grid", { element(el) { el.setInnerContent(html, { html: true }); el.setAttribute("data-key", results.map((m) => m.slug).join(",")); } })
     .on("#f-location", { element(el) { el.setInnerContent(Render.locationOptionsHtml(models, filters.location), { html: true }); } })
     .on("#f-count", { element(el) { el.setInnerContent(Render.countHtml(results.length)); } })
@@ -69,4 +89,14 @@ export async function renderModelsPage(context, lang) {
     .on("#empty-men", { element(el) { if (results.length === 0 && menOnly) el.removeAttribute("hidden"); } })
     .transform(template);
   return finish(res);
+}
+
+const STATIC_PAGES = ["book-talent", "apply", "about", "contact", "booking-terms", "privacy-policy"];
+
+/* /fr/about, /ar/contact, ...: the same static page with its own canonical,
+   language and translated head. */
+export async function renderStaticPage(context, lang, page) {
+  if (!LANGS.includes(lang) || !STATIC_PAGES.includes(page)) return null;
+  const template = await fetchTemplate(context, "/" + page);
+  return finish(localizeHead(new HTMLRewriter(), lang, page).transform(template));
 }

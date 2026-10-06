@@ -84,7 +84,7 @@
         } else {
           itemsEl.innerHTML = models.map((m) => `
             <div class="drawer-item">
-              <div class="drawer-item-media" style="--card-a:${esc(m.swatch[0])};--card-b:${esc(m.swatch[1])}">${m.images && m.images.headshot ? `<img src="/media/${esc(m.images.headshot)}" alt="">` : esc(initials(m.name))}</div>
+              <div class="drawer-item-media" style="--card-a:${esc(m.swatch[0])};--card-b:${esc(m.swatch[1])}">${m.images && m.images.headshot ? `<img src="/media/${esc(String(m.images.headshot).replace(/-1200\.webp$/, "-600.webp"))}" alt="">` : esc(initials(m.name))}</div>
               <div class="drawer-item-info">
                 <h4>${esc(m.name)}</h4>
                 <span>${esc(tr("category." + m.categories[0], window.PHOTOCZARO_CATEGORY_LABELS[m.categories[0]] || ""))}${m.newFace ? " · " + esc(tr("badge.newFace", "New Face")) : ""}</span>

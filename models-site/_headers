@@ -20,7 +20,6 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'
-  X-Robots-Tag: noindex
 
 /css/*
   Cache-Control: public, max-age=604800, stale-while-revalidate=86400
@@ -31,3 +30,12 @@
   Cache-Control: no-store
 /api/admin/*
   Cache-Control: no-store
+
+# Never index the admin panel, the API, or the *.pages.dev preview hosts
+# (the custom domain is the canonical site).
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+/api/*
+  X-Robots-Tag: noindex, nofollow
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex

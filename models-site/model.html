@@ -24,7 +24,7 @@
 <link rel="alternate" hreflang="cs" id="hreflang-cs" href="https://models.photoczaro.com/cs/model">
 <link rel="alternate" hreflang="ar" id="hreflang-ar" href="https://models.photoczaro.com/ar/model">
 <link rel="alternate" hreflang="x-default" id="hreflang-x-default" href="https://models.photoczaro.com/model">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="profile">
 <meta property="og:title" id="page-og-title" content="Model | Photoczaro Models Dubai">
 <meta property="og:description" id="page-og-description" content="Model profile at Photoczaro Models Dubai.">
@@ -143,7 +143,7 @@
   </div>
 </footer>
 
-<script src="/js/data.js?v=4"></script>
+<script src="/js/data.js?v=5"></script>
 <script src="/js/shortlist.js?v=3"></script>
 <script src="/js/i18n-data.js?v=5"></script>
 <script src="/js/i18n.js?v=2"></script>
@@ -168,15 +168,33 @@ window.PhotoczaroModelsReady.then(function () {
     return;
   }
 
+  /* Same fallback as functions/_lib/profile-seo.js: a stored description that is
+     just the generic default is replaced with one built from the profile's facts. */
+  function profileDesc(m) {
+    const stored = (m.seoDescription || "").trim();
+    if (stored && !/a Photoczaro Models roster talent based in the UAE\.?\s*$/i.test(stored)) return stored;
+    const city = (m.location || "").split(",")[0].trim() || "the UAE";
+    const bits = [m.name + " is a " + (m.categories[0] === "men" ? "male" : "female") + " model based in " + city + ", UAE."];
+    const stats = [m.height, m.hair && m.hair + " hair", m.eyes && m.eyes + " eyes"].filter(Boolean);
+    if (stats.length) bits.push(stats.join(", ") + ".");
+    const langs = (m.languages || []).filter(Boolean);
+    if (langs.length) bits.push("Speaks " + langs.join(", ") + ".");
+    bits.push("Book through Photoczaro Models Dubai.");
+    let text = bits.join(" ");
+    if (text.length > 158) text = text.slice(0, 157).replace(/\s+\S*$/, "") + "\u2026";
+    return text;
+  }
+  const seoDesc = profileDesc(model);
+
   document.title = model.seoTitle;
-  document.getElementById("page-description").setAttribute("content", model.seoDescription);
+  document.getElementById("page-description").setAttribute("content", seoDesc);
   const canonicalUrl = `https://models.photoczaro.com${i18n.path("/models/" + model.slug)}`;
   document.getElementById("page-canonical").setAttribute("href", canonicalUrl);
   document.getElementById("page-og-title").setAttribute("content", model.seoTitle);
-  document.getElementById("page-og-description").setAttribute("content", model.seoDescription);
+  document.getElementById("page-og-description").setAttribute("content", seoDesc);
   document.getElementById("page-og-url").setAttribute("content", canonicalUrl);
   document.getElementById("page-twitter-title").setAttribute("content", model.seoTitle);
-  document.getElementById("page-twitter-description").setAttribute("content", model.seoDescription);
+  document.getElementById("page-twitter-description").setAttribute("content", seoDesc);
   ["en", "fr", "ru", "es", "cs", "ar", "x-default"].forEach((code) => {
     const prefix = code === "x-default" || code === "en" ? "" : "/" + code;
     document.getElementById("hreflang-" + code)?.setAttribute("href", `https://models.photoczaro.com${prefix}/models/${model.slug}`);
@@ -222,7 +240,7 @@ window.PhotoczaroModelsReady.then(function () {
           const shots = [model.images?.fullFront, model.images?.fullSide, ...(model.images?.gallery || [])].filter(Boolean);
           const boxes = Math.max(shots.length, 6);
           return Array.from({ length: boxes }).map((_, i) => shots[i]
-            ? `<div class="model-card-media" style="--card-a:${model.swatch[0]};--card-b:${model.swatch[1]}"><img src="/media/${shots[i]}" alt="" loading="lazy"></div>`
+            ? `<div class="model-card-media" style="--card-a:${model.swatch[0]};--card-b:${model.swatch[1]}"><img src="/media/${shots[i]}" alt="${(model.name + " portfolio photo " + (i + 1)).replace(/"/g, "&quot;")}" loading="lazy"></div>`
             : `<div class="model-card-media" style="--card-a:${model.swatch[0]};--card-b:${model.swatch[1]}"><span class="initials" style="font-size:2.2rem;">${initials}</span></div>`
           ).join("");
         })()}

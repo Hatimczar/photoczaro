@@ -25,8 +25,46 @@
 <meta name="twitter:title" content="Photoczaro Models | UAE Booking Roster">
 <meta name="twitter:description" content="A curated roster of UAE-based models for editorial, fashion, beauty and commercial productions.">
 <meta name="twitter:image" content="https://models.photoczaro.com/images/og-image.png">
-<meta name="robots" content="noindex, nofollow">
-<!-- DEV NOTE: noindex while in development mock-data state; remove once real roster + legal review is complete. -->
+<meta name="robots" content="index, follow, max-image-preview:large">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://models.photoczaro.com/#org",
+      "name": "Photoczaro Models",
+      "url": "https://models.photoczaro.com/",
+      "logo": "https://models.photoczaro.com/favicon-192x192.png",
+      "email": "info@photoczaro.com",
+      "areaServed": "AE",
+      "description": "A curated, non-exclusive booking roster of UAE-based models for editorial, fashion, beauty and commercial productions.",
+      "parentOrganization": {
+        "@type": "Organization",
+        "name": "Photoczaro",
+        "url": "https://photoczaro.com"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://models.photoczaro.com/#website",
+      "name": "Photoczaro Models",
+      "url": "https://models.photoczaro.com/",
+      "publisher": {
+        "@id": "https://models.photoczaro.com/#org"
+      },
+      "inLanguage": [
+        "en",
+        "fr",
+        "ru",
+        "es",
+        "cs",
+        "ar"
+      ]
+    }
+  ]
+}
+</script>
 <link rel="preload" as="image" href="/images/hero.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -198,7 +236,7 @@
   </div>
 </footer>
 
-<script src="/js/data.js?v=4"></script>
+<script src="/js/data.js?v=5"></script>
 <script src="/js/shortlist.js?v=3"></script>
 <script src="/js/i18n-data.js?v=5"></script>
 <script src="/js/i18n.js?v=2"></script>

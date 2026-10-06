@@ -26,7 +26,7 @@ window.PhotoczaroModelsReady = fetch("/api/models")
    placeholder used for sample and not-yet-photographed records. */
 window.PhotoczaroCardMedia = function (m) {
   if (m.images && m.images.headshot) {
-    return `<img src="/media/${m.images.headshot}" alt="" loading="lazy">`;
+    return `<img src="/media/${m.images.headshot}" alt="${String(m.name || "").replace(/"/g, "&quot;")}, model in Dubai" loading="lazy">`;
   }
   const initials = (m.name || "").split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
   return `<span class="initials">${initials}</span>`;

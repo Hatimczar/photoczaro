@@ -1,6 +1,6 @@
-# Photoczaro Models is in development with mock roster data.
-# Every page also carries a noindex,nofollow meta tag; this file is the
-# crawl-level backstop. Remove the Disallow rule and add a sitemap once
-# the real roster and legal review are live (see index.html DEV NOTE).
 User-agent: *
-Disallow: /
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+Sitemap: https://models.photoczaro.com/sitemap.xml

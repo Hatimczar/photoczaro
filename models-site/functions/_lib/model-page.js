@@ -4,9 +4,11 @@
  * <head>. Link-preview crawlers (WhatsApp, iMessage, Slack, Facebook, X)
  * don't run JavaScript, so the client-side meta updates in model.html never
  * reach them; without this they'd all show the generic site image.
- * Unknown or unpublished slugs fall through to the plain template, which
- * renders its own "not found" state.
+ * Unknown or unpublished slugs get the plain template as a real 404 with
+ * noindex, so search engines drop them.
  */
+import { profileDescription, profileJsonLd } from "./profile-seo.js";
+
 const LANGS = ["fr", "ru", "es", "cs", "ar"];
 const ORIGIN = "https://models.photoczaro.com";
 
@@ -20,12 +22,19 @@ export async function renderModelPage({ request, env }, lang, slug) {
   if (env.ROSTER_KV && slug && /^[a-z0-9-]+$/.test(slug)) {
     model = await env.ROSTER_KV.get(`model:${slug}`, { type: "json" });
   }
-  if (!model || !model.published || model.archived) return template;
+  if (!model || !model.published || model.archived) {
+    // Unknown or unpublished profile: a real 404 that search engines drop,
+    // instead of the template answering 200 with an empty page.
+    const gone = new HTMLRewriter()
+      .on('meta[name="robots"]', { element(el) { el.setAttribute("content", "noindex, nofollow"); } })
+      .transform(template);
+    return new Response(gone.body, { status: 404, headers: gone.headers });
+  }
 
   const prefix = lang && LANGS.includes(lang) ? `/${lang}` : "";
   const canonical = `${ORIGIN}${prefix}/models/${model.slug}`;
   const title = model.seoTitle || `${model.name} | Photoczaro Models Dubai`;
-  const description = model.seoDescription || `${model.name}, a Photoczaro Models roster talent based in the UAE.`;
+  const description = profileDescription(model);
   const image = model.images?.headshot ? `${ORIGIN}/media/${model.images.headshot}` : null;
 
   const setContent = (value) => ({ element(el) { el.setAttribute("content", value); } });
@@ -39,7 +48,8 @@ export async function renderModelPage({ request, env }, lang, slug) {
     .on("#page-og-description", setContent(description))
     .on("#page-og-url", setContent(canonical))
     .on("#page-twitter-title", setContent(title))
-    .on("#page-twitter-description", setContent(description));
+    .on("#page-twitter-description", setContent(description))
+    .on("head", { element(el) { el.append(`<script type="application/ld+json">${profileJsonLd(model, canonical, image)}</script>`, { html: true }); } });
 
   for (const code of ["en", "fr", "ru", "es", "cs", "ar", "x-default"]) {
     const p = code === "x-default" || code === "en" ? "" : `/${code}`;

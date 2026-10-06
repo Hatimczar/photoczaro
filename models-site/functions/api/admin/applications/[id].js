@@ -2,6 +2,7 @@ import { json } from "../../../_lib/http.js";
 import { requireAccessIdentity } from "../../../_lib/admin-auth.js";
 import { requireSameOrigin } from "../../../_lib/origin-check.js";
 import { slugify, uniqueSlug } from "../../../_lib/slug.js";
+import Render from "../../../../js/render.js";
 
 export async function onRequestGet({ request, env, params }) {
   if (!(await requireAccessIdentity(request))) return json({ error: "Unauthorized" }, 401);
@@ -92,7 +93,7 @@ export async function onRequestPost({ request, env, params }) {
       subcategories: [],
       newFace: true,
       featured: false,
-      location: record.uaeCity ? `${record.uaeCity}, UAE` : "UAE",
+      location: record.uaeCity ? Render.canonicalLocation(record.uaeCity) : "UAE",
       height: record.height ? `${record.height} ${measurementUnit}` : "",
       measurementUnit,
       bust: record.bust || "",

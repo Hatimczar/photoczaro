@@ -34,7 +34,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/css/style.css?v=30">
+<link rel="stylesheet" href="/css/style.css?v=31">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipToContent">Skip to content</a>
@@ -60,7 +60,7 @@
   <div class="nav-actions" style="display:flex;align-items:center;gap:14px;">
     <button class="nav-shortlist-btn" data-open-shortlist><span data-i18n="nav.shortlist">Shortlist</span> <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
     <a href="book-talent" class="cta-btn cta-btn-primary" style="padding:9px 20px;" data-i18n="nav.bookTalent">Book Talent</a>
-    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" data-i18n-aria-label="a11y.menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -194,71 +194,170 @@
   </div>
 </footer>
 
-<script src="/js/data.js?v=5"></script>
-<script src="/js/shortlist.js?v=3"></script>
-<script src="/js/i18n-data.js?v=5"></script>
-<script src="/js/i18n.js?v=2"></script>
-<script src="/js/main.js?v=5"></script>
+<script src="/js/render.js?v=2"></script>
+<script src="/js/data.js?v=6"></script>
+<script src="/js/shortlist.js?v=4"></script>
+<script src="/js/i18n-data.js?v=7"></script>
+<script src="/js/i18n.js?v=3"></script>
+<script src="/js/main.js?v=8"></script>
 <script src="/js/magnetic-cta.js?v=1"></script>
 <script>
 (function () {
-  const slugs = (new URLSearchParams(window.location.search).get("models") || "").split(",").filter(Boolean);
-  const models = (window.PHOTOCZARO_MODELS || []).filter((m) => slugs.includes(m.slug));
   const i18n = window.PhotoczaroI18n;
+  const tr = (key, fb) => { const v = i18n.t(key); return v == null ? fb : v; };
   const box = document.getElementById("selected-models");
-  if (models.length) {
-    box.innerHTML = `<span class="eyebrow" style="width:100%;">${i18n.t("bookTalent.selectedModels")}</span>` + models.map((m) => `<span class="profile-tag">${m.name}</span>`).join("");
-  }
-
   const form = document.getElementById("booking-form");
   const status = document.getElementById("form-status");
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const SLUG = /^[a-z0-9-]+$/;
 
+  /* The requested selection is the state of this page. It starts from the
+     ?models= link (or, without one, the saved shortlist) and does NOT depend on
+     the roster feed: the feed is only used to show names and to drop models that
+     are no longer published. A slow or failed feed therefore never empties it. */
+  const fromUrl = new URLSearchParams(window.location.search).get("models");
+  const requested = fromUrl != null ? fromUrl.split(",") : (window.PhotoczaroShortlist ? window.PhotoczaroShortlist.list() : []);
+  let selection = Array.from(new Set(requested.map((s) => String(s).trim()).filter((s) => SLUG.test(s))));
+  let removedNotice = false;
+
+  const humanise = (slug) => slug.split("-").map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join(" ");
+
+  function syncUrl() {
+    const params = new URLSearchParams(window.location.search);
+    if (selection.length) params.set("models", selection.join(",")); else params.delete("models");
+    const qs = params.toString();
+    window.history.replaceState({}, "", window.location.pathname + (qs ? "?" + qs : ""));
+  }
+
+  function renderSelection() {
+    const state = window.PHOTOCZARO_MODELS_STATUS || "loading";
+    const roster = window.PHOTOCZARO_MODELS || [];
+    box.textContent = "";
+
+    if (state === "ok") {
+      const live = new Set(roster.map((m) => m.slug));
+      const kept = selection.filter((s) => live.has(s));
+      if (kept.length !== selection.length) { selection = kept; removedNotice = true; syncUrl(); }
+    }
+    if (selection.length) {
+      const label = document.createElement("span");
+      label.className = "eyebrow";
+      label.style.width = "100%";
+      label.textContent = tr("bookTalent.selectedModels", "Selected models");
+      box.appendChild(label);
+      selection.forEach((slug) => {
+        const model = roster.find((m) => m.slug === slug);
+        const chip = document.createElement("span");
+        chip.className = "profile-tag";
+        chip.setAttribute("data-slug", slug);
+        chip.textContent = model ? model.name : humanise(slug);
+        box.appendChild(chip);
+      });
+    }
+
+    const note = (text, role, withRetry) => {
+      const p = document.createElement("p");
+      p.className = "form-note";
+      p.style.width = "100%";
+      p.setAttribute("role", role);
+      p.textContent = text;
+      if (withRetry) {
+        const retry = document.createElement("button");
+        retry.type = "button";
+        retry.className = "cta-btn";
+        retry.style.marginInlineStart = "12px";
+        retry.textContent = tr("bookTalent.retry", "Retry");
+        retry.addEventListener("click", () => { window.PhotoczaroReloadModels(); renderSelection(); });
+        p.appendChild(retry);
+      }
+      box.appendChild(p);
+    };
+    if (state === "loading" && selection.length) note(tr("bookTalent.modelsLoading", "Loading your selected models…"), "status", false);
+    if (state === "error" && selection.length) note(tr("bookTalent.modelsLoadError", "We couldn't load your selected models. Your selection is saved; please retry before submitting."), "alert", true);
+    if (removedNotice) note(tr("bookTalent.modelUnavailable", "One or more selected models are no longer available and were removed from your enquiry. Please review your selection."), "alert", false);
+
+    /* Submission waits for the roster (so the selection has been checked); if it
+       failed and there is a selection to protect, it stays off until a retry works. */
+    submitBtn.disabled = state === "loading" || (state === "error" && selection.length > 0);
+    window.PhotoczaroShortlist.render();
+  }
+
+  renderSelection();
+  /* Redraw whenever the roster (re)loads: the first load, a retry, or a load
+     that finished before this script attached its listener. */
+  window.addEventListener("photoczaro:models-ready", renderSelection);
+  window.PhotoczaroModelsReady.then(renderSelection);
+  window.addEventListener("photoczaro:i18n-applied", renderSelection);
+
+  let submitting = false;
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (submitting || submitBtn.disabled) return;
     document.querySelectorAll(".form-error").forEach((el) => (el.textContent = ""));
     let valid = true;
     form.querySelectorAll("[required]").forEach((field) => {
       if ((field.type === "checkbox" && !field.checked) || (field.type !== "checkbox" && !field.value.trim())) {
         valid = false;
         const err = document.querySelector(`[data-error-for="${field.id}"]`);
-        if (err) err.textContent = i18n.t("form.required");
-        else field.closest(".form-field")?.querySelector(".form-error")?.append?.(i18n.t("form.required"));
+        if (err) err.textContent = tr("form.required", "Required");
+        else field.closest(".form-field")?.querySelector(".form-error")?.append?.(tr("form.required", "Required"));
       }
     });
     const emailField = document.getElementById("work-email");
     if (emailField.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
       valid = false;
-      document.querySelector('[data-error-for="work-email"]').textContent = i18n.t("form.invalidEmail");
+      document.querySelector('[data-error-for="work-email"]').textContent = tr("form.invalidEmail", "Enter a valid email address");
     }
     if (!valid) {
       status.className = "form-status error";
-      status.textContent = i18n.t("form.fixHighlighted");
+      status.textContent = tr("form.fixHighlighted", "Please fix the highlighted fields.");
       return;
     }
 
     const payload = Object.fromEntries(new FormData(form).entries());
-    payload.selectedModels = models.map((m) => m.slug);
+    /* Read at submit time from the live selection, never from a copy taken earlier. */
+    payload.selectedModels = selection.slice();
 
     status.className = "form-status";
-    status.textContent = i18n.t("form.sending");
+    status.textContent = tr("form.sending", "Sending…");
+    submitting = true;
+    submitBtn.disabled = true;
     try {
       const res = await fetch("/api/book-talent", {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Requested-With": "fetch" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error("request_failed");
+      if (!res.ok) {
+        let body = null;
+        try { body = await res.json(); } catch (err) { /* not JSON */ }
+        if (body && body.code === "unknown_models") {
+          /* A selected model was unpublished since the page loaded: drop it and let the client review. */
+          selection = selection.filter((s) => !body.unknownModels.includes(s));
+          removedNotice = true;
+          syncUrl();
+          renderSelection();
+          status.className = "form-status error";
+          status.textContent = tr("bookTalent.modelUnavailable", "One or more selected models are no longer available and were removed from your enquiry. Please review your selection.");
+          return;
+        }
+        throw new Error("request_failed");
+      }
       status.className = "form-status success";
-      status.textContent = i18n.t("bookTalent.thankYou");
+      status.textContent = tr("bookTalent.thankYou", "Thank you.");
       form.reset();
-      box.innerHTML = "";
+      selection = [];
+      removedNotice = false;
+      syncUrl();
+      renderSelection();
     } catch {
       status.className = "form-status error";
-      status.textContent = i18n.t("bookTalent.sendError");
+      status.textContent = tr("bookTalent.sendError", "Something went wrong sending this enquiry. Please try again.");
+    } finally {
+      submitting = false;
+      renderSelection();
     }
   });
-
-  window.PhotoczaroShortlist.render();
 })();
 </script>
 </body>

@@ -12,6 +12,7 @@
  */
 import { json, htmlResponse } from "../_lib/http.js";
 import { validateImageUpload, validatePortfolioUpload } from "../_lib/image-validate.js";
+import Render from "../../js/render.js";
 
 // Only accept a plain https:// link (Photoczaro doesn't need portfolios
 // served over http, and a stray javascript:/data: URL stored here would
@@ -40,11 +41,15 @@ export async function onRequestPost({ request, env }) {
   const email = (form.get("email") || "").toString().trim().toLowerCase();
   const professionalName = (form.get("professionalName") || "").toString().trim();
   const category = (form.get("category") || "").toString().trim().toLowerCase();
+  // The city comes from a fixed list of UAE cities, stored in one canonical
+  // spelling so roster filtering never depends on how someone typed it.
+  const uaeCity = Render.canonicalCity((form.get("uaeCity") || "").toString());
   if (
     !professionalName ||
     !email ||
     !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-    !["women", "men"].includes(category)
+    !["women", "men"].includes(category) ||
+    !uaeCity
   ) {
     return respondError(isNativeSubmit, "Missing or invalid required fields.", 400);
   }
@@ -129,7 +134,7 @@ export async function onRequestPost({ request, env }) {
     category,
     email,
     telephone: (form.get("telephone") || "").toString(),
-    uaeCity: (form.get("uaeCity") || "").toString(),
+    uaeCity,
     experience: (form.get("experience") || "").toString(),
     height: (form.get("height") || "").toString(),
     measurementUnit: (form.get("measurementUnit") || "cm").toString(),

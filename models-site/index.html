@@ -74,7 +74,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/css/style.css?v=30">
+<link rel="stylesheet" href="/css/style.css?v=31">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipToContent">Skip to content</a>
@@ -100,7 +100,7 @@
   <div class="nav-actions" style="display:flex;align-items:center;gap:14px;">
     <button class="nav-shortlist-btn" data-open-shortlist><span data-i18n="nav.shortlist">Shortlist</span> <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
     <a href="book-talent" class="cta-btn cta-btn-primary" style="padding:9px 20px;" data-i18n="nav.bookTalent">Book Talent</a>
-    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" data-i18n-aria-label="a11y.menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -236,11 +236,12 @@
   </div>
 </footer>
 
-<script src="/js/data.js?v=5"></script>
-<script src="/js/shortlist.js?v=3"></script>
-<script src="/js/i18n-data.js?v=5"></script>
-<script src="/js/i18n.js?v=2"></script>
-<script src="/js/main.js?v=5"></script>
+<script src="/js/render.js?v=2"></script>
+<script src="/js/data.js?v=6"></script>
+<script src="/js/shortlist.js?v=4"></script>
+<script src="/js/i18n-data.js?v=7"></script>
+<script src="/js/i18n.js?v=3"></script>
+<script src="/js/main.js?v=8"></script>
 <script src="/js/magnetic-cta.js?v=1"></script>
 <script>
   (function () {
@@ -252,24 +253,19 @@
   })();
 </script>
 <script>
+  /* The featured grid is server-rendered; this only refreshes it from the live
+     feed (new publishes, translations) and never blanks it if the feed fails. */
   window.PhotoczaroModelsReady.then(function () {
+    if (window.PHOTOCZARO_MODELS_STATUS !== "ok") { window.PhotoczaroShortlist.render(); return; }
     const grid = document.getElementById("home-model-grid");
-    const topModels = (window.PHOTOCZARO_MODELS || []).sort((a, b) => a.displayOrder - b.displayOrder).slice(0, 12);
     const i18n = window.PhotoczaroI18n;
-    grid.innerHTML = topModels.map((m) => `
-      <a href="${i18n.path("/models/" + m.slug)}" class="model-card">
-        <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
-          ${window.PhotoczaroCardMedia(m)}
-          ${m.sample ? `<span class="model-card-badge sample-badge">${i18n.t("badge.sampleProfile")}</span>` : m.newFace ? `<span class="model-card-badge">${i18n.t("badge.newFace")}</span>` : ""}
-          <button class="model-card-shortlist" data-shortlist-toggle="${m.slug}" aria-pressed="false" aria-label="${i18n.t("shortlist.addAriaLabel")}" onclick="event.preventDefault();window.PhotoczaroShortlist.toggle('${m.slug}')">♡</button>
-          <div class="model-card-overlay"><span class="model-card-name">${m.name}</span></div>
-        </div>
-        <div class="model-card-info">
-          <h3>${m.name}</h3>
-          <div class="model-card-meta">${i18n.t("category." + m.categories[0])} · ${m.location.split(",")[0]}</div>
-        </div>
-      </a>
-    `).join("");
+    const tr = (key, fb) => { const v = i18n.t(key); return v == null ? fb : v; };
+    const top = window.PHOTOCZARO_MODELS.slice().sort((a, b) => a.displayOrder - b.displayOrder).slice(0, 12);
+    const key = top.map((m) => m.slug).join(",");
+    if (grid.dataset.key !== key) {
+      grid.innerHTML = window.PhotoczaroRender.gridHtml(top, { t: tr, path: i18n.path });
+      grid.dataset.key = key;
+    }
     window.PhotoczaroShortlist.render();
   });
 </script>

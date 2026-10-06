@@ -1,6 +1,7 @@
 import { json } from "../../../_lib/http.js";
 import { requireAccessIdentity } from "../../../_lib/admin-auth.js";
 import { requireSameOrigin } from "../../../_lib/origin-check.js";
+import Render from "../../../../js/render.js";
 
 // "published" is deliberately excluded here: it's a guarded, validated
 // action of its own now (see [slug]/publish.js), not one field among many
@@ -43,6 +44,9 @@ export async function onRequestPut({ request, env, params }) {
   for (const field of EDITABLE_FIELDS) {
     if (field in body) model[field] = body[field];
   }
+  // One stored spelling per city ("Dubai, UAE"), whatever was typed, so the
+  // roster's location filter and the profile pages always agree.
+  if ("location" in body) model.location = Render.canonicalLocation(body.location);
   model.updatedAt = new Date().toISOString();
   pushHistory(model, { action: "edited", actor, at: model.updatedAt });
 

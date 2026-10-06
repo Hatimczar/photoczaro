@@ -11,6 +11,8 @@
   const fHeight = document.getElementById("f-height");
   const fNewFace = document.getElementById("f-newface");
 
+  const R_canonical = (v) => (window.PhotoczaroRender ? window.PhotoczaroRender.canonicalCity(v) : v);
+
   function paramsFromURL() {
     return new URLSearchParams(window.location.search);
   }
@@ -18,7 +20,7 @@
   function applyParamsToForm(params) {
     fCategory.value = params.get("category") || "";
     fSubcategory.value = params.get("subcategory") || "";
-    fLocation.value = params.get("location") || "";
+    fLocation.value = R_canonical(params.get("location") || "");
     fHeight.value = params.get("height") || "";
     fNewFace.checked = params.get("newFace") === "1";
   }
@@ -45,45 +47,47 @@
     window.history.replaceState({}, "", url);
   }
 
+  const R = window.PhotoczaroRender;
+  const emptyMen = document.getElementById("empty-men");
+  const tr = (key, fallback) => {
+    const v = window.PhotoczaroI18n && window.PhotoczaroI18n.t(key);
+    return v == null ? fallback : v;
+  };
+
+  /* Location options come from the published roster, so a city appears as
+     soon as someone based there is published (Fujairah, Abu Dhabi, ...). */
+  function renderLocationOptions(models, selected) {
+    const html = R.locationOptionsHtml(models, selected, tr);
+    if (fLocation.innerHTML !== html) fLocation.innerHTML = html;
+    fLocation.value = R.canonicalCity(selected) || "";
+  }
+
   function render() {
+    /* No live roster (feed failed): keep the server-rendered grid as it is. */
+    if (window.PHOTOCZARO_MODELS_STATUS !== "ok") return;
     const filters = currentFilters();
     updateURL(filters);
 
-    let results = (window.PHOTOCZARO_MODELS || []).filter((m) => m.status === "active");
+    const all = window.PHOTOCZARO_MODELS || [];
+    renderLocationOptions(all, filters.location);
+    const results = R.filterModels(all, filters);
 
-    if (filters.category) results = results.filter((m) => m.categories.includes(filters.category));
-    if (filters.subcategory) results = results.filter((m) => m.subcategories.includes(filters.subcategory));
-    if (filters.location) results = results.filter((m) => m.location.startsWith(filters.location));
-    if (filters.newFace) results = results.filter((m) => m.newFace);
-    if (filters.height) {
-      const [min, max] = filters.height.split("-").map(Number);
-      results = results.filter((m) => {
-        const cm = parseInt(m.height, 10);
-        return cm >= min && cm <= max;
-      });
+    countEl.textContent = R.countHtml(results.length, tr);
+
+    /* Only the one empty state that applies is shown: the men's brief prompt
+       when no male profiles are published at all; the generic reset message
+       when filters merely exclude models that do exist. */
+    const menOnly = results.length === 0 && filters.category === "men" && R.noMalesPublished(all);
+    emptyState.hidden = !(results.length === 0 && !menOnly);
+    if (emptyMen) emptyMen.hidden = !menOnly;
+
+    /* The grid is already server-rendered for the initial URL; leave it alone
+       when it is already showing exactly these models. */
+    const key = results.map((m) => m.slug).join(",");
+    if (grid.dataset.key !== key) {
+      grid.innerHTML = R.gridHtml(results, { t: tr, path: window.PhotoczaroI18n.path, showHeight: true });
+      grid.dataset.key = key;
     }
-
-    results.sort((a, b) => a.displayOrder - b.displayOrder);
-
-    const i18n = window.PhotoczaroI18n;
-    const countWord = i18n.t(results.length === 1 ? "filters.countSingular" : "filters.countPlural");
-    countEl.textContent = `${results.length} ${countWord}`;
-    emptyState.hidden = results.length !== 0;
-
-    grid.innerHTML = results.map((m) => `
-      <a href="${i18n.path("/models/" + m.slug)}" class="model-card">
-        <div class="model-card-media" style="--card-a:${m.swatch[0]};--card-b:${m.swatch[1]}">
-          ${window.PhotoczaroCardMedia(m)}
-          ${m.sample ? `<span class="model-card-badge sample-badge">${i18n.t("badge.sampleProfile")}</span>` : m.newFace ? `<span class="model-card-badge">${i18n.t("badge.newFace")}</span>` : ""}
-          <button class="model-card-shortlist" data-shortlist-toggle="${m.slug}" aria-pressed="false" aria-label="${i18n.t("shortlist.addAriaLabel")}" onclick="event.preventDefault();window.PhotoczaroShortlist.toggle('${m.slug}')">♡</button>
-          <div class="model-card-overlay"><span class="model-card-name">${m.name}</span></div>
-        </div>
-        <div class="model-card-info">
-          <h3>${m.name}</h3>
-          <div class="model-card-meta">${i18n.t("category." + m.categories[0])} · ${m.location.split(",")[0]} · ${m.height}</div>
-        </div>
-      </a>
-    `).join("");
 
     window.PhotoczaroShortlist.render();
   }
@@ -102,5 +106,8 @@
   });
 
   applyParamsToForm(paramsFromURL());
-  window.PhotoczaroModelsReady.then(render);
+  window.PhotoczaroModelsReady.then(() => {
+    /* A failed feed keeps the server-rendered grid instead of blanking it. */
+    if (window.PHOTOCZARO_MODELS_STATUS === "ok") render();
+  });
 })();

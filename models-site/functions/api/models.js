@@ -1,21 +1,13 @@
 /*
  * Public roster feed. Reads published model records from ROSTER_KV and
- * returns them in the same shape js/data.js used to hard-code, so the
- * front-end rendering (index.html, models.html/js/filters.js, model.html)
- * needs only to fetch this instead of reading a bundled array.
+ * returns only their public fields (see _lib/public-model.js) in the shape
+ * the front-end rendering (index.html, models.html/js/filters.js, model.html)
+ * expects. The pages are also server-rendered from the same data; this feed
+ * keeps filtering and the shortlist live in the browser.
  */
 import { json } from "../_lib/http.js";
+import { loadPublishedModels } from "../_lib/public-model.js";
 
 export async function onRequestGet({ env }) {
-  if (!env.ROSTER_KV) return json([]);
-
-  const list = await env.ROSTER_KV.list({ prefix: "model:" });
-  const records = await Promise.all(
-    list.keys.map((k) => env.ROSTER_KV.get(k.name, { type: "json" }))
-  );
-  const published = records
-    .filter((m) => m && m.published && !m.archived)
-    .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
-
-  return json(published, 200, { "Cache-Control": "public, max-age=60" });
+  return json(await loadPublishedModels(env), 200, { "Cache-Control": "public, max-age=60" });
 }

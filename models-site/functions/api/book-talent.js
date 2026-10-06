@@ -21,6 +21,10 @@
  *    book-talent.html (this handler currently trusts required-field checks
  *    already run client-side and only re-validates email format + presence).
  */
+import { loadPublishedModels } from "../_lib/public-model.js";
+
+const MAX_SELECTED_MODELS = 20;
+
 export async function onRequestPost({ request, env }) {
   const isNativeSubmit = request.headers.get("x-requested-with") !== "fetch";
 
@@ -42,8 +46,27 @@ export async function onRequestPost({ request, env }) {
     return respondError(isNativeSubmit, "Missing or invalid required fields.", 400);
   }
 
+  // Selected models: a list of slugs. Every slug must be a currently
+  // published profile; anything else is rejected rather than stored, so an
+  // enquiry can never reference a model that does not exist.
+  let selectedModels = [];
+  if (body.selectedModels != null && body.selectedModels !== "") {
+    const raw = Array.isArray(body.selectedModels) ? body.selectedModels : String(body.selectedModels).split(",");
+    selectedModels = [...new Set(raw.map((s) => String(s).trim()).filter(Boolean))];
+    if (selectedModels.length > MAX_SELECTED_MODELS) {
+      return respondError(isNativeSubmit, "Too many models selected.", 400);
+    }
+    const known = new Set((await loadPublishedModels(env)).map((m) => m.slug));
+    const unknown = selectedModels.filter((s) => !known.has(s));
+    if (unknown.length) {
+      if (isNativeSubmit) return respondError(true, "One or more selected models are not available.", 400);
+      return json({ error: "One or more selected models are not available.", code: "unknown_models", unknownModels: unknown }, 400);
+    }
+  }
+
   const record = {
     ...body,
+    selectedModels,
     workEmail,
     clientName,
     receivedAt: new Date().toISOString(),

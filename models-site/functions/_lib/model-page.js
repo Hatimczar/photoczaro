@@ -7,7 +7,10 @@
  * Unknown or unpublished slugs get the plain template as a real 404 with
  * noindex, so search engines drop them.
  */
+import Render from "../../js/render.js";
 import { profileDescription, profileJsonLd } from "./profile-seo.js";
+import { toPublicModel, loadPublishedModels } from "./public-model.js";
+import { fetchTemplate, finish } from "./pages.js";
 
 const LANGS = ["fr", "ru", "es", "cs", "ar"];
 const ORIGIN = "https://models.photoczaro.com";
@@ -15,22 +18,22 @@ const ORIGIN = "https://models.photoczaro.com";
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
 export async function renderModelPage({ request, env }, lang, slug) {
-  const url = new URL(request.url);
-  const template = await env.ASSETS.fetch(new Request(new URL("/model", url), { headers: request.headers }));
+  const template = await fetchTemplate({ request, env }, "/model");
 
-  let model = null;
+  let record = null;
   if (env.ROSTER_KV && slug && /^[a-z0-9-]+$/.test(slug)) {
-    model = await env.ROSTER_KV.get(`model:${slug}`, { type: "json" });
+    record = await env.ROSTER_KV.get(`model:${slug}`, { type: "json" });
   }
-  if (!model || !model.published || model.archived) {
+  if (!record || !record.published || record.archived) {
     // Unknown or unpublished profile: a real 404 that search engines drop,
     // instead of the template answering 200 with an empty page.
     const gone = new HTMLRewriter()
       .on('meta[name="robots"]', { element(el) { el.setAttribute("content", "noindex, nofollow"); } })
       .transform(template);
-    return new Response(gone.body, { status: 404, headers: gone.headers });
+    return finish(gone, 404);
   }
 
+  const model = toPublicModel(record);
   const prefix = lang && LANGS.includes(lang) ? `/${lang}` : "";
   const canonical = `${ORIGIN}${prefix}/models/${model.slug}`;
   const title = model.seoTitle || `${model.name} | Photoczaro Models Dubai`;
@@ -40,7 +43,20 @@ export async function renderModelPage({ request, env }, lang, slug) {
   const setContent = (value) => ({ element(el) { el.setAttribute("content", value); } });
   const setHref = (value) => ({ element(el) { el.setAttribute("href", value); } });
 
+  // The profile body itself is rendered here too, so crawlers and no-JS
+  // visitors get the model's details, photographs and related profiles.
+  const roster = await loadPublishedModels(env);
+  const body = Render.profileHtml(model, { path: (p) => `${prefix}${p}`, models: roster });
+
   let rewriter = new HTMLRewriter()
+    .on("#profile-root", {
+      element(el) {
+        el.setInnerContent(body, { html: true });
+        el.setAttribute("data-ssr", "1");
+        el.setAttribute("data-share-url", canonical);
+        el.setAttribute("data-share-title", title);
+      },
+    })
     .on("title", { element(el) { el.setInnerContent(title); } })
     .on("#page-description", setContent(description))
     .on("#page-canonical", setHref(canonical))
@@ -70,8 +86,5 @@ export async function renderModelPage({ request, env }, lang, slug) {
       .on('meta[name="twitter:image"]', setContent(image));
   }
 
-  const res = rewriter.transform(template);
-  const headers = new Headers(res.headers);
-  headers.set("Cache-Control", "public, max-age=0, must-revalidate");
-  return new Response(res.body, { status: 200, headers });
+  return finish(rewriter.transform(template), 200);
 }

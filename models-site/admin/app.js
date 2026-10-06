@@ -626,7 +626,7 @@
       <div class="admin-section-title">Stats</div>
       <p class="admin-note">${measureHint}</p>
       <div class="admin-grid">
-        <div class="admin-field"><label for="f-location">Location <span class="admin-required" aria-hidden="true">*</span></label><input id="f-location" value="${esc(model.location)}" aria-required="true"></div>
+        <div class="admin-field"><label for="f-location">Location <span class="admin-required" aria-hidden="true">*</span></label><input id="f-location" list="f-location-cities" value="${esc(model.location)}" aria-required="true" aria-describedby="f-location-hint"><datalist id="f-location-cities">${["Abu Dhabi","Ajman","Al Ain","Dubai","Fujairah","Ras Al Khaimah","Sharjah","Umm Al Quwain"].map((c) => `<option value="${c}, UAE">`).join("")}</datalist><div class="admin-note" id="f-location-hint">Pick a UAE city; spelling is normalised on save (e.g. "Dubaí" becomes "Dubai, UAE").</div></div>
         <div class="admin-field"><label for="f-height">Height <span class="admin-required" aria-hidden="true">*</span></label><input id="f-height" value="${esc(model.height)}" placeholder="e.g. 177 cm" aria-required="true"></div>
         <div class="admin-field"><label for="f-unit">Measurement unit</label>
           <select id="f-unit"><option value="cm" ${model.measurementUnit === "cm" ? "selected" : ""}>cm</option><option value="in" ${model.measurementUnit === "in" ? "selected" : ""}>in</option></select>

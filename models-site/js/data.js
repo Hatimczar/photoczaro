@@ -5,31 +5,50 @@
  * a model in the admin panel makes them appear on the site immediately.
  *
  * window.PhotoczaroModelsReady resolves once window.PHOTOCZARO_MODELS is
- * populated. Rendering code that used to assume the array was already
+ * populated (check window.PHOTOCZARO_MODELS_STATUS for "ok" vs "error").
+ * Rendering code that used to assume the array was already
  * present (it used to be a synchronous inline script) should now do:
  *   window.PhotoczaroModelsReady.then(() => { ...render... });
  * A "photoczaro:models-ready" event fires at the same time for listeners
  * that were already attached before this script ran.
  */
 window.PHOTOCZARO_MODELS = [];
-window.PhotoczaroModelsReady = fetch("/api/models")
-  .then((res) => (res.ok ? res.json() : []))
-  .catch(() => [])
-  .then((data) => {
-    window.PHOTOCZARO_MODELS = Array.isArray(data) ? data : [];
-    window.dispatchEvent(new CustomEvent("photoczaro:models-ready"));
-    return window.PHOTOCZARO_MODELS;
-  });
+/* "loading" | "ok" | "error". A failed fetch used to be indistinguishable from
+   an empty roster, which let pages quietly act on an empty list. */
+window.PHOTOCZARO_MODELS_STATUS = "loading";
 
-/* Renders a model's card/profile media: a real headshot when the admin
-   panel has uploaded one, otherwise the gradient-swatch + initials
-   placeholder used for sample and not-yet-photographed records. */
+function loadRoster() {
+  window.PHOTOCZARO_MODELS_STATUS = "loading";
+  return fetch("/api/models", { headers: { Accept: "application/json" } })
+    .then((res) => {
+      if (!res.ok) throw new Error("roster_" + res.status);
+      return res.json();
+    })
+    .then((data) => {
+      if (!Array.isArray(data)) throw new Error("roster_shape");
+      window.PHOTOCZARO_MODELS = data;
+      window.PHOTOCZARO_MODELS_STATUS = "ok";
+    })
+    .catch(() => {
+      window.PHOTOCZARO_MODELS_STATUS = "error";
+    })
+    .then(() => {
+      window.dispatchEvent(new CustomEvent("photoczaro:models-ready", { detail: { status: window.PHOTOCZARO_MODELS_STATUS } }));
+      return window.PHOTOCZARO_MODELS;
+    });
+}
+window.PhotoczaroModelsReady = loadRoster();
+/* Re-fetch after a failure; resolves like PhotoczaroModelsReady. */
+window.PhotoczaroReloadModels = function () {
+  window.PhotoczaroModelsReady = loadRoster();
+  return window.PhotoczaroModelsReady;
+};
+
+/* Renders a model's card/profile media (shared with the server-rendered
+   pages via js/render.js). */
 window.PhotoczaroCardMedia = function (m) {
-  if (m.images && m.images.headshot) {
-    return `<img src="/media/${m.images.headshot}" alt="${String(m.name || "").replace(/"/g, "&quot;")}, model in Dubai" loading="lazy">`;
-  }
-  const initials = (m.name || "").split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
-  return `<span class="initials">${initials}</span>`;
+  const t = window.PhotoczaroI18n && window.PhotoczaroI18n.t ? (k, fb) => { const v = window.PhotoczaroI18n.t(k); return v == null ? fb : v; } : undefined;
+  return window.PhotoczaroRender.mediaHtml(m, t);
 };
 
 window.PHOTOCZARO_CATEGORY_LABELS = {

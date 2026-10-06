@@ -76,6 +76,17 @@
       const v = t(el.getAttribute("data-i18n-title"));
       if (v != null) el.setAttribute("title", v);
     });
+    /* Image alt text with placeholders: data-i18n-alt="alt.fullFront" plus
+       data-alt-vars='{"name":"...","city":"Dubai"}' ({city} is translated). */
+    document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
+      const template = t(el.getAttribute("data-i18n-alt"));
+      if (template == null) return;
+      let vars = {};
+      try { vars = JSON.parse(el.getAttribute("data-alt-vars") || "{}"); } catch (e) { /* keep defaults */ }
+      const cityKey = "city." + String(vars.city || "").toLowerCase().replace(/[^a-z]/g, "");
+      const city = vars.city ? (t(cityKey) || vars.city) : "";
+      el.setAttribute("alt", template.replace("{name}", vars.name || "").replace("{city}", city).replace("{n}", vars.n || ""));
+    });
     document.querySelectorAll("[data-i18n-content]").forEach((el) => {
       const v = t(el.getAttribute("data-i18n-content"));
       if (v != null) el.setAttribute("content", v);

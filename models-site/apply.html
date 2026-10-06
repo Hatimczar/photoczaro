@@ -34,7 +34,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/css/style.css?v=30">
+<link rel="stylesheet" href="/css/style.css?v=31">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipToContent">Skip to content</a>
@@ -60,7 +60,7 @@
   <div class="nav-actions" style="display:flex;align-items:center;gap:14px;">
     <button class="nav-shortlist-btn" data-open-shortlist><span data-i18n="nav.shortlist">Shortlist</span> <span class="nav-shortlist-count" data-shortlist-count>0</span></button>
     <a href="book-talent" class="cta-btn cta-btn-primary" style="padding:9px 20px;" data-i18n="nav.bookTalent">Book Talent</a>
-    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" data-i18n-aria-label="a11y.menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -131,7 +131,7 @@
           <select id="apply-category" name="category" required><option value="" data-i18n="form.selectOne">Select one</option><option value="women" data-i18n="nav.women">Women</option><option value="men" data-i18n="nav.men">Men</option></select>
           <span class="form-error" data-error-for="apply-category"></span>
         </div>
-        <div class="form-field"><label for="uae-city" data-i18n="apply.uaeCity">UAE city *</label><input type="text" id="uae-city" name="uaeCity" required><span class="form-error" data-error-for="uae-city"></span></div>
+        <div class="form-field"><label for="uae-city" data-i18n="apply.uaeCity">UAE city *</label><select id="uae-city" name="uaeCity" required autocomplete="address-level2"><option value="" data-i18n="form.selectOne">Select one</option><option value="Abu Dhabi" data-i18n="city.abudhabi">Abu Dhabi</option><option value="Ajman" data-i18n="city.ajman">Ajman</option><option value="Al Ain" data-i18n="city.alain">Al Ain</option><option value="Dubai" data-i18n="city.dubai">Dubai</option><option value="Fujairah" data-i18n="city.fujairah">Fujairah</option><option value="Ras Al Khaimah" data-i18n="city.rasalkhaimah">Ras Al Khaimah</option><option value="Sharjah" data-i18n="city.sharjah">Sharjah</option><option value="Umm Al Quwain" data-i18n="city.ummalquwain">Umm Al Quwain</option></select><span class="form-error" data-error-for="uae-city"></span></div>
 
         <div class="form-field"><label for="experience" data-i18n="apply.experienceLevel">Experience level</label>
           <select id="experience" name="experience"><option value="" data-i18n="form.selectOne">Select one</option><option value="new-face" data-i18n="apply.newFace">New face</option><option value="some-experience" data-i18n="apply.someExperience">Some experience</option><option value="experienced" data-i18n="apply.experienced">Experienced</option></select>
@@ -234,11 +234,12 @@
   </div>
 </footer>
 
-<script src="/js/data.js?v=5"></script>
-<script src="/js/shortlist.js?v=3"></script>
-<script src="/js/i18n-data.js?v=5"></script>
-<script src="/js/i18n.js?v=2"></script>
-<script src="/js/main.js?v=5"></script>
+<script src="/js/render.js?v=2"></script>
+<script src="/js/data.js?v=6"></script>
+<script src="/js/shortlist.js?v=4"></script>
+<script src="/js/i18n-data.js?v=7"></script>
+<script src="/js/i18n.js?v=3"></script>
+<script src="/js/main.js?v=8"></script>
 <script src="/js/magnetic-cta.js?v=1"></script>
 <script>
 (function () {

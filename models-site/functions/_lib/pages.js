@@ -34,7 +34,11 @@ export function finish(res, status) {
   return new Response(res.body, { status: status ?? res.status, headers });
 }
 
-export async function renderHomePage(context, lang) {
+export function renderHomePage(context, lang) {
+  return edgeCached(context, () => buildHomePage(context, lang));
+}
+
+async function buildHomePage(context, lang) {
   const template = await fetchTemplate(context, "/");
   const models = await loadPublishedModels(context.env);
   const top = models.slice(0, 12);
@@ -47,7 +51,11 @@ export async function renderHomePage(context, lang) {
   return finish(res);
 }
 
-export async function renderModelsPage(context, lang) {
+export function renderModelsPage(context, lang) {
+  return edgeCached(context, () => buildModelsPage(context, lang));
+}
+
+async function buildModelsPage(context, lang) {
   const url = new URL(context.request.url);
   const template = await fetchTemplate(context, "/models");
   const models = await loadPublishedModels(context.env);
@@ -99,4 +107,30 @@ export async function renderStaticPage(context, lang, page) {
   if (!LANGS.includes(lang) || !STATIC_PAGES.includes(page)) return null;
   const template = await fetchTemplate(context, "/" + page);
   return finish(localizeHead(new HTMLRewriter(), lang, page).transform(template));
+}
+
+/* Pages are built from live roster data, which made the document itself the
+   slowest part of a first visit (a KV list plus one read per model on every
+   request). The finished HTML is kept at the edge for a minute, the same
+   freshness the public feed already had, so an admin edit still shows up
+   within a minute. Browsers are told to revalidate as before. Only plain
+   200 pages without a query string are stored. */
+export async function edgeCached(context, build, ttl = 60) {
+  const url = new URL(context.request.url);
+  if (context.request.method !== "GET" || url.search || typeof caches === "undefined") return build();
+  const key = new Request(url.origin + url.pathname, { method: "GET" });
+  const hit = await caches.default.match(key);
+  if (hit) {
+    const out = new Response(hit.body, hit);
+    out.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+    out.headers.set("X-Page-Cache", "hit");
+    return out;
+  }
+  const res = await build();
+  if (res.status === 200) {
+    const store = new Response(res.clone().body, res);
+    store.headers.set("Cache-Control", `public, max-age=${ttl}`);
+    context.waitUntil(caches.default.put(key, store));
+  }
+  return res;
 }

@@ -10,14 +10,18 @@
 import Render from "../../js/render.js";
 import { profileDescription, profileJsonLd } from "./profile-seo.js";
 import { toPublicModel, loadPublishedModels } from "./public-model.js";
-import { fetchTemplate, finish } from "./pages.js";
+import { fetchTemplate, finish, edgeCached } from "./pages.js";
 
 const LANGS = ["fr", "ru", "es", "cs", "ar"];
 const ORIGIN = "https://models.photoczaro.com";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
-export async function renderModelPage({ request, env }, lang, slug) {
+export function renderModelPage(context, lang, slug) {
+  return edgeCached(context, () => buildModelPage(context, lang, slug));
+}
+
+async function buildModelPage({ request, env }, lang, slug) {
   const template = await fetchTemplate({ request, env }, "/model");
 
   let record = null;

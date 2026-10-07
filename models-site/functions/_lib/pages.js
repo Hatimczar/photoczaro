@@ -8,6 +8,7 @@
 import Render from "../../js/render.js";
 import { loadPublishedModels } from "./public-model.js";
 import { localizeHead } from "./page-meta.js";
+import { translateResponse } from "./i18n-server.js";
 
 export const LANGS = ["fr", "ru", "es", "cs", "ar"];
 
@@ -48,7 +49,7 @@ async function buildHomePage(context, lang) {
   const res = rewriter
     .on("#home-model-grid", { element(el) { el.setInnerContent(html, { html: true }); el.setAttribute("data-key", top.map((m) => m.slug).join(",")); } })
     .transform(template);
-  return finish(res);
+  return finish(await translateResponse(context, res, lang));
 }
 
 export function renderModelsPage(context, lang) {
@@ -96,7 +97,7 @@ async function buildModelsPage(context, lang) {
     .on("#empty-state", { element(el) { if (results.length === 0 && !menOnly) el.removeAttribute("hidden"); } })
     .on("#empty-men", { element(el) { if (results.length === 0 && menOnly) el.removeAttribute("hidden"); } })
     .transform(template);
-  return finish(res);
+  return finish(await translateResponse(context, res, lang));
 }
 
 const STATIC_PAGES = ["book-talent", "apply", "about", "contact", "booking-terms", "privacy-policy"];
@@ -106,7 +107,8 @@ const STATIC_PAGES = ["book-talent", "apply", "about", "contact", "booking-terms
 export async function renderStaticPage(context, lang, page) {
   if (!LANGS.includes(lang) || !STATIC_PAGES.includes(page)) return null;
   const template = await fetchTemplate(context, "/" + page);
-  return finish(localizeHead(new HTMLRewriter(), lang, page).transform(template));
+  const res = localizeHead(new HTMLRewriter(), lang, page).transform(template);
+  return finish(await translateResponse(context, res, lang));
 }
 
 /* Pages are built from live roster data, which made the document itself the

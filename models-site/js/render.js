@@ -90,10 +90,10 @@
   const GALLERY_SIZES = "(max-width: 880px) 50vw, 33vw";
 
   /* ---------- Cards ---------- */
-  function mediaHtml(m, t, sizes) {
+  function mediaHtml(m, t, sizes, priority) {
     t = t || identityT;
     if (m.images && m.images.headshot) {
-      return `<img ${srcAttrs(m.images.headshot, sizes || CARD_SIZES)} ${altAttrs(m, "based", 0, t)} loading="lazy" decoding="async">`;
+      return `<img ${srcAttrs(m.images.headshot, sizes || CARD_SIZES)} ${altAttrs(m, "based", 0, t)} ${priority === "high" ? 'loading="eager" fetchpriority="high"' : priority === "eager" ? 'loading="eager"' : 'loading="lazy"'} decoding="async">`;
     }
     return `<span class="initials">${esc(initialsOf(m.name))}</span>`;
   }
@@ -115,7 +115,7 @@
     return `
       <a href="${esc(path("/models/" + m.slug))}" class="model-card">
         <div class="model-card-media" style="--card-a:${esc(m.swatch[0])};--card-b:${esc(m.swatch[1])}">
-          ${mediaHtml(m, t)}${badge}${heart}${overlay}
+          ${mediaHtml(m, t, null, opts.priority)}${badge}${heart}${overlay}
         </div>
         <div class="model-card-info">
           <h3>${esc(m.name)}</h3>
@@ -124,8 +124,10 @@
       </a>`;
   }
 
+  /* The first cards are what a phone shows without scrolling: they load
+     eagerly (the first two at high priority) instead of waiting to be lazy-loaded. */
   function gridHtml(models, opts) {
-    return models.map((m) => cardHtml(m, opts)).join("");
+    return models.map((m, i) => cardHtml(m, Object.assign({}, opts, i < 2 ? { priority: "high" } : i < 4 ? { priority: "eager" } : {}))).join("");
   }
 
   /* ---------- Filtering ---------- */
@@ -199,7 +201,7 @@
     ${model.sample ? `<div class="profile-sample-notice"><strong data-i18n="profile.sampleStrong">${esc(t("profile.sampleStrong", "Sample profile."))}</strong> <span data-i18n="profile.sampleBody">${esc(t("profile.sampleBody", "Shown for demonstration only. Not a real person and not available for booking."))}</span></div>` : ""}
     <section class="profile-hero" style="margin-top:24px;">
       <div class="profile-media" style="--card-a:${esc(model.swatch[0])};--card-b:${esc(model.swatch[1])}">
-        ${mediaHtml(model, t, HERO_SIZES)}
+        ${mediaHtml(model, t, HERO_SIZES, "high")}
       </div>
       <div class="profile-info">
         <span class="eyebrow"><span data-i18n="category.${esc(cat)}">${esc(t("category." + cat, CATEGORY_FALLBACK[cat] || ""))}</span>${model.newFace ? ` · <span data-i18n="badge.newFace">${esc(t("badge.newFace", "New Face"))}</span>` : ""}</span>

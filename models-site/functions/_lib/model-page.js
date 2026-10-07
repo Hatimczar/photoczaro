@@ -11,6 +11,7 @@ import Render from "../../js/render.js";
 import { profileDescription, profileJsonLd } from "./profile-seo.js";
 import { toPublicModel, loadPublishedModels } from "./public-model.js";
 import { fetchTemplate, finish, edgeCached } from "./pages.js";
+import { translateResponse } from "./i18n-server.js";
 
 const LANGS = ["fr", "ru", "es", "cs", "ar"];
 const ORIGIN = "https://models.photoczaro.com";
@@ -90,5 +91,5 @@ async function buildModelPage({ request, env }, lang, slug) {
       .on('meta[name="twitter:image"]', setContent(image));
   }
 
-  return finish(rewriter.transform(template), 200);
+  return finish(await translateResponse({ request, env }, rewriter.transform(template), prefix ? lang : ""), 200);
 }

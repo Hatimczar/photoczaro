@@ -27,14 +27,7 @@
   const dir = RTL.includes(lang) ? "rtl" : "ltr";
   document.documentElement.lang = lang;
   document.documentElement.dir = dir;
-  if (dir === "rtl") {
-    document.documentElement.classList.add("rtl");
-    /* Arabic faces are only fetched for Arabic pages. */
-    const arabicFonts = document.createElement("link");
-    arabicFonts.rel = "stylesheet";
-    arabicFonts.href = "https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Arabic:wght@300;400;500;700&display=swap";
-    document.head.appendChild(arabicFonts);
-  }
+  if (dir === "rtl") document.documentElement.classList.add("rtl");
 
   /* Strip the language prefix from the current path, returning a
      root-relative path with no trailing slash (e.g. "/models", ""). */

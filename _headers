@@ -20,9 +20,6 @@ https://:project.pages.dev/*
 # Static portrait/magazine/project photography is not filename-versioned,
 # so a moderate (not "immutable") browser cache bounds staleness risk if a
 # file at the same path is ever replaced.
-/fonts/*
-  Cache-Control: public, max-age=31536000, immutable
-
 /images/*
   Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 

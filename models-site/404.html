@@ -24,11 +24,11 @@
     <a href="/models" class="cta-btn" id="notfound-models" data-i18n="notFound.viewModels">View Models</a>
   </div>
 </main>
-<script src="/js/i18n-data.js?v=7"></script>
-<script src="/js/i18n.js?v=4"></script>
-<script>
+<script defer src="/js/i18n-data.js?v=7"></script>
+<script defer src="/js/i18n.js?v=4"></script>
+<script>document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("notfound-home").href = window.PhotoczaroI18n.path("/");
   document.getElementById("notfound-models").href = window.PhotoczaroI18n.path("/models");
-</script>
+});</script>
 </body>
 </html>

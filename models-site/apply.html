@@ -233,14 +233,14 @@
   </div>
 </footer>
 
-<script src="/js/render.js?v=4"></script>
-<script src="/js/data.js?v=6"></script>
-<script src="/js/shortlist.js?v=6"></script>
-<script src="/js/i18n-data.js?v=7"></script>
-<script src="/js/i18n.js?v=4"></script>
-<script src="/js/main.js?v=8"></script>
-<script src="/js/magnetic-cta.js?v=1"></script>
-<script>
+<script defer src="/js/render.js?v=4"></script>
+<script defer src="/js/data.js?v=6"></script>
+<script defer src="/js/shortlist.js?v=6"></script>
+<script defer src="/js/i18n-data.js?v=7"></script>
+<script defer src="/js/i18n.js?v=4"></script>
+<script defer src="/js/main.js?v=9"></script>
+<script defer src="/js/magnetic-cta.js?v=1"></script>
+<script>document.addEventListener("DOMContentLoaded", function () {
 (function () {
   const i18n = window.PhotoczaroI18n;
   const form = document.getElementById("apply-form");
@@ -481,6 +481,6 @@
 
   window.PhotoczaroShortlist.render();
 })();
-</script>
+});</script>
 </body>
 </html>

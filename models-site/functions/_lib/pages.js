@@ -71,7 +71,7 @@ async function buildModelsPage(context, lang) {
   };
   const results = Render.filterModels(models, filters);
   const menOnly = filters.category === "men" && Render.noMalesPublished(models);
-  const html = Render.gridHtml(results, { path: pathFor(lang), showHeight: true });
+  const html = Render.gridHtml(results, { path: pathFor(lang), showHeight: true, aboveFold: true });
 
   let rewriter = new HTMLRewriter();
   if (lang) rewriter = localizeHead(rewriter, lang, "models");
@@ -113,26 +113,33 @@ export async function renderStaticPage(context, lang, page) {
 
 /* Pages are built from live roster data, which made the document itself the
    slowest part of a first visit (a KV list plus one read per model on every
-   request). The finished HTML is kept at the edge for a minute, the same
-   freshness the public feed already had, so an admin edit still shows up
-   within a minute. Browsers are told to revalidate as before. Only plain
-   200 pages without a query string are stored. */
-export async function edgeCached(context, build, ttl = 60) {
+   request). The finished HTML is kept at the edge and served immediately; once
+   it is a minute old the next visitor still gets the stored copy instantly
+   while a fresh one is built in the background. An admin edit therefore shows
+   within about a minute of the next visit. Browsers are told to revalidate as
+   before. Only plain 200 pages without a query string are stored. */
+export async function edgeCached(context, build, freshSeconds = 60) {
   const url = new URL(context.request.url);
   if (context.request.method !== "GET" || url.search || typeof caches === "undefined") return build();
   const key = new Request(url.origin + url.pathname, { method: "GET" });
+  const store = async (res) => {
+    if (res.status !== 200) return;
+    const copy = new Response(res.clone().body, res);
+    copy.headers.set("Cache-Control", "public, max-age=86400");
+    copy.headers.set("X-Built-At", String(Date.now()));
+    await caches.default.put(key, copy);
+  };
   const hit = await caches.default.match(key);
   if (hit) {
+    const age = (Date.now() - Number(hit.headers.get("X-Built-At") || 0)) / 1000;
+    if (age > freshSeconds) context.waitUntil(build().then(store).catch(() => {}));
     const out = new Response(hit.body, hit);
     out.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
-    out.headers.set("X-Page-Cache", "hit");
+    out.headers.set("X-Page-Cache", age > freshSeconds ? "stale" : "hit");
+    out.headers.delete("X-Built-At");
     return out;
   }
   const res = await build();
-  if (res.status === 200) {
-    const store = new Response(res.clone().body, res);
-    store.headers.set("Cache-Control", `public, max-age=${ttl}`);
-    context.waitUntil(caches.default.put(key, store));
-  }
+  context.waitUntil(store(res));
   return res;
 }

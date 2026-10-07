@@ -440,7 +440,7 @@ button.cta-btn { font-family: inherit; border-width: 1px; }
 .model-card:hover .model-card-overlay .model-card-name { transform: translateY(0); }
 .model-card-meta { font-size: 11px; letter-spacing: 0.05em; color: var(--grey); text-transform: uppercase; }
 .model-card-info { padding: 14px 2px 26px; }
-.model-card-info h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; font-style: italic; }
+.model-card-info h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; font-style: italic; }
 .model-card-info .model-card-meta { margin-top: 4px; }
 
 /* ---------- Filters ---------- */
@@ -764,7 +764,7 @@ footer#site-footer { padding: 24px var(--bento-pad) 24px; border-top: none; }
   .model-card { border-radius: 20px; }
   .model-card-media { border-radius: 20px 20px 0 0; }
   .model-card-info { padding: 12px 14px 16px; }
-  .model-card-info h3 { font-size: 1rem; }
+  .model-card-info h2 { font-size: 1rem; }
 }
 /* Inputs inside the card form must shrink with it (they otherwise keep their intrinsic width and overflow on phones). */
 .form-field { min-width: 0; }

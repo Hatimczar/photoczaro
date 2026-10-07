@@ -118,16 +118,19 @@
           ${mediaHtml(m, t, null, opts.priority)}${badge}${heart}${overlay}
         </div>
         <div class="model-card-info">
-          <h3>${esc(m.name)}</h3>
+          <h2>${esc(m.name)}</h2>
           <div class="model-card-meta">${meta.join(" · ")}</div>
         </div>
       </a>`;
   }
 
-  /* The first cards are what a phone shows without scrolling: they load
-     eagerly (the first two at high priority) instead of waiting to be lazy-loaded. */
+  /* On the roster page the first cards are what a phone shows without
+     scrolling: they load eagerly (the first two at high priority). Elsewhere
+     (home, related models) everything stays lazy so the main photo of the page
+     is not competing with them. */
   function gridHtml(models, opts) {
-    return models.map((m, i) => cardHtml(m, Object.assign({}, opts, i < 2 ? { priority: "high" } : i < 4 ? { priority: "eager" } : {}))).join("");
+    const above = opts && opts.aboveFold;
+    return models.map((m, i) => cardHtml(m, Object.assign({}, opts, above && i < 2 ? { priority: "high" } : above && i < 4 ? { priority: "eager" } : {}))).join("");
   }
 
   /* ---------- Filtering ---------- */

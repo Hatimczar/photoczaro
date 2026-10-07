@@ -85,7 +85,7 @@
        when it is already showing exactly these models. */
     const key = results.map((m) => m.slug).join(",");
     if (grid.dataset.key !== key) {
-      grid.innerHTML = R.gridHtml(results, { t: tr, path: window.PhotoczaroI18n.path, showHeight: true });
+      grid.innerHTML = R.gridHtml(results, { t: tr, path: window.PhotoczaroI18n.path, showHeight: true, aboveFold: true });
       grid.dataset.key = key;
     }
 

@@ -581,7 +581,8 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
-<link rel="stylesheet" href="/a11y.css?v=1">
+<link rel="stylesheet" href="/a11y.css?v=2">
+<script src="/js/a11y-menu.js?v=1" defer></script>
 </head>
 <body>
 
@@ -705,21 +706,22 @@
 
 <!-- Posts -->
 <main class="journal-section">
-  <div class="journal-filters" id="journal-filters">
-    <button type="button" class="journal-filter-btn active" data-category="all">All</button>
-    <button type="button" class="journal-filter-btn" data-category="Acting &amp; Casting Guide">Acting &amp; Casting Guide</button>
-    <button type="button" class="journal-filter-btn" data-category="Location Guide">Location Guide</button>
-    <button type="button" class="journal-filter-btn" data-category="Modeling Guide">Modeling Guide</button>
-    <button type="button" class="journal-filter-btn" data-category="Client Guide">Client Guide</button>
-    <button type="button" class="journal-filter-btn" data-category="Brand Guide">Brand Guide</button>
-    <button type="button" class="journal-filter-btn" data-category="Behind the Scenes">Behind the Scenes</button>
-    <button type="button" class="journal-filter-btn" data-category="Gear Review">Gear Review</button>
-    <button type="button" class="journal-filter-btn" data-category="On Shooting">On Shooting</button>
-    <button type="button" class="journal-filter-btn" data-category="Press &amp; Publications">Press &amp; Publications</button>
-    <button type="button" class="journal-filter-btn" data-category="Pricing Guide">Pricing Guide</button>
-    <button type="button" class="journal-filter-btn" data-category="Client Story">Client Story</button>
-    <button type="button" class="journal-filter-btn" data-category="Models &amp; Booking">Models &amp; Booking</button>
+  <div class="journal-filters" id="journal-filters" role="group" aria-label="Filter articles by category">
+    <button type="button" class="journal-filter-btn active" data-category="all" aria-pressed="true">All</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Acting &amp; Casting Guide">Acting &amp; Casting Guide</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Location Guide">Location Guide</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Modeling Guide">Modeling Guide</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Client Guide">Client Guide</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Brand Guide">Brand Guide</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Behind the Scenes">Behind the Scenes</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Gear Review">Gear Review</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="On Shooting">On Shooting</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Press &amp; Publications">Press &amp; Publications</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Pricing Guide">Pricing Guide</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Client Story">Client Story</button>
+    <button type="button" class="journal-filter-btn" aria-pressed="false" data-category="Models &amp; Booking">Models &amp; Booking</button>
   </div>
+  <p class="sr-only" id="journal-count" role="status" aria-live="polite"></p>
   <div class="blog-grid" id="journal-grid">
 
     <a href="blog/book-models-dubai-uae-photoczaro-models-roster" class="blog-card reveal">
@@ -1219,14 +1221,18 @@
   const cards = document.querySelectorAll('#journal-grid .blog-card');
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
+      filterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       const category = btn.getAttribute('data-category');
       cards.forEach(card => {
         const cardCategory = card.querySelector('.blog-card-category');
         const match = category === 'all' || (cardCategory && cardCategory.textContent.trim() === category);
         card.classList.toggle('is-hidden', !match);
       });
+      const shown = Array.prototype.filter.call(cards, c => !c.classList.contains('is-hidden')).length;
+      const live = document.getElementById('journal-count');
+      if (live) live.textContent = (category === 'all' ? 'All articles' : btn.textContent.trim()) + ': ' + shown + (shown === 1 ? ' article' : ' articles') + ' shown.';
     });
   });
 </script>

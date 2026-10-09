@@ -8,3 +8,46 @@
 :focus:not(:focus-visible) {
   outline: none;
 }
+
+/* ---- Skip link (pages that do not define their own) ---- */
+.skip-link {
+  position: absolute; top: -100px; left: 16px; z-index: 100000;
+  background: #c9a96e; color: #0a0a0a; padding: 12px 20px; border-radius: 4px;
+  font-size: 13px; font-weight: 500; text-decoration: none; transition: top 0.2s ease;
+}
+.skip-link:focus { top: 16px; }
+
+/* ---- Mobile menu: Close control that sits over the hamburger (see js/a11y-menu.js) ---- */
+.menu-close {
+  position: fixed; z-index: 101; width: 44px; height: 44px; padding: 0; margin: 0;
+  background: transparent; border: 0; border-radius: 50%; cursor: pointer; display: none;
+}
+.mobile-menu-overlay.open .menu-close { display: block; }
+.menu-close:focus-visible { outline: 2px solid #c9a96e; outline-offset: 2px; }
+
+/* ---- Closed image viewer must be out of the tab order and accessibility tree ---- */
+.lightbox:not(.open) { visibility: hidden; }
+.lightbox.open { visibility: visible; }
+
+/* ---- Legibility: lighter secondary text and a dark backing for the header over the hero ---- */
+:root { --grey: #a8a39b; }
+nav .nav-links a, nav .nav-more-btn, nav .lang-switch-btn-nav { color: rgba(245, 240, 235, 0.92); text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75); }
+nav:not(.scrolled)::before {
+  content: ""; position: absolute; inset: 0 0 -24px 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(10, 8, 6, 0.72), rgba(10, 8, 6, 0));
+}
+
+/* ---- Reduced motion and native cursor for everyone who asks for it (or has no hover) ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important; scroll-behavior: auto !important;
+  }
+}
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  html, body, a, button, .cta-btn { cursor: auto !important; }
+  .cursor, .cursor-ring { display: none !important; }
+}
+
+/* Visually hidden, still announced by screen readers */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }

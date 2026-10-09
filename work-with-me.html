@@ -469,7 +469,8 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
-<link rel="stylesheet" href="/a11y.css?v=1">
+<link rel="stylesheet" href="/a11y.css?v=2">
+<script src="/js/a11y-menu.js?v=1" defer></script>
 </head>
 <body>
 
@@ -1226,8 +1227,22 @@ document.addEventListener('keydown', e => {
     return msg;
   }
 
+  function setError(id, message){
+    const el = document.getElementById(id);
+    const errEl = form.querySelector(`[data-error-for="${id}"]`);
+    if (errEl) {
+      if (!errEl.id) errEl.id = 'err-' + id;
+      errEl.textContent = message || '';
+      // Each field points at its own error text, so it is read when the field is reached.
+      const ids = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean).filter(x => x !== errEl.id);
+      if (message) ids.push(errEl.id);
+      if (ids.length) el.setAttribute('aria-describedby', ids.join(' ')); else el.removeAttribute('aria-describedby');
+    }
+    if (message) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+  }
+
   function validate(){
-    let valid = true;
+    let firstInvalid = null;
     const required = [
       { id: 'wm-name', msg: 'Please enter your name.' },
       { id: 'wm-location', msg: 'Please enter your country or city.' },
@@ -1236,31 +1251,25 @@ document.addEventListener('keydown', e => {
     ];
     required.forEach(({id, msg}) => {
       const el = document.getElementById(id);
-      const errEl = form.querySelector(`[data-error-for="${id}"]`);
-      if (!el.value.trim()) {
-        if (errEl) errEl.textContent = msg;
-        el.setAttribute('aria-invalid', 'true');
-        valid = false;
-      } else {
-        if (errEl) errEl.textContent = '';
-        el.removeAttribute('aria-invalid');
-      }
+      if (!el.value.trim()) { setError(id, msg); if (!firstInvalid) firstInvalid = el; }
+      else setError(id, '');
     });
     const privacy = document.getElementById('wm-privacy');
-    const privacyErr = form.querySelector('[data-error-for="wm-privacy"]');
-    if (!privacy.checked) {
-      if (privacyErr) privacyErr.textContent = 'Please acknowledge the Privacy Policy to continue.';
-      valid = false;
-    } else if (privacyErr) {
-      privacyErr.textContent = '';
-    }
-    return valid;
+    if (!privacy.checked) { setError('wm-privacy', 'Please acknowledge the Privacy Policy to continue.'); if (!firstInvalid) firstInvalid = privacy; }
+    else setError('wm-privacy', '');
+    return firstInvalid;
   }
+
+  // Corrected fields lose their error straight away.
+  form.addEventListener('input', (e) => { if (e.target.hasAttribute && e.target.hasAttribute('aria-invalid') && e.target.value && e.target.value.trim()) setError(e.target.id, ''); });
+  form.addEventListener('change', (e) => { if (e.target.id === 'wm-privacy' && e.target.checked) setError('wm-privacy', ''); else if (e.target.hasAttribute && e.target.hasAttribute('aria-invalid') && e.target.value) setError(e.target.id, ''); });
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    if (!validate()) {
+    const firstInvalid = validate();
+    if (firstInvalid) {
       statusEl.textContent = 'Please complete the required fields above.';
+      firstInvalid.focus();
       return;
     }
     const message = buildMessage();

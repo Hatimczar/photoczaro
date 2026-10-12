@@ -463,6 +463,50 @@
     if (n !== null) field.dataset.cm = String(currentUnit === "in" ? n * 2.54 : n); else delete field.dataset.cm;
   }));
 
+
+  /* A slider beside each linear measurement (height, bust, waist, hips and the
+     men's measurements) for quick entry on a phone. It is a convenience on top
+     of the number field, which stays the source of truth and the keyboard /
+     screen-reader control, so the slider is hidden from assistive technology
+     and out of the tab order. It starts "unset": an optional measurement stays
+     blank until the slider is actually moved. */
+  const SLIDER_RANGE_CM = {
+    height: [140, 210], bust: [70, 130], waist: [50, 120], hips: [70, 140],
+    neck: [30, 50], chest: [80, 130], sleeve: [55, 95], inseam: [65, 95],
+  };
+  const sliders = [];
+  unitFields.forEach((field) => {
+    const range = SLIDER_RANGE_CM[field.name];
+    if (!range) return;
+    const slider = document.createElement("input");
+    slider.type = "range";
+    slider.className = "measure-slider unset";
+    slider.tabIndex = -1;
+    slider.setAttribute("aria-hidden", "true");
+    field.insertAdjacentElement("afterend", slider);
+    slider.addEventListener("input", () => {
+      field.value = String(slider.value);
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    field.addEventListener("input", () => syncSlider(slider, field));
+    sliders.push({ slider, field, range });
+  });
+  function syncSlider(slider, field) {
+    const n = numberOf(field);
+    if (n === null) { slider.classList.add("unset"); slider.value = String((Number(slider.min) + Number(slider.max)) / 2); return; }
+    slider.classList.remove("unset");
+    slider.value = String(n);
+  }
+  function configureSliders() {
+    sliders.forEach(({ slider, field, range }) => {
+      const inches = currentUnit === "in";
+      slider.min = String(inches ? Math.round(range[0] / 2.54) : range[0]);
+      slider.max = String(inches ? Math.round(range[1] / 2.54) : range[1]);
+      slider.step = inches ? "0.5" : "1";
+      syncSlider(slider, field);
+    });
+  }
+
   function setUnit(unit) {
     if (unit !== currentUnit) {
       unitFields.forEach((field) => {
@@ -482,6 +526,7 @@
     unitField.value = unit;
     unitFields.forEach((field) => { field.placeholder = field.dataset[unit === "in" ? "phIn" : "phCm"]; checkWarnings(field); });
     form.querySelectorAll("[data-unit-suffix]").forEach((el) => { el.textContent = "(" + unit + ")"; });
+    configureSliders();
   }
   unitToggle.addEventListener("click", (e) => {
     const btn = e.target.closest(".unit-toggle-btn");
@@ -602,6 +647,7 @@
     showErrors({}, false);
   }
 
+  configureSliders();
   PHOTO_SLOTS.forEach(renderSlot);
   applyCategory();
   applyRepresentation();

@@ -103,3 +103,6 @@ fieldset.choice-group { border: 0; padding: 0; margin: 0; min-width: 0; }
 @media (pointer: coarse), (max-width: 768px) {
   .unit-toggle-btn { min-height: 44px; padding: 0 22px; }
 }
+
+.form-field .measure-slider { padding: 0; border: 0; background: transparent; border-radius: 0; height: 28px; margin: 2px 0 0; accent-color: var(--gold); cursor: pointer; }
+.form-field .measure-slider.unset { opacity: 0.45; }

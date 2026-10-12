@@ -355,7 +355,7 @@
     list.innerHTML = state.applications.map((a) => `
       <button type="button" class="admin-row ${a.id === state.selectedAppId ? "selected" : ""}" data-id="${esc(a.id)}">
         <div class="admin-row-title">${esc(a.professionalName)}</div>
-        <div class="admin-row-meta">${esc(a.category)} · ${esc(a.uaeCity || "n/a")} · ${new Date(a.receivedAt).toLocaleDateString()}</div>
+        <div class="admin-row-meta">${esc(a.category)} · ${esc(a.uaeCity || "n/a")} · ${new Date(a.receivedAt).toLocaleDateString()}${(a.flags || []).includes("birth_year_under_18") ? " · ⚠ age check" : ""}</div>
         <span class="admin-badge ${a.status === "pending_review" ? "pending" : a.status}">${a.status.replace("_", " ")}</span>
       </button>
     `).join("");
@@ -421,9 +421,24 @@
       ? [["Neck", app.neck], ["Chest", app.chest], ["Waist", app.waist], ["Sleeve", app.sleeve], ["Inseam", app.inseam]]
       : [["Bust", app.bust], ["Waist", app.waist], ["Hips", app.hips]];
 
-    const portfolioLink = app.portfolioUrl && app.portfolioUrl.startsWith("https://")
-      ? `<a href="${esc(app.portfolioUrl)}" target="_blank" rel="noopener noreferrer">${esc(app.portfolioUrl)}</a>`
-      : "n/a";
+    const safeLink = (url, label) => (url && /^https?:\/\//i.test(url)
+      ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label || url)}</a>` : "n/a");
+    const unitLabel = app.measurementUnit || "cm";
+    const SYSTEM_LABELS = { EU: "EU", UK: "UK", US: "US", SML: "S–M–L", WAIST_IN: "waist in inches" };
+    const sizeText = (size, system) => (size ? `${esc(size)} (${esc(SYSTEM_LABELS[system] || system || "system not given")})` : "n/a");
+    const TRAVEL = { yes: "Yes", depends: "Depends on location and arrangements", "current-emirate": "Prefers current emirate" };
+    const AVAIL = { weekdays: "Weekdays", weekends: "Weekends", flexible: "Flexible", varies: "Varies, discuss with applicant" };
+    const INTERESTS = { editorial: "Editorial", fashion: "Fashion", commercial: "Commercial", ecommerce: "E-commerce", beauty: "Beauty", lifestyle: "Lifestyle", fitness: "Fitness", runway: "Runway", "acting-video": "Acting / video" };
+    const isV2 = app.schemaVersion >= 2;
+    const ageFlag = (app.flags || []).includes("birth_year_under_18");
+    const missingSizes = Array.isArray(app.missingSizes) ? app.missingSizes : [];
+    const warnings = Array.isArray(app.measurementWarnings) ? app.measurementWarnings : [];
+    const repText = app.existingRepresentation === "yes"
+      ? `Yes${app.agencyName ? ": " + esc(app.agencyName) : ""}${app.representationRestrictions ? `<br><span class="admin-note">Restrictions: ${esc(app.representationRestrictions)}</span>` : ""}`
+      : app.existingRepresentation === "no" ? "No" : "Not stated";
+    const termsText = app.termsVersion
+      ? `Application Terms ${esc(app.termsVersion)} accepted ${esc(new Date(app.termsAcceptedAt).toLocaleString())}`
+      : "Older form: ticked the Booking Terms box (no Application Terms version recorded)";
 
     detail.innerHTML = `
       <div class="admin-detail-head">
@@ -436,47 +451,78 @@
         </div>
       </div>
 
+      ${ageFlag ? `<p class="admin-note" role="alert"><strong>Age check needed.</strong> The birth year given (${esc(app.birthYear)}) suggests this applicant may be under 18. A birth year is not proof of age: verify before doing anything else, and if they are under 18 follow the Privacy Policy (stop processing, delete).</p>` : ""}
+      ${isV2 && missingSizes.length ? `<p class="admin-note">Not yet given (needed before the profile is booking-ready): ${missingSizes.map((m) => esc(m + " size")).join(", ")}.</p>` : ""}
+      ${warnings.length ? `<p class="admin-note">Unusual values entered, worth confirming: ${warnings.map(esc).join(", ")}.</p>` : ""}
+      ${Object.keys(app.fileErrors || {}).length ? `<p class="admin-note">Some uploads were rejected (see below). Ask the applicant to resend if needed.</p>` : ""}
+
       <div class="admin-review-images">
         ${reviewImage(app, "headshot", "Headshot")}
         ${reviewImage(app, "fullFront", "Full length, front")}
         ${reviewImage(app, "fullSide", "Full length, side")}
+        ${reviewImage(app, "facialProfile", "Facial profile (close-up)")}
         ${reviewImage(app, "portfolioFile", "Portfolio")}
         ${reviewGalleryImages(app)}
       </div>
 
       <div class="admin-section-title">Details</div>
       <div class="admin-grid">
-        <div class="admin-field"><label>Legal name</label><div>${esc(app.legalName)}</div></div>
+        <div class="admin-field"><label>Legal name (private)</label><div>${esc(app.legalName)}</div></div>
         <div class="admin-field"><label>Category</label><div>${esc(app.category)}</div></div>
         <div class="admin-field"><label>Email</label><div>${esc(app.email)}</div></div>
         <div class="admin-field"><label>Telephone</label><div>${esc(app.telephone)}</div></div>
         <div class="admin-field"><label>UAE city</label><div>${esc(app.uaeCity)}</div></div>
+        <div class="admin-field"><label>Birth year (private)</label><div>${esc(app.birthYear) || "n/a"}</div></div>
+        <div class="admin-field"><label>Existing representation</label><div>${isV2 ? repText : "n/a (older form)"}</div></div>
         <div class="admin-field"><label>Experience</label><div>${esc(experienceLabel(app.experience)) || "n/a"}</div></div>
-        <div class="admin-field"><label>Height</label><div>${esc(app.height)} ${esc(app.measurementUnit)}</div></div>
-        <div class="admin-field"><label>Hair / Eyes</label><div>${esc(app.hair)} / ${esc(app.eyes)}</div></div>
+        <div class="admin-field"><label>Height</label><div>${esc(app.height)} ${esc(unitLabel)}</div></div>
+        <div class="admin-field"><label>Hair / Eyes</label><div>${esc(app.hair) || "n/a"} / ${esc(app.eyes) || "n/a"}</div></div>
         <div class="admin-field"><label>Languages</label><div>${esc(app.languages) || "n/a"}</div></div>
         <div class="admin-field"><label>Skills</label><div>${esc(app.skills) || "n/a"}</div></div>
-        <div class="admin-field"><label>Portfolio URL</label><div>${portfolioLink}</div></div>
+        <div class="admin-field"><label>Work interests</label><div>${(app.workInterests || []).map((v) => esc(INTERESTS[v] || v)).join(", ") || "n/a"}</div></div>
+        <div class="admin-field"><label>Availability</label><div>${esc(AVAIL[app.availability] || "") || "n/a"}</div></div>
+        <div class="admin-field"><label>Travel between emirates</label><div>${esc(TRAVEL[app.travelPreference] || "") || "n/a"}</div></div>
+        <div class="admin-field"><label>Instagram</label><div>${app.instagram ? safeLink(app.instagramUrl, "@" + app.instagram) : "n/a"}</div></div>
+        <div class="admin-field"><label>Portfolio website</label><div>${safeLink(app.portfolioWebsite)}</div></div>
+        <div class="admin-field"><label>Movement / runway / showreel</label><div>${safeLink(app.showreelUrl)}</div></div>
+        ${app.portfolioUrl ? `<div class="admin-field"><label>Instagram or portfolio link (older combined field)</label><div>${safeLink(app.portfolioUrl)}</div></div>` : ""}
         <div class="admin-field"><label>Age / residency confirmed</label><div>${app.ageConfirm ? "Yes" : "No"} / ${app.residencyConfirm ? "Yes" : "No"}</div></div>
+        <div class="admin-field"><label>Terms</label><div>${termsText}</div></div>
       </div>
 
-      <div class="admin-section-title">Measurements (${esc(app.measurementUnit)})</div>
+      <div class="admin-section-title">Measurements (${esc(unitLabel)})</div>
       <div class="admin-grid">
         ${measureFields.map(([label, val]) => `<div class="admin-field"><label>${label}</label><div>${esc(val) || "n/a"}</div></div>`).join("")}
       </div>
 
+      <div class="admin-section-title">Sizes (labels, not converted)</div>
+      <div class="admin-grid">
+        <div class="admin-field"><label>Shoe</label><div>${isV2 ? sizeText(app.shoeSize, app.shoeSystem) : "n/a (older form)"}</div></div>
+        <div class="admin-field"><label>${app.category === "men" ? "Clothing" : "Dress"}</label><div>${isV2 ? sizeText(app.clothingSize, app.clothingSystem) : "n/a (older form)"}</div></div>
+        <div class="admin-field"><label>Trouser</label><div>${isV2 ? sizeText(app.trouserSize, app.trouserSystem) : "n/a (older form)"}</div></div>
+      </div>
+
       <div class="admin-section-title">Introduction</div>
       <p class="admin-note">${esc(app.introduction) || "n/a"}</p>
+      ${app.bookingNotes ? `<div class="admin-section-title">Booking preferences (private)</div><p class="admin-note">${esc(app.bookingNotes)}</p>` : ""}
 
       ${app.rosterSlug ? `<p class="admin-note">Approved onto the roster as <a href="/models/${esc(app.rosterSlug)}" target="_blank" rel="noopener noreferrer">${esc(app.rosterSlug)}</a> (draft, review it on the Models tab before publishing).</p>` : ""}
       ${app.rejectionReason ? `<p class="admin-note">Rejection note: ${esc(app.rejectionReason)}</p>` : ""}
     `;
 
     document.getElementById("approve-btn")?.addEventListener("click", async () => {
+      let ageOverride = false;
+      if (ageFlag) {
+        ageOverride = await showConfirmModal({
+          title: "Possible under-18 applicant", confirmLabel: "Age verified, continue", danger: true,
+          message: `The birth year suggests ${app.professionalName} may be under 18. Only continue if you have verified they are 18 or over.`,
+        });
+        if (!ageOverride) return;
+      }
       if (!(await showApproveModal(app.professionalName))) return;
       try {
         const res = await api(`/api/admin/applications/${encodeURIComponent(id)}`, {
-          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "approve" }),
+          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "approve", ageOverride }),
         });
         toast(`Approved as a draft (${res.slug}). Publish it from the Models tab when ready.`);
         await loadApplications();
@@ -695,6 +741,7 @@
   }
 
   async function togglePublish(model, slug) {
+    let authorised = false;
     if (state.modelFormDirty) { toast("Save your changes first.", true); return; }
 
     if (model.published) {
@@ -714,11 +761,18 @@
         message: `Publish ${model.name} to the live site? It becomes visible on models.photoczaro.com immediately.`,
       });
       if (!proceed) return;
+      if (model.sourceApplicationId) {
+        authorised = await showConfirmModal({
+          title: "Model's authorisation", confirmLabel: "Yes, they approved it",
+          message: `Applications are published only with the model's own approval. Confirm that ${model.name} has approved this public profile and these images during onboarding.`,
+        });
+        if (!authorised) return;
+      }
     }
 
     try {
       await api(`/api/admin/models/${encodeURIComponent(slug)}/publish`, {
-        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ published: !model.published }),
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ published: !model.published, profileAuthorised: authorised }),
       });
       toast(model.published ? "Unpublished." : "Published.");
       await loadModels();

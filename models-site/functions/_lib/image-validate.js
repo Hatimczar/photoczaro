@@ -89,7 +89,7 @@ function exceedsMaxDimension(dims) {
   return !!dims && (dims.width > MAX_DIMENSION || dims.height > MAX_DIMENSION);
 }
 
-export async function validateImageUpload(file) {
+export async function validateImageUpload(file, opts = {}) {
   if (!file || typeof file !== "object" || !("size" in file)) {
     return { ok: false, error: "No file provided." };
   }
@@ -100,6 +100,9 @@ export async function validateImageUpload(file) {
   const sniffedType = matchSignature(head);
   if (!sniffedType) {
     return { ok: false, error: "Unsupported file. Only JPEG, PNG, WEBP or HEIC images are accepted." };
+  }
+  if (sniffedType === "image/heic" && opts.allowHeic === false) {
+    return { ok: false, error: "HEIC photos are not supported. Please upload a JPEG, PNG or WEBP image." };
   }
 
   let dims = null;
@@ -119,7 +122,7 @@ export async function validateImageUpload(file) {
 // Same signature-sniffing approach, but for the one upload field that's
 // allowed to be either an image or a PDF (apply.html's optional portfolio
 // file, accept="image/*,application/pdf").
-export async function validatePortfolioUpload(file) {
+export async function validatePortfolioUpload(file, opts = {}) {
   if (!file || typeof file !== "object" || !("size" in file)) {
     return { ok: false, error: "No file provided." };
   }
@@ -133,6 +136,9 @@ export async function validatePortfolioUpload(file) {
   const sniffedType = matchSignature(head);
   if (!sniffedType) {
     return { ok: false, error: "Unsupported file. Only JPEG, PNG, WEBP, HEIC or PDF are accepted." };
+  }
+  if (sniffedType === "image/heic" && opts.allowHeic === false) {
+    return { ok: false, error: "HEIC photos are not supported. Please upload a JPEG, PNG, WEBP or PDF file." };
   }
   return { ok: true, contentType: sniffedType };
 }

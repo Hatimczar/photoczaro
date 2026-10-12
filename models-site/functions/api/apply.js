@@ -13,20 +13,17 @@
 import { json, htmlResponse } from "../_lib/http.js";
 import { validateImageUpload, validatePortfolioUpload } from "../_lib/image-validate.js";
 import Render from "../../js/render.js";
+import Rules from "../../js/apply-rules.js";
 
-// Only accept a plain https:// link (Photoczaro doesn't need portfolios
-// served over http, and a stray javascript:/data: URL stored here would
-// otherwise render as a raw href in the admin panel).
-function sanitizePortfolioUrl(value) {
-  const trimmed = (value || "").toString().trim();
-  if (!trimmed) return "";
-  try {
-    const url = new URL(trimmed);
-    return url.protocol === "https:" ? url.toString() : "";
-  } catch {
-    return "";
-  }
-}
+const MAX_GALLERY_PHOTOS = 12;
+const EXT_FOR_TYPE = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/heic": "heic",
+  "application/pdf": "pdf",
+};
+const isFile = (f) => f && typeof f === "object" && "size" in f && f.size > 0;
 
 export async function onRequestPost({ request, env }) {
   const isNativeSubmit = request.headers.get("x-requested-with") !== "fetch";
@@ -38,56 +35,70 @@ export async function onRequestPost({ request, env }) {
     return respondError(isNativeSubmit, "Invalid request.", 400);
   }
 
-  const email = (form.get("email") || "").toString().trim().toLowerCase();
-  const professionalName = (form.get("professionalName") || "").toString().trim();
-  const category = (form.get("category") || "").toString().trim().toLowerCase();
-  // The city comes from a fixed list of UAE cities, stored in one canonical
-  // spelling so roster filtering never depends on how someone typed it.
-  const uaeCity = Render.canonicalCity((form.get("uaeCity") || "").toString());
-  if (
-    !professionalName ||
-    !email ||
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-    !["women", "men"].includes(category) ||
-    !uaeCity
-  ) {
-    return respondError(isNativeSubmit, "Missing or invalid required fields.", 400);
+  // The same rules the page runs, applied again here: the browser is only a
+  // convenience, never the check that counts. Field values come from FormData,
+  // so a checkbox arrives as "on" and a missing one not at all.
+  const input = {};
+  for (const key of new Set(form.keys())) {
+    if (key === "workInterests") continue;
+    const v = form.get(key);
+    if (typeof v === "string") input[key] = v;
+  }
+  input.workInterests = form.getAll("workInterests").filter((v) => typeof v === "string");
+  ["ageConfirm", "residencyConfirm", "accuracyConfirm", "privacyConsent", "termsConsent"].forEach((k) => {
+    input[k] = form.get(k) === "on";
+  });
+  const { errors, clean, warnings, flags } = Rules.validateApplication(input, {
+    canonicalCity: Render.canonicalCity,
+    files: {
+      headshot: isFile(form.get("headshot")),
+      fullFront: isFile(form.get("fullFront")),
+      fullSide: isFile(form.get("fullSide")),
+    },
+  });
+  if (Object.keys(errors).length) {
+    if (isNativeSubmit) return htmlResponse("Please check your application", "Some required details are missing or invalid. Please go back, review the form and try again.", "apply", 400);
+    return json({ error: "validation", fields: errors }, 400);
   }
 
   // Double-tap guard: a repeat submission from the same email within a
   // minute is treated as already received. The marker is set before the
-  // (slow) uploads so a near-simultaneous second request sees it.
-  const dedupeKey = `dedupe:${email}`;
+  // (slow) uploads so a near-simultaneous second request sees it, and removed
+  // again if this attempt fails so a retry is not mistaken for a duplicate.
+  const dedupeKey = `dedupe:${clean.email}`;
   if (env.APPLICATIONS_KV) {
     if (await env.APPLICATIONS_KV.get(dedupeKey)) {
       if (isNativeSubmit) {
         return htmlResponse("Application received", "Thank you. Your application has been received.", "apply");
       }
-      return json({ ok: true });
+      return json({ ok: true, duplicate: true });
     }
     await env.APPLICATIONS_KV.put(dedupeKey, "1", { expirationTtl: 60 });
   }
 
+  try {
+    return await store({ form, env, clean, warnings, flags, isNativeSubmit });
+  } catch (err) {
+    console.error("apply failed", err && err.message);
+    if (env.APPLICATIONS_KV) await env.APPLICATIONS_KV.delete(dedupeKey).catch(() => {});
+    return respondError(isNativeSubmit, "Something went wrong saving your application. Please try again.", 500);
+  }
+}
+
+async function store({ form, env, clean, warnings, flags, isNativeSubmit }) {
   const applicationId = `${Date.now()}-${crypto.randomUUID()}`;
-  const EXT_FOR_TYPE = {
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "image/webp": "webp",
-    "image/heic": "heic",
-    "application/pdf": "pdf",
-  };
   // A rejected photo (wrong format, too large, corrupt) must never cost us
   // the applicant's contact details: skip that one file, note it as an
   // error on the record, and keep going. Losing a lead over one bad file is
   // worse than reviewing an application with a missing photo.
-  const imageFields = ["headshot", "fullFront", "fullSide"];
   const files = {};
   const fileErrors = {};
-  for (const field of [...imageFields, "portfolioFile"]) {
+  const noHeic = { allowHeic: false };
+  for (const field of ["headshot", "fullFront", "fullSide", "facialProfile", "portfolioFile"]) {
     const file = form.get(field);
-    if (!file || typeof file !== "object" || !("size" in file) || file.size === 0) continue;
+    if (!isFile(file)) continue;
 
-    const validation = field === "portfolioFile" ? await validatePortfolioUpload(file) : await validateImageUpload(file);
+    const validation = field === "portfolioFile" ? await validatePortfolioUpload(file, noHeic) : await validateImageUpload(file, noHeic);
     if (!validation.ok) {
       fileErrors[field] = validation.error;
       continue;
@@ -106,13 +117,16 @@ export async function onRequestPost({ request, env }) {
   // Additional gallery photos, submitted as repeated "gallery" fields (up to
   // MAX_GALLERY_PHOTOS). Same skip-and-note-the-error handling as the named
   // slots above: one bad photo shouldn't sink the whole application.
-  const MAX_GALLERY_PHOTOS = 12;
-  const galleryUploads = form.getAll("gallery").filter((f) => f && typeof f === "object" && "size" in f && f.size > 0).slice(0, MAX_GALLERY_PHOTOS);
+  const allGallery = form.getAll("gallery").filter(isFile);
+  const galleryUploads = allGallery.slice(0, MAX_GALLERY_PHOTOS);
   const gallery = [];
   const galleryErrors = [];
+  if (allGallery.length > MAX_GALLERY_PHOTOS) {
+    galleryErrors.push(`Only ${MAX_GALLERY_PHOTOS} additional photos are accepted; ${allGallery.length - MAX_GALLERY_PHOTOS} extra photo(s) were not attached.`);
+  }
   for (let i = 0; i < galleryUploads.length; i++) {
     const file = galleryUploads[i];
-    const validation = await validateImageUpload(file);
+    const validation = await validateImageUpload(file, noHeic);
     if (!validation.ok) {
       galleryErrors.push(validation.error);
       continue;
@@ -127,38 +141,66 @@ export async function onRequestPost({ request, env }) {
   files.gallery = gallery;
   if (galleryErrors.length) fileErrors.gallery = galleryErrors;
 
+  const now = new Date().toISOString();
   const record = {
     id: applicationId,
-    professionalName,
-    legalName: (form.get("legalName") || "").toString(),
-    category,
-    email,
-    telephone: (form.get("telephone") || "").toString(),
-    uaeCity,
-    experience: (form.get("experience") || "").toString(),
-    height: (form.get("height") || "").toString(),
-    measurementUnit: (form.get("measurementUnit") || "cm").toString(),
-    bust: (form.get("bust") || "").toString(),
-    waist: (form.get("waist") || "").toString(),
-    hips: (form.get("hips") || "").toString(),
-    neck: (form.get("neck") || "").toString(),
-    chest: (form.get("chest") || "").toString(),
-    sleeve: (form.get("sleeve") || "").toString(),
-    inseam: (form.get("inseam") || "").toString(),
-    hair: (form.get("hair") || "").toString(),
-    eyes: (form.get("eyes") || "").toString(),
-    languages: (form.get("languages") || "").toString(),
-    skills: (form.get("skills") || "").toString(),
-    portfolioUrl: sanitizePortfolioUrl(form.get("portfolioUrl")),
-    introduction: (form.get("introduction") || "").toString(),
-    ageConfirm: form.get("ageConfirm") === "on",
-    residencyConfirm: form.get("residencyConfirm") === "on",
-    accuracyConfirm: form.get("accuracyConfirm") === "on",
-    privacyConsent: form.get("privacyConsent") === "on",
-    termsConsent: form.get("termsConsent") === "on",
+    schemaVersion: 2,
+    professionalName: clean.professionalName,
+    legalName: clean.legalName,
+    category: clean.category,
+    email: clean.email,
+    telephone: clean.telephone,
+    uaeCity: clean.uaeCity,
+    birthYear: clean.birthYear,
+    existingRepresentation: clean.existingRepresentation,
+    agencyName: clean.agencyName,
+    representationRestrictions: clean.representationRestrictions,
+    experience: clean.experience,
+    height: clean.height,
+    measurementUnit: clean.measurementUnit,
+    bust: clean.bust,
+    waist: clean.waist,
+    hips: clean.hips,
+    neck: clean.neck,
+    chest: clean.chest,
+    sleeve: clean.sleeve,
+    inseam: clean.inseam,
+    hair: clean.hair,
+    eyes: clean.eyes,
+    shoeSize: clean.shoeSize,
+    shoeSystem: clean.shoeSystem,
+    clothingSize: clean.clothingSize,
+    clothingSystem: clean.clothingSystem,
+    trouserSize: clean.trouserSize,
+    trouserSystem: clean.trouserSystem,
+    missingSizes: clean.missingSizes,
+    measurementWarnings: warnings,
+    languages: clean.languages,
+    skills: clean.skills,
+    workInterests: clean.workInterests,
+    availability: clean.availability,
+    travelPreference: clean.travelPreference,
+    bookingNotes: clean.bookingNotes,
+    // Older records carry one combined Instagram/portfolio field; it is kept
+    // as-is on those records and left empty here.
+    portfolioUrl: "",
+    instagram: clean.instagram,
+    instagramUrl: clean.instagramUrl,
+    portfolioWebsite: clean.portfolioWebsite,
+    showreelUrl: clean.showreelUrl,
+    introduction: clean.introduction,
+    ageConfirm: true,
+    residencyConfirm: true,
+    accuracyConfirm: true,
+    privacyConsent: true,
+    termsConsent: true,
+    termsVersion: Rules.TERMS_VERSION,
+    termsAcceptedAt: now,
+    privacyAcknowledgedAt: now,
+    flags,
     files,
     fileErrors,
-    receivedAt: new Date().toISOString(),
+    receivedAt: now,
     status: "pending_review",
   };
 
@@ -172,7 +214,7 @@ export async function onRequestPost({ request, env }) {
   if (isNativeSubmit) {
     const message = hasFileErrors
       ? "Thank you. Your application has been received, but one or more photos could not be used (unsupported format or file size) and were not attached. We'll follow up by email if we need you to resend them."
-      : "Thank you. Your application has been received. We review applications on a rolling basis and will contact you only through verified Photoczaro channels.";
+      : "Thank you. Your application has been received. We'll contact you using the details provided if we would like to proceed.";
     return htmlResponse("Application received", message, "apply");
   }
   return json({ ok: true, fileErrors: hasFileErrors ? fileErrors : undefined });

@@ -31,7 +31,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/css/style.css?v=36">
+<link rel="stylesheet" href="/css/style.css?v=38">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/inter-latin-L7W0Q5nw.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/cormorant-garamond-latin-tKky2F7g.woff2">
 </head>
@@ -96,107 +96,157 @@
   <div class="wrap" style="padding-top:24px;max-width:900px;">
     <span class="eyebrow" data-i18n="apply.eyebrow">For Models</span>
     <h1 style="font-size:clamp(2rem,4vw,2.8rem);" data-i18n="apply.title">Apply to the Roster</h1>
+    <p class="apply-intro" data-i18n="apply.intro">Photoczaro Models connects UAE-based models with brands, agencies and production teams. Clients can discover and shortlist talent, while Photoczaro coordinates proposed bookings. You choose whether to accept each opportunity.</p>
 
-    <div class="bento-tile" style="margin:24px 0 32px;padding:20px 22px;">
-      <ul style="margin:0;padding-left:20px;color:#cfcac2;line-height:1.8;font-size:0.9rem;" data-i18n-html="apply.eligibilityList">
+    <div class="bento-tile apply-eligibility">
+      <ul data-i18n-html="apply.eligibilityList">
         <li>You must be at least 18 years old.</li>
         <li>You must currently reside in the UAE.</li>
         <li>Applying does not guarantee acceptance or bookings.</li>
         <li>Representation is initially non-exclusive.</li>
         <li>Photoczaro does not provide visa sponsorship.</li>
-        <li>Photoczaro does not charge a mandatory fee to apply, and paid photography is never a condition of consideration.</li>
-        <li>Never send money in response to unsolicited messages. Official communication only comes through verified Photoczaro channels.</li>
+        <li>There is no fee to apply. Paid photography is never a condition of consideration.</li>
+        <li>Beware of impersonation: never send money in response to unsolicited messages. Official communication only comes through verified Photoczaro channels.</li>
       </ul>
     </div>
 
+    <section class="apply-process" aria-labelledby="process-title">
+      <h2 id="process-title" class="apply-process-title" data-i18n="apply.processTitle">How it works</h2>
+      <ol class="apply-steps">
+        <li data-i18n-html="apply.step1"><strong>Apply</strong> — share your details and photographs.</li>
+        <li data-i18n-html="apply.step2"><strong>Personal review</strong> — Photoczaro reviews your application.</li>
+        <li data-i18n-html="apply.step3"><strong>Onboarding</strong> — if accepted, confirm the roster arrangements and approve your public profile.</li>
+      </ol>
+      <p class="form-note" data-i18n="apply.contactNote">We’ll contact you using the details provided if we would like to proceed.</p>
+    </section>
+
     <form id="apply-form" novalidate method="post" action="/api/apply" enctype="multipart/form-data">
-      <div class="unit-toggle-field">
-        <label data-i18n="apply.unitLabel">Measurement units</label>
-        <div class="unit-toggle" role="group" id="unit-toggle" aria-label="Measurement units">
-          <button type="button" class="unit-toggle-btn active" data-unit="cm" data-i18n="apply.unitCm">CM</button>
-          <button type="button" class="unit-toggle-btn" data-unit="in" data-i18n="apply.unitIn">IN</button>
-        </div>
-        <input type="hidden" id="apply-unit" name="measurementUnit" value="cm">
+      <div id="error-summary" class="error-summary" role="alert" tabindex="-1" hidden>
+        <p class="error-summary-title" id="error-summary-title" data-i18n="apply.errorSummaryTitle">Please correct the following:</p>
+        <ul id="error-summary-list"></ul>
       </div>
 
-      <div class="form-grid">
-        <div class="form-field"><label for="prof-name" data-i18n="apply.professionalName">Professional name *</label><input type="text" id="prof-name" name="professionalName" required><span class="form-error" data-error-for="prof-name"></span></div>
-        <div class="form-field"><label for="legal-name" data-i18n="apply.legalName">Legal name (kept private) *</label><input type="text" id="legal-name" name="legalName" required><span class="form-error" data-error-for="legal-name"></span></div>
-
-        <div class="form-field"><label for="apply-email" data-i18n="form.email">Email *</label><input type="email" id="apply-email" name="email" required><span class="form-error" data-error-for="apply-email"></span></div>
-        <div class="form-field"><label for="apply-phone" data-i18n="form.telephone">Telephone *</label><input type="tel" id="apply-phone" name="telephone" required><span class="form-error" data-error-for="apply-phone"></span></div>
-
-        <div class="form-field"><label for="apply-category" data-i18n="apply.applyingAs">Applying as *</label>
-          <select id="apply-category" name="category" required><option value="" data-i18n="form.selectOne">Select one</option><option value="women" data-i18n="nav.women">Women</option><option value="men" data-i18n="nav.men">Men</option></select>
-          <span class="form-error" data-error-for="apply-category"></span>
-        </div>
-        <div class="form-field"><label for="uae-city" data-i18n="apply.uaeCity">UAE city *</label><select id="uae-city" name="uaeCity" required autocomplete="address-level2"><option value="" data-i18n="form.selectOne">Select one</option><option value="Dubai" data-i18n="city.dubai">Dubai</option><option value="Abu Dhabi" data-i18n="city.abudhabi">Abu Dhabi</option><option value="Al Ain" data-i18n="city.alain">Al Ain</option><option value="Sharjah" data-i18n="city.sharjah">Sharjah</option><option value="Ajman" data-i18n="city.ajman">Ajman</option><option value="Umm Al Quwain" data-i18n="city.ummalquwain">Umm Al Quwain</option><option value="Ras Al Khaimah" data-i18n="city.rasalkhaimah">Ras Al Khaimah</option><option value="Fujairah" data-i18n="city.fujairah">Fujairah</option></select><span class="form-error" data-error-for="uae-city"></span></div>
-
-        <div class="form-field"><label for="experience" data-i18n="apply.experienceLevel">Experience level</label>
-          <select id="experience" name="experience"><option value="" data-i18n="form.selectOne">Select one</option><option value="new-face" data-i18n="apply.newFace">New face</option><option value="some-experience" data-i18n="apply.someExperience">Some experience</option><option value="experienced" data-i18n="apply.experienced">Experienced</option></select>
-        </div>
-        <div class="form-field"><label for="apply-height"><span data-i18n="apply.height">Height *</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="apply-height" name="height" required data-ph-cm="e.g. 178" data-ph-in="e.g. 70" placeholder="e.g. 178"><span class="form-error" data-error-for="apply-height"></span></div>
-
-        <div class="form-field full">
-          <label class="form-checkbox"><input type="checkbox" id="age-confirm" name="ageConfirm" required> <span data-i18n="apply.ageConfirm">I confirm I am at least 18 years old. *</span></label>
-          <label class="form-checkbox"><input type="checkbox" id="residency-confirm" name="residencyConfirm" required> <span data-i18n="apply.residencyConfirm">I confirm I currently reside in the UAE. *</span></label>
-        </div>
-
-        <div class="form-field full" id="measurements-section">
-          <label data-i18n="apply.measurements">Measurements</label>
-          <p class="measurements-hint" id="measurements-hint" data-i18n="apply.measurementsPlaceholderDefault">Select a category above first</p>
-
-          <div class="measure-grid" id="measure-women" style="display:none;">
-            <div class="form-field"><label for="mw-bust"><span data-i18n="apply.bust">Bust</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mw-bust" name="bust" disabled data-ph-cm="e.g. 86" data-ph-in="e.g. 34"></div>
-            <div class="form-field"><label for="mw-waist"><span data-i18n="apply.waist">Waist</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mw-waist" name="waist" disabled data-ph-cm="e.g. 61" data-ph-in="e.g. 24"></div>
-            <div class="form-field"><label for="mw-hips"><span data-i18n="apply.hips">Hips</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mw-hips" name="hips" disabled data-ph-cm="e.g. 91" data-ph-in="e.g. 36"></div>
+      <section class="apply-section" aria-labelledby="sec-personal">
+        <h2 class="apply-section-title" id="sec-personal" data-i18n="apply.sec.personal">Personal details</h2>
+        <div class="form-grid">
+          <div class="form-field"><label for="prof-name"><span data-i18n="apply.professionalName">Professional name *</span></label><input type="text" id="prof-name" name="professionalName" required autocomplete="nickname" maxlength="100" aria-describedby="err-professionalName"><span class="form-error" id="err-professionalName" data-error-name="professionalName"></span></div>
+          <div class="form-field"><label for="legal-name"><span data-i18n="apply.legalName">Legal name (kept private) *</span></label><input type="text" id="legal-name" name="legalName" required autocomplete="name" maxlength="120" aria-describedby="err-legalName"><span class="form-error" id="err-legalName" data-error-name="legalName"></span></div>
+          <div class="form-field"><label for="apply-email"><span data-i18n="form.email">Email *</span></label><input type="email" id="apply-email" name="email" required autocomplete="email" inputmode="email" maxlength="254" autocapitalize="none" spellcheck="false" aria-describedby="err-email"><span class="form-error" id="err-email" data-error-name="email"></span></div>
+          <div class="form-field"><label for="apply-phone"><span data-i18n="form.telephone">Telephone *</span></label><input type="tel" id="apply-phone" name="telephone" required autocomplete="tel" inputmode="tel" maxlength="30" aria-describedby="hint-apply-phone err-telephone"><span class="form-hint" id="hint-apply-phone" data-i18n="apply.telHint">International numbers are welcome. Include the country code, e.g. +971 50 123 4567.</span><span class="form-error" id="err-telephone" data-error-name="telephone"></span></div>
+          <div class="form-field"><label for="apply-category"><span data-i18n="apply.applyingAs">Applying as *</span></label>
+            <select id="apply-category" name="category" required aria-describedby="err-category"><option value="" data-i18n="form.selectOne">Select one</option><option value="women" data-i18n="nav.women">Women</option><option value="men" data-i18n="nav.men">Men</option></select>
+            <span class="form-error" id="err-category" data-error-name="category"></span>
           </div>
-
-          <div class="measure-grid" id="measure-men" style="display:none;">
-            <div class="form-field"><label for="mm-neck"><span data-i18n="apply.neck">Neck</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mm-neck" name="neck" disabled data-ph-cm="e.g. 38" data-ph-in="e.g. 15"></div>
-            <div class="form-field"><label for="mm-chest"><span data-i18n="apply.chest">Chest</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mm-chest" name="chest" disabled data-ph-cm="e.g. 98" data-ph-in="e.g. 39"></div>
-            <div class="form-field"><label for="mm-waist"><span data-i18n="apply.waist">Waist</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mm-waist" name="waist" disabled data-ph-cm="e.g. 81" data-ph-in="e.g. 32"></div>
-            <div class="form-field"><label for="mm-sleeve"><span data-i18n="apply.sleeve">Sleeve</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mm-sleeve" name="sleeve" disabled data-ph-cm="e.g. 86" data-ph-in="e.g. 34"></div>
-            <div class="form-field"><label for="mm-inseam"><span data-i18n="apply.inseam">Inseam</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="number" step="0.1" min="0" id="mm-inseam" name="inseam" disabled data-ph-cm="e.g. 81" data-ph-in="e.g. 32"></div>
+          <div class="form-field"><label for="uae-city"><span data-i18n="apply.uaeCity">UAE city *</span></label><select id="uae-city" name="uaeCity" required autocomplete="address-level1" aria-describedby="err-uaeCity"><option value="" data-i18n="form.selectOne">Select one</option><option value="Dubai" data-i18n="city.dubai">Dubai</option><option value="Abu Dhabi" data-i18n="city.abudhabi">Abu Dhabi</option><option value="Al Ain" data-i18n="city.alain">Al Ain</option><option value="Sharjah" data-i18n="city.sharjah">Sharjah</option><option value="Ajman" data-i18n="city.ajman">Ajman</option><option value="Umm Al Quwain" data-i18n="city.ummalquwain">Umm Al Quwain</option><option value="Ras Al Khaimah" data-i18n="city.rasalkhaimah">Ras Al Khaimah</option><option value="Fujairah" data-i18n="city.fujairah">Fujairah</option></select><span class="form-error" id="err-uaeCity" data-error-name="uaeCity"></span></div>
+          <div class="form-field"><label for="birth-year"><span data-i18n="apply.birthYear">Birth year</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" id="birth-year" name="birthYear" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="bday-year" aria-describedby="hint-birth-year warn-birthYear err-birthYear"><span class="form-hint" id="hint-birth-year" data-i18n="apply.birthYearHint">Private, never shown publicly. We verify age during onboarding.</span><span class="form-error" id="err-birthYear" data-error-name="birthYear"></span><span class="form-warning" id="warn-birthYear" data-warn-name="birthYear" hidden></span></div>
+          <fieldset class="form-field full choice-group" id="fs-existingRepresentation" aria-describedby="err-existingRepresentation"><legend><span data-i18n="apply.representation">Do you currently have agency representation?</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></legend><div class="choice-row"><label class="choice"><input type="radio" name="existingRepresentation" value="yes"> <span data-i18n="apply.yes">Yes</span></label><label class="choice"><input type="radio" name="existingRepresentation" value="no"> <span data-i18n="apply.no">No</span></label></div><span class="form-error" id="err-existingRepresentation" data-error-name="existingRepresentation"></span></fieldset>
+          <div class="form-grid-nested full" id="rep-details" hidden>
+            <div class="form-field"><label for="agency-name"><span data-i18n="apply.agencyName">Agency name</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" id="agency-name" name="agencyName" maxlength="120" disabled autocomplete="organization" aria-describedby="err-agencyName"><span class="form-error" id="err-agencyName" data-error-name="agencyName"></span></div>
+            <div class="form-field"><label for="rep-restrictions"><span data-i18n="apply.repRestrictions">Relevant representation restrictions</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" id="rep-restrictions" name="representationRestrictions" maxlength="300" disabled aria-describedby="hint-rep-restrictions err-representationRestrictions"><span class="form-hint" id="hint-rep-restrictions" data-i18n="apply.repHint">Let us know about any exclusivity or booking restrictions we should consider. Do not upload agency contracts.</span><span class="form-error" id="err-representationRestrictions" data-error-name="representationRestrictions"></span></div>
           </div>
         </div>
+      </section>
 
-        <div class="form-field"><label for="apply-hair" data-i18n="apply.hairColour">Hair colour</label><input type="text" id="apply-hair" name="hair"></div>
-        <div class="form-field"><label for="apply-eyes" data-i18n="apply.eyeColour">Eye colour</label><input type="text" id="apply-eyes" name="eyes"></div>
-
-        <div class="form-field"><label for="apply-languages" data-i18n="apply.languages">Languages</label><input type="text" id="apply-languages" name="languages" placeholder="e.g. English, Arabic" data-i18n-placeholder="apply.languagesPlaceholder"></div>
-        <div class="form-field"><label for="apply-skills" data-i18n="apply.skills">Skills</label><input type="text" id="apply-skills" name="skills" placeholder="e.g. runway, swimwear" data-i18n-placeholder="bookTalent.requiredSkillsPlaceholder"></div>
-
-        <div class="form-field full"><label for="portfolio-url" data-i18n="apply.portfolioUrl">Instagram or portfolio URL (optional)</label><input type="url" id="portfolio-url" name="portfolioUrl" placeholder="https://"></div>
-
-        <div class="form-field"><label for="file-headshot" data-i18n="apply.headshot">Headshot *</label><input type="file" id="file-headshot" name="headshot" accept="image/*" required><span class="form-error" data-error-for="file-headshot"></span></div>
-        <div class="form-field"><label for="file-front" data-i18n="apply.fullFront">Full-length front digital *</label><input type="file" id="file-front" name="fullFront" accept="image/*" required><span class="form-error" data-error-for="file-front"></span></div>
-        <div class="form-field"><label for="file-side" data-i18n="apply.fullSide">Full-length side digital *</label><input type="file" id="file-side" name="fullSide" accept="image/*" required><span class="form-error" data-error-for="file-side"></span></div>
-        <div class="form-field"><label for="file-extra" data-i18n="apply.existingPortfolio">Existing portfolio (optional)</label><input type="file" id="file-extra" name="portfolioFile" accept="image/*,application/pdf"></div>
-
-        <div class="form-field full">
-          <label data-i18n="apply.galleryPhotos">Additional photos (optional, up to 12)</label>
-          <div class="apply-gallery-grid" id="apply-gallery-grid">
-            <label class="apply-gallery-add" id="apply-gallery-add-tile">
-              <svg class="icon" aria-hidden="true" focusable="false" style="width:24px;height:24px"><use href="/images/icons-v1.svg#i-camera"></use></svg>
-              <span class="apply-gallery-add-label" data-i18n="apply.addPhotos">Add photos</span>
-              <input type="file" id="file-gallery-input" accept="image/*" multiple>
-            </label>
+      <section class="apply-section" aria-labelledby="sec-measure">
+        <h2 class="apply-section-title" id="sec-measure" data-i18n="apply.sec.measure">Measurements and appearance</h2>
+        <p class="form-note" data-i18n="apply.measureHint">Use your current measurements. Leave optional fields blank if you are unsure.</p>
+        <div class="unit-toggle-field">
+          <span class="unit-toggle-label" id="unit-label" data-i18n="apply.unitLabel">Measurement units</span>
+          <div class="unit-toggle" role="group" id="unit-toggle" aria-labelledby="unit-label" aria-describedby="unit-hint">
+            <button type="button" class="unit-toggle-btn active" data-unit="cm" aria-pressed="true" data-i18n="apply.unitCm">CM</button>
+            <button type="button" class="unit-toggle-btn" data-unit="in" aria-pressed="false" data-i18n="apply.unitIn">IN</button>
           </div>
-          <p class="form-note" id="apply-gallery-count">0 / 12 <span data-i18n="apply.photosAdded">photos added</span></p>
+          <span class="form-hint" id="unit-hint" data-i18n="apply.unitHint">Applies to height and body measurements only.</span>
+          <input type="hidden" id="apply-unit" name="measurementUnit" value="cm">
         </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="apply-height"><span data-i18n="apply.height">Height *</span> <span class="unit-suffix" data-unit-suffix>(cm)</span></label><input type="text" inputmode="decimal" id="apply-height" name="height" required autocomplete="off" data-ph-cm="e.g. 178" data-ph-in="e.g. 70" placeholder="e.g. 178" aria-describedby="warn-height err-height"><span class="form-warning" id="warn-height" data-warn-name="height" hidden></span><span class="form-error" id="err-height" data-error-name="height"></span></div>
+          <div class="form-field" aria-hidden="true"></div>
 
-        <div class="form-field full"><label for="intro" data-i18n="apply.shortIntro">Short introduction</label><textarea id="intro" name="introduction" maxlength="600"></textarea></div>
+          <div class="form-field full" id="measurements-section">
+            <p class="measurements-hint" id="measurements-hint" data-i18n="apply.measurementsPlaceholderDefault">Select a category above first</p>
+            <div class="measure-grid" id="measure-women" style="display:none;">
+              <div class="form-field"><label for="mw-bust"><span data-i18n="apply.bust">Bust</span> <span class="unit-suffix" data-unit-suffix>(cm)</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" inputmode="decimal" id="mw-bust" name="bust" disabled autocomplete="off" data-ph-cm="e.g. 86" data-ph-in="e.g. 34" aria-describedby="warn-bust err-bust"><span class="form-warning" id="warn-bust" data-warn-name="bust" hidden></span><span class="form-error" id="err-bust" data-error-name="bust"></span></div><div class="form-field"><label for="mw-waist"><span data-i18n="apply.waist">Waist</span> <span class="unit-suffix" data-unit-suffix>(cm)</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" inputmode="decimal" id="mw-waist" name="waist" disabled autocomplete="off" data-ph-cm="e.g. 61" data-ph-in="e.g. 24" aria-describedby="warn-waist err-waist"><span class="form-warning" id="warn-waist" data-warn-name="waist" hidden></span><span class="form-error" id="err-waist" data-error-name="waist"></span></div><div class="form-field"><label for="mw-hips"><span data-i18n="apply.hips">Hips</span> <span class="unit-suffix" data-unit-suffix>(cm)</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" inputmode="decimal" id="mw-hips" name="hips" disabled autocomplete="off" data-ph-cm="e.g. 91" data-ph-in="e.g. 36" aria-describedby="warn-hips err-hips"><span class="form-warning" id="warn-hips" data-warn-name="hips" hidden></span><span class="form-error" id="err-hips" data-error-name="hips"></span></div>
+            </div>
+            <div class="measure-grid" id="measure-men" style="display:none;">
+              <div class="form-field"><label for="mm-neck"><span data-i18n="apply.neck">Neck</span> <span class="unit-suffix" data-unit-suffix>(cm)</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" inputmode="decimal" id="mm-neck" name="neck" disabled autocomplete="off" data-ph-cm="e.g. 38" data-ph-in="e.g. 15" aria-describedby="warn-neck err-neck"><span class="form-warning" id="warn-neck" data-warn-name="neck" hidden></span><span class="form-error" id="err-neck" data-error-name="neck"></span></div><div class="form-field"><label for="mm-chest"><span data-i18n="apply.chest">Chest</span> <span class="unit-suffix" data-unit-suffix>(cm)</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" inputmode="decimal" id="mm-chest" name="chest" disabled autocomplete="off" data-ph-cm="e.g. 98" data-ph-in="e.g. 39" aria-describedby="warn-chest err-chest"><span class="form-warning" id="warn-chest" data-warn-name="chest" hidden></span><span class="form-error" id="err-chest" data-error-name="chest"></span></div><div class="form-field"><label for="mm-waist"><span data-i18n="apply.waist">Waist</span> <span class="unit-suffix" data-unit-suffix>(cm)</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" inputmode="decimal" id="mm-waist" name="waist" disabled autocomplete="off" data-ph-cm="e.g. 81" data-ph-in="e.g. 32" aria-describedby="warn-waist-m err-waist-m"><span class="form-warning" id="warn-waist-m" data-warn-name="waist" hidden></span><span class="form-error" id="err-waist-m" data-error-name="waist"></span></div><div class="form-field"><label for="mm-sleeve"><span data-i18n="apply.sleeve">Sleeve</span> <span class="unit-suffix" data-unit-suffix>(cm)</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" inputmode="decimal" id="mm-sleeve" name="sleeve" disabled autocomplete="off" data-ph-cm="e.g. 86" data-ph-in="e.g. 34" aria-describedby="warn-sleeve err-sleeve"><span class="form-warning" id="warn-sleeve" data-warn-name="sleeve" hidden></span><span class="form-error" id="err-sleeve" data-error-name="sleeve"></span></div><div class="form-field"><label for="mm-inseam"><span data-i18n="apply.inseam">Inseam</span> <span class="unit-suffix" data-unit-suffix>(cm)</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" inputmode="decimal" id="mm-inseam" name="inseam" disabled autocomplete="off" data-ph-cm="e.g. 81" data-ph-in="e.g. 32" aria-describedby="warn-inseam err-inseam"><span class="form-warning" id="warn-inseam" data-warn-name="inseam" hidden></span><span class="form-error" id="err-inseam" data-error-name="inseam"></span></div>
+            </div>
+          </div>
 
-        <div class="form-field full">
-          <label class="form-checkbox"><input type="checkbox" id="apply-accuracy" name="accuracyConfirm" required> <span data-i18n="apply.accuracyConfirm">I confirm the information submitted is accurate. *</span></label>
-          <label class="form-checkbox"><input type="checkbox" id="apply-privacy" name="privacyConsent" required> <span data-i18n-html="form.privacyConsent">I consent to the <a href="privacy-policy" style="color:var(--gold-light);text-decoration:underline;">Privacy Policy</a>. *</span></label>
-          <label class="form-checkbox"><input type="checkbox" id="apply-terms" name="termsConsent" required> <span data-i18n-html="apply.termsConsent">I have read and agree to the <a href="booking-terms" style="color:var(--gold-light);text-decoration:underline;">Booking Terms &amp; Conditions</a>. *</span></label>
+          <div class="form-field"><label for="apply-hair"><span data-i18n="apply.hairColour">Hair colour</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" id="apply-hair" name="hair" maxlength="40" autocomplete="off" aria-describedby="err-hair"><span class="form-error" id="err-hair" data-error-name="hair"></span></div>
+          <div class="form-field"><label for="apply-eyes"><span data-i18n="apply.eyeColour">Eye colour</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" id="apply-eyes" name="eyes" maxlength="40" autocomplete="off" aria-describedby="err-eyes"><span class="form-error" id="err-eyes" data-error-name="eyes"></span></div>
+
+          <div class="form-field size-field"><label for="shoe-size"><span data-i18n="apply.shoeSize" >Shoe size</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><div class="size-pair"><input type="text" id="shoe-size" name="shoeSize" maxlength="12" autocomplete="off" aria-describedby="err-shoeSize"><select id="shoe-system" name="shoeSystem" aria-label="Shoe sizing system" data-i18n-aria-label="apply.shoeSystem" aria-describedby="err-shoeSystem"><option value="" data-i18n="apply.system">System</option><option value="EU">EU</option><option value="UK">UK</option><option value="US">US</option></select></div><span class="form-error" id="err-shoeSize" data-error-name="shoeSize"></span><span class="form-error" id="err-shoeSystem" data-error-name="shoeSystem"></span></div>
+          <div class="form-field size-field"><label for="clothing-size"><span data-i18n="apply.clothingSize" id="clothing-label">Clothing or dress size</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><div class="size-pair"><input type="text" id="clothing-size" name="clothingSize" maxlength="12" autocomplete="off" aria-describedby="err-clothingSize"><select id="clothing-system" name="clothingSystem" aria-label="Clothing sizing system" data-i18n-aria-label="apply.clothingSystem" aria-describedby="err-clothingSystem"><option value="" data-i18n="apply.system">System</option><option value="EU">EU</option><option value="UK">UK</option><option value="US">US</option><option value="SML" data-i18n="apply.sysSML">S–M–L</option></select></div><span class="form-error" id="err-clothingSize" data-error-name="clothingSize"></span><span class="form-error" id="err-clothingSystem" data-error-name="clothingSystem"></span></div>
+          <div class="form-field size-field"><label for="trouser-size"><span data-i18n="apply.trouserSize" >Trouser size</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><div class="size-pair"><input type="text" id="trouser-size" name="trouserSize" maxlength="12" autocomplete="off" aria-describedby="err-trouserSize"><select id="trouser-system" name="trouserSystem" aria-label="Trouser sizing system" data-i18n-aria-label="apply.trouserSystem" aria-describedby="err-trouserSystem"><option value="" data-i18n="apply.system">System</option><option value="EU">EU</option><option value="UK">UK</option><option value="US">US</option><option value="WAIST_IN" data-i18n="apply.sysWaist">Waist (in)</option></select></div><span class="form-error" id="err-trouserSize" data-error-name="trouserSize"></span><span class="form-error" id="err-trouserSystem" data-error-name="trouserSystem"></span></div>
+          <p class="form-note full" style="grid-column:1/-1;margin:-8px 0 0;" data-i18n="apply.sizesNote">Sizes are optional and are not changed by the CM/IN switch.</p>
         </div>
-      </div>
+      </section>
 
-      <p class="form-note" style="margin-top:24px;" data-i18n="apply.formNote">Do not include passports, Emirates ID or banking details in this form. Those are only ever collected later, through a separate secure process, if you're added to the roster.</p>
-      <button type="submit" class="cta-btn cta-btn-primary" style="margin-top:16px;" data-i18n="apply.submit">Submit Application</button>
+      <section class="apply-section" aria-labelledby="sec-experience">
+        <h2 class="apply-section-title" id="sec-experience" data-i18n="apply.sec.experience">Experience and work interests</h2>
+        <div class="form-grid">
+          <div class="form-field"><label for="experience"><span data-i18n="apply.experienceLevel">Experience level</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label>
+            <select id="experience" name="experience" aria-describedby="err-experience"><option value="" data-i18n="form.selectOne">Select one</option><option value="new-face" data-i18n="apply.newFace">New face</option><option value="some-experience" data-i18n="apply.someExperience">Some experience</option><option value="experienced" data-i18n="apply.experienced">Experienced</option></select><span class="form-error" id="err-experience" data-error-name="experience"></span>
+          </div>
+          <div class="form-field" aria-hidden="true"></div>
+          <div class="form-field"><label for="apply-languages"><span data-i18n="apply.languages">Languages</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" id="apply-languages" name="languages" maxlength="200" placeholder="e.g. English, Arabic" data-i18n-placeholder="apply.languagesPlaceholder" autocomplete="off" aria-describedby="err-languages"><span class="form-error" id="err-languages" data-error-name="languages"></span></div>
+          <div class="form-field"><label for="apply-skills"><span data-i18n="apply.skills">Skills</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" id="apply-skills" name="skills" maxlength="200" placeholder="e.g. runway, swimwear" data-i18n-placeholder="bookTalent.requiredSkillsPlaceholder" autocomplete="off" aria-describedby="err-skills"><span class="form-error" id="err-skills" data-error-name="skills"></span></div>
+
+          <fieldset class="form-field full choice-group" id="fs-workInterests" aria-describedby="hint-interests err-workInterests"><legend><span data-i18n="apply.interestsLegend">Work you are interested in</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></legend><div class="choice-row"><label class="choice"><input type="checkbox" name="workInterests" value="editorial"> <span data-i18n="apply.int.editorial">Editorial</span></label><label class="choice"><input type="checkbox" name="workInterests" value="fashion"> <span data-i18n="apply.int.fashion">Fashion</span></label><label class="choice"><input type="checkbox" name="workInterests" value="commercial"> <span data-i18n="apply.int.commercial">Commercial</span></label><label class="choice"><input type="checkbox" name="workInterests" value="ecommerce"> <span data-i18n="apply.int.ecommerce">E-commerce</span></label><label class="choice"><input type="checkbox" name="workInterests" value="beauty"> <span data-i18n="apply.int.beauty">Beauty</span></label><label class="choice"><input type="checkbox" name="workInterests" value="lifestyle"> <span data-i18n="apply.int.lifestyle">Lifestyle</span></label><label class="choice"><input type="checkbox" name="workInterests" value="fitness"> <span data-i18n="apply.int.fitness">Fitness</span></label><label class="choice"><input type="checkbox" name="workInterests" value="runway"> <span data-i18n="apply.int.runway">Runway</span></label><label class="choice"><input type="checkbox" name="workInterests" value="acting-video"> <span data-i18n="apply.int.acting-video">Acting / video</span></label></div>
+            <span class="form-hint" id="hint-interests" data-i18n="apply.interestsNote">Choosing interests or applying is not consent to any project, wardrobe or image use. Each proposed booking remains subject to your agreement.</span>
+            <span class="form-error" id="err-workInterests" data-error-name="workInterests"></span></fieldset>
+
+          <fieldset class="form-field full choice-group" id="fs-availability" aria-describedby="err-availability"><legend><span data-i18n="apply.availabilityLegend">Availability</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></legend><div class="choice-row"><label class="choice"><input type="radio" name="availability" value="weekdays"> <span data-i18n="apply.avail.weekdays">Weekdays</span></label><label class="choice"><input type="radio" name="availability" value="weekends"> <span data-i18n="apply.avail.weekends">Weekends</span></label><label class="choice"><input type="radio" name="availability" value="flexible"> <span data-i18n="apply.avail.flexible">Flexible</span></label><label class="choice"><input type="radio" name="availability" value="varies"> <span data-i18n="apply.avail.varies">Varies — discuss with me</span></label></div><span class="form-error" id="err-availability" data-error-name="availability"></span></fieldset>
+          <fieldset class="form-field full choice-group" id="fs-travelPreference" aria-describedby="err-travelPreference"><legend><span data-i18n="apply.travelLegend">Travel between emirates</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></legend><div class="choice-row"><label class="choice"><input type="radio" name="travelPreference" value="yes"> <span data-i18n="apply.travel.yes">Yes</span></label><label class="choice"><input type="radio" name="travelPreference" value="depends"> <span data-i18n="apply.travel.depends">Depends on the location and arrangements</span></label><label class="choice"><input type="radio" name="travelPreference" value="current-emirate"> <span data-i18n="apply.travel.current-emirate">Prefer my current emirate</span></label></div><span class="form-error" id="err-travelPreference" data-error-name="travelPreference"></span></fieldset>
+
+          <div class="form-field full"><label for="booking-notes"><span data-i18n="apply.bookingNotes">Anything you would like us to consider when discussing suitable bookings?</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><textarea id="booking-notes" name="bookingNotes" maxlength="600" aria-describedby="hint-booking-notes err-bookingNotes"></textarea><span class="form-hint" id="hint-booking-notes" data-i18n="apply.bookingNotesHint">Private, seen only by Photoczaro.</span><span class="form-error" id="err-bookingNotes" data-error-name="bookingNotes"></span></div>
+
+          <div class="form-field"><label for="apply-instagram"><span data-i18n="apply.instagram">Instagram</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="text" id="apply-instagram" name="instagram" maxlength="200" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="@yourname" aria-describedby="hint-apply-instagram err-instagram"><span class="form-hint" id="hint-apply-instagram" data-i18n="apply.instagramHint">A handle or profile link, e.g. @yourname.</span><span class="form-error" id="err-instagram" data-error-name="instagram"></span></div>
+          <div class="form-field"><label for="apply-website"><span data-i18n="apply.portfolioWebsite">Portfolio website</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="url" id="apply-website" name="portfolioWebsite" maxlength="300" autocomplete="url" autocapitalize="none" spellcheck="false" placeholder="https://" aria-describedby="hint-apply-website err-portfolioWebsite"><span class="form-hint" id="hint-apply-website" data-i18n="apply.portfolioWebsiteHint">A link starting with http:// or https://.</span><span class="form-error" id="err-portfolioWebsite" data-error-name="portfolioWebsite"></span></div>
+          <div class="form-field full"><label for="apply-showreel"><span data-i18n="apply.showreel">Movement, runway or showreel link</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><input type="url" id="apply-showreel" name="showreelUrl" maxlength="300" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="https://" aria-describedby="hint-apply-showreel err-showreelUrl"><span class="form-hint" id="hint-apply-showreel" data-i18n="apply.showreelHint">Useful for runway or acting applications. Not required.</span><span class="form-error" id="err-showreelUrl" data-error-name="showreelUrl"></span></div>
+          <div class="form-field full"><label for="intro"><span data-i18n="apply.shortIntro">Short introduction</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></label><textarea id="intro" name="introduction" maxlength="600" aria-describedby="err-introduction"></textarea><span class="form-error" id="err-introduction" data-error-name="introduction"></span></div>
+        </div>
+      </section>
+
+      <section class="apply-section" aria-labelledby="sec-photos">
+        <h2 class="apply-section-title" id="sec-photos" data-i18n="apply.sec.photos">Photos and portfolio</h2>
+        <p class="photo-guide" data-i18n="apply.photoGuide">Clear phone photos are welcome. Use recent photographs that show your current appearance, preferably taken within the last three months. Choose natural daylight and a plain background. Keep your face visible, wear simple fitted clothing, and avoid filters, retouching and heavy makeup. Professional photography is not required. Do not submit nude, lingerie or underwear photographs.</p>
+        <p class="form-note photo-specs" data-i18n="apply.photoSpecs">Accepted: JPEG, PNG or WebP photos, up to 8 MB each (the portfolio file may also be a PDF). HEIC is not supported, so please upload a JPEG instead.</p>
+        <div class="photo-slots">
+          <div class="photo-slot" data-slot="headshot"><img class="photo-example" src="/images/guide-headshot.svg" width="72" height="96" alt="Illustration: front-facing head and shoulders centred in the frame" data-i18n-alt="apply.alt.headshot" loading="lazy" decoding="async"><div class="photo-slot-body"><span class="photo-slot-title" id="title-headshot"><span data-i18n="apply.headshot">Headshot *</span></span><span class="form-hint" id="hint-headshot" data-i18n="apply.headshotHint">Front-facing, face and shoulders.</span><div class="photo-preview" hidden><img alt="" data-i18n-alt="apply.previewAlt"><span class="photo-meta"></span></div><div class="photo-actions"><label class="photo-btn photo-choose" for="file-headshot" id="choose-headshot"><span data-i18n="apply.choosePhoto">Choose photo</span></label><button type="button" class="photo-btn photo-remove" hidden data-remove="headshot"><span data-i18n="apply.removePhoto">Remove</span></button></div><input type="file" class="visually-hidden-input" id="file-headshot" name="headshot" accept="image/jpeg,image/png,image/webp" aria-labelledby="title-headshot choose-headshot" aria-describedby="hint-headshot err-headshot"><span class="form-error" id="err-headshot" data-error-name="headshot"></span></div></div>
+          <div class="photo-slot" data-slot="fullFront"><img class="photo-example" src="/images/guide-full-front.svg" width="72" height="96" alt="Illustration: standing figure facing the camera, head to feet in frame" data-i18n-alt="apply.alt.fullFront" loading="lazy" decoding="async"><div class="photo-slot-body"><span class="photo-slot-title" id="title-front"><span data-i18n="apply.fullFront">Full-length front *</span></span><span class="form-hint" id="hint-front" data-i18n="apply.fullFrontHint">Entire body visible, including feet.</span><div class="photo-preview" hidden><img alt="" data-i18n-alt="apply.previewAlt"><span class="photo-meta"></span></div><div class="photo-actions"><label class="photo-btn photo-choose" for="file-front" id="choose-front"><span data-i18n="apply.choosePhoto">Choose photo</span></label><button type="button" class="photo-btn photo-remove" hidden data-remove="fullFront"><span data-i18n="apply.removePhoto">Remove</span></button></div><input type="file" class="visually-hidden-input" id="file-front" name="fullFront" accept="image/jpeg,image/png,image/webp" aria-labelledby="title-front choose-front" aria-describedby="hint-front err-fullFront"><span class="form-error" id="err-fullFront" data-error-name="fullFront"></span></div></div>
+          <div class="photo-slot" data-slot="fullSide"><img class="photo-example" src="/images/guide-full-side.svg" width="72" height="96" alt="Illustration: standing figure seen from the side, head to feet in frame" data-i18n-alt="apply.alt.fullSide" loading="lazy" decoding="async"><div class="photo-slot-body"><span class="photo-slot-title" id="title-side"><span data-i18n="apply.fullSide">Full-length side *</span></span><span class="form-hint" id="hint-side" data-i18n="apply.fullSideHint">Entire body from the side, including feet.</span><div class="photo-preview" hidden><img alt="" data-i18n-alt="apply.previewAlt"><span class="photo-meta"></span></div><div class="photo-actions"><label class="photo-btn photo-choose" for="file-side" id="choose-side"><span data-i18n="apply.choosePhoto">Choose photo</span></label><button type="button" class="photo-btn photo-remove" hidden data-remove="fullSide"><span data-i18n="apply.removePhoto">Remove</span></button></div><input type="file" class="visually-hidden-input" id="file-side" name="fullSide" accept="image/jpeg,image/png,image/webp" aria-labelledby="title-side choose-side" aria-describedby="hint-side err-fullSide"><span class="form-error" id="err-fullSide" data-error-name="fullSide"></span></div></div>
+          <div class="photo-slot" data-slot="facialProfile"><img class="photo-example" src="/images/guide-profile.svg" width="72" height="96" alt="Illustration: close-up of a face seen from the side" data-i18n-alt="apply.alt.profile" loading="lazy" decoding="async"><div class="photo-slot-body"><span class="photo-slot-title" id="title-profile"><span data-i18n="apply.facialProfile">Close-up facial profile</span> <span class="opt-tag" data-i18n="form.optional">Optional</span></span><span class="form-hint" id="hint-profile" data-i18n="apply.facialProfileHint">A side view of your face. Different from the full-length side photo.</span><div class="photo-preview" hidden><img alt="" data-i18n-alt="apply.previewAlt"><span class="photo-meta"></span></div><div class="photo-actions"><label class="photo-btn photo-choose" for="file-profile" id="choose-profile"><span data-i18n="apply.choosePhoto">Choose photo</span></label><button type="button" class="photo-btn photo-remove" hidden data-remove="facialProfile"><span data-i18n="apply.removePhoto">Remove</span></button></div><input type="file" class="visually-hidden-input" id="file-profile" name="facialProfile" accept="image/jpeg,image/png,image/webp" aria-labelledby="title-profile choose-profile" aria-describedby="hint-profile err-facialProfile"><span class="form-error" id="err-facialProfile" data-error-name="facialProfile"></span></div></div>
+        </div>
+        <div class="form-grid" style="margin-top:22px;">
+          <div class="form-field full"><label for="file-extra"><span data-i18n="apply.existingPortfolio">Existing portfolio (optional)</span></label><input type="file" id="file-extra" name="portfolioFile" accept="image/jpeg,image/png,image/webp,application/pdf" aria-describedby="hint-file-extra err-portfolioFile"><span class="form-hint" id="hint-file-extra" data-i18n="apply.portfolioHint">Image or PDF, up to 8 MB.</span><span class="form-error" id="err-portfolioFile" data-error-name="portfolioFile" aria-live="polite"></span></div>
+          <div class="form-field full">
+            <span class="field-label" id="gallery-label" data-i18n="apply.galleryPhotos">Additional photos (optional, up to 12)</span>
+            <div class="apply-gallery-grid" id="apply-gallery-grid" role="group" aria-labelledby="gallery-label">
+              <label class="apply-gallery-add" id="apply-gallery-add-tile">
+                <svg class="icon" aria-hidden="true" focusable="false" style="width:24px;height:24px"><use href="/images/icons-v1.svg#i-camera"></use></svg>
+                <span class="apply-gallery-add-label" data-i18n="apply.addPhotos">Add photos</span>
+                <input type="file" id="file-gallery-input" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="apply-gallery-count apply-gallery-msg">
+              </label>
+            </div>
+            <p class="form-note" id="apply-gallery-count">0 / 12 <span data-i18n="apply.photosAdded">photos added</span></p>
+            <p class="form-error" id="apply-gallery-msg" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="apply-section" aria-labelledby="sec-confirm">
+        <h2 class="apply-section-title" id="sec-confirm" data-i18n="apply.sec.confirm">Application confirmations</h2>
+        <div class="confirm-list">
+          <div class="confirm-item"><label class="form-checkbox"><input type="checkbox" id="age-confirm" name="ageConfirm" required aria-describedby="err-ageConfirm"> <span data-i18n="apply.ageConfirm">I confirm I am at least 18 years old. *</span></label><span class="form-error" id="err-ageConfirm" data-error-name="ageConfirm"></span></div><div class="confirm-item"><label class="form-checkbox"><input type="checkbox" id="residency-confirm" name="residencyConfirm" required aria-describedby="err-residencyConfirm"> <span data-i18n="apply.residencyConfirm">I confirm I currently reside in the UAE. *</span></label><span class="form-error" id="err-residencyConfirm" data-error-name="residencyConfirm"></span></div><div class="confirm-item"><label class="form-checkbox"><input type="checkbox" id="apply-accuracy" name="accuracyConfirm" required aria-describedby="err-accuracyConfirm"> <span data-i18n="apply.accuracyConfirm">I confirm the information submitted is accurate. *</span></label><span class="form-error" id="err-accuracyConfirm" data-error-name="accuracyConfirm"></span></div><div class="confirm-item"><label class="form-checkbox"><input type="checkbox" id="apply-privacy" name="privacyConsent" required aria-describedby="err-privacyConsent"> <span data-i18n-html="apply.privacyAck">I have read the <a href='privacy-policy' target='_blank' rel='noopener'>Privacy Policy</a> and understand that Photoczaro will use my application details and photos to review my application and contact me. *</span></label><span class="form-error" id="err-privacyConsent" data-error-name="privacyConsent"></span></div><div class="confirm-item"><label class="form-checkbox"><input type="checkbox" id="apply-terms" name="termsConsent" required aria-describedby="err-termsConsent"> <span data-i18n-html="apply.termsConsent">I have read the <a href='application-terms' target='_blank' rel='noopener'>Application Terms</a>. *</span></label><span class="form-error" id="err-termsConsent" data-error-name="termsConsent"></span></div>
+        </div>
+      </section>
+
+      <p class="apply-private-note" data-i18n="apply.privateReviewNote">Your application is reviewed privately. Your profile and selected images are published only after acceptance and your authorisation.</p>
+      <p class="form-note" data-i18n="apply.formNote">Do not include passports, Emirates ID or banking details in this form. Those are only ever collected later, through a separate secure process, if you're added to the roster.</p>
+      <button type="submit" class="cta-btn cta-btn-primary" style="margin-top:16px;" id="apply-submit" data-i18n="apply.submit">Submit Application</button>
+      <progress id="apply-progress" class="apply-progress" max="100" value="0" hidden aria-hidden="true"></progress>
       <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
     </form>
   </div>
@@ -223,6 +273,7 @@
     </div>
     <div class="footer-col"><p class="footer-h" data-i18n="footer.legal">Legal</p>
       <a href="booking-terms" data-i18n="footer.bookingTerms">Booking Terms</a>
+      <a href="application-terms" data-i18n="footer.applicationTerms">Application Terms</a>
       <a href="privacy-policy" data-i18n="footer.privacyPolicy">Privacy Policy</a>
       <a href="https://photoczaro.com" data-i18n="footer.photography">Photoczaro Photography ↗</a>
     </div>
@@ -234,253 +285,13 @@
 </footer>
 
 <script defer src="/js/render.js?v=6"></script>
+<script defer src="/js/apply-rules.js?v=1"></script>
 <script defer src="/js/data.js?v=6"></script>
 <script defer src="/js/shortlist.js?v=6"></script>
-<script defer src="/js/i18n-data.js?v=7"></script>
+<script defer src="/js/i18n-data.js?v=8"></script>
 <script defer src="/js/i18n.js?v=5"></script>
 <script defer src="/js/main.js?v=9"></script>
 <script defer src="/js/magnetic-cta.js?v=1"></script>
-<script>document.addEventListener("DOMContentLoaded", function () {
-(function () {
-  const i18n = window.PhotoczaroI18n;
-  const form = document.getElementById("apply-form");
-  const status = document.getElementById("form-status");
-  const MAX_BYTES = 8 * 1024 * 1024;
-  const MAX_GALLERY_PHOTOS = 12;
-  const WEBP_MAX_DIMENSION = 2400;
-  const WEBP_QUALITY = 0.82;
-
-  /* Re-encode every photo to WebP client-side before it ever reaches the
-     server: smaller uploads for applicants on mobile data, and the roster
-     never has to store or serve a mixed bag of JPEG/PNG/HEIC originals.
-     Falls back to the original file untouched if the browser can't decode
-     it (e.g. HEIC outside Safari) rather than blocking the submission. */
-  async function toWebp(file) {
-    if (!file || !(file.type || "").startsWith("image/") || file.type === "image/webp") return file;
-    try {
-      const bitmap = await createImageBitmap(file);
-      let { width, height } = bitmap;
-      if (width > WEBP_MAX_DIMENSION || height > WEBP_MAX_DIMENSION) {
-        const scale = WEBP_MAX_DIMENSION / Math.max(width, height);
-        width = Math.round(width * scale);
-        height = Math.round(height * scale);
-      }
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
-      bitmap.close?.();
-      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", WEBP_QUALITY));
-      if (!blob) return file;
-      const newName = file.name.replace(/\.[^.]+$/, "") + ".webp";
-      return new File([blob], newName, { type: "image/webp" });
-    } catch {
-      return file;
-    }
-  }
-
-  /* Tracks in-flight conversions so the submit handler can wait for them;
-     converting is async (canvas decode + encode) but file inputs resolve
-     their `change` event synchronously. */
-  let pendingConversions = 0;
-  async function convertFileInput(input) {
-    if (!input.files || !input.files[0]) return;
-    pendingConversions++;
-    try {
-      const converted = await toWebp(input.files[0]);
-      if (converted !== input.files[0]) {
-        const dt = new DataTransfer();
-        dt.items.add(converted);
-        input.files = dt.files;
-      }
-    } finally {
-      pendingConversions--;
-    }
-  }
-  ["file-headshot", "file-front", "file-side", "file-extra"].forEach((id) => {
-    const input = document.getElementById(id);
-    input.addEventListener("change", () => convertFileInput(input));
-  });
-
-  /* Additional gallery photos (up to 12): a custom add/remove grid rather
-     than a single native multiple-file input, since the native control has
-     no way to add more photos to an existing selection or drop just one. */
-  let galleryFiles = [];
-  const galleryGrid = document.getElementById("apply-gallery-grid");
-  const galleryAddTile = document.getElementById("apply-gallery-add-tile");
-  const galleryInput = document.getElementById("file-gallery-input");
-  const galleryCount = document.getElementById("apply-gallery-count");
-
-  function renderGallery() {
-    galleryGrid.querySelectorAll(".apply-gallery-item").forEach((el) => el.remove());
-    galleryFiles.forEach((file, index) => {
-      const item = document.createElement("div");
-      item.className = "apply-gallery-item";
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(file);
-      img.alt = "";
-      const remove = document.createElement("button");
-      remove.type = "button";
-      remove.className = "apply-gallery-remove";
-      remove.setAttribute("aria-label", "Remove this photo");
-      remove.textContent = "✕";
-      remove.addEventListener("click", () => {
-        galleryFiles.splice(index, 1);
-        renderGallery();
-      });
-      item.appendChild(img);
-      item.appendChild(remove);
-      galleryGrid.insertBefore(item, galleryAddTile);
-    });
-    const full = galleryFiles.length >= MAX_GALLERY_PHOTOS;
-    galleryAddTile.style.display = full ? "none" : "";
-    galleryCount.firstChild.textContent = `${galleryFiles.length} / ${MAX_GALLERY_PHOTOS} `;
-  }
-
-  galleryInput.addEventListener("change", async () => {
-    const picked = Array.from(galleryInput.files || []);
-    galleryInput.value = "";
-    const room = MAX_GALLERY_PHOTOS - galleryFiles.length;
-    pendingConversions++;
-    try {
-      const converted = await Promise.all(picked.slice(0, room).map((f) => toWebp(f)));
-      galleryFiles.push(...converted);
-      renderGallery();
-    } finally {
-      pendingConversions--;
-    }
-  });
-
-  /* Measurements mean different fields per category (bust/waist/hips vs
-     neck/chest/waist/sleeve/inseam); show the matching group and disable
-     the other so only the relevant fields are submitted. */
-  const categoryField = document.getElementById("apply-category");
-  const measurementsHint = document.getElementById("measurements-hint");
-  const measureGroups = { women: document.getElementById("measure-women"), men: document.getElementById("measure-men") };
-  categoryField.addEventListener("change", () => {
-    const active = measureGroups[categoryField.value];
-    Object.values(measureGroups).forEach((group) => {
-      const shown = group === active;
-      group.style.display = shown ? "" : "none";
-      group.querySelectorAll("input").forEach((input) => { input.disabled = !shown; });
-    });
-    measurementsHint.style.display = active ? "none" : "";
-  });
-
-  /* Height and body-measurement fields are entered in whichever unit the
-     applicant picks (cm or in); the choice travels with the submission as
-     measurementUnit so reviewers can interpret the numbers correctly. */
-  const unitToggle = document.getElementById("unit-toggle");
-  const unitField = document.getElementById("apply-unit");
-  const unitFields = form.querySelectorAll("[data-ph-cm]");
-  let currentUnit = "cm";
-  unitFields.forEach((field) => field.addEventListener("input", () => {
-    const n = parseFloat(field.value);
-    if (Number.isFinite(n)) field.dataset.cm = String(currentUnit === "in" ? n * 2.54 : n); else delete field.dataset.cm;
-  }));
-  unitToggle.addEventListener("click", (e) => {
-    const btn = e.target.closest(".unit-toggle-btn");
-    if (!btn) return;
-    const unit = btn.dataset.unit;
-    /* Numbers already entered are converted, not relabelled: 170 cm becomes
-       66.9 in (and back). Fields are converted even while hidden. */
-    if (unit !== currentUnit) {
-      unitFields.forEach((field) => {
-        const n = parseFloat(field.value);
-        if (field.value === "" || !Number.isFinite(n)) return;
-        /* Convert from the exact centimetre value that was typed, so flipping
-           back and forth never drifts (170 cm stays 170 cm). */
-        const cm = field.dataset.cm ? parseFloat(field.dataset.cm) : (currentUnit === "in" ? n * 2.54 : n);
-        field.dataset.cm = String(cm);
-        field.value = String(Math.round((unit === "in" ? cm / 2.54 : cm) * 10) / 10);
-      });
-      currentUnit = unit;
-    }
-    unitToggle.querySelectorAll(".unit-toggle-btn").forEach((b) => b.classList.toggle("active", b === btn));
-    unitField.value = unit;
-    unitFields.forEach((field) => { field.placeholder = field.dataset[unit === "in" ? "phIn" : "phCm"]; });
-    form.querySelectorAll("[data-unit-suffix]").forEach((el) => { el.textContent = "(" + unit + ")"; });
-  });
-
-  /* Uploads can take several seconds; without this guard an impatient second
-     tap creates a duplicate application. */
-  let isSubmitting = false;
-  const submitButton = form.querySelector('button[type="submit"]');
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (isSubmitting) return;
-    isSubmitting = true;
-    if (submitButton) submitButton.disabled = true;
-    try {
-      await handleSubmit();
-    } finally {
-      isSubmitting = false;
-      if (submitButton) submitButton.disabled = false;
-    }
-  });
-
-  async function handleSubmit() {
-    document.querySelectorAll(".form-error").forEach((el) => (el.textContent = ""));
-
-    if (pendingConversions > 0) {
-      status.className = "form-status";
-      status.textContent = i18n.t("form.sending");
-      while (pendingConversions > 0) await new Promise((r) => setTimeout(r, 50));
-    }
-
-    let valid = true;
-
-    form.querySelectorAll("[required]").forEach((field) => {
-      const isEmpty = field.type === "checkbox" ? !field.checked : field.type === "file" ? field.files.length === 0 : !field.value.trim();
-      if (isEmpty) {
-        valid = false;
-        const err = document.querySelector(`[data-error-for="${field.id}"]`);
-        if (err) err.textContent = i18n.t("form.required");
-      }
-    });
-
-    form.querySelectorAll('input[type="file"]').forEach((field) => {
-      if (field.files[0] && field.files[0].size > MAX_BYTES) {
-        valid = false;
-        const err = document.querySelector(`[data-error-for="${field.id}"]`);
-        if (err) err.textContent = i18n.t("form.fileTooLarge");
-      }
-    });
-
-    const emailField = document.getElementById("apply-email");
-    if (emailField.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
-      valid = false;
-      document.querySelector('[data-error-for="apply-email"]').textContent = i18n.t("form.invalidEmail");
-    }
-
-    if (!valid) {
-      status.className = "form-status error";
-      status.textContent = i18n.t("form.fixHighlighted");
-      return;
-    }
-
-    status.className = "form-status";
-    status.textContent = i18n.t("form.sending");
-    try {
-      const fd = new FormData(form);
-      galleryFiles.forEach((file) => fd.append("gallery", file, file.name));
-      const res = await fetch("/api/apply", { method: "POST", headers: { "X-Requested-With": "fetch" }, body: fd });
-      if (!res.ok) throw new Error("request_failed");
-      const data = await res.json().catch(() => ({}));
-      status.className = "form-status success";
-      status.textContent = data.fileErrors ? i18n.t("apply.thankYouPartial") : i18n.t("apply.thankYou");
-      form.reset();
-      galleryFiles = [];
-      renderGallery();
-    } catch {
-      status.className = "form-status error";
-      status.textContent = i18n.t("apply.sendError");
-    }
-  }
-
-  window.PhotoczaroShortlist.render();
-})();
-});</script>
+<script defer src="/js/apply.js?v=4"></script>
 </body>
 </html>

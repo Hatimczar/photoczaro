@@ -25,6 +25,11 @@ export async function onRequestPost({ request, env, params }) {
   const publish = body.published !== false;
 
   if (publish) {
+    // A profile that came from an application goes live only with the model's
+    // own approval, confirmed by the admin at publish time and recorded.
+    if (model.sourceApplicationId && body.profileAuthorised !== true) {
+      return json({ error: "Confirm that the model has approved this public profile before publishing." }, 400);
+    }
     const readiness = publishReadiness(model);
     if (!readiness.ready) {
       return json({ error: `Missing before publishing: ${readiness.missing.join(", ")}` }, 400);
@@ -35,7 +40,7 @@ export async function onRequestPost({ request, env, params }) {
   model.published = publish;
   model.updatedAt = now;
   const history = Array.isArray(model.history) ? model.history : [];
-  history.push({ action: publish ? "published" : "unpublished", actor, at: now });
+  history.push({ action: publish ? "published" : "unpublished", actor, at: now, ...(publish && model.sourceApplicationId ? { profileAuthorised: true } : {}) });
   model.history = history.slice(-50);
 
   await env.ROSTER_KV.put(`model:${params.slug}`, JSON.stringify(model));

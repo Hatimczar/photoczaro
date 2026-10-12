@@ -37,6 +37,12 @@ export async function onRequestPost({ request, env, params }) {
   }
 
   if (action === "approve") {
+    // A birth year that makes the applicant under 18 is only a flag, never
+    // proof, so an admin who has verified their age can proceed; anything else
+    // stops here.
+    if ((record.flags || []).includes("birth_year_under_18") && body.ageOverride !== true) {
+      return json({ error: "This application is flagged for an age check. Verify the applicant is 18 or over first." }, 409);
+    }
     const roster = await listRoster(env);
     const slug = await uniqueSlug(slugify(record.professionalName), roster);
 
@@ -114,6 +120,17 @@ export async function onRequestPost({ request, env, params }) {
       seoTitle: `${record.professionalName} | Photoczaro Models Dubai`,
       seoDescription: `${record.professionalName}, a Photoczaro Models roster talent based in the UAE.`,
       sourceApplicationId: record.id,
+      // Private onboarding data: never part of the public allowlist
+      // (functions/_lib/public-model.js). Sizes are labels in the system the
+      // applicant chose, kept so the profile can be completed before booking.
+      onboarding: {
+        sizing: {
+          shoe: { size: record.shoeSize || "", system: record.shoeSystem || "" },
+          clothing: { size: record.clothingSize || "", system: record.clothingSystem || "" },
+          trouser: { size: record.trouserSize || "", system: record.trouserSystem || "" },
+        },
+        missingSizes: Array.isArray(record.missingSizes) ? record.missingSizes : [],
+      },
       archived: false,
       history: [{ action: "created_from_application", actor, at: new Date().toISOString(), applicationId: record.id }],
       createdAt: new Date().toISOString(),

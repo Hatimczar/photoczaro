@@ -100,7 +100,7 @@ async function buildModelsPage(context, lang) {
   return finish(await translateResponse(context, res, lang));
 }
 
-const STATIC_PAGES = ["book-talent", "apply", "about", "contact", "booking-terms", "privacy-policy"];
+const STATIC_PAGES = ["book-talent", "apply", "about", "contact", "booking-terms", "application-terms", "privacy-policy"];
 
 /* /fr/about, /ar/contact, ...: the same static page with its own canonical,
    language and translated head. */

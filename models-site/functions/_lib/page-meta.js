@@ -55,6 +55,13 @@ export const PAGE_META = {
     cs: ["Rezervační podmínky | Photoczaro Models Dubaj", "Podmínky upravující poptávky a rezervace talentů přes Photoczaro Models, účinné od 29. září 2026."],
     ar: ["شروط الحجز | Photoczaro Models دبي", "الشروط التي تحكم طلبات الحجز والحجوزات عبر Photoczaro Models، سارية اعتبارًا من 29 سبتمبر 2026."],
   },
+  "application-terms": {
+    fr: ["Conditions de candidature | Photoczaro Models Dubaï", "Conditions applicables aux candidatures au registre de Photoczaro Models à Dubaï et aux Émirats. Postuler est gratuit ; l’acceptation et les réservations ne sont pas garanties."],
+    ru: ["Условия подачи заявки | Photoczaro Models Дубай", "Условия подачи заявки в ростер Photoczaro Models в Дубае и ОАЭ. Подача заявки бесплатна; принятие и бронирования не гарантируются."],
+    es: ["Condiciones de solicitud | Photoczaro Models Dubái", "Condiciones para solicitar entrar en el roster de Photoczaro Models en Dubái y los EAU. Solicitar es gratis; la aceptación y las reservas no están garantizadas."],
+    cs: ["Podmínky přihlášky | Photoczaro Models Dubaj", "Podmínky přihlášky do seznamu Photoczaro Models v Dubaji a SAE. Přihláška je zdarma; přijetí ani rezervace nejsou zaručeny."],
+    ar: ["شروط التقديم | Photoczaro Models دبي", "شروط التقديم إلى قائمة Photoczaro Models في دبي والإمارات. التقديم مجاني، والقبول والحجوزات غير مضمونة."],
+  },
   "privacy-policy": {
     fr: ["Politique de confidentialité | Photoczaro Models Dubaï", "Comment Photoczaro Models collecte, utilise, conserve et partage les données personnelles. En vigueur au 29 septembre 2026."],
     ru: ["Политика конфиденциальности | Photoczaro Models Дубай", "Как Photoczaro Models собирает, использует, хранит и передаёт персональные данные. Действует с 29 сентября 2026 года."],

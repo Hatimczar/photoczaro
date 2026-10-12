@@ -16,6 +16,7 @@
 /fr/about /about 200
 /fr/contact /contact 200
 /fr/booking-terms /booking-terms 200
+/fr/application-terms /application-terms 200
 /fr/privacy-policy /privacy-policy 200
 
 /ru/ / 200
@@ -27,6 +28,7 @@
 /ru/about /about 200
 /ru/contact /contact 200
 /ru/booking-terms /booking-terms 200
+/ru/application-terms /application-terms 200
 /ru/privacy-policy /privacy-policy 200
 
 /es/ / 200
@@ -38,6 +40,7 @@
 /es/about /about 200
 /es/contact /contact 200
 /es/booking-terms /booking-terms 200
+/es/application-terms /application-terms 200
 /es/privacy-policy /privacy-policy 200
 
 /cs/ / 200
@@ -49,6 +52,7 @@
 /cs/about /about 200
 /cs/contact /contact 200
 /cs/booking-terms /booking-terms 200
+/cs/application-terms /application-terms 200
 /cs/privacy-policy /privacy-policy 200
 
 /ar/ / 200
@@ -60,6 +64,7 @@
 /ar/about /about 200
 /ar/contact /contact 200
 /ar/booking-terms /booking-terms 200
+/ar/application-terms /application-terms 200
 /ar/privacy-policy /privacy-policy 200
 
 # Redirect .html to extensionless for canonical URLs (matches the main site's convention).
@@ -71,4 +76,5 @@
 /about.html /about 301
 /contact.html /contact 301
 /booking-terms.html /booking-terms 301
+/application-terms.html /application-terms 301
 /privacy-policy.html /privacy-policy 301

@@ -178,6 +178,21 @@
     const icon = (id) => `<svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#${id}"></use></svg>`;
     const stat = (id, key, fb, value) => `<div class="profile-stat"><dt>${icon(id)}<span data-i18n="${key}">${esc(t(key, fb))}</span></dt><dd>${value}</dd></div>`;
     const dash = (s) => (s ? esc(s) : "–");
+  /* Height is shown on its own; below it each body measurement is listed
+     separately: bust / waist / hips for women, chest / waist / neck / sleeve /
+     inseam for men. Older profiles with only the combined "81-61-88 cm" text
+     fall back to that. */
+  const MEASURE_FIELDS = { women: ["bust", "waist", "hips"], men: ["chest", "waist", "neck", "sleeve", "inseam"] };
+  const MEASURE_LABELS = { bust: "Bust", waist: "Waist", hips: "Hips", chest: "Chest", neck: "Neck", sleeve: "Sleeve", inseam: "Inseam" };
+  const measureStats = (model, cat) => {
+    const fields = MEASURE_FIELDS[cat] || MEASURE_FIELDS.women;
+    const unit = model.measurementUnit === "in" ? "in" : "cm";
+    const rows = fields.filter((f) => String(model[f] || "").trim()).map((f) =>
+      stat("i-ruler", "profile." + f, MEASURE_LABELS[f], esc(String(model[f]).trim()) + " " + unit));
+    if (rows.length) return rows.join("\n          ");
+    return stat("i-ruler", "profile.measurements", "Measurements", dash(model.measurements));
+  };
+
 
     const shots = [];
     if (model.images?.fullFront) shots.push({ src: model.images.fullFront, kind: "front" });
@@ -213,7 +228,7 @@
         <dl class="profile-stats">
           ${stat("i-pin", "profile.location", "Location", loc)}
           ${stat("i-ruler", "profile.height", "Height", dash(model.height))}
-          ${stat("i-ruler", "profile.measurements", "Measurements", dash(model.measurements))}
+          ${measureStats(model, cat)}
           ${stat("i-eye", "profile.hairEyes", "Hair / Eyes", `${dash(tidy(model.hair))} / ${dash(tidy(model.eyes))}`)}
           ${stat("i-globe", "profile.languages", "Languages", langs || "–")}
           ${stat("i-star", "profile.skills", "Skills", skills || "–")}

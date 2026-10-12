@@ -187,10 +187,22 @@
   const measureStats = (model, cat) => {
     const fields = MEASURE_FIELDS[cat] || MEASURE_FIELDS.women;
     const unit = model.measurementUnit === "in" ? "in" : "cm";
+    const sizeRow = (key, fb, size, system) => {
+      const v = String(size || "").trim();
+      if (!v) return "";
+      const text = system === "SML" ? v : system === "WAIST_IN" ? v + " in" : v + (system ? " " + system : "");
+      return stat("i-ruler", key, fb, esc(text));
+    };
+    const sizes = [
+      sizeRow("profile.shoe", "Shoe size", model.shoeSize, model.shoeSystem),
+      cat === "men" ? sizeRow("profile.clothing", "Clothing size", model.clothingSize, model.clothingSystem) : sizeRow("profile.dress", "Dress size", model.clothingSize, model.clothingSystem),
+      sizeRow("profile.trouser", "Trouser size", model.trouserSize, model.trouserSystem),
+    ].filter(Boolean);
     const rows = fields.filter((f) => String(model[f] || "").trim()).map((f) =>
       stat("i-ruler", "profile." + f, MEASURE_LABELS[f], esc(String(model[f]).trim()) + " " + unit));
-    if (rows.length) return rows.join("\n          ");
-    return stat("i-ruler", "profile.measurements", "Measurements", dash(model.measurements));
+    const all = rows.concat(sizes);
+    if (rows.length) return all.join("\n          ");
+    return [stat("i-ruler", "profile.measurements", "Measurements", dash(model.measurements))].concat(sizes).join("\n          ");
   };
 
 

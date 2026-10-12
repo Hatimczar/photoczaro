@@ -9,7 +9,8 @@ import Render from "../../../../js/render.js";
 const EDITABLE_FIELDS = [
   "name", "status", "categories", "subcategories", "newFace", "featured",
   "location", "height", "measurementUnit", "bust", "waist", "hips", "neck", "chest",
-  "sleeve", "inseam", "measurements", "hair", "eyes", "languages", "skills",
+  "sleeve", "inseam", "measurements",
+  "shoeSize", "shoeSystem", "clothingSize", "clothingSystem", "trouserSize", "trouserSystem", "hair", "eyes", "languages", "skills",
   "displayOrder", "swatch", "seoTitle", "seoDescription",
 ];
 
@@ -44,6 +45,10 @@ export async function onRequestPut({ request, env, params }) {
   for (const field of EDITABLE_FIELDS) {
     if (field in body) model[field] = body[field];
   }
+  // Sizes are short labels in a fixed set of sizing systems.
+  const SYSTEMS = { shoeSystem: ["EU", "UK", "US"], clothingSystem: ["EU", "UK", "US", "SML"], trouserSystem: ["EU", "UK", "US", "WAIST_IN"] };
+  for (const f of ["shoeSize", "clothingSize", "trouserSize"]) if (f in body) model[f] = String(body[f] || "").trim().slice(0, 12);
+  for (const [f, allowed] of Object.entries(SYSTEMS)) if (f in body) model[f] = allowed.includes(body[f]) ? body[f] : "";
   // One stored spelling per city ("Dubai, UAE"), whatever was typed, so the
   // roster's location filter and the profile pages always agree.
   if ("location" in body) model.location = Render.canonicalLocation(body.location);

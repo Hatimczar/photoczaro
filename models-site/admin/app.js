@@ -685,6 +685,9 @@
         <div class="admin-field"><label for="f-chest">Chest</label><input type="number" step="0.1" min="0" id="f-chest" value="${esc(model.chest)}"></div>
         <div class="admin-field"><label for="f-sleeve">Sleeve</label><input type="number" step="0.1" min="0" id="f-sleeve" value="${esc(model.sleeve)}"></div>
         <div class="admin-field"><label for="f-inseam">Inseam</label><input type="number" step="0.1" min="0" id="f-inseam" value="${esc(model.inseam)}"></div>
+        <div class="admin-field"><label for="f-shoe-size">Shoe size</label><div style="display:flex;gap:8px;"><input id="f-shoe-size" maxlength="12" value="${esc(model.shoeSize)}"><select id="f-shoe-system" aria-label="Shoe size system"><option value="">System</option><option value="EU"${model.shoeSystem === "EU" ? " selected" : ""}>EU</option><option value="UK"${model.shoeSystem === "UK" ? " selected" : ""}>UK</option><option value="US"${model.shoeSystem === "US" ? " selected" : ""}>US</option></select></div></div>
+        <div class="admin-field"><label for="f-clothing-size">Clothing / dress size</label><div style="display:flex;gap:8px;"><input id="f-clothing-size" maxlength="12" value="${esc(model.clothingSize)}"><select id="f-clothing-system" aria-label="Clothing / dress size system"><option value="">System</option><option value="EU"${model.clothingSystem === "EU" ? " selected" : ""}>EU</option><option value="UK"${model.clothingSystem === "UK" ? " selected" : ""}>UK</option><option value="US"${model.clothingSystem === "US" ? " selected" : ""}>US</option><option value="SML"${model.clothingSystem === "SML" ? " selected" : ""}>S–M–L</option></select></div></div>
+        <div class="admin-field"><label for="f-trouser-size">Trouser size</label><div style="display:flex;gap:8px;"><input id="f-trouser-size" maxlength="12" value="${esc(model.trouserSize)}"><select id="f-trouser-system" aria-label="Trouser size system"><option value="">System</option><option value="EU"${model.trouserSystem === "EU" ? " selected" : ""}>EU</option><option value="UK"${model.trouserSystem === "UK" ? " selected" : ""}>UK</option><option value="US"${model.trouserSystem === "US" ? " selected" : ""}>US</option><option value="WAIST_IN"${model.trouserSystem === "WAIST_IN" ? " selected" : ""}>Waist (in)</option></select></div></div>
         <div class="admin-field"><label for="f-hair">Hair colour</label><input id="f-hair" value="${esc(model.hair)}"></div>
         <div class="admin-field"><label for="f-eyes">Eye colour</label><input id="f-eyes" value="${esc(model.eyes)}"></div>
         <div class="admin-field full"><label for="f-languages">Languages (comma-separated)</label><input id="f-languages" value="${esc((model.languages || []).join(", "))}"></div>
@@ -865,6 +868,9 @@
       chest: document.getElementById("f-chest").value.trim(),
       sleeve: document.getElementById("f-sleeve").value.trim(),
       inseam: document.getElementById("f-inseam").value.trim(),
+      shoeSize: document.getElementById("f-shoe-size").value.trim(), shoeSystem: document.getElementById("f-shoe-system").value,
+      clothingSize: document.getElementById("f-clothing-size").value.trim(), clothingSystem: document.getElementById("f-clothing-system").value,
+      trouserSize: document.getElementById("f-trouser-size").value.trim(), trouserSystem: document.getElementById("f-trouser-system").value,
       hair: document.getElementById("f-hair").value.trim(),
       eyes: document.getElementById("f-eyes").value.trim(),
       languages: splitList(document.getElementById("f-languages").value),

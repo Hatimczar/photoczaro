@@ -82,9 +82,10 @@ async function buildModelPage({ request, env }, lang, slug) {
       .on('meta[property="og:image"]', {
         element(el) {
           el.setAttribute("content", image);
-          el.after(`<meta property="og:image:alt" content="${esc(model.name)}">`, { html: true });
         },
       })
+      // The template carries the generic alt text; a profile's own photo gets the model's name.
+      .on('meta[property="og:image:alt"]', setContent(model.name))
       // Real dimensions are unknown, and the template's 1200x630 would be wrong.
       .on('meta[property="og:image:width"]', { element(el) { el.remove(); } })
       .on('meta[property="og:image:height"]', { element(el) { el.remove(); } })

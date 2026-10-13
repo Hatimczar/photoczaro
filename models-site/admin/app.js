@@ -786,12 +786,50 @@
 
   const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
 
+  /* Re-encode to WebP in the browser at near-lossless quality (0.92, up to
+     4000px, never upscaled). Files that are already WebP are kept as they
+     are. If the browser can't decode or encode the file, fail with a message
+     instead of silently storing a different format. */
+  async function toWebp(file) {
+    const encode = (bitmap, maxDim, quality) => {
+      let { width, height } = bitmap;
+      if (width > maxDim || height > maxDim) {
+        const scale = maxDim / Math.max(width, height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(bitmap, 0, 0, width, height);
+      return new Promise((resolve) => canvas.toBlob(resolve, "image/webp", quality));
+    };
+    if (file.type === "image/webp") {
+      if (file.size > MAX_UPLOAD_BYTES) throw new Error("File exceeds the 8MB limit.");
+      return file;
+    }
+    let bitmap;
+    try {
+      try { bitmap = await createImageBitmap(file, { imageOrientation: "from-image" }); }
+      catch { bitmap = await createImageBitmap(file); }
+    } catch {
+      throw new Error("This browser can't read that image. Use a JPEG, PNG or WebP file.");
+    }
+    let blob = await encode(bitmap, 4000, 0.92);
+    for (const [dim, q] of [[3600, 0.88], [3000, 0.84], [2400, 0.8]]) {
+      if (!blob || blob.size <= MAX_UPLOAD_BYTES) break;
+      blob = await encode(bitmap, dim, q);
+    }
+    if (bitmap.close) bitmap.close();
+    if (!blob || blob.type !== "image/webp") throw new Error("This browser can't convert images to WebP. Try Chrome, Edge, Firefox or Safari 16+.");
+    if (blob.size > MAX_UPLOAD_BYTES) throw new Error("Image is still over 8MB after conversion.");
+    return new File([blob], file.name.replace(/\.[^.]+$/, "") + ".webp", { type: "image/webp" });
+  }
+
   async function uploadImage(slug, slot, file) {
     if (!file) return;
-    if (file.size > MAX_UPLOAD_BYTES) {
-      toast("File exceeds the 8MB limit.", true);
-      return;
-    }
 
     const box = slot === "gallery"
       ? document.querySelector(".admin-gallery-add")
@@ -801,6 +839,14 @@
     progressEl.textContent = "Uploading… 0%";
     box?.appendChild(progressEl);
 
+    try {
+      progressEl.textContent = "Converting to WebP…";
+      file = await toWebp(file);
+    } catch (err) {
+      toast(err.message, true);
+      progressEl.remove();
+      return;
+    }
     const fd = new FormData();
     fd.append("image", file);
     fd.append("slot", slot);

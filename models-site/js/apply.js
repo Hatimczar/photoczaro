@@ -23,8 +23,8 @@
 
   const MAX_BYTES = 8 * 1024 * 1024;
   const MAX_GALLERY_PHOTOS = 12;
-  const WEBP_MAX_DIMENSION = 2400;
-  const WEBP_QUALITY = 0.82;
+  const WEBP_MAX_DIMENSION = 4000; // below the server's 6000px sanity cap; photos are never upscaled
+  const WEBP_QUALITY = 0.92; // visually lossless for photographs
   const PHOTO_SLOTS = ["headshot", "fullFront", "fullSide", "facialProfile"];
   const FILE_FIELDS = PHOTO_SLOTS.concat(["portfolioFile"]);
   const CONFIRMS = ["ageConfirm", "residencyConfirm", "accuracyConfirm", "privacyConsent", "termsConsent"];
@@ -62,7 +62,9 @@
     const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-    canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(bitmap, 0, 0, width, height);
     return new Promise((resolve) => canvas.toBlob(resolve, "image/webp", quality));
   }
 
@@ -89,7 +91,11 @@
       throw heic ? "file_heic" : "file_decode";
     }
     let blob = await encodeWebp(bitmap, WEBP_MAX_DIMENSION, WEBP_QUALITY);
-    if (blob && blob.size > MAX_BYTES) blob = await encodeWebp(bitmap, 1800, 0.7);
+    // Only step quality down if the 8 MB cap forces it, and as little as possible.
+    for (const [dim, q] of [[3600, 0.88], [3000, 0.84], [2400, 0.8]]) {
+      if (!blob || blob.size <= MAX_BYTES) break;
+      blob = await encodeWebp(bitmap, dim, q);
+    }
     if (bitmap.close) bitmap.close();
     if (!blob || blob.type !== "image/webp") {
       if (heic) throw "file_heic";

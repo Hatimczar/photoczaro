@@ -683,7 +683,7 @@ html[dir="rtl"] .nav-shortlist-count { margin-right: 0; margin-left: 6px; }
 .model-card-shortlist { top: 14px; right: 14px; }
 #home-model-grid .model-card:first-child:nth-last-child(n+5) { grid-column: span 2; grid-row: span 2; }
 #home-model-grid .model-card:first-child:nth-last-child(n+5) .model-card-media { flex: 1; aspect-ratio: auto; min-height: 380px; }
-@media (max-width: 560px) { #home-model-grid .model-card:first-child:nth-last-child(n+5) { grid-column: span 1; grid-row: span 1; } }
+@media (max-width: 560px) { #home-model-grid .model-card:first-child:nth-last-child(n+5) { grid-column: span 1; grid-row: span 1; } #home-model-grid .model-card:first-child:nth-last-child(n+5) .model-card-media { flex: none; aspect-ratio: 3 / 4; min-height: 0; } }
 
 /* Filters */
 .filters-bar {

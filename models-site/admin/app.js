@@ -487,6 +487,7 @@
         <div class="admin-field"><label>Movement / runway / showreel</label><div>${safeLink(app.showreelUrl)}</div></div>
         ${app.portfolioUrl ? `<div class="admin-field"><label>Instagram or portfolio link (older combined field)</label><div>${safeLink(app.portfolioUrl)}</div></div>` : ""}
         <div class="admin-field"><label>Age / residency confirmed</label><div>${app.ageConfirm ? "Yes" : "No"} / ${app.residencyConfirm ? "Yes" : "No"}</div></div>
+        <div class="admin-field"><label>Marketing emails</label><div>${app.marketingConsent ? `Agreed ${esc(new Date(app.marketingConsentAt).toLocaleDateString())}` : "No (not opted in)"}</div></div>
         <div class="admin-field"><label>Terms</label><div>${termsText}</div></div>
       </div>
 

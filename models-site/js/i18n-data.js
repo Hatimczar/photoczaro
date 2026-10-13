@@ -392,6 +392,7 @@ en: {
   "profile.dress": "Dress size",
   "profile.clothing": "Clothing size",
   "profile.trouser": "Trouser size",
+  "apply.marketingConsent": "Send me occasional news and opportunities from Photoczaro Models by email. I can withdraw this at any time by emailing info@photoczaro.com.",
 },
 fr: {
   "a11y.home": "Accueil",
@@ -784,6 +785,7 @@ fr: {
   "profile.dress": "Taille de robe",
   "profile.clothing": "Taille de vêtement",
   "profile.trouser": "Taille de pantalon",
+  "apply.marketingConsent": "Envoyez-moi de temps à autre des nouvelles et des opportunités de Photoczaro Models par e-mail. Je peux retirer mon accord à tout moment en écrivant à info@photoczaro.com.",
 },
 ru: {
   "a11y.home": "Главная",
@@ -1176,6 +1178,7 @@ ru: {
   "profile.dress": "Размер платья",
   "profile.clothing": "Размер одежды",
   "profile.trouser": "Размер брюк",
+  "apply.marketingConsent": "Присылайте мне время от времени новости и предложения Photoczaro Models по эл. почте. Я могу отозвать согласие в любой момент, написав на info@photoczaro.com.",
 },
 es: {
   "a11y.home": "Inicio",
@@ -1568,6 +1571,7 @@ es: {
   "profile.dress": "Talla de vestido",
   "profile.clothing": "Talla de ropa",
   "profile.trouser": "Talla de pantalón",
+  "apply.marketingConsent": "Envíame de vez en cuando noticias y oportunidades de Photoczaro Models por correo electrónico. Puedo retirar mi consentimiento en cualquier momento escribiendo a info@photoczaro.com.",
 },
 cs: {
   "a11y.home": "Domů",
@@ -1960,6 +1964,7 @@ cs: {
   "profile.dress": "Velikost šatů",
   "profile.clothing": "Velikost oblečení",
   "profile.trouser": "Velikost kalhot",
+  "apply.marketingConsent": "Zasílejte mi občas e-mailem novinky a příležitosti od Photoczaro Models. Souhlas mohu kdykoli odvolat e-mailem na info@photoczaro.com.",
 },
 ar: {
   "a11y.home": "الرئيسية",
@@ -2352,5 +2357,6 @@ ar: {
   "profile.dress": "مقاس الفستان",
   "profile.clothing": "مقاس الملابس",
   "profile.trouser": "مقاس البنطال",
+  "apply.marketingConsent": "أرسلوا لي من حين لآخر أخبارًا وفرصًا من Photoczaro Models عبر البريد الإلكتروني. يمكنني سحب موافقتي في أي وقت بمراسلة info@photoczaro.com.",
 },
 };

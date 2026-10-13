@@ -86,6 +86,7 @@ export async function onRequestPost({ request, env }) {
 }
 
 async function store({ form, env, clean, warnings, flags, isNativeSubmit }) {
+  const marketing = form.get("marketingConsent") === "on";
   const applicationId = `${Date.now()}-${crypto.randomUUID()}`;
   // A rejected photo (wrong format, too large, corrupt) must never cost us
   // the applicant's contact details: skip that one file, note it as an
@@ -194,6 +195,9 @@ async function store({ form, env, clean, warnings, flags, isNativeSubmit }) {
     accuracyConfirm: true,
     privacyConsent: true,
     termsConsent: true,
+    // Optional and separate from the required confirmations; never pre-ticked.
+    marketingConsent: marketing,
+    marketingConsentAt: marketing ? now : null,
     termsVersion: Rules.TERMS_VERSION,
     termsAcceptedAt: now,
     privacyAcknowledgedAt: now,

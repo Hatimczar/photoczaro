@@ -373,6 +373,7 @@ button.cta-btn { font-family: inherit; border-width: 1px; }
   .cta-split-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
   /* Key form/filter labels read small at 10-11px on mobile; nudge up for comfort. */
   .form-field label { font-size: 13px; }
+  .form-field input, .form-field select, .form-field textarea { font-size: 16px; }
   .filter-reset, .filter-count { font-size: 12px; }
   .profile-tag, .profile-stat dt { font-size: 11px; }
 }
@@ -398,7 +399,7 @@ button.cta-btn { font-family: inherit; border-width: 1px; }
 }
 .model-card:hover .model-card-media .initials { transform: scale(1.16); }
 .model-card-media img, .profile-media img {
-  width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 0.9s var(--ease);
+  width: 100%; height: 100%; object-fit: cover; object-position: var(--card-pos, 50% 50%); transform: scale(1.02); transition: transform 0.9s var(--ease);
 }
 .model-card:hover .model-card-media img { transform: scale(1.08); }
 .model-card-badge {
@@ -462,11 +463,12 @@ button.cta-btn { font-family: inherit; border-width: 1px; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; }
 .form-field { display: flex; flex-direction: column; gap: 8px; }
 .form-field.full { grid-column: 1 / -1; }
-.form-field label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
+.form-field label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
 .form-field input, .form-field select, .form-field textarea {
   background: var(--dark-2); border: 1px solid rgba(255,255,255,0.1); color: var(--white);
   padding: 12px 14px; font-family: inherit; font-size: 0.92rem; border-radius: 4px;
 }
+.form-field input::placeholder, .form-field textarea::placeholder { color: rgba(245,240,235,0.55); opacity: 1; }
 .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--gold); }
 .form-field textarea { resize: vertical; min-height: 90px; }
 .form-checkbox { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; color: var(--grey); }

@@ -18,13 +18,17 @@
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     const id = a.getAttribute('href').slice(1);
     if (!id) return;
-    a.setAttribute('href', window.location.pathname + window.location.search + '#' + id);
+    const isSkip = a.classList.contains('skip-link');
+    // The skip link keeps its literal "#main" href: rewriting it to the
+    // page's URL at load went stale as soon as the filters changed the
+    // query string. It never navigates, reloads or edits the URL.
+    if (!isSkip) a.setAttribute('href', window.location.pathname + window.location.search + '#' + id);
     a.addEventListener('click', (e) => {
       const target = document.getElementById(id);
       if (!target) return;
       e.preventDefault();
       focusTarget(target);
-      history.replaceState(null, '', window.location.pathname + window.location.search + '#' + id);
+      if (!isSkip) history.replaceState(null, '', window.location.pathname + window.location.search + '#' + id);
     });
   });
 

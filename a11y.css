@@ -59,3 +59,29 @@ nav:not(.scrolled)::before {
 /* Images carry width/height so the browser reserves their space before they
    load; any class rule that sets a height still wins (zero specificity). */
 :where(img[width][height]) { height: auto; }
+
+/* ---- Mobile menu layout: list and footer are separate, in-flow regions ----
+   The footer used to be absolutely positioned at the bottom of the viewport,
+   so on shorter windows the last link and the CTA ran into it. Now the list
+   fills the space between a sticky top band (which keeps scrolled links away
+   from the close button) and the footer, and the whole panel scrolls when
+   the content is taller than the screen. */
+.mobile-menu-overlay.mobile-menu-overlay {
+  flex-direction: column; align-items: stretch; justify-content: flex-start;
+  height: 100vh; height: 100dvh;
+  padding: 0 0 calc(32px + env(safe-area-inset-bottom));
+  overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: 100px;
+}
+.mobile-menu-overlay.mobile-menu-overlay::before {
+  content: ""; position: sticky; top: 0; z-index: 1; flex: none;
+  height: calc(88px + env(safe-area-inset-top)); background: #080603;
+}
+.mobile-menu-overlay .mobile-menu-nav {
+  flex: 1 0 auto; display: flex; flex-direction: column; justify-content: center;
+  margin: 0; padding: 8px max(24px, env(safe-area-inset-right)) 16px max(24px, env(safe-area-inset-left));
+}
+.mobile-menu-overlay .mobile-menu-nav a { font-size: clamp(32px, min(8vw, 5.4vh), 56px); }
+.mobile-menu-overlay .mobile-menu-footer {
+  position: static; flex: none; margin-top: 8px;
+  padding: 24px max(24px, env(safe-area-inset-right)) 0 max(24px, env(safe-area-inset-left));
+}

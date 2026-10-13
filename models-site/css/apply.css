@@ -15,7 +15,7 @@
 .apply-gallery-add input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 .apply-gallery-item, .apply-gallery-add { border-radius: 14px; }
 .unit-toggle-field { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; padding: 14px 18px; background: var(--dark-2); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; }
-.unit-toggle-field > label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); margin: 0; }
+.unit-toggle-field > label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); margin: 0; }
 .unit-toggle { display: inline-flex; border: 1px solid rgba(255,255,255,0.15); border-radius: 999px; overflow: hidden; }
 .unit-toggle-btn { background: transparent; border: none; color: var(--grey); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; padding: 7px 20px; cursor: pointer; transition: background 0.25s var(--ease), color 0.25s var(--ease); }
 .unit-toggle-btn.active { background: var(--gold); color: var(--dark); }
@@ -48,9 +48,9 @@
 .form-warning { font-size: 0.78rem; color: var(--gold-light); line-height: 1.4; }
 .opt-tag { text-transform: none; letter-spacing: 0; font-size: 10.5px; color: #b3ada4; border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; padding: 1px 8px; margin-inline-start: 6px; white-space: nowrap; }
 .form-field input[aria-invalid="true"], .form-field select[aria-invalid="true"], .form-field textarea[aria-invalid="true"] { border-color: #e08a7d; }
-.field-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
+.field-label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
 
-.unit-toggle-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
+.unit-toggle-label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
 .unit-toggle-btn:focus-visible, .photo-btn:focus-visible, .apply-gallery-remove:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
 .unit-toggle-field .form-hint { flex-basis: 100%; }
 .form-grid-nested { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; }

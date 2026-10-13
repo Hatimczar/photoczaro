@@ -49,6 +49,11 @@ export async function onRequestPut({ request, env, params }) {
   const SYSTEMS = { shoeSystem: ["EU", "UK", "US"], clothingSystem: ["EU", "UK", "US", "SML"], trouserSystem: ["EU", "UK", "US", "WAIST_IN"] };
   for (const f of ["shoeSize", "clothingSize", "trouserSize"]) if (f in body) model[f] = String(body[f] || "").trim().slice(0, 12);
   for (const [f, allowed] of Object.entries(SYSTEMS)) if (f in body) model[f] = allowed.includes(body[f]) ? body[f] : "";
+  // Optional cover-crop focal point for roster cards, e.g. "66% 50%" (x y).
+  if ("cardFocus" in body) {
+    const v = String(body.cardFocus || "").trim();
+    model.cardFocus = /^(100|\d{1,2})% (100|\d{1,2})%$/.test(v) ? v : "";
+  }
   // One stored spelling per city ("Dubai, UAE"), whatever was typed, so the
   // roster's location filter and the profile pages always agree.
   if ("location" in body) model.location = Render.canonicalLocation(body.location);

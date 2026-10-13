@@ -697,6 +697,11 @@
 
       <div class="admin-section-title">SEO</div>
       <div class="admin-grid">
+        <div class="admin-field">
+          <label for="f-card-focus">Card crop focal point</label>
+          <input id="f-card-focus" value="${esc(model.cardFocus || "")}" placeholder="50% 50%" maxlength="9" pattern="\\d{1,3}% \\d{1,3}%" aria-describedby="f-card-focus-hint">
+          <div class="admin-char-counter" id="f-card-focus-hint">Optional. Horizontal and vertical position (0-100%) of the roster-card crop, e.g. 66% 50%. Leave blank for centred.</div>
+        </div>
         <div class="admin-field full">
           <label for="f-seo-title">SEO title <span class="admin-required" aria-hidden="true">*</span></label>
           <input id="f-seo-title" value="${esc(model.seoTitle)}" aria-required="true" maxlength="120">
@@ -922,6 +927,7 @@
       eyes: document.getElementById("f-eyes").value.trim(),
       languages: splitList(document.getElementById("f-languages").value),
       skills: splitList(document.getElementById("f-skills").value),
+      cardFocus: document.getElementById("f-card-focus").value.trim(),
       seoTitle: document.getElementById("f-seo-title").value.trim(),
       seoDescription: document.getElementById("f-seo-desc").value.trim(),
     };

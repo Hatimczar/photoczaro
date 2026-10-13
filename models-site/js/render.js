@@ -114,7 +114,7 @@
     const overlay = opts.simple ? "" : `<div class="model-card-overlay"><span class="model-card-name">${esc(m.name)}</span></div>`;
     return `
       <a href="${esc(path("/models/" + m.slug))}" class="model-card">
-        <div class="model-card-media" style="--card-a:${esc(m.swatch[0])};--card-b:${esc(m.swatch[1])}">
+        <div class="model-card-media" style="--card-a:${esc(m.swatch[0])};--card-b:${esc(m.swatch[1])}${/^\d{1,3}% \d{1,3}%$/.test(m.cardFocus || "") ? ";--card-pos:" + m.cardFocus : ""}">
           ${mediaHtml(m, t, null, opts.priority)}${badge}${heart}${overlay}
         </div>
         <div class="model-card-info">

@@ -36,6 +36,7 @@ export function toPublicModel(m) {
     languages: cleanList(m.languages),
     skills: cleanList(m.skills),
     displayOrder: m.displayOrder ?? 999,
+    cardFocus: /^\d{1,3}% \d{1,3}%$/.test(clean(m.cardFocus)) ? clean(m.cardFocus) : "",
     swatch: Array.isArray(m.swatch) && m.swatch.length >= 2 ? m.swatch : ["#2b2621", "#14120f"],
     images: {
       headshot: images.headshot || null,

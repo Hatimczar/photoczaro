@@ -110,3 +110,9 @@ fieldset.choice-group { border: 0; padding: 0; margin: 0; min-width: 0; }
 .apply-prep { margin: 0 0 28px; }
 .apply-prep-links { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 22px; }
 .apply-prep-links a { color: var(--gold-light); text-decoration: underline; font-size: 0.9rem; display: inline-flex; align-items: center; min-height: 44px; }
+
+/* Native file input (existing portfolio): match the photo buttons */
+#file-extra { color: var(--text-muted, inherit); font: inherit; font-size: 13px; }
+#file-extra::file-selector-button { margin-right: 12px; min-height: 36px; padding: 6px 16px; border-radius: 999px; border: 1px solid var(--gold); background: transparent; color: var(--gold-light); font: inherit; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; }
+#file-extra::file-selector-button:hover { background: rgba(201,169,110,0.12); }
+@media (pointer: coarse), (max-width: 768px) { #file-extra::file-selector-button { min-height: 44px; } }

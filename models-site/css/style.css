@@ -798,5 +798,7 @@ footer#site-footer { padding: 24px var(--bento-pad) 24px; border-top: none; }
 .consent-btn { flex: 1 1 120px; min-height: 44px; border-radius: 999px; font: inherit; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; border: 1px solid var(--gold); background: transparent; color: var(--gold-light); }
 .consent-accept { background: var(--gold); color: var(--dark); }
 .consent-btn:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
-.footer-link-btn { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-align: start; cursor: pointer; display: block; }
+.footer-link-btn { background: none; border: 0; padding: 6px 0; min-height: 28px; font: inherit; color: inherit; text-align: start; cursor: pointer; display: block; }
 .footer-link-btn:hover { color: var(--gold-light); }
+
+@media (pointer: coarse), (max-width: 768px) { .footer-link-btn { padding: 11px 0; min-height: 44px; } }

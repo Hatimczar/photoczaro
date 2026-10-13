@@ -166,6 +166,56 @@
     return `${n} ${t(n === 1 ? "filters.countSingular" : "filters.countPlural", n === 1 ? "model" : "models")}`;
   }
 
+  /* ---------- Profile copy (one source for title, description and intro) ---------- */
+  const slugOf = (v) => String(v == null ? "" : v).toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const fillTpl = (tpl, vars) => String(tpl).replace(/\{(\w+)\}/g, (m, k) => (vars[k] != null ? vars[k] : m));
+  const upFirst = (x) => x.charAt(0).toUpperCase() + x.slice(1);
+  /* Controlled vocabulary (hair, eyes, languages, skills): a translated word
+     where the dictionary has one, otherwise the stored text unchanged. */
+  function vocabHtml(kind, value, t) {
+    const key = "vocab." + kind + "." + slugOf(value);
+    return `<span data-i18n="${key}">${esc(t(key, value))}</span>`;
+  }
+  function unitHtml(unit, t) {
+    return `<span data-i18n="vocab.unit.${unit}">${esc(t("vocab.unit." + unit, unit))}</span>`;
+  }
+  /* "165 cm" -> number plus a translated unit; anything else is left alone. */
+  function lengthHtml(value, t) {
+    const m = /^(\d+(?:\.\d+)?)\s*(cm|in)$/i.exec(String(value || "").trim());
+    return m ? `${esc(m[1])} ${unitHtml(m[2].toLowerCase(), t)}` : esc(value);
+  }
+
+  /* Returns { title, description, intro } in the page's language. Built from
+     the profile's own facts and the locale dictionary; nothing is invented. */
+  function profileMeta(model, t, lang) {
+    t = t || identityT;
+    const gender = (model.categories || [])[0] === "men" ? "men" : "women";
+    const city = canonicalCity(model.location);
+    const cityName = city ? t(cityKey(city), city) : String(model.location || "").split(",")[0].trim() || "UAE";
+    const word = (kind, v, lower) => { const w = t("vocab." + kind + "." + slugOf(v), tidy(v)); return lower ? w.toLowerCase() : w; };
+    const lc = lang && lang !== "en";
+    const sep = lang === "ar" ? "، " : ", ";
+    const base = { name: model.name, city: cityName };
+    const intro = fillTpl(t("meta.intro." + gender, gender === "men" ? "{name} is a male model based in {city}, UAE." : "{name} is a female model based in {city}, UAE."), base);
+    const title = fillTpl(t("meta.title." + gender, gender === "men" ? "{name}, male model in {city} | Photoczaro Models" : "{name}, female model in {city} | Photoczaro Models"), base);
+    const stats = [];
+    const hm = /^(\d+(?:\.\d+)?)\s*(cm|in)$/i.exec(String(model.height || "").trim());
+    if (hm) stats.push(fillTpl(t("meta.height", "{v}"), { v: hm[1] + " " + t("vocab.unit." + hm[2].toLowerCase(), hm[2].toLowerCase()) }));
+    else if (model.height) stats.push(fillTpl(t("meta.height", "{v}"), { v: String(model.height) }));
+    if (model.hair) stats.push(fillTpl(t("meta.hair", "{v} hair"), { v: word("hair", model.hair, true) }));
+    if (model.eyes) stats.push(fillTpl(t("meta.eyes", "{v} eyes"), { v: word("eye", model.eyes, true) }));
+    const statsText = stats.length ? upFirst(stats.join(sep)) + "." : "";
+    const langs = list(model.languages).map((v) => word("lang", v, lc));
+    const skills = list(model.skills).map((v) => word("skill", v, lc));
+    const langText = langs.length ? fillTpl(t("meta.languages", "Speaks {list}."), { list: langs.join(sep) }) : "";
+    const skillText = skills.length ? fillTpl(t("meta.skills", "Skills: {list}."), { list: skills.join(sep) }) : "";
+    const newText = model.newFace ? t("meta.newFace", "New face.") : "";
+    const cta = t("meta.cta", "Book through Photoczaro Models.");
+    let description = [intro, statsText, newText, langText, skillText, cta].filter(Boolean).join(" ");
+    if (description.length > 175) description = description.slice(0, 174).replace(/\s+\S*$/, "") + "…";
+    return { title, description, intro: [intro, statsText, langText, skillText].filter(Boolean).join(" ") };
+  }
+
   /* ---------- Profile ---------- */
   /* opts: { t, path, models } ; returns the markup for #profile-root */
   function profileHtml(model, opts) {
@@ -199,10 +249,10 @@
       sizeRow("profile.trouser", "Trouser size", model.trouserSize, model.trouserSystem),
     ].filter(Boolean);
     const rows = fields.filter((f) => String(model[f] || "").trim()).map((f) =>
-      stat("i-ruler", "profile." + f, MEASURE_LABELS[f], esc(String(model[f]).trim()) + " " + unit));
+      stat("i-ruler", "profile." + f, MEASURE_LABELS[f], esc(String(model[f]).trim()) + " " + unitHtml(unit, t)));
     const all = rows.concat(sizes);
     if (rows.length) return all.join("\n          ");
-    return [stat("i-ruler", "profile.measurements", "Measurements", dash(model.measurements))].concat(sizes).join("\n          ");
+    return [stat("i-ruler", "profile.measurements", "Measurements", model.measurements ? esc(model.measurements).replace(/\s*(cm|in)$/i, (m, u) => " " + unitHtml(u.toLowerCase(), t)) : "–")].concat(sizes).join("\n          ");
   };
 
 
@@ -223,8 +273,8 @@
 
     const mainLoc = cityLabel(model, t);
     const loc = canonicalCity(model.location) ? `${mainLoc}, <span data-i18n="country.uae">${esc(t("country.uae", "UAE"))}</span>` : esc(model.location);
-    const langs = list(model.languages).map(esc).join(", ");
-    const skills = list(model.skills).map(esc).join(", ");
+    const langs = list(model.languages).map((v) => vocabHtml("lang", v, t)).join(", ");
+    const skills = list(model.skills).map((v) => vocabHtml("skill", v, t)).join(", ");
 
     return `
     <div class="breadcrumbs"><a href="/" data-i18n="a11y.home">${esc(t("a11y.home", "Home"))}</a><span>/</span><a href="models" data-i18n="nav.allModels">${esc(t("nav.allModels", "All Models"))}</a><span>/</span><span>${esc(model.name)}</span></div>
@@ -236,12 +286,13 @@
       <div class="profile-info">
         <span class="eyebrow"><span data-i18n="category.${esc(cat)}">${esc(t("category." + cat, CATEGORY_FALLBACK[cat] || ""))}</span>${model.newFace ? ` · <span data-i18n="badge.newFace">${esc(t("badge.newFace", "New Face"))}</span>` : ""}</span>
         <h1>${esc(model.name)}</h1>
+        <p class="profile-intro">${esc(profileMeta(model, t, opts.lang).intro)}</p>
         <div class="profile-tags">${subs}</div>
         <dl class="profile-stats">
           ${stat("i-pin", "profile.location", "Location", loc)}
-          ${stat("i-ruler", "profile.height", "Height", dash(model.height))}
+          ${stat("i-ruler", "profile.height", "Height", model.height ? lengthHtml(model.height, t) : "–")}
           ${measureStats(model, cat)}
-          ${stat("i-eye", "profile.hairEyes", "Hair / Eyes", `${dash(tidy(model.hair))} / ${dash(tidy(model.eyes))}`)}
+          ${stat("i-eye", "profile.hairEyes", "Hair / Eyes", `${model.hair ? vocabHtml("hair", tidy(model.hair), t) : "–"} / ${model.eyes ? vocabHtml("eye", tidy(model.eyes), t) : "–"}`)}
           ${stat("i-globe", "profile.languages", "Languages", langs || "–")}
           ${stat("i-star", "profile.skills", "Skills", skills || "–")}
         </dl>
@@ -263,6 +314,6 @@
   return {
     UAE_CITIES, canonicalCity, canonicalLocation, cityKey, esc, tidy,
     mediaHtml, cardHtml, gridHtml, profileHtml,
-    filterModels, cityOptions, locationOptionsHtml, noMalesPublished, countHtml,
+    profileMeta, filterModels, cityOptions, locationOptionsHtml, noMalesPublished, countHtml,
   };
 });

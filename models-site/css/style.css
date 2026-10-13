@@ -802,3 +802,10 @@ footer#site-footer { padding: 24px var(--bento-pad) 24px; border-top: none; }
 .footer-link-btn:hover { color: var(--gold-light); }
 
 @media (pointer: coarse), (max-width: 768px) { .footer-link-btn { padding: 11px 0; min-height: 44px; } }
+
+.profile-intro { color: #cfcac2; font-size: 0.95rem; line-height: 1.7; margin: 0 0 18px; max-width: 60ch; }
+/* Translated profile text can contain long words: let the columns shrink. */
+.profile-hero > *, .profile-info { min-width: 0; }
+.profile-stat, .profile-stat dd, .profile-stat dt, .profile-intro { min-width: 0; overflow-wrap: anywhere; }
+.profile-actions { flex-wrap: wrap; }
+.profile-actions .cta-btn { max-width: 100%; white-space: normal; text-align: center; }

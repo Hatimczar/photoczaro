@@ -27,26 +27,39 @@ export function profileDescription(model) {
   return text;
 }
 
-export function profileJsonLd(model, url, image) {
+/* One Person identity per profile, shared by every language version; each
+   language gets its own ProfilePage, labels and description. */
+export function profileJsonLd(model, url, image, locale) {
+  const o = locale || {};
+  const origin = "https://models.photoczaro.com";
+  const personId = `${origin}/models/${model.slug}#person`;
   const person = {
     "@type": "Person",
+    "@id": personId,
     name: model.name,
     url,
     jobTitle: "Model",
-    description: profileDescription(model),
+    description: o.description || profileDescription(model),
   };
   if (image) person.image = image;
   if (model.height) person.height = model.height;
   if ((model.languages || []).length) person.knowsLanguage = model.languages;
+  const prefix = o.prefix || "";
   const graph = {
     "@context": "https://schema.org",
     "@graph": [
-      { "@type": "ProfilePage", "@id": url, url, name: model.seoTitle || `${model.name} | Photoczaro Models Dubai`, mainEntity: person },
+      {
+        "@type": "ProfilePage", "@id": `${url}#profilepage`, url, inLanguage: o.lang || "en",
+        name: o.title || model.seoTitle || `${model.name} | Photoczaro Models Dubai`,
+        mainEntity: { "@id": personId },
+        isPartOf: { "@id": `${origin}/#website` },
+      },
+      person,
       {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: "https://models.photoczaro.com/" },
-          { "@type": "ListItem", position: 2, name: "Models", item: "https://models.photoczaro.com/models" },
+          { "@type": "ListItem", position: 1, name: o.home || "Home", item: `${origin}${prefix}/` },
+          { "@type": "ListItem", position: 2, name: o.models || "Models", item: `${origin}${prefix}/models` },
           { "@type": "ListItem", position: 3, name: model.name, item: url },
         ],
       },

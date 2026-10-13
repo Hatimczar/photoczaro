@@ -94,6 +94,12 @@
     document.querySelectorAll("[data-blog-guide]").forEach((el) => {
       el.setAttribute("href", "https://photoczaro.com" + (lang === "en" ? "" : "/" + lang) + "/blog/book-models-dubai-uae-photoczaro-models-roster");
     });
+    /* Links into photoczaro.com: point at the translated page where one
+       exists (data-xsite-langs lists those languages), else keep English. */
+    document.querySelectorAll("[data-xsite]").forEach((el) => {
+      const langs = (el.getAttribute("data-xsite-langs") || "").split(/\s+/);
+      if (langs.includes(lang)) el.setAttribute("href", "https://photoczaro.com/" + lang + "/" + el.getAttribute("data-xsite"));
+    });
     renderSwitchers();
     window.dispatchEvent(new CustomEvent("photoczaro:i18n-applied", { detail: { lang } }));
   }

@@ -45,7 +45,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/css/style.css?v=41">
+<link rel="stylesheet" href="/css/style.css?v=44">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/inter-latin-L7W0Q5nw.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/cormorant-garamond-latin-tKky2F7g.woff2">
 </head>
@@ -144,11 +144,11 @@
   </div>
 </footer>
 
-<script defer src="/js/render.js?v=8"></script>
+<script defer src="/js/render.js?v=9"></script>
 <script defer src="/js/data.js?v=6"></script>
 <script defer src="/js/shortlist.js?v=6"></script>
-<script defer src="/js/i18n-data.js?v=15"></script>
-<script defer src="/js/i18n.js?v=5"></script>
+<script defer src="/js/i18n-data.js?v=17"></script>
+<script defer src="/js/i18n.js?v=6"></script>
 <script defer src="/js/consent.js?v=2"></script>
 <script defer src="/js/main.js?v=9"></script>
 <script defer src="/js/magnetic-cta.js?v=1"></script>
@@ -232,23 +232,28 @@
       return;
     }
 
-    const seoDesc = profileDesc(model);
-    document.title = model.seoTitle;
+    // English keeps the stored copy; other languages get the same
+    // facts-based copy the server builds (see functions/_lib/model-page.js).
+    const isEn = i18n.lang === "en";
+    const meta = window.PhotoczaroRender.profileMeta(model, tr, i18n.lang);
+    const seoTitle = isEn ? model.seoTitle : meta.title;
+    const seoDesc = isEn ? profileDesc(model) : meta.description;
+    document.title = seoTitle;
     document.getElementById("page-description").setAttribute("content", seoDesc);
     const canonicalUrl = `https://models.photoczaro.com${i18n.path("/models/" + model.slug)}`;
     document.getElementById("page-canonical").setAttribute("href", canonicalUrl);
-    document.getElementById("page-og-title").setAttribute("content", model.seoTitle);
+    document.getElementById("page-og-title").setAttribute("content", seoTitle);
     document.getElementById("page-og-description").setAttribute("content", seoDesc);
     document.getElementById("page-og-url").setAttribute("content", canonicalUrl);
-    document.getElementById("page-twitter-title").setAttribute("content", model.seoTitle);
+    document.getElementById("page-twitter-title").setAttribute("content", seoTitle);
     document.getElementById("page-twitter-description").setAttribute("content", seoDesc);
     ["en", "fr", "ru", "es", "cs", "ar", "x-default"].forEach((code) => {
       const prefix = code === "x-default" || code === "en" ? "" : "/" + code;
       document.getElementById("hreflang-" + code)?.setAttribute("href", `https://models.photoczaro.com${prefix}/models/${model.slug}`);
     });
 
-    root.innerHTML = window.PhotoczaroRender.profileHtml(model, { t: tr, path: i18n.path, models: window.PHOTOCZARO_MODELS });
-    enhance(canonicalUrl, model.seoTitle);
+    root.innerHTML = window.PhotoczaroRender.profileHtml(model, { t: tr, path: i18n.path, models: window.PHOTOCZARO_MODELS, lang: i18n.lang });
+    enhance(canonicalUrl, seoTitle);
   });
 })();
 });</script>

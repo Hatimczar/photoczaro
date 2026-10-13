@@ -24,6 +24,16 @@ async function loadDict(context) {
 /* HTMLRewriter hands attribute values back still HTML-escaped. */
 const unescapeAttr = (s) => s.replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
 
+/* A t(key, fallback) for building copy (titles, descriptions) in a language. */
+export async function getTranslator(context, lang) {
+  if (!lang || lang === "en") return (key, fallback) => fallback;
+  const dict = await loadDict(context);
+  return (key, fallback) => {
+    const v = dict[lang] && Object.prototype.hasOwnProperty.call(dict[lang], key) ? dict[lang][key] : dict.en[key];
+    return v == null ? fallback : v;
+  };
+}
+
 export async function translateResponse(context, res, lang) {
   if (!lang || lang === "en") return res;
   const dict = await loadDict(context);
@@ -54,6 +64,10 @@ export async function translateResponse(context, res, lang) {
         },
       },
     },
+    { selector: "[data-xsite]", handler: { element(el) {
+      const langs = (el.getAttribute("data-xsite-langs") || "").split(/\s+/);
+      if (langs.includes(lang)) el.setAttribute("href", `https://photoczaro.com/${lang}/${el.getAttribute("data-xsite")}`);
+    } } },
     { selector: "[data-blog-guide]", handler: { element(el) { el.setAttribute("href", `https://photoczaro.com/${lang}/blog/book-models-dubai-uae-photoczaro-models-roster`); } } },
   ];
   let rewriter = new HTMLRewriter();

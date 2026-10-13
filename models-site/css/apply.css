@@ -106,3 +106,7 @@ fieldset.choice-group { border: 0; padding: 0; margin: 0; min-width: 0; }
 
 .form-field .measure-slider { padding: 0; border: 0; background: transparent; border-radius: 0; height: 28px; margin: 2px 0 0; accent-color: var(--gold); cursor: pointer; }
 .form-field .measure-slider.unset { opacity: 0.45; }
+
+.apply-prep { margin: 0 0 28px; }
+.apply-prep-links { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 22px; }
+.apply-prep-links a { color: var(--gold-light); text-decoration: underline; font-size: 0.9rem; display: inline-flex; align-items: center; min-height: 44px; }

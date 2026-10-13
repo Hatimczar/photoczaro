@@ -11,7 +11,7 @@ import Render from "../../js/render.js";
 import { profileDescription, profileJsonLd } from "./profile-seo.js";
 import { toPublicModel, loadPublishedModels } from "./public-model.js";
 import { fetchTemplate, finish, edgeCached } from "./pages.js";
-import { translateResponse } from "./i18n-server.js";
+import { translateResponse, getTranslator } from "./i18n-server.js";
 
 const LANGS = ["fr", "ru", "es", "cs", "ar"];
 const ORIGIN = "https://models.photoczaro.com";
@@ -41,8 +41,15 @@ async function buildModelPage({ request, env }, lang, slug) {
   const model = toPublicModel(record);
   const prefix = lang && LANGS.includes(lang) ? `/${lang}` : "";
   const canonical = `${ORIGIN}${prefix}/models/${model.slug}`;
-  const title = model.seoTitle || `${model.name} | Photoczaro Models Dubai`;
-  const description = profileDescription(model);
+  // English keeps the editor-written title and description; every other
+  // language gets copy built from the profile's own facts in that language
+  // (right city, translated vocabulary), so titles, descriptions, social
+  // cards, structured data and the visible intro all come from one source.
+  const tx = await getTranslator({ request, env }, lang);
+  const isEn = !lang || !LANGS.includes(lang);
+  const meta = Render.profileMeta(model, (k, fb) => tx(k, fb), isEn ? "en" : lang);
+  const title = isEn ? (model.seoTitle || `${model.name} | Photoczaro Models Dubai`) : meta.title;
+  const description = isEn ? profileDescription(model) : meta.description;
   const image = model.images?.headshot ? `${ORIGIN}/media/${model.images.headshot}` : null;
 
   const setContent = (value) => ({ element(el) { el.setAttribute("content", value); } });
@@ -51,7 +58,7 @@ async function buildModelPage({ request, env }, lang, slug) {
   // The profile body itself is rendered here too, so crawlers and no-JS
   // visitors get the model's details, photographs and related profiles.
   const roster = await loadPublishedModels(env);
-  const body = Render.profileHtml(model, { path: (p) => `${prefix}${p}`, models: roster });
+  const body = Render.profileHtml(model, { path: (p) => `${prefix}${p}`, models: roster, t: (k, fb) => tx(k, fb), lang: isEn ? "en" : lang });
 
   let rewriter = new HTMLRewriter()
     .on("#profile-root", {
@@ -70,7 +77,7 @@ async function buildModelPage({ request, env }, lang, slug) {
     .on("#page-og-url", setContent(canonical))
     .on("#page-twitter-title", setContent(title))
     .on("#page-twitter-description", setContent(description))
-    .on("head", { element(el) { el.append(`<script type="application/ld+json">${profileJsonLd(model, canonical, image)}</script>`, { html: true }); } });
+    .on("head", { element(el) { el.append(`<script type="application/ld+json">${profileJsonLd(model, canonical, image, { lang: isEn ? "en" : lang, prefix, title, description, home: tx("a11y.home", "Home"), models: tx("nav.models", "Models") })}</script>`, { html: true }); } });
 
   for (const code of ["en", "fr", "ru", "es", "cs", "ar", "x-default"]) {
     const p = code === "x-default" || code === "en" ? "" : `/${code}`;

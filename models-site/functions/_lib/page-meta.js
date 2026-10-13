@@ -63,11 +63,11 @@ export const PAGE_META = {
     ar: ["شروط التقديم | Photoczaro Models دبي", "شروط التقديم إلى قائمة Photoczaro Models في دبي والإمارات. التقديم مجاني، والقبول والحجوزات غير مضمونة."],
   },
   "privacy-policy": {
-    fr: ["Politique de confidentialité | Photoczaro Models Dubaï", "Comment Photoczaro Models collecte, utilise, conserve et partage les données personnelles. En vigueur au 29 septembre 2026."],
-    ru: ["Политика конфиденциальности | Photoczaro Models Дубай", "Как Photoczaro Models собирает, использует, хранит и передаёт персональные данные. Действует с 29 сентября 2026 года."],
-    es: ["Política de privacidad | Photoczaro Models Dubái", "Cómo Photoczaro Models recoge, usa, conserva y comparte datos personales. Vigente desde el 29 de septiembre de 2026."],
-    cs: ["Zásady ochrany osobních údajů | Photoczaro Models Dubaj", "Jak Photoczaro Models shromažďuje, používá, uchovává a sdílí osobní údaje. Účinné od 29. září 2026."],
-    ar: ["سياسة الخصوصية | Photoczaro Models دبي", "كيف تجمع Photoczaro Models البيانات الشخصية وتستخدمها وتحفظها وتشاركها. سارية اعتبارًا من 29 سبتمبر 2026."],
+    fr: ["Politique de confidentialité | Photoczaro Models Dubaï", "Comment Photoczaro Models collecte, utilise, conserve et partage les données personnelles. En vigueur au 14 octobre 2026."],
+    ru: ["Политика конфиденциальности | Photoczaro Models Дубай", "Как Photoczaro Models собирает, использует, хранит и передаёт персональные данные. Действует с 14 октября 2026 года."],
+    es: ["Política de privacidad | Photoczaro Models Dubái", "Cómo Photoczaro Models recoge, usa, conserva y comparte datos personales. Vigente desde el 14 de octubre de 2026."],
+    cs: ["Zásady ochrany osobních údajů | Photoczaro Models Dubaj", "Jak Photoczaro Models shromažďuje, používá, uchovává a sdílí osobní údaje. Účinné od 14. října 2026."],
+    ar: ["سياسة الخصوصية | Photoczaro Models دبي", "كيف تجمع Photoczaro Models البيانات الشخصية وتستخدمها وتحفظها وتشاركها. سارية اعتبارًا من 14 أكتوبر 2026."],
   },
 };
 

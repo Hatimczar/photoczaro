@@ -1708,7 +1708,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
-<link rel="stylesheet" href="/a11y.css?v=2">
+<style id="a11y-css">:focus-visible{outline:2px solid #c9a96e;outline-offset:2px}:focus:not(:focus-visible){outline:none}.skip-link{position:absolute;top:-100px;left:16px;z-index:100000;background:#c9a96e;color:#0a0a0a;padding:12px 20px;border-radius:4px;font-size:13px;font-weight:500;text-decoration:none;transition:top 0.2s ease}.skip-link:focus{top:16px}.menu-close{position:fixed;z-index:101;width:44px;height:44px;padding:0;margin:0;background:transparent;border:0;border-radius:50%;cursor:pointer;display:none}.mobile-menu-overlay.open .menu-close{display:block}.menu-close:focus-visible{outline:2px solid #c9a96e;outline-offset:2px}.lightbox:not(.open){visibility:hidden}.lightbox.open{visibility:visible}:root{--grey:#a8a39b}nav .nav-links a,nav .nav-more-btn,nav .lang-switch-btn-nav{color:rgba(245,240,235,0.92);text-shadow:0 1px 4px rgba(0,0,0,0.75)}nav:not(.scrolled)::before{content:"";position:absolute;inset:0 0 -24px 0;z-index:-1;pointer-events:none;background:linear-gradient(to bottom,rgba(10,8,6,0.72),rgba(10,8,6,0))}@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;scroll-behavior:auto !important}}@media (prefers-reduced-motion:reduce),(hover:none){html,body,a,button,.cta-btn{cursor:auto !important}.cursor,.cursor-ring{display:none !important}}.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.lang-switch-menu a{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}</style>
 <script src="/js/a11y-menu.js?v=1" defer></script>
 </head>
 <body>
@@ -2327,10 +2327,11 @@
 <script>
 // Responsive image helper: builds a srcset from the @640w/@1200w tiers generated
 // alongside every source image, falling back to the original as the largest candidate.
-function srcsetFor(src) {
+function srcsetFor(src, small) {
   const base = src.replace(/\.webp$/, '');
   const enc = s => encodeURI(s).replace(/,/g, '%2C');
-  return `${enc(base + '@640w.webp')} 640w, ${enc(base + '@1200w.webp')} 1200w, ${enc(src)} 1800w`;
+  // `small`: grid covers also have a 320w tier, so a phone does not fetch the 640w file for a ~180px card.
+  return `${small ? enc(base + '@320w.webp') + ' 320w, ' : ''}${enc(base + '@640w.webp')} 640w, ${enc(base + '@1200w.webp')} 1200w, ${enc(src)} 1800w`;
 }
 
 // Custom cursor: Montoya-style
@@ -2810,7 +2811,7 @@ function buildPortraits() { portraits.forEach((p, i) => {
 
   const cover = document.createElement('div');
   cover.className = 'gallery-item';
-  cover.innerHTML = `<img src="${p.src}" srcset="${srcsetFor(p.src)}" sizes="(max-width: 640px) calc(50vw - 24px), (max-width: 1024px) calc(50vw - 32px), 30vw" alt="${p.alt || p.name}" loading="lazy" width="900" height="1200">
+  cover.innerHTML = `<img src="${p.src}" srcset="${srcsetFor(p.src, true)}" sizes="(max-width: 640px) calc(50vw - 24px), (max-width: 1024px) calc(50vw - 32px), 30vw" alt="${p.alt || p.name}" loading="lazy" width="900" height="1200">
     <div class="gallery-item-overlay">
       <span class="gallery-item-name">${p.name}</span>
     </div>`;
@@ -3049,7 +3050,7 @@ function buildMagazines() { magazines.forEach((m, i) => {
   // cover card
   const card = document.createElement('div');
   card.className = 'magazine-card';
-  card.innerHTML = `<img src="${m.src}" srcset="${srcsetFor(m.src)}" sizes="(max-width: 640px) calc(50vw - 24px), (max-width: 1024px) calc(50vw - 32px), 30vw" alt="Editorial feature in ${m.pub}, Dubai portrait and fashion photography by Photoczaro" loading="lazy" width="900" height="1200">
+  card.innerHTML = `<img src="${m.src}" srcset="${srcsetFor(m.src, true)}" sizes="(max-width: 640px) calc(50vw - 24px), (max-width: 1024px) calc(50vw - 32px), 30vw" alt="Editorial feature in ${m.pub}, Dubai portrait and fashion photography by Photoczaro" loading="lazy" width="900" height="1200">
     <div class="magazine-card-info">
       <p class="magazine-pub">${m.pub}</p>
       <p class="magazine-title">${m.name}</p>
@@ -3163,7 +3164,7 @@ function buildProjects() { projectsData.forEach((proj, i) => {
   const cover = document.createElement('div');
   cover.className = 'project-cover';
   cover.innerHTML = `
-    <img src="${proj.cover}" alt="${proj.alt || proj.name}" loading="lazy" width="900" height="1200">
+    <img src="${proj.cover}" srcset="${srcsetFor(proj.cover, true)}" sizes="(max-width: 640px) 90vw, 45vw" alt="${proj.alt || proj.name}" loading="lazy" width="900" height="1200">
     <div class="project-cover-overlay">
       <span class="project-eyebrow">${proj.eyebrow}</span>
       <h3 class="project-name">${proj.name}</h3>

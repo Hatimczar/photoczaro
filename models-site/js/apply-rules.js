@@ -16,7 +16,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  const TERMS_VERSION = "application-terms-1.1";
+  const TERMS_VERSION = "application-terms-1.2";
 
   const CATEGORIES = ["women", "men"];
   const MEASURE_FIELDS = {

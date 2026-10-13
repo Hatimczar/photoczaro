@@ -705,6 +705,9 @@
     transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
   }
   .reveal.visible { opacity: 1; transform: translateY(0); }
+  /* Headings sit in a clipping box as tall as themselves; a fixed 40px offset hid them fully so the observer never fired on phones. */
+  .section-header .reveal { transform: translateY(40%); }
+  .section-header .reveal.visible { transform: translateY(0); }
   .reveal-delay-1 { transition-delay: 0.1s; }
   .reveal-delay-2 { transition-delay: 0.2s; }
   .reveal-delay-3 { transition-delay: 0.3s; }

@@ -55,3 +55,7 @@ nav:not(.scrolled)::before {
 /* The language list contains "Čeština"; in the site font that character
    pulls in the whole Latin-Extended font file (85 KB) on every page. */
 .lang-switch-menu a { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+
+/* Images carry width/height so the browser reserves their space before they
+   load; any class rule that sets a height still wins (zero specificity). */
+:where(img[width][height]) { height: auto; }

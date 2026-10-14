@@ -341,6 +341,7 @@
   /* ---------- Applications ---------- */
   async function loadApplications() {
     state.applications = await api("/api/admin/applications");
+    try { state.failures = await api("/api/admin/applications/failures"); } catch { state.failures = { entries: [], suppressedToday: 0 }; }
     renderApplicationsList();
     const pending = state.applications.filter((a) => a.status === "pending_review").length;
     document.getElementById("tab-count-applications").textContent = pending ? `(${pending})` : "";
@@ -348,20 +349,58 @@
 
   function renderApplicationsList() {
     const list = document.getElementById("applications-list");
+    const failCount = (state.failures && state.failures.entries.length) || 0;
+    const failRow = `<button type="button" class="admin-row admin-row-failures ${state.showFailures ? "selected" : ""}" id="open-failures">
+        <div class="admin-row-title">Failed attempts</div>
+        <div class="admin-row-meta">Last 90 days · no applicant details stored</div>
+        <span class="admin-badge ${failCount ? "rejected" : "approved"}">${failCount ? failCount + " logged" : "none"}</span>
+      </button>`;
     if (state.applications.length === 0) {
-      list.innerHTML = `<div class="admin-empty">No applications yet.</div>`;
+      list.innerHTML = failRow + `<div class="admin-empty">No applications yet.</div>`;
+      list.querySelector("#open-failures").addEventListener("click", showFailures);
       return;
     }
-    list.innerHTML = state.applications.map((a) => `
+    list.innerHTML = failRow + state.applications.map((a) => `
       <button type="button" class="admin-row ${a.id === state.selectedAppId ? "selected" : ""}" data-id="${esc(a.id)}">
         <div class="admin-row-title">${esc(a.professionalName)}</div>
         <div class="admin-row-meta">${esc(a.category)} · ${esc(a.uaeCity || "n/a")} · ${new Date(a.receivedAt).toLocaleDateString()}${(a.flags || []).includes("birth_year_under_18") ? " · ⚠ age check" : ""}</div>
         <span class="admin-badge ${a.status === "pending_review" ? "pending" : a.status}">${a.status.replace("_", " ")}</span>
       </button>
     `).join("");
-    list.querySelectorAll(".admin-row").forEach((row) => {
-      row.addEventListener("click", () => selectApplication(row.dataset.id));
+    list.querySelector("#open-failures").addEventListener("click", showFailures);
+    list.querySelectorAll(".admin-row[data-id]").forEach((row) => {
+      row.addEventListener("click", () => { state.showFailures = false; selectApplication(row.dataset.id); });
     });
+  }
+
+  const FAILURE_LABELS = {
+    unreadable_request: "Request could not be read",
+    validation: "Form rejected (missing or invalid details)",
+    server_error: "Server error while saving",
+    photos_rejected: "Saved, but photos were left out",
+  };
+
+  function showFailures() {
+    state.showFailures = true;
+    state.selectedAppId = null;
+    renderApplicationsList();
+    const f = state.failures || { entries: [], suppressedToday: 0 };
+    const detail = document.getElementById("applications-detail");
+    const rows = f.entries.map((e) => {
+      const fields = e.fields ? Object.entries(e.fields).map(([k, v]) => `${esc(k)} <em>(${esc(v)})</em>`).join(", ") : "";
+      const rejected = e.rejected ? Object.entries(e.rejected).map(([k, v]) => `${esc(k)}: ${esc(Array.isArray(v) ? v.join("; ") : v)}`).join("<br>") : "";
+      const files = (e.files || []).map((x) => `${esc(x.field)} ${esc(x.type || "?")} ${(x.bytes / 1048576).toFixed(1)} MB`).join(", ");
+      return `<tr>
+        <td>${new Date(e.at).toLocaleString()}</td>
+        <td>${esc(FAILURE_LABELS[e.kind] || e.kind)}</td>
+        <td>${fields}${rejected}${e.error ? esc(e.error) : ""}${files ? `<div class="admin-failure-files">${files}</div>` : ""}</td>
+        <td>${esc(e.country || "")} ${esc((e.userAgent || "").slice(0, 60))}</td>
+      </tr>`;
+    }).join("");
+    detail.innerHTML = `
+      <h2>Failed application attempts</h2>
+      <p class="admin-note">Attempts that did not produce a complete application, kept for 90 days. Only field names, reason codes, file sizes and types are stored: never names, emails, phone numbers or photos.${f.suppressedToday ? ` ${f.suppressedToday} more were not logged today (daily cap reached).` : ""}</p>
+      ${f.entries.length ? `<div class="admin-failure-wrap"><table class="admin-failure-table"><thead><tr><th>When</th><th>What happened</th><th>Details</th><th>Origin</th></tr></thead><tbody>${rows}</tbody></table></div>` : `<div class="admin-empty">No failed attempts recorded.</div>`}`;
   }
 
   function reviewGalleryImages(app) {

@@ -14,6 +14,7 @@ import { json, htmlResponse } from "../_lib/http.js";
 import { validateImageUpload, validatePortfolioUpload } from "../_lib/image-validate.js";
 import Render from "../../js/render.js";
 import Rules from "../../js/apply-rules.js";
+import { logApplyFailure, codesOnly, describeFiles } from "../_lib/apply-log.js";
 
 const MAX_GALLERY_PHOTOS = 12;
 const EXT_FOR_TYPE = {
@@ -25,13 +26,15 @@ const EXT_FOR_TYPE = {
 };
 const isFile = (f) => f && typeof f === "object" && "size" in f && f.size > 0;
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost({ request, env, waitUntil }) {
+  const log = (kind, details) => { const p = logApplyFailure(env, request, kind, details); if (waitUntil) waitUntil(p); return p; };
   const isNativeSubmit = request.headers.get("x-requested-with") !== "fetch";
 
   let form;
   try {
     form = await request.formData();
-  } catch {
+  } catch (err) {
+    await log("unreadable_request", { error: err && err.message });
     return respondError(isNativeSubmit, "Invalid request.", 400);
   }
 
@@ -57,6 +60,7 @@ export async function onRequestPost({ request, env }) {
     },
   });
   if (Object.keys(errors).length) {
+    await log("validation", { fields: codesOnly(errors), files: describeFiles(form) });
     if (isNativeSubmit) return htmlResponse("Please check your application", "Some required details are missing or invalid. Please go back, review the form and try again.", "apply", 400);
     return json({ error: "validation", fields: errors }, 400);
   }
@@ -77,15 +81,16 @@ export async function onRequestPost({ request, env }) {
   }
 
   try {
-    return await store({ form, env, clean, warnings, flags, isNativeSubmit });
+    return await store({ form, env, clean, warnings, flags, isNativeSubmit, log });
   } catch (err) {
     console.error("apply failed", err && err.message);
+    await log("server_error", { error: err && err.message, files: describeFiles(form) });
     if (env.APPLICATIONS_KV) await env.APPLICATIONS_KV.delete(dedupeKey).catch(() => {});
     return respondError(isNativeSubmit, "Something went wrong saving your application. Please try again.", 500);
   }
 }
 
-async function store({ form, env, clean, warnings, flags, isNativeSubmit }) {
+async function store({ form, env, clean, warnings, flags, isNativeSubmit, log }) {
   const marketing = form.get("marketingConsent") === "on";
   const applicationId = `${Date.now()}-${crypto.randomUUID()}`;
   // A rejected photo (wrong format, too large, corrupt) must never cost us
@@ -215,6 +220,8 @@ async function store({ form, env, clean, warnings, flags, isNativeSubmit }) {
   }
 
   const hasFileErrors = Object.keys(fileErrors).length > 0;
+  // The application itself is saved; this just records that photos were left out.
+  if (hasFileErrors) await log("photos_rejected", { rejected: fileErrors, files: describeFiles(form) });
   if (isNativeSubmit) {
     const message = hasFileErrors
       ? "Thank you. Your application has been received, but one or more photos could not be used (unsupported format or file size) and were not attached. We'll follow up by email if we need you to resend them."

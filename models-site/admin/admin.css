@@ -308,3 +308,11 @@ body { background: var(--dark); }
 
 /* Icons (Unicons line set via /images/icons-v1.svg) */
 .icon { width: 1.15em; height: 1.15em; fill: currentColor; flex-shrink: 0; vertical-align: -0.2em; margin-right: 4px; }
+
+/* Failed-attempts log */
+.admin-failure-wrap { overflow-x: auto; margin-top: 16px; }
+.admin-failure-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.admin-failure-table th { text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); font-weight: 500; padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.admin-failure-table td { vertical-align: top; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); line-height: 1.5; }
+.admin-failure-files { color: var(--grey); font-size: 12px; margin-top: 4px; }
+.admin-row-failures { border-bottom: 1px solid rgba(201,169,110,0.25); }

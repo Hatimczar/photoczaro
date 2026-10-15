@@ -211,9 +211,25 @@
     const skillText = skills.length ? fillTpl(t("meta.skills", "Skills: {list}."), { list: skills.join(sep) }) : "";
     const newText = model.newFace ? t("meta.newFace", "New face.") : "";
     const cta = t("meta.cta", "Book through Photoczaro Models.");
-    let description = [intro, statsText, newText, langText, skillText, cta].filter(Boolean).join(" ");
-    if (description.length > 175) description = description.slice(0, 174).replace(/\s+\S*$/, "") + "…";
-    return { title, description, intro: [intro, statsText, langText, skillText].filter(Boolean).join(" ") };
+    /* Keep the description inside the ~160 characters search results show,
+       by dropping whole optional sentences (skills, then languages, then the
+       "new face" note) rather than cutting one off mid-sentence. */
+    const DESC_MAX = 160;
+    const compose = (parts) => parts.filter(Boolean).join(" ");
+    const attempts = [
+      [intro, statsText, newText, langText, skillText, cta],
+      [intro, statsText, newText, langText, cta],
+      [intro, statsText, newText, cta],
+      [intro, statsText, cta],
+      [intro, cta],
+    ];
+    let description = "";
+    for (const parts of attempts) {
+      description = compose(parts);
+      if (description.length <= DESC_MAX) break;
+    }
+    if (description.length > DESC_MAX) description = description.slice(0, DESC_MAX - 1).replace(/[\s,;:·.-]+\S*$/, "") + ".";
+    return { title: title.length > 60 ? title.replace(/\s*\|\s*Photoczaro Models$/, "") : title, description, intro: [intro, statsText, langText, skillText].filter(Boolean).join(" ") };
   }
 
   /* ---------- Profile ---------- */

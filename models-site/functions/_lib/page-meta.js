@@ -7,16 +7,16 @@
  */
 export const PAGE_META = {
   home: {
-    fr: ["Photoczaro Models | Réservation de mannequins aux EAU", "Réservez des mannequins basés aux Émirats pour vos productions éditoriales, mode, beauté et commerciales. Un registre sélectionné et non exclusif, à Dubaï et dans tout le pays."],
+    fr: ["Photoczaro Models | Réservation de mannequins aux EAU", "Réservez des mannequins basés aux Émirats pour vos productions éditoriales, mode, beauté et commerciales. Un registre sélectionné et non exclusif."],
     ru: ["Photoczaro Models | Бронирование моделей в ОАЭ", "Бронируйте моделей из ОАЭ для редакционных, модных, бьюти и коммерческих съёмок. Отобранный реестр без эксклюзивности в Дубае и по всей стране."],
-    es: ["Photoczaro Models | Reserva de modelos en los EAU", "Reserva modelos residentes en los EAU para producciones editoriales, de moda, belleza y comerciales. Un roster seleccionado y no exclusivo en Dubái y todo el país."],
+    es: ["Photoczaro Models | Reserva de modelos en los EAU", "Reserva modelos residentes en los EAU para producciones editoriales, de moda, belleza y comerciales. Un roster seleccionado y no exclusivo."],
     cs: ["Photoczaro Models | Rezervace modelů v SAE", "Rezervujte modely působící v SAE pro editoriální, módní, beauty i komerční produkce. Vybraný nevýhradní seznam v Dubaji i po celé zemi."],
     ar: ["Photoczaro Models | حجز عارضين في الإمارات", "احجز عارضين مقيمين في الإمارات لإنتاجات التحرير والأزياء والجمال والإعلانات. قائمة منتقاة وغير حصرية في دبي وكل أنحاء الدولة."],
   },
   models: {
-    fr: ["Mannequins aux EAU pour projets éditoriaux et commerciaux | Photoczaro", "Parcourez le registre Photoczaro de mannequins basés aux EAU. Filtrez par catégorie, lieu, taille et compétences, puis constituez une présélection."],
-    ru: ["Модели в ОАЭ для редакционных и коммерческих съёмок | Photoczaro", "Изучите реестр Photoczaro: модели из ОАЭ. Фильтруйте по категории, городу, росту и навыкам и соберите подборку для бронирования."],
-    es: ["Modelos en los EAU para encargos editoriales y comerciales | Photoczaro", "Explora el roster de Photoczaro con modelos en los EAU. Filtra por categoría, ubicación, altura y habilidades y crea tu preselección."],
+    fr: ["Mannequins aux EAU pour projets éditoriaux et commerciaux", "Parcourez le registre Photoczaro de mannequins basés aux EAU. Filtrez par catégorie, lieu, taille et compétences, puis constituez une présélection."],
+    ru: ["Модели в ОАЭ для редакционных и коммерческих съёмок", "Изучите реестр Photoczaro: модели из ОАЭ. Фильтруйте по категории, городу, росту и навыкам и соберите подборку для бронирования."],
+    es: ["Modelos en los EAU para encargos editoriales y comerciales", "Explora el roster de Photoczaro con modelos en los EAU. Filtra por categoría, ubicación, altura y habilidades y crea tu preselección."],
     cs: ["Modely v SAE pro editoriální a komerční zakázky | Photoczaro", "Projděte seznam modelů Photoczaro působících v SAE. Filtrujte podle kategorie, lokality, výšky a dovedností a sestavte si výběr."],
     ar: ["عارضون في الإمارات للتحرير والإعلانات | Photoczaro", "تصفّح قائمة Photoczaro للعارضين في الإمارات. صفِّ حسب الفئة والموقع والطول والمهارات ثم كوّن قائمتك المختصرة للحجز."],
   },
@@ -56,7 +56,7 @@ export const PAGE_META = {
     ar: ["شروط الحجز | Photoczaro Models دبي", "الشروط التي تحكم طلبات الحجز والحجوزات عبر Photoczaro Models، سارية اعتبارًا من 29 سبتمبر 2026."],
   },
   "application-terms": {
-    fr: ["Conditions de candidature | Photoczaro Models Dubaï", "Conditions applicables aux candidatures au registre de Photoczaro Models à Dubaï et aux Émirats. Postuler est gratuit ; l’acceptation et les réservations ne sont pas garanties."],
+    fr: ["Conditions de candidature | Photoczaro Models Dubaï", "Conditions applicables aux candidatures au registre de Photoczaro Models. Postuler est gratuit ; l’acceptation et les réservations ne sont pas garanties."],
     ru: ["Условия подачи заявки | Photoczaro Models Дубай", "Условия подачи заявки в ростер Photoczaro Models в Дубае и ОАЭ. Подача заявки бесплатна; принятие и бронирования не гарантируются."],
     es: ["Condiciones de solicitud | Photoczaro Models Dubái", "Condiciones para solicitar entrar en el roster de Photoczaro Models en Dubái y los EAU. Solicitar es gratis; la aceptación y las reservas no están garantizadas."],
     cs: ["Podmínky přihlášky | Photoczaro Models Dubaj", "Podmínky přihlášky do seznamu Photoczaro Models v Dubaji a SAE. Přihláška je zdarma; přijetí ani rezervace nejsou zaručeny."],

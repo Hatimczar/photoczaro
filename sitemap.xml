@@ -442,7 +442,7 @@
     <loc>https://photoczaro.com/blog/model-comp-card-dubai</loc>
     <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/blog/model-comp-card-dubai"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/model-comp-card-dubai"/>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -452,7 +452,7 @@
     <loc>https://photoczaro.com/blog/model-test-shoot-tfp-dubai</loc>
     <xhtml:link rel="alternate" hreflang="en"       href="https://photoczaro.com/blog/model-test-shoot-tfp-dubai"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/model-test-shoot-tfp-dubai"/>
-    <lastmod>2026-08-14</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -847,6 +847,14 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Why model photos get ignored blog post (English only, no translations yet) -->
+  <url>
+    <loc>https://photoczaro.com/blog/why-model-photos-get-ignored-dubai</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Model digitals vs portfolio blog post (English only, no translations yet) -->
   <url>
     <loc>https://photoczaro.com/blog/model-digitals-vs-model-portfolio-dubai</loc>
@@ -856,7 +864,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://photoczaro.com/es/blog/model-digitals-vs-model-portfolio-dubai"/>
     <xhtml:link rel="alternate" hreflang="cs" href="https://photoczaro.com/cs/blog/model-digitals-vs-model-portfolio-dubai"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/model-digitals-vs-model-portfolio-dubai"/>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -918,7 +926,7 @@
     <xhtml:link rel="alternate" hreflang="es"       href="https://photoczaro.com/es/blog/modeling-portfolio-dubai-guide"/>
     <xhtml:link rel="alternate" hreflang="cs"       href="https://photoczaro.com/cs/blog/modeling-portfolio-dubai-guide"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/modeling-portfolio-dubai-guide"/>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1421,7 +1429,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://photoczaro.com/es/blog/start-modeling-dubai-no-experience"/>
     <xhtml:link rel="alternate" hreflang="cs" href="https://photoczaro.com/cs/blog/start-modeling-dubai-no-experience"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/start-modeling-dubai-no-experience"/>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1607,7 +1615,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://photoczaro.com/es/blog/best-modeling-agencies-dubai"/>
     <xhtml:link rel="alternate" hreflang="cs" href="https://photoczaro.com/cs/blog/best-modeling-agencies-dubai"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/blog/best-modeling-agencies-dubai"/>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

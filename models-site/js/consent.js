@@ -19,6 +19,17 @@
   };
   const t = (k) => { const v = i18n && i18n.t ? i18n.t(k) : null; return v == null ? FALLBACK[k] : v; };
 
+  /* Privacy-safe event helper for the rest of the site. It sends nothing
+     unless the visitor has accepted analytics (gtag does not exist before
+     that, and decline switches measurement off). Only pass counts and short
+     codes: never names, emails, phone numbers, form text or file names. */
+  window.pczTrack = function (name, params) {
+    try {
+      if (!window.__pczGaLoaded || window["ga-disable-" + GA_ID] === true || typeof window.gtag !== "function") return;
+      window.gtag("event", name, params || {});
+    } catch (e) { /* analytics must never break a form */ }
+  };
+
   let memory = null;
   function read() { try { return localStorage.getItem(KEY); } catch (e) { return memory; } }
   function write(v) { memory = v; try { localStorage.setItem(KEY, v); } catch (e) { /* storage blocked: the choice lasts for this page view */ } }

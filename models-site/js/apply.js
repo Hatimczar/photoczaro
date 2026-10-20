@@ -618,8 +618,11 @@
     });
     galleryFiles.forEach((file) => fd.append("gallery", file, file.name));
 
+    const track = (name, params) => { if (window.pczTrack) window.pczTrack(name, params); };
+    track("application_attempt", { photos: PHOTO_SLOTS.filter((n) => photoFiles[n]).length + galleryFiles.length });
     const res = await send(fd);
     if (res.status === 200 && res.body && res.body.ok) {
+      track("application_success", { photos_left_out: res.body.fileErrors ? 1 : 0 });
       status.className = "form-status success";
       status.textContent = res.body.fileErrors ? t("apply.thankYouPartial") : t("apply.thankYou");
       resetForm();
@@ -627,11 +630,13 @@
       return;
     }
     if (res.status === 400 && res.body && res.body.error === "validation" && res.body.fields) {
+      track("application_error", { reason: "server_validation" });
       showErrors(res.body.fields, true);
       status.className = "form-status error";
       status.textContent = t("apply.err.server_validation");
       return;
     }
+    track("application_error", { reason: res.status === 0 ? "network" : "http_" + res.status });
     status.className = "form-status error";
     status.textContent = t("apply.sendError");
   }

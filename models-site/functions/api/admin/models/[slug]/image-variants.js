@@ -1,4 +1,5 @@
 /*
+ * (Names do not repeat the hash when the source key already ends with it.)
  * Stores the responsive (resized WebP) versions of one of a model's photos.
  * The admin page makes them in the browser (it already has the decoded
  * image) and posts them here. Names follow js/render.js variantKey():
@@ -54,7 +55,7 @@ export async function onRequestPost({ request, env, params }) {
     const validation = await validateImageUpload(file);
     if (!validation.ok) return json({ error: validation.error }, 400);
     if (validation.contentType !== "image/webp") return json({ error: "Versions must be WebP." }, 400);
-    await env.MEDIA.put(`${base}.${v}-${w}.webp`, await file.arrayBuffer(), { httpMetadata: { contentType: "image/webp" } });
+    await env.MEDIA.put(`${base.endsWith("." + v) ? base : base + "." + v}-${w}.webp`, await file.arrayBuffer(), { httpMetadata: { contentType: "image/webp" } });
     widths.push(w);
   }
   widths.sort((a, b) => a - b);

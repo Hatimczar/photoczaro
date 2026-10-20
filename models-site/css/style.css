@@ -241,6 +241,13 @@ nav#site-nav.scrolled {
 .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+/* Six links (incl. Apply) need a little less space each between the hamburger
+   breakpoint and ~1500px (the longest translation, Russian, needs it at 1440);
+   wider screens keep the original spacing. */
+@media (min-width: 901px) and (max-width: 1499px) {
+  .nav-links { gap: 18px; padding: 10px 20px; }
+  .nav-links a { letter-spacing: 0.12em; }
+}
 @media (max-width: 900px) {
   .nav-links { display: none; }
   .nav-hamburger { display: flex; }

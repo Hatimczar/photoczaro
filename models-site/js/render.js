@@ -88,7 +88,11 @@
      (source width/height after rotation). The browser picks a version from
      srcset + sizes; nothing is chosen in JavaScript. Photos without a set fall
      back to the older -1200/-600 pair, then to the file itself. */
-  const variantKey = (key, v, w) => String(key).replace(/\.[^./]+$/, "") + "." + v + "-" + w + ".webp";
+  const variantKey = (key, v, w) => {
+    const base = String(key).replace(/\.[^./]+$/, "");
+    // Keys of new uploads already end in the hash ("headshot.1fb1d1a2.webp"); don't repeat it.
+    return (base.endsWith("." + v) ? base : base + "." + v) + "-" + w + ".webp";
+  };
   const setFor = (m, key) => (m && m.imageSets && key && m.imageSets[key]) || null;
   const validSet = (set) => set && /^[0-9a-f]{8}$/.test(set.v || "") && Array.isArray(set.widths) && set.widths.length > 0;
 
@@ -117,9 +121,14 @@
     const w = widths.find((x) => x >= (minWidth || 0)) || widths[widths.length - 1];
     return "/media/" + variantKey(key, set.v, w);
   }
-  const CARD_SIZES = "(max-width: 600px) 50vw, (max-width: 1100px) 33vw, 400px";
-  const HERO_SIZES = "(max-width: 880px) 100vw, 50vw";
-  const GALLERY_SIZES = "(max-width: 880px) 50vw, 33vw";
+  /* sizes hints, measured from the real layouts at 360/390/430/768/1440px
+     (displayed CSS widths): roster grid, 4-up home + related grids, the large
+     first tile on the home grid, the profile hero and the profile gallery. */
+  const CARD_SIZES = "(max-width: 600px) calc(50vw - 24px), (max-width: 1100px) calc(50vw - 42px), 292px";
+  const GRID_SIZES = "(max-width: 600px) calc(50vw - 18px), (max-width: 1100px) calc(50vw - 26px), 262px";
+  const FEATURED_SIZES = "(max-width: 560px) calc(50vw - 18px), (max-width: 1100px) calc(100vw - 34px), 543px";
+  const HERO_SIZES = "(max-width: 880px) calc(100vw - 24px), min(50vw - 36px, 683px)";
+  const GALLERY_SIZES = "(max-width: 880px) calc(50vw - 20px), min(31vw, 449px)";
 
   /* ---------- Cards ---------- */
   function mediaHtml(m, t, sizes, priority) {
@@ -147,7 +156,7 @@
     return `
       <a href="${esc(path("/models/" + m.slug))}" class="model-card">
         <div class="model-card-media" style="--card-a:${esc(m.swatch[0])};--card-b:${esc(m.swatch[1])}${/^\d{1,3}% \d{1,3}%$/.test(m.cardFocus || "") ? ";--card-pos:" + m.cardFocus : ""}">
-          ${mediaHtml(m, t, null, opts.priority)}${badge}${heart}${overlay}
+          ${mediaHtml(m, t, opts.sizes || null, opts.priority)}${badge}${heart}${overlay}
         </div>
         <div class="model-card-info">
           <h2>${esc(m.name)}</h2>
@@ -162,7 +171,10 @@
      is not competing with them. */
   function gridHtml(models, opts) {
     const above = opts && opts.aboveFold;
-    return models.map((m, i) => cardHtml(m, Object.assign({}, opts, above && i < 2 ? { priority: "high" } : above && i < 4 ? { priority: "eager" } : {}))).join("");
+    // The home grid enlarges its first tile when there are 5+ cards (see the
+    // #home-model-grid rule in css/style.css), so that one gets its own hint.
+    const featured = opts && opts.firstSizes && models.length >= 5;
+    return models.map((m, i) => cardHtml(m, Object.assign({}, opts, featured && i === 0 ? { sizes: opts.firstSizes } : {}, above && i < 2 ? { priority: "high" } : above && i < 4 ? { priority: "eager" } : {}))).join("");
   }
 
   /* ---------- Filtering ---------- */
@@ -316,7 +328,7 @@
     const relatedHtml = related.length ? `
     <section class="section related-models reveal visible" id="related-section" style="border-top:1px solid rgba(255,255,255,0.08);">
       <div class="section-head"><span class="eyebrow" data-i18n="profile.related">${esc(t("profile.related", "Related"))}</span><h2 style="font-size:1.8rem;" data-i18n="profile.similarModels">${esc(t("profile.similarModels", "Similar models"))}</h2></div>
-      <div class="model-grid" id="related-grid">${gridHtml(related, { t, path, simple: true })}</div>
+      <div class="model-grid" id="related-grid">${gridHtml(related, { t, path, simple: true, sizes: GRID_SIZES })}</div>
     </section>` : "";
 
     const mainLoc = cityLabel(model, t);
@@ -362,7 +374,7 @@
 
   return {
     UAE_CITIES, canonicalCity, canonicalLocation, cityKey, esc, tidy,
-    mediaHtml, cardHtml, gridHtml, profileHtml, imageUrl, variantKey,
+    mediaHtml, cardHtml, gridHtml, profileHtml, imageUrl, variantKey, GRID_SIZES, FEATURED_SIZES,
     profileMeta, filterModels, cityOptions, locationOptionsHtml, noMalesPublished, countHtml,
   };
 });

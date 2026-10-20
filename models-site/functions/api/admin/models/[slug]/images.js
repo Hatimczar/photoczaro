@@ -98,7 +98,8 @@ export async function onRequestDelete({ request, env, params }) {
     if (set && set.v) {
       // Responsive versions are derived files; remove them with the photo.
       const base = key.replace(/\.[^./]+$/, "");
-      await Promise.all((set.widths || []).map((w) => env.MEDIA.delete(`${base}.${set.v}-${w}.webp`).catch(() => {})));
+      const stem = base.endsWith("." + set.v) ? base : `${base}.${set.v}`;
+      await Promise.all((set.widths || []).map((w) => env.MEDIA.delete(`${stem}-${w}.webp`).catch(() => {})));
     }
   }
   if (model.imageSets) delete model.imageSets[key];

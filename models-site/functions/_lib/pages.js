@@ -43,7 +43,7 @@ async function buildHomePage(context, lang) {
   const template = await fetchTemplate(context, "/");
   const models = await loadPublishedModels(context.env);
   const top = models.slice(0, 12);
-  const html = Render.gridHtml(top, { path: pathFor(lang) });
+  const html = Render.gridHtml(top, { path: pathFor(lang), sizes: Render.GRID_SIZES, firstSizes: Render.FEATURED_SIZES });
   let rewriter = new HTMLRewriter();
   if (lang) rewriter = localizeHead(rewriter, lang, "home");
   const res = rewriter

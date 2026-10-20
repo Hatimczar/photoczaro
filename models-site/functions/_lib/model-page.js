@@ -50,7 +50,8 @@ async function buildModelPage({ request, env }, lang, slug) {
   const meta = Render.profileMeta(model, (k, fb) => tx(k, fb), isEn ? "en" : lang);
   const title = isEn ? (model.seoTitle || `${model.name} | Photoczaro Models Dubai`) : meta.title;
   const description = isEn ? profileDescription(model) : meta.description;
-  const image = model.images?.headshot ? `${ORIGIN}/media/${model.images.headshot}` : null;
+  // Social/schema image: a ~1200px content-hashed version, not the full-size original.
+  const image = model.images?.headshot ? `${ORIGIN}${Render.imageUrl(model, model.images.headshot, 1200)}` : null;
 
   const setContent = (value) => ({ element(el) { el.setAttribute("content", value); } });
   const setHref = (value) => ({ element(el) { el.setAttribute("href", value); } });

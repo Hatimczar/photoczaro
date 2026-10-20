@@ -262,6 +262,8 @@
     if (!model.images?.headshot) missing.push("Headshot photo");
     if (!model.images?.fullFront) missing.push("Full-length front photo");
     if (!model.images?.fullSide) missing.push("Full-length side photo");
+    const allKeys = [model.images?.headshot, model.images?.fullFront, model.images?.fullSide, ...(model.images?.gallery || [])].filter(Boolean);
+    if (allKeys.some((k) => !(model.imageSets && model.imageSets[k] && model.imageSets[k].v))) missing.push("Responsive image versions (open this profile to generate them)");
     if (!model.location || !model.location.trim()) missing.push("Location");
     if (!model.height || !model.height.trim()) missing.push("Height");
     if (!model.seoTitle || !model.seoTitle.trim()) missing.push("SEO title");
@@ -632,6 +634,7 @@
     renderModelsList();
     const model = await api(`/api/admin/models/${encodeURIComponent(slug)}`);
     const detail = document.getElementById("models-detail");
+    if (!model.archived) ensureVariants(model);   // non-blocking; re-renders itself when done
 
     if (model.archived) {
       detail.innerHTML = `
@@ -736,6 +739,11 @@
 
       <div class="admin-section-title">SEO</div>
       <div class="admin-grid">
+        <div class="admin-field full">
+          <label for="f-bio">Short statement (optional)</label>
+          <input id="f-bio" value="${esc(model.bio || "")}" maxlength="300" aria-describedby="f-bio-hint">
+          <div class="admin-char-counter" id="f-bio-hint">Shown under the profile intro, in English. Only add statements the model has approved.</div>
+        </div>
         <div class="admin-field">
           <label for="f-card-focus">Card crop focal point</label>
           <input id="f-card-focus" value="${esc(model.cardFocus || "")}" placeholder="50% 50%" maxlength="9" pattern="\\d{1,3}% \\d{1,3}%" aria-describedby="f-card-focus-hint">
@@ -872,6 +880,79 @@
     return new File([blob], file.name.replace(/\.[^.]+$/, "") + ".webp", { type: "image/webp" });
   }
 
+  /* ---------- Responsive image versions ----------
+     The public site serves resized WebP copies (see js/render.js srcAttrs),
+     so phones never download a 5 MB original. They are made here, in the
+     browser, from the decoded photograph and stored by
+     /api/admin/models/:slug/image-variants under content-hashed names. */
+  const VARIANT_WIDTHS = [320, 640, 960, 1280, 1600];
+
+  function scaleTo(bitmap, w, h) {
+    // Halve repeatedly, then take the last step: much sharper than one big jump.
+    let cur = bitmap, cw = bitmap.width, ch = bitmap.height;
+    while (cw / 2 >= w) {
+      const c = document.createElement("canvas");
+      c.width = Math.round(cw / 2); c.height = Math.round(ch / 2);
+      const x = c.getContext("2d"); x.imageSmoothingQuality = "high"; x.drawImage(cur, 0, 0, c.width, c.height);
+      cur = c; cw = c.width; ch = c.height;
+    }
+    const out = document.createElement("canvas");
+    out.width = w; out.height = h;
+    const ox = out.getContext("2d"); ox.imageSmoothingQuality = "high"; ox.drawImage(cur, 0, 0, w, h);
+    return out;
+  }
+
+  async function makeVariants(blob) {
+    let bitmap;
+    try { bitmap = await createImageBitmap(blob, { imageOrientation: "from-image" }); }
+    catch { bitmap = await createImageBitmap(blob); }
+    const sw = bitmap.width, sh = bitmap.height;
+    const widths = [...new Set(VARIANT_WIDTHS.filter((w) => w < sw).concat(Math.min(sw, 1600)))].sort((a, b) => a - b);
+    const files = {};
+    for (const w of widths) {
+      if (w === sw && blob.type === "image/webp") { files["w" + w] = new File([blob], `w${w}.webp`, { type: "image/webp" }); continue; }
+      const canvas = scaleTo(bitmap, w, Math.round((sh * w) / sw));
+      const out = await new Promise((res) => canvas.toBlob(res, "image/webp", 0.8));
+      if (!out || out.type !== "image/webp") throw new Error("This browser can't create WebP versions.");
+      files["w" + w] = new File([out], `w${w}.webp`, { type: "image/webp" });
+    }
+    if (bitmap.close) bitmap.close();
+    return { sw, sh, files };
+  }
+
+  async function storeVariants(slug, key, blob) {
+    const { sw, sh, files } = await makeVariants(blob);
+    const fd = new FormData();
+    fd.append("key", key); fd.append("sourceWidth", String(sw)); fd.append("sourceHeight", String(sh));
+    Object.entries(files).forEach(([name, f]) => fd.append(name, f));
+    return uploadWithProgress(`/api/admin/models/${encodeURIComponent(slug)}/image-variants`, fd, () => {});
+  }
+
+  // Any photo without responsive versions (older uploads, approved applications)
+  // gets them when its profile is opened.
+  async function ensureVariants(model) {
+    const keys = [model.images?.headshot, model.images?.fullFront, model.images?.fullSide, ...(model.images?.gallery || [])].filter(Boolean);
+    const todo = keys.filter((k) => !(model.imageSets && model.imageSets[k] && model.imageSets[k].v));
+    if (!todo.length || state.generatingVariants === model.slug) return;
+    state.generatingVariants = model.slug;
+    try {
+      let n = 0;
+      for (const key of todo) {
+        toast(`Creating responsive image versions… ${++n}/${todo.length}`);
+        const res = await fetch(`/api/admin/media/${key}`, { credentials: "same-origin" });
+        if (!res.ok) throw new Error("Could not read a photograph to resize.");
+        await storeVariants(model.slug, key, await res.blob());
+      }
+      toast("Responsive image versions ready.");
+      await loadModels();
+      if (state.selectedSlug === model.slug) selectModel(model.slug);
+    } catch (err) {
+      toast(err.message, true);
+    } finally {
+      state.generatingVariants = null;
+    }
+  }
+
   async function uploadImage(slug, slot, file) {
     if (!file) return;
 
@@ -895,9 +976,11 @@
     fd.append("image", file);
     fd.append("slot", slot);
     try {
-      await uploadWithProgress(`/api/admin/models/${encodeURIComponent(slug)}/images`, fd, (pct) => {
+      const uploaded = await uploadWithProgress(`/api/admin/models/${encodeURIComponent(slug)}/images`, fd, (pct) => {
         progressEl.textContent = `Uploading… ${pct}%`;
       });
+      progressEl.textContent = "Creating responsive versions…";
+      if (uploaded.key) await storeVariants(slug, uploaded.key, file);
       toast("Image uploaded.");
       state.modelFormDirty = false;
       await loadModels();
@@ -967,6 +1050,7 @@
       languages: splitList(document.getElementById("f-languages").value),
       skills: splitList(document.getElementById("f-skills").value),
       cardFocus: document.getElementById("f-card-focus").value.trim(),
+      bio: document.getElementById("f-bio").value.trim(),
       seoTitle: document.getElementById("f-seo-title").value.trim(),
       seoDescription: document.getElementById("f-seo-desc").value.trim(),
     };

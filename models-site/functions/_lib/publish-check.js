@@ -8,6 +8,8 @@ export function publishReadiness(model) {
   if (!model.images?.headshot) missing.push("Headshot photo");
   if (!model.images?.fullFront) missing.push("Full-length front photo");
   if (!model.images?.fullSide) missing.push("Full-length side photo");
+  const allKeys = [model.images?.headshot, model.images?.fullFront, model.images?.fullSide, ...(model.images?.gallery || [])].filter(Boolean);
+  if (allKeys.some((k) => !(model.imageSets && model.imageSets[k] && model.imageSets[k].v))) missing.push("Responsive image versions (open this profile in the admin to generate them)");
   if (!model.location || !model.location.trim()) missing.push("Location");
   if (!model.height || !model.height.trim()) missing.push("Height");
   if (!model.seoTitle || !model.seoTitle.trim()) missing.push("SEO title");

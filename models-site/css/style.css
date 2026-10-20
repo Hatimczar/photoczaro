@@ -806,8 +806,20 @@ footer#site-footer { padding: 24px var(--bento-pad) 24px; border-top: none; }
 @media (pointer: coarse), (max-width: 768px) { .footer-link-btn { padding: 11px 0; min-height: 44px; } }
 
 .profile-intro { color: #cfcac2; font-size: 0.95rem; line-height: 1.7; margin: 0 0 18px; max-width: 60ch; }
+.profile-bio { color: #cfcac2; font-size: 0.95rem; line-height: 1.7; margin: -6px 0 18px; max-width: 60ch; font-style: italic; }
 /* Translated profile text can contain long words: let the columns shrink. */
 .profile-hero > *, .profile-info { min-width: 0; }
-.profile-stat, .profile-stat dd, .profile-stat dt, .profile-intro { min-width: 0; overflow-wrap: anywhere; }
+.profile-stat, .profile-stat dd, .profile-stat dt, .profile-intro, .profile-bio { min-width: 0; overflow-wrap: anywhere; }
 .profile-actions { flex-wrap: wrap; }
 .profile-actions .cta-btn { max-width: 100%; white-space: normal; text-align: center; }
+
+
+/* Booking form: optional production/usage fields live in a disclosure. */
+.form-optional { grid-column: 1 / -1; border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; background: rgba(255,255,255,0.02); }
+.form-optional > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 14px 20px; font-size: 0.95rem; color: var(--white); border-radius: 18px; }
+.form-optional > summary::-webkit-details-marker { display: none; }
+.form-optional > summary::after { content: "+"; color: var(--gold); font-size: 1.3rem; line-height: 1; flex: none; }
+.form-optional[open] > summary::after { content: "\2013"; }
+.form-optional > summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.form-optional-body { padding: 4px 20px 22px; }
+.form-field input[aria-invalid="true"], .form-field select[aria-invalid="true"], .form-field textarea[aria-invalid="true"] { border-color: #e08a7d; }

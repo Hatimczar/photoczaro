@@ -11,6 +11,21 @@ import Render from "../../js/render.js";
 const clean = (s) => String(s == null ? "" : s).replace(/\s+/g, " ").trim();
 const cleanList = (arr) => (Array.isArray(arr) ? arr : []).map(clean).filter(Boolean);
 
+// Responsive-image metadata for the photos a profile actually shows.
+function publicImageSets(m) {
+  const images = m.images || {};
+  const keys = [images.headshot, images.fullFront, images.fullSide, ...(Array.isArray(images.gallery) ? images.gallery : [])].filter(Boolean);
+  const out = {};
+  for (const k of keys) {
+    const s = m.imageSets && m.imageSets[k];
+    if (!s || !/^[0-9a-f]{8}$/.test(String(s.v || ""))) continue;
+    const widths = (Array.isArray(s.widths) ? s.widths : []).map(Number).filter((n) => Number.isInteger(n) && n >= 16 && n <= 4000).sort((a, b) => a - b);
+    if (!widths.length) continue;
+    out[k] = { v: s.v, w: Number(s.w) || 0, h: Number(s.h) || 0, widths };
+  }
+  return out;
+}
+
 export function toPublicModel(m) {
   const images = m.images || {};
   return {
@@ -31,6 +46,7 @@ export function toPublicModel(m) {
     clothingSize: clean(m.clothingSize), clothingSystem: clean(m.clothingSystem),
     trouserSize: clean(m.trouserSize), trouserSystem: clean(m.trouserSystem),
     chest: clean(m.chest), neck: clean(m.neck), sleeve: clean(m.sleeve), inseam: clean(m.inseam),
+    bio: clean(m.bio).slice(0, 300),
     hair: clean(m.hair),
     eyes: clean(m.eyes),
     languages: cleanList(m.languages),
@@ -44,6 +60,7 @@ export function toPublicModel(m) {
       fullSide: images.fullSide || null,
       gallery: Array.isArray(images.gallery) ? images.gallery.filter(Boolean) : [],
     },
+    imageSets: publicImageSets(m),
     seoTitle: m.seoTitle || `${clean(m.name)} | Photoczaro Models Dubai`,
     seoDescription: m.seoDescription || "",
   };

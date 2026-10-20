@@ -4,6 +4,13 @@ import { requireSameOrigin } from "../../../_lib/origin-check.js";
 import { slugify, uniqueSlug } from "../../../_lib/slug.js";
 import Render from "../../../../js/render.js";
 
+// Short content hash for stored photo names, so a different photograph never
+// reuses a cached URL (see functions/api/admin/models/[slug]/images.js).
+async function hash8(buffer) {
+  const digest = await crypto.subtle.digest("SHA-256", buffer);
+  return [...new Uint8Array(digest)].slice(0, 4).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 export async function onRequestGet({ request, env, params }) {
   if (!(await requireAccessIdentity(request))) return json({ error: "Unauthorized" }, 401);
   const record = await getApplication(env, params.id);
@@ -53,8 +60,9 @@ export async function onRequestPost({ request, env, params }) {
         const object = await env.MEDIA.get(meta.key);
         if (object) {
           const ext = meta.key.split(".").pop();
-          const destKey = `models/${slug}/${field}.${ext}`;
-          await env.MEDIA.put(destKey, object.body, {
+          const bytes = await object.arrayBuffer();
+          const destKey = `models/${slug}/${field}.${await hash8(bytes)}.${ext}`;
+          await env.MEDIA.put(destKey, bytes, {
             httpMetadata: { contentType: object.httpMetadata?.contentType || meta.type },
           });
           images[field] = destKey;
@@ -70,8 +78,9 @@ export async function onRequestPost({ request, env, params }) {
         const object = await env.MEDIA.get(meta.key);
         if (object) {
           const ext = meta.key.split(".").pop();
-          const destKey = `models/${slug}/gallery-${i}.${ext}`;
-          await env.MEDIA.put(destKey, object.body, {
+          const bytes = await object.arrayBuffer();
+          const destKey = `models/${slug}/gallery-${await hash8(bytes)}.${ext}`;
+          await env.MEDIA.put(destKey, bytes, {
             httpMetadata: { contentType: object.httpMetadata?.contentType || meta.type },
           });
           gallery.push(destKey);

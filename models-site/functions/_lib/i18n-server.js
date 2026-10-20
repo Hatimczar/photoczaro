@@ -34,6 +34,8 @@ export async function getTranslator(context, lang) {
   };
 }
 
+const RTL_LANGS = ["ar"];
+
 export async function translateResponse(context, res, lang) {
   if (!lang || lang === "en") return res;
   const dict = await loadDict(context);
@@ -70,6 +72,24 @@ export async function translateResponse(context, res, lang) {
     } } },
     { selector: "[data-blog-guide]", handler: { element(el) { el.setAttribute("href", `https://photoczaro.com/${lang}/blog/book-models-dubai-uae-photoczaro-models-roster`); } } },
   ];
+  // The page's language and direction are part of the HTML itself, not
+  // something the browser script fixes up after load (screen readers,
+  // crawlers and the first paint all see the right values). Arabic also
+  // gets the "rtl" class js/i18n.js would otherwise add, so layout does not
+  // flip when the script runs.
+  rules.unshift({
+    selector: "html",
+    handler: {
+      element(el) {
+        el.setAttribute("lang", lang);
+        el.setAttribute("dir", RTL_LANGS.includes(lang) ? "rtl" : "ltr");
+        if (RTL_LANGS.includes(lang)) {
+          const cls = el.getAttribute("class") || "";
+          if (!/(^|\s)rtl(\s|$)/.test(cls)) el.setAttribute("class", (cls + " rtl").trim());
+        }
+      },
+    },
+  });
   let rewriter = new HTMLRewriter();
   for (const r of rules) rewriter = rewriter.on(r.selector, r.handler);
   return rewriter.transform(res);

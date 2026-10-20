@@ -47,6 +47,9 @@
     const v = String(s == null ? "" : s).replace(/\s+/g, " ").trim();
     return v ? v.charAt(0).toUpperCase() + v.slice(1) : v;
   };
+  // A real value is anything non-blank, including the number 0 (which a plain
+  // truthiness test would wrongly treat as "not provided").
+  const hasValue = (v) => v !== null && v !== undefined && String(v).trim() !== "";
   const list = (arr) => (Array.isArray(arr) ? arr : []).map(tidy).filter(Boolean);
   const initialsOf = (name) => String(name || "").split(" ").filter(Boolean).map((p) => p[0]).join("").slice(0, 2).toUpperCase();
   const CATEGORY_FALLBACK = { women: "Women", men: "Men", commercial: "Commercial", "editorial-fashion": "Editorial / Fashion", beauty: "Beauty", fitness: "Fitness" };
@@ -76,14 +79,43 @@
     return `alt="${esc(text)}" data-i18n-alt="${keys[kind]}" data-alt-vars="${esc(vars)}"`;
   }
 
-  /* Optimised photos are stored as <name>-1200.webp with a <name>-600.webp
-     sibling; those get a srcset so phones fetch the small one. Older
-     uploads (any other key) are served as they are. */
-  function srcAttrs(key, sizes) {
+  /* ---------- Responsive images ----------
+     Every photo has an "image set": WebP versions at several widths, named by
+     a hash of the photo's bytes so a replaced photograph always gets new URLs
+     (and unchanged ones stay cacheable for a year):
+         <key without extension>.<hash>-<width>.webp
+     The model record stores imageSets[key] = { v: hash, w, h, widths: [...] }
+     (source width/height after rotation). The browser picks a version from
+     srcset + sizes; nothing is chosen in JavaScript. Photos without a set fall
+     back to the older -1200/-600 pair, then to the file itself. */
+  const variantKey = (key, v, w) => String(key).replace(/\.[^./]+$/, "") + "." + v + "-" + w + ".webp";
+  const setFor = (m, key) => (m && m.imageSets && key && m.imageSets[key]) || null;
+  const validSet = (set) => set && /^[0-9a-f]{8}$/.test(set.v || "") && Array.isArray(set.widths) && set.widths.length > 0;
+
+  function srcAttrs(key, sizes, set) {
+    if (validSet(set)) {
+      const widths = set.widths.slice().sort((a, b) => a - b);
+      const url = (w) => "/media/" + esc(variantKey(key, set.v, w));
+      const pick = widths.filter((w) => w <= 960).pop() || widths[0];
+      // Intrinsic size of the default (src) file lets the browser reserve the
+      // right aspect ratio before it loads.
+      const dims = set.w && set.h ? ` width="${pick}" height="${Math.round((pick * set.h) / set.w)}"` : "";
+      return `src="${url(pick)}" srcset="${widths.map((w) => url(w) + " " + w + "w").join(", ")}" sizes="${esc(sizes)}"${dims}`;
+    }
     const src = "/media/" + esc(key);
     if (!/-1200\.webp$/.test(key)) return `src="${src}"`;
     const small = "/media/" + esc(key.replace(/-1200\.webp$/, "-600.webp"));
     return `src="${src}" srcset="${small} 600w, ${src} 1200w" sizes="${esc(sizes)}"`;
+  }
+
+  /* A single URL for places that need one file (OG image, shortlist
+     thumbnail): the smallest version that is at least minWidth wide. */
+  function imageUrl(m, key, minWidth) {
+    const set = setFor(m, key);
+    if (!validSet(set)) return key ? "/media/" + key : "";
+    const widths = set.widths.slice().sort((a, b) => a - b);
+    const w = widths.find((x) => x >= (minWidth || 0)) || widths[widths.length - 1];
+    return "/media/" + variantKey(key, set.v, w);
   }
   const CARD_SIZES = "(max-width: 600px) 50vw, (max-width: 1100px) 33vw, 400px";
   const HERO_SIZES = "(max-width: 880px) 100vw, 50vw";
@@ -93,7 +125,7 @@
   function mediaHtml(m, t, sizes, priority) {
     t = t || identityT;
     if (m.images && m.images.headshot) {
-      return `<img ${srcAttrs(m.images.headshot, sizes || CARD_SIZES)} ${altAttrs(m, "based", 0, t)} ${priority === "high" ? 'loading="eager" fetchpriority="high"' : priority === "eager" ? 'loading="eager"' : 'loading="lazy"'} decoding="async">`;
+      return `<img ${srcAttrs(m.images.headshot, sizes || CARD_SIZES, setFor(m, m.images.headshot))} ${altAttrs(m, "based", 0, t)} ${priority === "high" ? 'loading="eager" fetchpriority="high"' : priority === "eager" ? 'loading="eager"' : 'loading="lazy"'} decoding="async">`;
     }
     return `<span class="initials">${esc(initialsOf(m.name))}</span>`;
   }
@@ -264,7 +296,7 @@
       cat === "men" ? sizeRow("profile.clothing", "Clothing size", model.clothingSize, model.clothingSystem) : sizeRow("profile.dress", "Dress size", model.clothingSize, model.clothingSystem),
       sizeRow("profile.trouser", "Trouser size", model.trouserSize, model.trouserSystem),
     ].filter(Boolean);
-    const rows = fields.filter((f) => String(model[f] || "").trim()).map((f) =>
+    const rows = fields.filter((f) => hasValue(model[f])).map((f) =>
       stat("i-ruler", "profile." + f, MEASURE_LABELS[f], esc(String(model[f]).trim()) + " " + unitHtml(unit, t)));
     const all = rows.concat(sizes);
     if (rows.length) return all.join("\n          ");
@@ -277,7 +309,7 @@
     if (model.images?.fullSide) shots.push({ src: model.images.fullSide, kind: "side" });
     (model.images?.gallery || []).forEach((src) => shots.push({ src, kind: "photo" }));
     const gallery = shots.length
-      ? `<div class="profile-gallery">${shots.map((s, i) => `<div class="model-card-media" style="--card-a:${esc(model.swatch[0])};--card-b:${esc(model.swatch[1])}"><img ${srcAttrs(s.src, GALLERY_SIZES)} ${altAttrs(model, s.kind, i + 1, t)} loading="lazy" decoding="async"></div>`).join("")}</div>`
+      ? `<div class="profile-gallery">${shots.map((s, i) => `<div class="model-card-media" style="--card-a:${esc(model.swatch[0])};--card-b:${esc(model.swatch[1])}"><img ${srcAttrs(s.src, GALLERY_SIZES, setFor(model, s.src))} ${altAttrs(model, s.kind, i + 1, t)} loading="lazy" decoding="async"></div>`).join("")}</div>`
       : `<p class="form-note gallery-note" data-i18n="profile.noPhotos">${esc(t("profile.noPhotos", "More photographs are available on request."))}</p>`;
 
     const related = (opts.models || []).filter((m) => m.slug !== model.slug && m.categories.some((c) => model.categories.includes(c))).slice(0, 4);
@@ -303,14 +335,15 @@
         <span class="eyebrow"><span data-i18n="category.${esc(cat)}">${esc(t("category." + cat, CATEGORY_FALLBACK[cat] || ""))}</span>${model.newFace ? ` · <span data-i18n="badge.newFace">${esc(t("badge.newFace", "New Face"))}</span>` : ""}</span>
         <h1>${esc(model.name)}</h1>
         <p class="profile-intro">${esc(profileMeta(model, t, opts.lang).intro)}</p>
+        ${hasValue(model.bio) ? `<p class="profile-bio" lang="en">${esc(String(model.bio).trim())}</p>` : ""}
         <div class="profile-tags">${subs}</div>
         <dl class="profile-stats">
           ${stat("i-pin", "profile.location", "Location", loc)}
           ${stat("i-ruler", "profile.height", "Height", model.height ? lengthHtml(model.height, t) : "–")}
           ${measureStats(model, cat)}
-          ${stat("i-eye", "profile.hairEyes", "Hair / Eyes", `${model.hair ? vocabHtml("hair", tidy(model.hair), t) : "–"} / ${model.eyes ? vocabHtml("eye", tidy(model.eyes), t) : "–"}`)}
-          ${stat("i-globe", "profile.languages", "Languages", langs || "–")}
-          ${stat("i-star", "profile.skills", "Skills", skills || "–")}
+          ${model.hair || model.eyes ? stat("i-eye", "profile.hairEyes", "Hair / Eyes", `${model.hair ? vocabHtml("hair", tidy(model.hair), t) : "–"} / ${model.eyes ? vocabHtml("eye", tidy(model.eyes), t) : "–"}`) : ""}
+          ${langs ? stat("i-globe", "profile.languages", "Languages", langs) : ""}
+          ${skills ? stat("i-star", "profile.skills", "Skills", skills) : ""}
         </dl>
         <div class="profile-actions">
           <a href="book-talent?models=${esc(model.slug)}" class="cta-btn cta-btn-primary" data-i18n="profile.checkAvailability">${esc(t("profile.checkAvailability", "Check Availability"))}</a>
@@ -329,7 +362,7 @@
 
   return {
     UAE_CITIES, canonicalCity, canonicalLocation, cityKey, esc, tidy,
-    mediaHtml, cardHtml, gridHtml, profileHtml,
+    mediaHtml, cardHtml, gridHtml, profileHtml, imageUrl, variantKey,
     profileMeta, filterModels, cityOptions, locationOptionsHtml, noMalesPublished, countHtml,
   };
 });

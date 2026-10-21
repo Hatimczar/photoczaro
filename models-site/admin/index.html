@@ -16,6 +16,7 @@
   <nav class="admin-tabs" id="admin-tabs" role="tablist" aria-label="Admin sections">
     <button class="admin-tab active" data-tab="applications" role="tab" id="tab-applications" aria-selected="true" aria-controls="panel-applications"><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-list"></use></svg> Applications <span class="admin-tab-count" id="tab-count-applications"></span></button>
     <button class="admin-tab" data-tab="models" role="tab" id="tab-models" aria-selected="false" aria-controls="panel-models" tabindex="-1"><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-user"></use></svg> Models <span class="admin-tab-count" id="tab-count-models"></span></button>
+    <button class="admin-tab" data-tab="enquiries" role="tab" id="tab-enquiries" aria-selected="false" aria-controls="panel-enquiries" tabindex="-1"><svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons-v1.svg#i-list"></use></svg> Enquiries <span class="admin-tab-count" id="tab-count-enquiries"></span></button>
   </nav>
   <div class="admin-session" id="admin-session"></div>
 </header>
@@ -38,6 +39,12 @@
       <div class="admin-empty">Select a model to edit, or create a new one.</div>
     </div>
   </section>
+  <section class="admin-panel" id="panel-enquiries" role="tabpanel" aria-labelledby="tab-enquiries" hidden>
+    <div class="admin-panel-list" id="enquiries-list"></div>
+    <div class="admin-panel-detail" id="enquiries-detail">
+      <div class="admin-empty">Select an enquiry to read it.</div>
+    </div>
+  </section>
 </main>
 
 <div class="admin-toast" id="admin-toast" role="status" aria-live="polite" hidden></div>
@@ -46,6 +53,6 @@
   <div class="admin-modal" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title"></div>
 </div>
 
-<script src="/admin/app.js?v=13"></script>
+<script src="/admin/app.js?v=14"></script>
 </body>
 </html>

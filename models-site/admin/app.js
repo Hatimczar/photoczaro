@@ -1,6 +1,6 @@
 (function () {
   const state = {
-    applications: [], models: [], activeTab: "applications",
+    applications: [], enquiries: [], selectedEnquiryId: null, models: [], activeTab: "applications",
     selectedAppId: null, selectedSlug: null,
     showArchived: false, modelFormDirty: false,
   };
@@ -308,6 +308,7 @@
     });
     document.getElementById("panel-applications").hidden = tab !== "applications";
     document.getElementById("panel-models").hidden = tab !== "models";
+    document.getElementById("panel-enquiries").hidden = tab !== "enquiries";
   }
   document.getElementById("admin-tabs").addEventListener("click", async (e) => {
     const btn = e.target.closest(".admin-tab");
@@ -338,6 +339,90 @@
         ${history.map((h) => `<li><span class="admin-history-action">${esc((h.action || "").replace(/_/g, " "))}</span> · ${esc(h.actor)} · ${new Date(h.at).toLocaleString()}</li>`).join("")}
       </ul>
     `;
+  }
+
+
+  /* ---------- Booking enquiries ---------- */
+  const ENQ_STATUS = { new: "New", contacted: "Contacted", booked: "Booked", closed: "Closed" };
+  const ENQ_FIELDS = [
+    ["company", "Company"], ["projectName", "Project"], ["projectType", "Project type"], ["productionType", "Production type"],
+    ["photoVideo", "Photo / video"], ["shootDate", "Shoot date"], ["altDate", "Alternative date"], ["location", "Location"],
+    ["workingHours", "Working hours"], ["wardrobe", "Wardrobe"], ["requiredSkills", "Required skills"],
+    ["usageTerritory", "Usage territory"], ["usageDuration", "Usage duration"], ["exclusivity", "Exclusivity"], ["budget", "Budget"],
+  ];
+
+  async function loadEnquiries() {
+    state.enquiries = await api("/api/admin/enquiries");
+    renderEnquiriesList();
+    const fresh = state.enquiries.filter((e) => (e.status || "new") === "new").length;
+    document.getElementById("tab-count-enquiries").textContent = fresh ? `(${fresh})` : "";
+  }
+
+  function renderEnquiriesList() {
+    const list = document.getElementById("enquiries-list");
+    if (!state.enquiries.length) { list.innerHTML = `<div class="admin-empty">No enquiries yet.</div>`; return; }
+    list.innerHTML = state.enquiries.map((e) => {
+      const st = e.status || "new";
+      const models = (e.selectedModels || []).length;
+      return `<button type="button" class="admin-row ${e.id === state.selectedEnquiryId ? "selected" : ""}" data-id="${esc(e.id)}">
+        <div class="admin-row-title">${esc(e.clientName)}${e.company ? " · " + esc(e.company) : ""}</div>
+        <div class="admin-row-meta">${models} model${models === 1 ? "" : "s"} · ${esc(e.productionType || "enquiry")} · ${new Date(e.receivedAt).toLocaleDateString()}</div>
+        <span class="admin-badge ${st === "new" ? "pending" : st === "booked" ? "approved" : st === "closed" ? "archived" : "published"}">${esc(ENQ_STATUS[st] || st)}</span>
+      </button>`;
+    }).join("");
+    list.querySelectorAll(".admin-row[data-id]").forEach((row) => row.addEventListener("click", () => selectEnquiry(row.dataset.id)));
+  }
+
+  function selectEnquiry(id) {
+    state.selectedEnquiryId = id;
+    renderEnquiriesList();
+    const e = state.enquiries.find((x) => x.id === id);
+    const detail = document.getElementById("enquiries-detail");
+    if (!e) { detail.innerHTML = `<div class="admin-empty">Select an enquiry to read it.</div>`; return; }
+    const st = e.status || "new";
+    const phone = (e.telephone || "").replace(/\D/g, "");
+    const note = e.notification
+      ? (e.notification.ok ? `WhatsApp alert sent (${esc(e.notification.channel)}).`
+        : e.notification.error === "not_configured" ? "No WhatsApp alert was sent: not configured yet."
+        : `WhatsApp alert not sent (${esc(e.notification.error || "failed")}).`)
+      : "";
+    const nextButtons = Object.keys(ENQ_STATUS).filter((s) => s !== st)
+      .map((s) => `<button class="admin-btn ${s === "booked" ? "primary" : ""}" type="button" data-set-status="${s}">${s === "new" ? "Mark as new" : "Mark " + ENQ_STATUS[s].toLowerCase()}</button>`).join("");
+    detail.innerHTML = `
+      <div class="admin-detail-head">
+        <h2>${esc(e.clientName)}</h2>
+        <div class="admin-actions"><span class="admin-badge ${st === "new" ? "pending" : st === "booked" ? "approved" : "published"}">${esc(ENQ_STATUS[st] || st)}</span></div>
+      </div>
+      <div class="admin-section-title">Contact</div>
+      <div class="admin-grid">
+        <div class="admin-field"><label>Name</label><div>${esc(e.clientName)}</div></div>
+        <div class="admin-field"><label>Email</label><div>${e.workEmail ? `<a href="mailto:${esc(e.workEmail)}">${esc(e.workEmail)}</a>` : "n/a"}</div></div>
+        <div class="admin-field"><label>Telephone</label><div>${e.telephone ? `${esc(e.telephone)}${phone ? ` · <a href="https://wa.me/${phone}" target="_blank" rel="noopener noreferrer">WhatsApp</a>` : ""}` : "n/a"}</div></div>
+        <div class="admin-field"><label>Received</label><div>${esc(new Date(e.receivedAt).toLocaleString())}</div></div>
+      </div>
+      <div class="admin-section-title">Models requested</div>
+      <p class="admin-note">${(e.selectedModels || []).length ? (e.selectedModels || []).map((m) => `<a href="/models/${esc(m)}" target="_blank" rel="noopener noreferrer">${esc(m)}</a>`).join(", ") : "No specific models selected."}</p>
+      <div class="admin-section-title">Project</div>
+      <div class="admin-grid">
+        ${ENQ_FIELDS.map(([k, label]) => e[k] ? `<div class="admin-field"><label>${label}</label><div>${esc(e[k])}</div></div>` : "").join("")}
+      </div>
+      ${e.notes ? `<div class="admin-section-title">Notes from the client</div><p class="admin-note">${esc(e.notes)}</p>` : ""}
+      <div class="admin-section-title">Your note (private)</div>
+      <div class="admin-field"><textarea id="enquiry-note" maxlength="1000">${esc(e.adminNote || "")}</textarea></div>
+      <div class="admin-actions" style="margin-top:12px;"><button class="admin-btn" id="enquiry-save-note" type="button">Save note</button>${nextButtons}</div>
+      ${note ? `<p class="admin-note">${note}</p>` : ""}
+      ${renderHistory(e)}
+    `;
+    const update = async (payload, message) => {
+      try {
+        await api(`/api/admin/enquiries/${encodeURIComponent(id)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        toast(message);
+        await loadEnquiries();
+        selectEnquiry(id);
+      } catch (err) { toast(err.message, true); }
+    };
+    detail.querySelectorAll("[data-set-status]").forEach((b) => b.addEventListener("click", () => update({ status: b.dataset.setStatus }, "Status updated")));
+    document.getElementById("enquiry-save-note").addEventListener("click", () => update({ adminNote: document.getElementById("enquiry-note").value }, "Note saved"));
   }
 
   /* ---------- Applications ---------- */
@@ -1121,7 +1206,7 @@
     });
     detail.appendChild(grid);
   }
-  ["applications-detail", "models-detail"].forEach((id) => {
+  ["applications-detail", "models-detail", "enquiries-detail"].forEach((id) => {
     const el = document.getElementById(id);
     if (el) new MutationObserver(() => bentoize(el)).observe(el, { childList: true });
   });
@@ -1129,4 +1214,5 @@
   loadSession();
   loadApplications().catch((err) => toast(err.message, true));
   loadModels().catch((err) => toast(err.message, true));
+  loadEnquiries().catch((err) => toast(err.message, true));
 })();

@@ -14,18 +14,18 @@
  *    rest of the stack; verify the token here before writing to KV).
  *  - Add rate-limiting (e.g. a Cloudflare Rate Limiting rule on /api/*, or a
  *    per-IP counter key in KV with a short TTL).
- *  - Wire a notification (email or the same Telegram pattern used by
- *    functions/_lib/telegram.js on the main site) so enquiries aren't only
- *    sitting in KV unread.
+ *  - (Done) WhatsApp alert via functions/_lib/notify.js once secrets are set;
+ *    enquiries are read in the admin Enquiries tab.
  *  - Add server-side validation matching the client-side rules in
  *    book-talent.html (this handler currently trusts required-field checks
  *    already run client-side and only re-validates email format + presence).
  */
 import { loadPublishedModels } from "../_lib/public-model.js";
+import { notifyNewEnquiry } from "../_lib/notify.js";
 
 const MAX_SELECTED_MODELS = 20;
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost({ request, env, waitUntil }) {
   const isNativeSubmit = request.headers.get("x-requested-with") !== "fetch";
 
   let body;
@@ -76,6 +76,9 @@ export async function onRequestPost({ request, env }) {
   if (env.ENQUIRIES_KV) {
     const key = `enquiry:${Date.now()}:${crypto.randomUUID()}`;
     await env.ENQUIRIES_KV.put(key, JSON.stringify(record));
+    // WhatsApp alert (no personal details in it); never blocks or fails the submission.
+    const alert = notifyNewEnquiry(env, key, record);
+    if (typeof waitUntil === "function") waitUntil(alert);
   } else {
     // No KV bound yet, log only, so local/dev testing doesn't hard-fail.
     console.log("book-talent enquiry (no KV bound):", record);

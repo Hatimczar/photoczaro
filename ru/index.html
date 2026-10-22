@@ -2556,7 +2556,7 @@ function buildPortraits() { portraits.forEach((p, i) => {
 
   const cover = document.createElement('div');
   cover.className = 'gallery-item';
-  cover.innerHTML = `<img src="${p.src}" srcset="${srcsetFor(p.src, true)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${p.name}" loading="lazy">
+  cover.innerHTML = `<img src="${p.src}" srcset="${srcsetFor(p.src, true)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${p.alt || p.name}" loading="lazy">
     <div class="gallery-item-overlay">
       <span class="gallery-item-name">${p.name}</span>
     </div>`;

@@ -1562,6 +1562,7 @@
 <script src="/js/a11y-menu.js?v=1" defer></script>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido</a>
 
 <!-- Page loader -->
 <div class="page-loader" id="page-loader">
@@ -1591,8 +1592,8 @@
     <li><a href="/work-with-me" class="nav-cta-btn">Trabaja conmigo</a></li>
   
     <li><div class="lang-switch lang-switch-nav">
-      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="ES, change language">ES <span class="lsn-caret">▾</span></button>
-      <div class="lang-switch-menu" role="menu">
+      <button type="button" class="lang-switch-btn-nav" aria-expanded="false" aria-label="ES, change language">ES <span class="lsn-caret">▾</span></button>
+      <div class="lang-switch-menu">
         <a href="/" hreflang="en">English</a>
         <a href="/fr/" hreflang="fr">Français</a>
         <a href="/ru/" hreflang="ru">Русский</a>
@@ -1676,6 +1677,7 @@
   </div>
 </div>
 
+<main id="main-content">
 <!-- Hero -->
 <section class="hero" id="home">
   <div class="hero-bg" id="hero-bg"></div>
@@ -1773,7 +1775,7 @@
   </div>
   <div class="about-layout">
     <div class="about-image-wrap reveal">
-      <img src="/images/About__Lucia-Curio-Heritage.webp" srcset="/images/About__Lucia-Curio-Heritage@640w.webp 640w, /images/About__Lucia-Curio-Heritage@1200w.webp 1200w, /images/About__Lucia-Curio-Heritage.webp 1350w" sizes="(max-width: 768px) 90vw, 45vw" alt="Photoczaro portrait" loading="lazy">
+      <img height="1800" width="1350" src="/images/About__Lucia-Curio-Heritage.webp" srcset="/images/About__Lucia-Curio-Heritage@640w.webp 640w, /images/About__Lucia-Curio-Heritage@1200w.webp 1200w, /images/About__Lucia-Curio-Heritage.webp 1350w" sizes="(max-width: 768px) 90vw, 45vw" alt="Photoczaro portrait" loading="lazy">
       <div class="about-image-frame"></div>
     </div>
     <div class="about-text reveal reveal-delay-2">
@@ -1955,6 +1957,7 @@
   </div>
 </section>
 
+</main>
 <footer>
   <span class="footer-logo">Photoczaro</span>
   <a href="https://models.photoczaro.com/es/" style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.95)'">Photoczaro Models</a>
@@ -2012,8 +2015,8 @@
   .lang-switch-menu a.active { color: #c9a96e; }
 </style>
 <div class="lang-switch">
-  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="ES, change language">ES ▾</button>
-  <div class="lang-switch-menu" role="menu">
+  <button type="button" class="lang-switch-btn" aria-expanded="false" aria-label="ES, change language">ES ▾</button>
+  <div class="lang-switch-menu">
       <a href="/" hreflang="en">English</a>
       <a href="/fr/" hreflang="fr">Français</a>
       <a href="/ru/" hreflang="ru">Русский</a>
@@ -2128,26 +2131,26 @@ window.addEventListener('scroll', () => {
 
 // Image data
 const portraits = [
-  { name: 'Anastasiia', src: '/images/Portraits__Anastasiia__IMG_3371-DeNoiseAI-low-light-Fuji.webp' },
-  { name: 'Darya', src: '/images/Portraits__Darya__DSC_0287-2.webp' },
-  { name: 'Diana', src: '/images/Portraits__Diana__DSC_1506 Large.webp' },
-  { name: 'Elizabeth', src: '/images/Portraits__Elizabeth__DSC_0685.webp' },
-  { name: 'Evelina', src: '/images/Portraits__Evelina__DSC_0150.webp' },
-  { name: 'Fernanda', src: '/images/Portraits__Fernanda__Post---5.webp' },
-  { name: 'Jane', src: '/images/Portraits__Jane__IMG_2378 Nude Lip.webp' },
-  { name: 'Kate', src: '/images/Portraits__Kate Indoor Shoot__DSC_0151.webp' },
-  { name: 'Kardelen', src: '/images/Portraits__Kardelen__DSC_3802-1.webp' },
-  { name: 'Karla', src: '/images/Portraits__Karla - Financial Centre__Image_02.webp' },
-  { name: 'Karla II', alt: 'Portrait session at Princess Tower, Dubai Marina, by Photoczaro', src: '/images/Portraits__Karla - Princess Tower__DSC_0538 копіювати.webp' },
-  { name: 'Klaudia', alt: 'Home portrait session by Photoczaro, Dubai', src: '/images/Portraits__Klaudia - Home__DSC_0280.webp' },
-  { name: 'Kseniia', src: '/images/Portraits__Kseniia__DSC_0422.webp', alt: 'A woman in a burgundy embroidered robe seated by a curtained window, looking to one side with a hand at her collar.' },
-  { name: 'Nargiz', alt: 'Walking portrait session in Ajman by Photoczaro', src: '/images/Portraits__Nargiz - Ajman Walk__DSC_0030.webp' },
-  { name: 'Olga', alt: 'Portrait session at City Walk, Dubai, by Photoczaro', src: '/images/Portraits__Olga - City Walk__DSC_0024.webp' },
-  { name: 'Olga II', alt: 'Home portrait session by Photoczaro, Dubai (second set)', src: '/images/Portraits__Olga - Home__DSC_0689-Mood.webp' },
-  { name: 'Sana', alt: 'Portrait session at a beauty salon in Dubai by Photoczaro', src: '/images/Portraits__Sana - ILuvMe Salon__IMG_3904.webp' },
-  { name: 'Tatiana', alt: 'Portrait session at Hilton Dubai Creek by Photoczaro', src: '/images/Portraits__Tatiana - Hilton Creek__DSC_3351.webp' },
-  { name: 'Zara Kennedy', alt: 'Lifestyle portrait session in Dubai by Photoczaro', src: '/images/Portraits__Zara Kennedy - IKEA__DSC_3583-2.webp' },
-  { name: 'Zaraish', alt: 'Beach portrait session in Dubai by Photoczaro', src: '/images/Portraits__Zaraish - The Beach__DSC_0564-1.webp' },
+  { name: 'Anastasiia', alt: "Sesión de retrato con poca luz en Dubái, expresión natural y luz ambiental suave", src: '/images/Portraits__Anastasiia__IMG_3371-DeNoiseAI-low-light-Fuji.webp' },
+  { name: 'Darya', alt: "Retrato editorial de Photoczaro, fotografía de retrato en Dubái", src: '/images/Portraits__Darya__DSC_0287-2.webp' },
+  { name: 'Diana', alt: "Sesión de retrato fine art, fotografía de estudio en Dubái por Photoczaro", src: '/images/Portraits__Diana__DSC_1506 Large.webp' },
+  { name: 'Elizabeth', alt: "Retrato con luz natural, fotografía de retrato en Dubái por Photoczaro", src: '/images/Portraits__Elizabeth__DSC_0685.webp' },
+  { name: 'Evelina', alt: "Sesión de retrato de estilo editorial en Dubái por Photoczaro", src: '/images/Portraits__Evelina__DSC_0150.webp' },
+  { name: 'Fernanda', alt: "Sesión de fotografía de retrato en Dubái por Photoczaro", src: '/images/Portraits__Fernanda__Post---5.webp' },
+  { name: 'Jane', alt: "Retrato centrado en la belleza realizado en Dubái por Photoczaro", src: '/images/Portraits__Jane__IMG_2378 Nude Lip.webp' },
+  { name: 'Kate', alt: "Sesión de retrato en interior en Dubái, luz direccional suave", src: '/images/Portraits__Kate Indoor Shoot__DSC_0151.webp' },
+  { name: 'Kardelen', alt: "Retrato de estudio con iluminación dramática, fotografía en Dubái por Photoczaro", src: '/images/Portraits__Kardelen__DSC_3802-1.webp' },
+  { name: 'Karla', alt: "Sesión de retrato en el DIFC, Dubái, por Photoczaro", src: '/images/Portraits__Karla - Financial Centre__Image_02.webp' },
+  { name: 'Karla II', alt: "Sesión de retrato en la Princess Tower, Dubai Marina, por Photoczaro", src: '/images/Portraits__Karla - Princess Tower__DSC_0538 копіювати.webp' },
+  { name: 'Klaudia', alt: "Sesión de retrato en casa por Photoczaro, Dubái", src: '/images/Portraits__Klaudia - Home__DSC_0280.webp' },
+  { name: 'Kseniia', alt: "Una mujer con una bata bordada color burdeos, sentada junto a una ventana con cortinas, mirando hacia un lado con una mano en el cuello.", src: '/images/Portraits__Kseniia__DSC_0422.webp' },
+  { name: 'Nargiz', alt: "Sesión de retrato caminando en Ajmán por Photoczaro", src: '/images/Portraits__Nargiz - Ajman Walk__DSC_0030.webp' },
+  { name: 'Olga', alt: "Sesión de retrato en City Walk, Dubái, por Photoczaro", src: '/images/Portraits__Olga - City Walk__DSC_0024.webp' },
+  { name: 'Olga II', alt: "Sesión de retrato en casa por Photoczaro, Dubái (segunda serie)", src: '/images/Portraits__Olga - Home__DSC_0689-Mood.webp' },
+  { name: 'Sana', alt: "Sesión de retrato en un salón de belleza en Dubái por Photoczaro", src: '/images/Portraits__Sana - ILuvMe Salon__IMG_3904.webp' },
+  { name: 'Tatiana', alt: "Sesión de retrato en el Hilton Dubai Creek por Photoczaro", src: '/images/Portraits__Tatiana - Hilton Creek__DSC_3351.webp' },
+  { name: 'Zara Kennedy', alt: "Sesión de retrato lifestyle en Dubái por Photoczaro", src: '/images/Portraits__Zara Kennedy - IKEA__DSC_3583-2.webp' },
+  { name: 'Zaraish', alt: "Sesión de retrato en la playa en Dubái por Photoczaro", src: '/images/Portraits__Zaraish - The Beach__DSC_0564-1.webp' },
 ];
 
 const magAlt = {
@@ -2448,39 +2451,55 @@ function makeKeyboardClickable(el, label) {
   });
 }
 
-function makeCarousel(imgs, labelFn, trackClass, itemClass) {
+// Lazy carousel: shell is inserted into the DOM immediately (no images),
+// full gallery images are only created the first time it is opened.
+let carouselShellCount = 0;
+function makeCarouselShell() {
   const wrap = document.createElement('div');
   wrap.className = 'carousel-wrap';
+  wrap.id = 'carousel-' + (++carouselShellCount);
+  return wrap;
+}
+
+function populateCarousel(wrap, imgs, labelFn, trackClass, itemClass) {
+  if (wrap.dataset.populated === '1') return;
+  wrap.dataset.populated = '1';
 
   const arrowBar = document.createElement('div');
   arrowBar.className = 'carousel-arrows';
   const btnPrev = document.createElement('button');
   btnPrev.className = 'carousel-arrow';
   btnPrev.innerHTML = '&#8249;';
-  btnPrev.setAttribute('aria-label', 'Previous');
+  btnPrev.setAttribute('aria-label', 'Anterior');
   const btnNext = document.createElement('button');
   btnNext.className = 'carousel-arrow';
   btnNext.innerHTML = '&#8250;';
-  btnNext.setAttribute('aria-label', 'Next');
+  btnNext.setAttribute('aria-label', 'Siguiente');
   arrowBar.appendChild(btnPrev);
   arrowBar.appendChild(btnNext);
 
   const track = document.createElement('div');
   track.className = trackClass;
+  track.tabIndex = 0;
+  track.setAttribute('role', 'group');
+  track.setAttribute('aria-label', labelFn(0).replace(/,\s*(photo|foto|фото)\s*1\s.*$/, ''));
   imgs.forEach((src, j) => {
     const item = document.createElement('div');
     item.className = itemClass;
-    item.innerHTML = `<img src="${src}" srcset="${srcsetFor(src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${labelFn(j)}" loading="lazy">`;
+    item.innerHTML = `<img src="${src}" srcset="${srcsetFor(src)}" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw" alt="${labelFn(j)}" loading="lazy" class="reveal" width="900" height="1200">`;
     item.addEventListener('click', () => openLightbox(imgs.map(s => ({ src: s, name: labelFn(j) })), j));
     track.appendChild(item);
   });
+  observeNewRevealEls(track);
 
   // Dot indicators
   const dotsRow = document.createElement('div');
   dotsRow.className = 'carousel-dots';
   const dots = imgs.map((_, j) => {
-    const d = document.createElement('div');
+    const d = document.createElement('button');
+    d.type = 'button';
     d.className = 'carousel-dot' + (j === 0 ? ' active' : '');
+    d.setAttribute('aria-label', `Ir a la imagen ${j + 1} de ${imgs.length}`);
     d.addEventListener('click', () => {
       track.scrollTo({ left: track.scrollWidth / imgs.length * j, behavior: 'smooth' });
     });
@@ -2541,19 +2560,22 @@ function buildPortraits() { portraits.forEach((p, i) => {
     <div class="gallery-item-overlay">
       <span class="gallery-item-name">${p.name}</span>
     </div>`;
-  cover.addEventListener('click', () => openLightbox(imgs.map((s, j) => ({ src: s, name: p.name + ', portrait session, photo ' + (j + 1) + ' of ' + imgs.length })), 0));
+  cover.addEventListener('click', () => openLightbox(imgs.map((s, j) => ({ src: s, name: p.name + ', sesión de retratos, foto ' + (j + 1) + ' de ' + imgs.length })), 0));
   makeKeyboardClickable(cover, 'View ' + p.name + ' gallery');
 
   const toggle = document.createElement('button');
   toggle.className = 'model-toggle';
-  toggle.innerHTML = `<span>Explore &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length}</em></span><em class="toggle-icon">+</em>`;
+  toggle.innerHTML = `<span>Explorar &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length}</em></span><em class="toggle-icon">+</em>`;
 
-  const carousel = makeCarousel(imgs, j => p.name + ', portrait session, photo ' + (j + 1) + ' of ' + imgs.length, 'model-gallery', 'model-gallery-item');
+  const carousel = makeCarouselShell();
+  toggle.setAttribute('aria-controls', carousel.id);
+  
   toggle.type = 'button';
   toggle.setAttribute('aria-expanded', 'false');
-  toggle.setAttribute('aria-label', 'Explore ' + p.name + "'s gallery, " + imgs.length + ' photos');
+  toggle.setAttribute('aria-label', 'Explorar la galería de ' + p.name + ', ' + imgs.length + ' fotos');
 
   toggle.addEventListener('click', () => {
+    populateCarousel(carousel, imgs, j => p.name + ', sesión de retratos, foto ' + (j + 1) + ' de ' + imgs.length, 'model-gallery', 'model-gallery-item');
     const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -2782,20 +2804,23 @@ function buildMagazines() { magazines.forEach((m, i) => {
       <p class="magazine-pub">${m.pub}</p>
       <p class="magazine-title">${m.name}</p>
     </div>`;
-  card.addEventListener('click', () => openLightbox(imgs.map((s, j) => ({ src: s, name: m.name + ', ' + m.pub + ' feature, photo ' + (j + 1) + ' of ' + imgs.length })), 0));
+  card.addEventListener('click', () => openLightbox(imgs.map((s, j) => ({ src: s, name: m.name + ', ' + m.pub + ' reportaje, foto ' + (j + 1) + ' de ' + imgs.length })), 0));
   makeKeyboardClickable(card, 'View ' + m.name + ' feature in ' + m.pub);
 
   // toggle
   const toggle = document.createElement('button');
   toggle.className = 'model-toggle';
-  toggle.innerHTML = `<span>Explore the Edit &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length} frames</em></span><em class="toggle-icon">+</em>`;
+  toggle.innerHTML = `<span>Explorar la edición &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${imgs.length} imágenes</em></span><em class="toggle-icon">+</em>`;
 
-  const carousel = makeCarousel(imgs, j => m.name + ', ' + m.pub + ' feature, photo ' + (j + 1) + ' of ' + imgs.length, 'model-gallery', 'model-gallery-item');
+  const carousel = makeCarouselShell();
+  toggle.setAttribute('aria-controls', carousel.id);
+  
   toggle.type = 'button';
   toggle.setAttribute('aria-expanded', 'false');
-  toggle.setAttribute('aria-label', 'Explore the Edit: ' + m.name + ', ' + imgs.length + ' frames');
+  toggle.setAttribute('aria-label', 'Explorar la edición: ' + m.name + ', ' + imgs.length + ' imágenes');
 
   toggle.addEventListener('click', () => {
+    populateCarousel(carousel, imgs, j => m.name + ', ' + m.pub + ' reportaje, foto ' + (j + 1) + ' de ' + imgs.length, 'model-gallery', 'model-gallery-item');
     const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -2917,20 +2942,23 @@ function buildProjects() { projectsData.forEach((proj, i) => {
       <h3 class="project-name">${proj.name}</h3>
       <span class="project-count">${proj.images.length} photographs</span>
     </div>`;
-  cover.addEventListener('click', () => openLightbox(proj.images.map((s, j) => ({ src: s, name: proj.name + ', photo ' + (j + 1) + ' of ' + proj.images.length })), 0));
+  cover.addEventListener('click', () => openLightbox(proj.images.map((s, j) => ({ src: s, name: proj.name + ', foto ' + (j + 1) + ' de ' + proj.images.length })), 0));
   makeKeyboardClickable(cover, 'View ' + proj.name + ' gallery');
 
   // toggle
   const toggle = document.createElement('button');
   toggle.className = 'model-toggle';
-  toggle.innerHTML = `<span>Explore the Project &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${proj.images.length} frames</em></span><em class="toggle-icon">+</em>`;
+  toggle.innerHTML = `<span>Explorar el proyecto &nbsp;<em style="font-style:normal;color:var(--gold);opacity:0.6;font-size:9px">✦ ${proj.images.length} imágenes</em></span><em class="toggle-icon">+</em>`;
 
-  const carousel = makeCarousel(proj.images, j => proj.name + ', photo ' + (j + 1) + ' of ' + proj.images.length, 'project-gallery', 'project-gallery-item');
+  const carousel = makeCarouselShell();
+  toggle.setAttribute('aria-controls', carousel.id);
+  
   toggle.type = 'button';
   toggle.setAttribute('aria-expanded', 'false');
-  toggle.setAttribute('aria-label', 'Explore the Project: ' + proj.name + ', ' + proj.images.length + ' frames');
+  toggle.setAttribute('aria-label', 'Explorar el proyecto: ' + proj.name + ', ' + proj.images.length + ' imágenes');
 
   toggle.addEventListener('click', () => {
+    populateCarousel(carousel, proj.images, j => proj.name + ', foto ' + (j + 1) + ' de ' + proj.images.length, 'project-gallery', 'project-gallery-item');
     const isOpen = carousel.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');

@@ -118,8 +118,8 @@
     }).join("");
     return `
       <div class="lang-switch" id="lang-switch${idSuffix}">
-        <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="${LANG_LABELS[lang]}, change language">${LANG_LABELS[lang]} <span class="lang-switch-caret">&#9662;</span></button>
-        <div class="lang-switch-menu" role="menu">${menuItems}</div>
+        <button type="button" class="lang-switch-btn" aria-expanded="false" aria-label="${LANG_LABELS[lang]}, change language">${LANG_LABELS[lang]} <span class="lang-switch-caret">&#9662;</span></button>
+        <div class="lang-switch-menu">${menuItems}</div>
       </div>`;
   }
 

@@ -39,7 +39,7 @@ export async function onRequest({ request, next, env }) {
 
   const lang = langs.find(l => supported.includes(l));
 
-  // No supported non-English language — serve English as-is
+  // No supported non-English language, serve English as-is
   if (!lang) return next();
 
   // Redirect once, set cookie so subsequent visits aren't redirected again

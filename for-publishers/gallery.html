@@ -132,7 +132,7 @@ async function loadModelSection(model, gridEl) {
       const key = `${model.slug}:${item.original}`;
       const cell = document.createElement('div');
       cell.className = 'photo-pick';
-      cell.innerHTML = `<img src="/images/publishers/${model.slug}/${item.preview}" loading="lazy" decoding="async" alt="${model.name} — ${item.original}"><div class="pick-check">✓</div>`;
+      cell.innerHTML = `<img src="/images/publishers/${model.slug}/${item.preview}" loading="lazy" decoding="async" alt="${model.name}, ${item.original}"><div class="pick-check">✓</div>`;
       cell.addEventListener('click', () => togglePick(cell, key, model.name, item.original));
       gridEl.appendChild(cell);
     });

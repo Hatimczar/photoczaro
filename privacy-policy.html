@@ -263,7 +263,7 @@
     padding-left: 20px; position: relative; margin-bottom: 8px;
   }
   .pp-section ul li::before {
-    content: '—'; position: absolute; left: 0;
+    content: '–'; position: absolute; left: 0;
     color: var(--gold); opacity: 0.5; font-size: 12px;
   }
   .pp-section ol { counter-reset: ol; }
@@ -384,6 +384,7 @@
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to content</a>
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
@@ -422,8 +423,8 @@
     <li><a href="work-with-me" class="nav-cta-btn">Work With Me</a></li>
 
     <li><div class="lang-switch lang-switch-nav">
-      <button type="button" class="lang-switch-btn-nav" aria-haspopup="true" aria-expanded="false" aria-label="EN, change language">EN <span class="lsn-caret">▾</span></button>
-      <div class="lang-switch-menu" role="menu">
+      <button type="button" class="lang-switch-btn-nav" aria-expanded="false" aria-label="EN, change language">EN <span class="lsn-caret">▾</span></button>
+      <div class="lang-switch-menu">
         <a href="/privacy-policy" hreflang="en" class="active">English</a>
         <a href="/fr/" hreflang="fr">Français</a>
         <a href="/ru/" hreflang="ru">Русский</a>
@@ -520,7 +521,7 @@
 </div>
 
 <!-- Content -->
-<main class="pp-content">
+<main id="main-content" class="pp-content">
 
   <!-- 01 -->
   <section class="pp-section" id="s1">
@@ -946,7 +947,7 @@
     <p>We encourage you to review this policy periodically. Continued use of our services or website after an update constitutes acceptance of the revised policy. Where changes significantly affect how we use photographs or personal data obtained under a prior version of this policy, we will seek fresh consent where required.</p>
     <h3>Version history</h3>
     <ul>
-      <li><strong>22 July 2026</strong> — Current version. Added a dedicated Website Terms of Use section and this version history.</li>
+      <li><strong>22 July 2026</strong>: Current version. Added a dedicated Website Terms of Use section and this version history.</li>
     </ul>
   </section>
 
@@ -1033,8 +1034,8 @@
   .lang-switch-menu a.active { color: #c9a96e; }
 </style>
 <div class="lang-switch">
-  <button type="button" class="lang-switch-btn" aria-haspopup="true" aria-expanded="false" aria-label="EN, change language">EN ▾</button>
-  <div class="lang-switch-menu" role="menu">
+  <button type="button" class="lang-switch-btn" aria-expanded="false" aria-label="EN, change language">EN ▾</button>
+  <div class="lang-switch-menu">
       <a href="https://models.photoczaro.com/" hreflang="en" class="active">Photoczaro Models</a><a href="/privacy-policy" hreflang="en" class="active">English</a>
       <a href="/fr/" hreflang="fr">Français</a>
       <a href="/ru/" hreflang="ru">Русский</a>

@@ -131,7 +131,7 @@ h1.pub-title {
 
 .pub-actions { display: flex; gap: 16px; flex-wrap: wrap; }
 
-/* Button system — matches the site's WhatsApp-Me glass/gradient CTA */
+/* Button system, matches the site's WhatsApp-Me glass/gradient CTA */
 .pub-btn {
   display: inline-flex;
   align-items: center;

@@ -33,3 +33,20 @@ https://:project.pages.dev/*
   Cache-Control: public, max-age=31536000, immutable
 /a11y.css
   Cache-Control: public, max-age=31536000, immutable
+
+# Private deliveries: never cached, never indexed.
+/delivery/*
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow, noarchive
+/delivery-admin/*
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow, noarchive
+/delivery-admin
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow, noarchive
+/api/delivery/*
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow
+/api/delivery-admin/*
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow

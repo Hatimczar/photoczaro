@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Deliveries | Admin | Photoczaro</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Inter:wght@300;400;500&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#c9a96e;--gold-light:#e8d5a3;--white:#f5f0eb;--grey:#8a8680;--dark:#0a0a0a;--dark-2:#111;--dark-3:#1a1a1a;--danger:#d4756a;--ok:#7ec686}
+body{background:var(--dark);color:var(--white);font-family:'Inter',system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--gold-light)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 5vw;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);text-decoration:none}.logo span{color:var(--grey);font-size:14px}
+main{max-width:1100px;margin:0 auto;padding:36px 5vw 80px}
+h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:2.4rem;margin-bottom:6px}
+h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.5rem;margin:30px 0 12px}
+.eyebrow{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sub{color:var(--grey);margin-bottom:24px;line-height:1.6}
+label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin:0 0 6px}
+input,textarea,select{width:100%;background:var(--dark-3);border:1px solid rgba(255,255,255,.12);color:var(--white);font:inherit;font-size:15px;padding:11px 12px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:14px}
+button,.btn{background:var(--gold);color:#0a0a0a;border:0;font:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:12px 20px;cursor:pointer}
+button.ghost{background:transparent;color:var(--gold-light);border:1px solid rgba(201,169,110,.5)}
+button.danger{background:transparent;color:var(--danger);border:1px solid rgba(212,117,106,.55)}
+button:disabled{opacity:.5;cursor:default}
+.panel{background:var(--dark-2);border:.5px solid rgba(255,255,255,.08);padding:22px;margin-bottom:18px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-weight:400;text-align:left;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.1)}
+td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+tr.link{cursor:pointer}tr.link:hover td{background:rgba(255,255,255,.03)}
+.pill{display:inline-block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;border:1px solid rgba(255,255,255,.2);color:var(--grey)}
+.pill.released{color:var(--ok);border-color:rgba(126,198,134,.5)}.pill.preview{color:var(--gold-light);border-color:rgba(201,169,110,.5)}
+.msg{min-height:20px;font-size:14px;margin-top:10px}.msg.err{color:var(--danger)}.msg.ok{color:var(--ok)}
+.linkbox{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.linkbox input{flex:1;min-width:240px}
+.drop{border:1px dashed rgba(201,169,110,.5);padding:30px;text-align:center;color:var(--grey);cursor:pointer}
+.drop.on{background:rgba(201,169,110,.08)}
+.files{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.file{background:var(--dark-3);border:.5px solid rgba(255,255,255,.08);font-size:12px}
+.file img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#151515}
+.file .m{padding:8px 10px;display:flex;justify-content:space-between;gap:6px;align-items:center;color:var(--grey)}
+.file .m span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file .m button{padding:5px 8px;font-size:10px}
+.prog{font-size:13px;color:var(--grey);line-height:1.8}.prog b{color:var(--white);font-weight:400}
+.log{font-size:13px;color:var(--grey);line-height:1.9}
+.stats{display:flex;gap:26px;flex-wrap:wrap;margin:6px 0 4px;color:var(--grey);font-size:13px}.stats b{color:var(--white);font-weight:400}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><a class="logo" href="/">Photoczaro <span>/ Admin / Deliveries</span></a><button class="ghost" id="logout" hidden type="button">Log out</button></header>
+<main>
+<section id="login" hidden>
+  <p class="eyebrow">Admin</p><h1>Deliveries</h1>
+  <form class="panel" id="f-login" style="max-width:420px"><label for="pw">Admin password</label><input id="pw" type="password" autocomplete="current-password" required><br><br><button type="submit">Log in</button><p class="msg" id="m-login" role="status" aria-live="polite"></p></form>
+</section>
+
+<section id="list" hidden>
+  <p class="eyebrow">Admin</p><h1>Private deliveries</h1>
+  <p class="sub">Each delivery has its own private link and email code, and is visible only to the model it belongs to and to you.</p>
+  <div class="panel">
+    <h2 style="margin-top:0">New delivery</h2>
+    <form id="f-new">
+      <div class="row">
+        <div><label for="n-model">Model name</label><input id="n-model" required maxlength="120"></div>
+        <div><label for="n-email">Model email (receives the code)</label><input id="n-email" type="email" required></div>
+        <div><label for="n-title">Title</label><input id="n-title" required maxlength="120" placeholder="e.g. Portfolio shoot, October 2026"></div>
+      </div>
+      <div class="row">
+        <div><label for="n-days">Available for (days, 0 = no expiry)</label><input id="n-days" type="number" min="0" max="365" value="30"></div>
+        <div><label for="n-note">Note shown to the model (optional)</label><input id="n-note" maxlength="500"></div>
+      </div>
+      <button type="submit">Create delivery</button><p class="msg" id="m-new" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+  <div class="panel" style="overflow-x:auto">
+    <table><thead><tr><th>Model</th><th>Title</th><th>Status</th><th>Files</th><th>Opened</th><th>Downloads</th><th>Expires</th></tr></thead><tbody id="rows"></tbody></table>
+    <p class="sub" id="empty" hidden style="margin:14px 0 0">No deliveries yet.</p>
+  </div>
+</section>
+
+<section id="detail" hidden>
+  <p><button class="ghost" id="back" type="button">Back to all deliveries</button></p>
+  <p class="eyebrow" id="d-model"></p><h1 id="d-title"></h1>
+  <p class="stats" id="d-stats"></p>
+  <div class="panel">
+    <label for="d-link">Private link (send this to the model)</label>
+    <div class="linkbox"><input id="d-link" readonly><button type="button" id="copy">Copy link</button></div>
+    <p class="sub" style="margin:10px 0 0" id="d-email"></p>
+    <p class="msg" id="m-detail" role="status" aria-live="polite"></p>
+    <div class="linkbox" style="margin-top:8px">
+      <button type="button" class="ghost" id="b-release"></button>
+      <button type="button" class="ghost" id="b-code">Generate a one-time code to share personally</button>
+      <button type="button" class="danger" id="b-delete">Delete delivery</button>
+    </div>
+    <p class="msg" id="m-code" role="status"></p>
+  </div>
+
+  <h2>Add images and videos</h2>
+  <div class="panel">
+    <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose files to upload">Drop JPG, PNG, WebP, CR2, NEF, MP4, MOV or WebM files here, or click to choose<input id="pick" type="file" multiple accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/webm,.cr2,.nef" hidden></div>
+    <p class="sub" style="margin:12px 0 0">Images get a watermarked preview made in your browser (use Chrome or Edge). For CR2 and NEF the preview is built from the JPEG inside the RAW file; the RAW itself stays locked until you release the delivery. Videos get a watermarked poster frame; the video itself stays locked until you release the delivery.</p>
+    <div class="prog" id="prog"></div>
+  </div>
+  <div class="files" id="files"></div>
+
+  <h2>Activity</h2>
+  <div class="panel log" id="log"></div>
+</section>
+</main>
+
+<script>
+(function(){
+var $=function(s){return document.getElementById(s)};
+var current=null;
+function show(n){['login','list','detail'].forEach(function(k){$(k).hidden=(k!==n)});$('logout').hidden=(n==='login')}
+function msg(el,t,c){el.textContent=t||'';el.className='msg'+(c?' '+c:'')}
+function api(path,opt){opt=opt||{};opt.credentials='same-origin';if(opt.body&&typeof opt.body!=='string'&&!(opt.body instanceof Blob)&&!(opt.body instanceof ArrayBuffer)){opt.body=JSON.stringify(opt.body);opt.headers=Object.assign({'Content-Type':'application/json'},opt.headers||{})}
+  return fetch('/api/delivery-admin/'+path,opt).then(function(r){if(r.status===401){show('login');throw new Error('auth')}return r.json().then(function(j){if(!r.ok)throw new Error(j.error||'Request failed');return j})})}
+function fmtDate(t){return t?new Date(t).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'}):'No expiry'}
+function fmtSize(b){return b>=1048576?(b/1048576).toFixed(1)+' MB':Math.max(1,Math.round(b/1024))+' KB'}
+function td(tr,t){var c=document.createElement('td');c.textContent=t;tr.appendChild(c);return c}
+
+function loadList(){
+  return api('deliveries').then(function(j){
+    show('list');var body=$('rows');body.textContent='';$('empty').hidden=j.deliveries.length>0;
+    j.deliveries.forEach(function(d){
+      var tr=document.createElement('tr');tr.className='link';tr.tabIndex=0;
+      td(tr,d.modelName);td(tr,d.title);
+      var s=td(tr,'');var p=document.createElement('span');p.className='pill '+d.status;p.textContent=d.status==='released'?'Released':'Preview only';s.appendChild(p);
+      td(tr,String(d.fileCount));td(tr,String(d.viewCount));td(tr,String(d.downloadCount));td(tr,fmtDate(d.expiresAt));
+      var go=function(){openDetail(d.id)};tr.addEventListener('click',go);tr.addEventListener('keydown',function(e){if(e.key==='Enter')go()});
+      body.appendChild(tr);
+    });
+  }).catch(function(e){if(e.message!=='auth')msg($('m-new'),e.message,'err')});
+}
+
+$('f-login').addEventListener('submit',function(e){
+  e.preventDefault();msg($('m-login'),'Checking…');
+  fetch('/api/admin-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('pw').value}),credentials:'same-origin'}).then(function(r){
+    if(!r.ok){msg($('m-login'),'Incorrect password.','err');return}
+    $('pw').value='';msg($('m-login'),'');loadList();
+  }).catch(function(){msg($('m-login'),'Network error.','err')});
+});
+$('logout').addEventListener('click',function(){fetch('/api/delivery-admin/logout',{method:'POST',credentials:'same-origin'}).then(function(){show('login')})});
+
+$('f-new').addEventListener('submit',function(e){
+  e.preventDefault();msg($('m-new'),'Creating…');
+  api('deliveries',{method:'POST',body:{modelName:$('n-model').value,email:$('n-email').value,title:$('n-title').value,expiresDays:$('n-days').value,note:$('n-note').value}}).then(function(j){
+    $('f-new').reset();$('n-days').value='30';msg($('m-new'),'');openDetail(j.delivery.id);
+  }).catch(function(e){if(e.message!=='auth')msg($('m-new'),e.message,'err')});
+});
+
+function openDetail(id){
+  return api('deliveries/'+id).then(function(j){current=j.delivery;renderDetail(j)}).catch(function(e){if(e.message!=='auth')alert(e.message)});
+}
+function renderDetail(j){
+  var d=j.delivery;show('detail');
+  $('d-model').textContent=d.modelName;$('d-title').textContent=d.title;
+  $('d-link').value=j.link;$('d-email').textContent='Code goes to: '+d.email+' · '+(d.status==='released'?'Released: the model can download full-resolution files.':'Preview only: the model sees watermarked previews until you release.')+' · Expires: '+fmtDate(d.expiresAt);
+  $('d-stats').innerHTML='';
+  [['Opened',d.viewCount||0],['Downloads',d.downloadCount||0],['Last opened',d.lastViewedAt?new Date(d.lastViewedAt).toLocaleString():'never'],['Files',(d.files||[]).length]].forEach(function(x){var s=document.createElement('span');s.textContent=x[0]+' ';var b=document.createElement('b');b.textContent=x[1];s.appendChild(b);$('d-stats').appendChild(s)});
+  $('b-release').textContent=d.status==='released'?'Lock again (preview only)':'Release originals to the model';
+  msg($('m-detail'),'');msg($('m-code'),'');
+  var f=$('files');f.textContent='';
+  (d.files||[]).forEach(function(x){
+    var c=document.createElement('div');c.className='file';var im=document.createElement('img');im.alt=x.name;im.loading='lazy';im.src='/api/delivery-admin/file/'+d.id+'/'+x.id+'?v='+(x.type==='video'?'poster':'preview');c.appendChild(im);
+    var m=document.createElement('div');m.className='m';var n=document.createElement('span');n.textContent=(x.type==='video'?'Video · ':x.raw?'RAW · ':'')+x.name+' · '+fmtSize(x.size);m.appendChild(n);
+    var del=document.createElement('button');del.className='danger';del.type='button';del.textContent='Remove';del.addEventListener('click',function(){if(!confirm('Remove '+x.name+'?'))return;api('deliveries/'+d.id+'/files?fid='+x.id,{method:'DELETE'}).then(function(){openDetail(d.id)})});m.appendChild(del);c.appendChild(m);f.appendChild(c);
+  });
+  var L=$('log');L.textContent='';
+  if(!j.log.length)L.textContent='No activity yet.';
+  var names={opened:'Model opened the delivery',download:'Model downloaded',code_requested:'Code requested by the model',code_failed:'Wrong code entered',code_generated_by_admin:'You generated a code'};
+  j.log.forEach(function(e){var r=document.createElement('div');r.textContent=new Date(e.ts).toLocaleString()+'  ·  '+(names[e.type]||e.type)+(e.file?': '+e.file:'')+(e.type==='code_requested'?(e.emailed?' (emailed)':' (email not sent: share a code yourself)'):'');L.appendChild(r)});
+}
+$('back').addEventListener('click',function(){current=null;loadList()});
+$('copy').addEventListener('click',function(){navigator.clipboard.writeText($('d-link').value).then(function(){msg($('m-detail'),'Link copied.','ok')},function(){$('d-link').select()})});
+$('b-release').addEventListener('click',function(){
+  var to=current.status==='released'?'preview':'released';
+  if(to==='released'&&!confirm('Release full-resolution originals to '+current.modelName+'? They will be able to download everything in this delivery.'))return;
+  api('deliveries/'+current.id,{method:'PATCH',body:{status:to}}).then(function(){openDetail(current.id)}).catch(function(e){msg($('m-detail'),e.message,'err')});
+});
+$('b-code').addEventListener('click',function(){
+  api('deliveries/'+current.id+'/code',{method:'POST',body:{}}).then(function(j){msg($('m-code'),'One-time code: '+j.code+' (valid for '+j.validMinutes+' minutes, single use). Share it personally; the model still opens the private link and enters the email on file.','ok')}).catch(function(e){msg($('m-code'),e.message,'err')});
+});
+$('b-delete').addEventListener('click',function(){
+  if(!confirm('Permanently delete this delivery and every file in it? This cannot be undone.'))return;
+  api('deliveries/'+current.id,{method:'DELETE'}).then(function(){current=null;loadList()}).catch(function(e){msg($('m-detail'),e.message,'err')});
+});
+
+// ---------- uploads ----------
+var drop=$('drop'),pick=$('pick');
+drop.addEventListener('click',function(){pick.click()});
+drop.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick.click()}});
+['dragenter','dragover'].forEach(function(t){drop.addEventListener(t,function(e){e.preventDefault();drop.classList.add('on')})});
+['dragleave','drop'].forEach(function(t){drop.addEventListener(t,function(e){e.preventDefault();drop.classList.remove('on')})});
+drop.addEventListener('drop',function(e){handle(e.dataTransfer.files)});
+pick.addEventListener('change',function(){handle(pick.files);pick.value=''});
+
+var IMG=['image/jpeg','image/png','image/webp'],VID=['video/mp4','video/quicktime','video/webm'];
+var RAWEXT={cr2:'image/x-canon-cr2',nef:'image/x-nikon-nef'};
+function rawMime(f){var m=/\.(cr2|nef)$/i.exec(f.name);return m?RAWEXT[m[1].toLowerCase()]:null}
+function rawPreview(buf){
+  var v=new DataView(buf),size=buf.byteLength;
+  if(size<16)return null;
+  var le=v.getUint16(0)===0x4949;
+  if(!(v.getUint16(0)===0x4949||v.getUint16(0)===0x4d4d)||v.getUint16(2,le)!==42)return null;
+  function u16(o){return v.getUint16(o,le)}function u32(o){return v.getUint32(o,le)}
+  var seen={},cands=[],orientation=0,tsz={1:1,2:1,3:2,4:4,5:8,7:1,9:4,10:8};
+  function vals(e,type,count){
+    var sz=(tsz[type]||1)*count,off=sz<=4?e+8:u32(e+8),out=[];
+    for(var i=0;i<count&&i<4096;i++){var p=off+i*(type===3?2:4);if(p+(type===3?2:4)>size)break;out.push(type===3?u16(p):u32(p))}
+    return out;
+  }
+  function ifd(off,depth){
+    if(!off||off+2>size||seen[off]||depth>6)return;seen[off]=1;
+    var n=u16(off);if(n>512||off+2+n*12+4>size)return;
+    var jOff=0,jLen=0,comp=0,sOff=[],sLen=[],subs=[];
+    for(var i=0;i<n;i++){
+      var e=off+2+i*12,tag=u16(e),type=u16(e+2),count=u32(e+4);
+      if(tag===0x0112){if(!orientation)orientation=u16(e+8)}
+      else if(tag===0x0201)jOff=u32(e+8);
+      else if(tag===0x0202)jLen=u32(e+8);
+      else if(tag===0x0103)comp=u16(e+8);
+      else if(tag===0x0111)sOff=vals(e,type,count);
+      else if(tag===0x0117)sLen=vals(e,type,count);
+      else if(tag===0x014a)subs=vals(e,type,count);
+    }
+    if(jOff&&jLen)cands.push([jOff,jLen]);
+    if((comp===6||comp===7)&&sOff.length===1&&sLen.length===1)cands.push([sOff[0],sLen[0]]);
+    subs.forEach(function(s){ifd(s,depth+1)});
+    ifd(u32(off+2+n*12),depth);
+  }
+  ifd(u32(4),0);
+  // Lossless JPEG (SOF3) is the raw sensor data in CR2; only baseline/progressive JPEGs are previews.
+  function viewable(o,l){
+    if(o+l>size||l<2000||v.getUint8(o)!==0xff||v.getUint8(o+1)!==0xd8||v.getUint8(o+2)!==0xff)return false;
+    var p=o+2,end=Math.min(o+l,o+65536);
+    while(p+4<end){
+      if(v.getUint8(p)!==0xff){p++;continue}
+      var m=v.getUint8(p+1);
+      if(m===0xff){p++;continue}
+      if(m>=0xc0&&m<=0xcf&&m!==0xc4&&m!==0xc8&&m!==0xcc)return m===0xc0||m===0xc1||m===0xc2;
+      if(m===0xd8||m===0x01||(m>=0xd0&&m<=0xd7)){p+=2;continue}
+      p+=2+v.getUint16(p+2);
+    }
+    return false;
+  }
+  cands.sort(function(a,b){return b[1]-a[1]});
+  for(var k=0;k<cands.length;k++){
+    if(viewable(cands[k][0],cands[k][1]))return{start:cands[k][0],length:cands[k][1],orientation:orientation||1};
+  }
+  return null;
+}
+
+function hex(n){var a=new Uint8Array(n);crypto.getRandomValues(a);return Array.from(a).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
+function watermark(canvas){
+  var ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height,fs=Math.max(18,Math.round(Math.min(w,h)/14));
+  ctx.save();ctx.translate(w/2,h/2);ctx.rotate(-Math.PI/7);ctx.font='500 '+fs+'px Inter, Arial, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.lineWidth=Math.max(1,fs/18);ctx.strokeStyle='rgba(0,0,0,.28)';ctx.fillStyle='rgba(255,255,255,.34)';
+  var t='PHOTOCZARO  ·  PREVIEW',gapY=fs*3.2,gapX=ctx.measureText(t).width+fs*1.2,span=Math.hypot(w,h);
+  for(var y=-span;y<span;y+=gapY){var off=(Math.round(y/gapY)%2)*gapX/2;for(var x=-span;x<span;x+=gapX){ctx.strokeText(t,x+off,y);ctx.fillText(t,x+off,y)}}
+  ctx.restore();
+}
+function toWebp(canvas){return new Promise(function(res,rej){canvas.toBlob(function(b){if(!b||b.type!=='image/webp')rej(new Error('This browser cannot create WebP previews. Use Chrome or Edge.'));else res(b)},'image/webp',0.78)})}
+function put(id,fid,kind,blob,mime){return api('upload/'+id+'?action=put&fid='+fid+'&kind='+kind+(mime?'&mime='+encodeURIComponent(mime):''),{method:'POST',body:blob})}
+function drawOriented(bmp,o,max){
+  var w=bmp.width,h=bmp.height,sw=o>=5,cw=sw?h:w,ch=sw?w:h,s=Math.min(1,max/Math.max(cw,ch)),c=document.createElement('canvas');
+  c.width=Math.round(cw*s);c.height=Math.round(ch*s);var x=c.getContext('2d');x.scale(s,s);
+  switch(o){case 2:x.transform(-1,0,0,1,w,0);break;case 3:x.transform(-1,0,0,-1,w,h);break;case 4:x.transform(1,0,0,-1,0,h);break;case 5:x.transform(0,1,1,0,0,0);break;case 6:x.transform(0,1,-1,0,h,0);break;case 7:x.transform(0,-1,-1,0,h,w);break;case 8:x.transform(0,-1,1,0,0,w);break}
+  x.drawImage(bmp,0,0);return c;
+}
+async function rawImagePreview(file){
+  var r=rawPreview(await file.arrayBuffer());
+  if(!r)throw new Error('No preview image found inside this RAW file.');
+  var jpg=file.slice(r.start,r.start+r.length,'image/jpeg');
+  var bmp=await createImageBitmap(jpg,{imageOrientation:'none'});
+  var c=drawOriented(bmp,r.orientation,1600);var dims=(r.orientation>=5)?{w:bmp.height,h:bmp.width}:{w:bmp.width,h:bmp.height};bmp.close&&bmp.close();
+  watermark(c);return {blob:await toWebp(c),dims:dims};
+}
+async function imagePreview(file){
+  var bmp=await createImageBitmap(file),max=1600,s=Math.min(1,max/Math.max(bmp.width,bmp.height));
+  var c=document.createElement('canvas');c.width=Math.round(bmp.width*s);c.height=Math.round(bmp.height*s);
+  c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);watermark(c);var dims={w:bmp.width,h:bmp.height};bmp.close&&bmp.close();
+  return {blob:await toWebp(c),dims:dims};
+}
+function videoPoster(file){
+  return new Promise(function(res,rej){
+    var v=document.createElement('video');v.muted=true;v.playsInline=true;v.preload='metadata';var url=URL.createObjectURL(file);v.src=url;
+    var fail=function(){URL.revokeObjectURL(url);rej(new Error('Could not read this video in the browser. Use an MP4 (H.264) file.'))};
+    v.onerror=fail;
+    v.onloadedmetadata=function(){v.currentTime=Math.min(1,(v.duration||2)/2)};
+    v.onseeked=function(){
+      var s=Math.min(1,1280/Math.max(v.videoWidth,v.videoHeight)),c=document.createElement('canvas');c.width=Math.round(v.videoWidth*s);c.height=Math.round(v.videoHeight*s);
+      c.getContext('2d').drawImage(v,0,0,c.width,c.height);watermark(c);var dims={w:v.videoWidth,h:v.videoHeight};URL.revokeObjectURL(url);
+      toWebp(c).then(function(b){res({blob:b,dims:dims})},rej);
+    };
+  });
+}
+async function uploadLarge(id,fid,file,mime){
+  var start=await api('upload/'+id+'?action=start&fid='+fid+'&mime='+encodeURIComponent(mime),{method:'POST',body:'{}'});
+  var PART=32*1024*1024,parts=[],n=1;
+  try{
+    for(var o=0;o<file.size;o+=PART,n++){
+      var r=await api('upload/'+id+'?action=part&fid='+fid+'&uploadId='+encodeURIComponent(start.uploadId)+'&mime='+encodeURIComponent(mime)+'&n='+n,{method:'POST',body:file.slice(o,o+PART)});
+      parts.push({partNumber:r.partNumber,etag:r.etag});
+      setLine(file.name,Math.min(100,Math.round((o+PART)/file.size*100))+'%');
+    }
+    await api('upload/'+id+'?action=complete&fid='+fid+'&uploadId='+encodeURIComponent(start.uploadId),{method:'POST',body:{parts:parts}});
+  }catch(e){try{await api('upload/'+id+'?action=abort&fid='+fid+'&uploadId='+encodeURIComponent(start.uploadId),{method:'POST',body:'{}'})}catch(_){}throw e}
+}
+var lines={};
+function setLine(name,status,err){var p=$('prog');var el=lines[name];if(!el){el=document.createElement('div');lines[name]=el;p.appendChild(el)}el.textContent='';var b=document.createElement('b');b.textContent=name;el.appendChild(b);el.appendChild(document.createTextNode('  '+status));if(err)el.style.color='var(--danger)'}
+async function handle(list){
+  var files=Array.from(list||[]);if(!files.length||!current)return;var id=current.id;$('prog').textContent='';lines={};
+  for(var i=0;i<files.length;i++){
+    var raw=rawMime(f),mime=raw||f.type,isImg=!!raw||IMG.indexOf(f.type)>-1,isVid=!raw&&VID.indexOf(f.type)>-1;
+    if(!isImg&&!isVid){setLine(f.name,'skipped: unsupported type ('+(f.type||'unknown')+')',1);continue}
+    if(isImg&&!raw&&f.size>60*1024*1024){setLine(f.name,'skipped: image over 60 MB',1);continue}
+    if(raw&&f.size>200*1024*1024){setLine(f.name,'skipped: RAW over 200 MB',1);continue}
+    var fid=hex(6);
+    try{
+      setLine(f.name,'preparing preview…');
+      var pv=raw?await rawImagePreview(f):isImg?await imagePreview(f):await videoPoster(f);
+      setLine(f.name,'uploading…');
+      if(raw){await uploadLarge(id,fid,f,mime);await put(id,fid,'preview',pv.blob)}
+      else if(isImg){await put(id,fid,'original',f,f.type);await put(id,fid,'preview',pv.blob)}
+      else{await uploadLarge(id,fid,f,f.type);await put(id,fid,'poster',pv.blob)}
+      await api('deliveries/'+id+'/files',{method:'POST',body:{fid:fid,name:f.name,type:isImg?'image':'video',mime:mime,width:pv.dims.w,height:pv.dims.h}});
+      setLine(f.name,'done ✓');
+    }catch(e){setLine(f.name,'failed: '+e.message,1)}
+  }
+  openDetail(id);
+}
+
+api('deliveries').then(function(){loadList()}).catch(function(){});
+})();
+</script>
+</body>
+</html>

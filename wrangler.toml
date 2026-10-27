@@ -9,3 +9,15 @@ id = "25ad1257e9f44539b1d8bc02f72100eb"
 [[kv_namespaces]]
 binding = "TELEGRAM_KV"
 id = "1319392a2b3d4557a3ec98fbdac5b3e6"
+
+# Private Image/Video Delivery (photoczaro.com/delivery/<id>, admin at /delivery-admin).
+# DELIVERY_KV holds delivery records, one-time codes, rate-limit counters and the activity log.
+# DELIVERY_R2 holds the files and is never publicly readable: every byte is served by a Function
+# after a session check (functions/api/delivery/**).
+[[kv_namespaces]]
+binding = "DELIVERY_KV"
+id = "9fcf012a84e64b58a163a38615f9838c"
+
+[[r2_buckets]]
+binding = "DELIVERY_R2"
+bucket_name = "photoczaro-deliveries"

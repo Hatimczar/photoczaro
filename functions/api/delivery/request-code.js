@@ -15,7 +15,7 @@ export async function onRequestPost({ request, env }) {
   if (await rateLimited(env, `id:${id}`, 6)) return json({ error: 'Too many attempts. Please try again later.' }, 429);
 
   const d = await loadDelivery(env, id);
-  if (d && !isExpired(d) && safeEqual(normEmail(d.email), email)) {
+  if (d && d.access !== 'link' && !isExpired(d) && safeEqual(normEmail(d.email), email)) {
     const code = await createCode(env, id);
     const r = await sendCodeEmail(env, email, code, d.title);
     await logEvent(env, id, 'code_requested', { emailed: !!r.sent });

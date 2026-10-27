@@ -90,6 +90,13 @@ export async function hasSession(request, env, id) {
   return !!(payload && payload.dlv === id);
 }
 
+// Access modes: 'link' = anyone holding the private link may view/download (the 128-bit link is the secret);
+// 'code' = the link plus an emailed one-time code is required.
+export async function canAccess(request, env, d) {
+  if (d.access === 'link') return true;
+  return hasSession(request, env, d.id);
+}
+
 export async function loadDelivery(env, id) {
   if (!ID_RE.test(id)) return null;
   const raw = await env.DELIVERY_KV.get(`d:${id}`);
@@ -134,4 +141,63 @@ export function parseRange(header, size) {
   else { start = parseInt(m[1], 10); end = m[2] === '' ? size - 1 : Math.min(parseInt(m[2], 10), size - 1); }
   if (start > end || start >= size) return { invalid: true };
   return { offset: start, length: end - start + 1 };
+}
+
+// ---------- ZIP (store method, no compression) ----------
+// Sizes and CRC-32 of every original are known up front (the admin's browser computes the CRC at upload),
+// so the archive can be streamed straight out of R2 with an exact Content-Length and no CPU-heavy hashing.
+const u16 = (n) => [n & 255, (n >>> 8) & 255];
+const u32 = (n) => [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255];
+
+function dosDateTime(ts) {
+  const d = new Date(ts);
+  const time = (d.getUTCHours() << 11) | (d.getUTCMinutes() << 5) | (d.getUTCSeconds() >> 1);
+  const date = ((d.getUTCFullYear() - 1980) << 9) | ((d.getUTCMonth() + 1) << 5) | d.getUTCDate();
+  return { time, date };
+}
+
+function uniqueNames(files) {
+  const seen = new Map();
+  return files.map((f) => {
+    let name = cleanName(f.name, 'file');
+    const key = name.toLowerCase();
+    const n = (seen.get(key) || 0) + 1;
+    seen.set(key, n);
+    if (n > 1) { const dot = name.lastIndexOf('.'); name = dot > 0 ? `${name.slice(0, dot)} (${n})${name.slice(dot)}` : `${name} (${n})`; }
+    return name;
+  });
+}
+
+// Returns { entries, totalSize, centralDirectory, ok, reason }. Each entry has the local header bytes ready to emit.
+export function planZip(files, ts = Date.now()) {
+  if (!files.length) return { ok: false, reason: 'empty' };
+  if (files.length > 65000) return { ok: false, reason: 'too-many' };
+  if (files.some((f) => !Number.isInteger(f.crc32) || f.crc32 < 0 || f.crc32 > 0xffffffff)) return { ok: false, reason: 'no-crc' };
+  const names = uniqueNames(files);
+  const { time, date } = dosDateTime(ts);
+  const te = new TextEncoder();
+  const entries = [];
+  let offset = 0;
+  const central = [];
+  files.forEach((f, i) => {
+    const nameBytes = te.encode(names[i]);
+    const local = new Uint8Array([
+      ...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(time), ...u16(date),
+      ...u32(f.crc32), ...u32(f.size), ...u32(f.size), ...u16(nameBytes.length), ...u16(0), ...nameBytes,
+    ]);
+    entries.push({ file: f, local });
+    central.push(new Uint8Array([
+      ...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(time), ...u16(date),
+      ...u32(f.crc32), ...u32(f.size), ...u32(f.size), ...u16(nameBytes.length), ...u16(0), ...u16(0),
+      ...u16(0), ...u16(0), ...u32(0), ...u32(offset), ...nameBytes,
+    ]));
+    offset += local.length + f.size;
+  });
+  const cdSize = central.reduce((s, c) => s + c.length, 0);
+  const eocd = new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(files.length), ...u16(files.length), ...u32(cdSize), ...u32(offset), ...u16(0)]);
+  const centralDirectory = new Uint8Array(cdSize + eocd.length);
+  let o = 0; for (const c of central) { centralDirectory.set(c, o); o += c.length; } centralDirectory.set(eocd, o);
+  const totalSize = offset + centralDirectory.length;
+  if (totalSize >= 0xffffffff) return { ok: false, reason: 'too-large' };
+  return { ok: true, entries, centralDirectory, totalSize };
 }

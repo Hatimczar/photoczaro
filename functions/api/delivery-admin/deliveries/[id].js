@@ -30,8 +30,9 @@ export async function onRequestPatch({ request, env, params }) {
   if (b.title !== undefined) d.title = cleanName(b.title, d.title);
   if (b.modelName !== undefined) d.modelName = cleanName(b.modelName, d.modelName);
   if (b.note !== undefined) d.note = String(b.note).slice(0, 500);
-  if (b.email !== undefined) { const e = normEmail(b.email); if (!validEmail(e)) return json({ error: 'Invalid email.' }, 400); d.email = e; }
+  if (b.email !== undefined) { const e = normEmail(b.email); if (e && !validEmail(e)) return json({ error: 'Invalid email.' }, 400); d.email = e; }
   if (b.expiresDays !== undefined) { const n = Math.max(0, Math.min(365, Math.floor(+b.expiresDays) || 0)); d.expiresAt = n ? Date.now() + n * 86400000 : null; }
+  if (b.access !== undefined) { if (!['link', 'code'].includes(b.access)) return json({ error: 'Invalid access mode.' }, 400); if (b.access === 'code' && !validEmail(d.email)) return json({ error: 'Add a valid email first.' }, 400); d.access = b.access; }
   if (b.status !== undefined) { if (!['preview', 'released'].includes(b.status)) return json({ error: 'Invalid status.' }, 400); d.status = b.status; }
   await saveDelivery(env, d);
   return json({ delivery: d });

@@ -66,8 +66,12 @@ tr.link{cursor:pointer}tr.link:hover td{background:rgba(255,255,255,.03)}
     <form id="f-new">
       <div class="row">
         <div><label for="n-model">Model name</label><input id="n-model" required maxlength="120"></div>
-        <div><label for="n-email">Model email (receives the code)</label><input id="n-email" type="email" required></div>
+        <div><label for="n-access">Access</label><select id="n-access"><option value="link">Anyone with the private link (no code)</option><option value="code">Link plus emailed code</option></select></div>
         <div><label for="n-title">Title</label><input id="n-title" required maxlength="120" placeholder="e.g. Portfolio shoot, October 2026"></div>
+      </div>
+      <div class="row">
+        <div><label for="n-email">Model email (only needed for the code option)</label><input id="n-email" type="email" maxlength="254"></div>
+        <div><label for="n-release" style="margin-top:6px">Release originals now</label><select id="n-release"><option value="1">Yes, ready to download</option><option value="0">No, watermarked previews first</option></select></div>
       </div>
       <div class="row">
         <div><label for="n-days">Available for (days, 0 = no expiry)</label><input id="n-days" type="number" min="0" max="365" value="30"></div>
@@ -93,6 +97,7 @@ tr.link{cursor:pointer}tr.link:hover td{background:rgba(255,255,255,.03)}
     <p class="msg" id="m-detail" role="status" aria-live="polite"></p>
     <div class="linkbox" style="margin-top:8px">
       <button type="button" class="ghost" id="b-release"></button>
+      <button type="button" class="ghost" id="b-access"></button>
       <button type="button" class="ghost" id="b-code">Generate a one-time code to share personally</button>
       <button type="button" class="danger" id="b-delete">Delete delivery</button>
     </div>
@@ -149,7 +154,7 @@ $('logout').addEventListener('click',function(){fetch('/api/delivery-admin/logou
 
 $('f-new').addEventListener('submit',function(e){
   e.preventDefault();msg($('m-new'),'Creating…');
-  api('deliveries',{method:'POST',body:{modelName:$('n-model').value,email:$('n-email').value,title:$('n-title').value,expiresDays:$('n-days').value,note:$('n-note').value}}).then(function(j){
+  api('deliveries',{method:'POST',body:{modelName:$('n-model').value,email:$('n-email').value,access:$('n-access').value,release:$('n-release').value==='1',title:$('n-title').value,expiresDays:$('n-days').value,note:$('n-note').value}}).then(function(j){
     $('f-new').reset();$('n-days').value='30';msg($('m-new'),'');openDetail(j.delivery.id);
   }).catch(function(e){if(e.message!=='auth')msg($('m-new'),e.message,'err')});
 });
@@ -160,9 +165,11 @@ function openDetail(id){
 function renderDetail(j){
   var d=j.delivery;show('detail');
   $('d-model').textContent=d.modelName;$('d-title').textContent=d.title;
-  $('d-link').value=j.link;$('d-email').textContent='Code goes to: '+d.email+' · '+(d.status==='released'?'Released: the model can download full-resolution files.':'Preview only: the model sees watermarked previews until you release.')+' · Expires: '+fmtDate(d.expiresAt);
+  $('d-link').value=j.link;$('d-email').textContent=(d.access==='link'?'Access: anyone with the link (no code).':'Access: link plus a code emailed to '+d.email+'.')+' · '+(d.status==='released'?'Released: the model can download full-resolution files.':'Preview only: the model sees watermarked previews until you release.')+' · Expires: '+fmtDate(d.expiresAt);
   $('d-stats').innerHTML='';
   [['Opened',d.viewCount||0],['Downloads',d.downloadCount||0],['Last opened',d.lastViewedAt?new Date(d.lastViewedAt).toLocaleString():'never'],['Files',(d.files||[]).length]].forEach(function(x){var s=document.createElement('span');s.textContent=x[0]+' ';var b=document.createElement('b');b.textContent=x[1];s.appendChild(b);$('d-stats').appendChild(s)});
+  $('b-code').hidden=(d.access==='link');
+  $('b-access').textContent=d.access==='link'?'Require an emailed code':'Switch to link only (no code)';
   $('b-release').textContent=d.status==='released'?'Lock again (preview only)':'Release originals to the model';
   msg($('m-detail'),'');msg($('m-code'),'');
   var f=$('files');f.textContent='';
@@ -183,6 +190,12 @@ $('b-release').addEventListener('click',function(){
   if(to==='released'&&!confirm('Release full-resolution originals to '+current.modelName+'? They will be able to download everything in this delivery.'))return;
   api('deliveries/'+current.id,{method:'PATCH',body:{status:to}}).then(function(){openDetail(current.id)}).catch(function(e){msg($('m-detail'),e.message,'err')});
 });
+$('b-access').addEventListener('click',function(){
+  var to=current.access==='link'?'code':'link';
+  var go=function(){api('deliveries/'+current.id,{method:'PATCH',body:{access:to}}).then(function(){openDetail(current.id)}).catch(function(e){msg($('m-detail'),e.message,'err')})};
+  if(to==='code'&&!current.email){var em=prompt('Model email address for the code:');if(!em)return;api('deliveries/'+current.id,{method:'PATCH',body:{email:em}}).then(go).catch(function(e){msg($('m-detail'),e.message,'err')});return}
+  go();
+});
 $('b-code').addEventListener('click',function(){
   api('deliveries/'+current.id+'/code',{method:'POST',body:{}}).then(function(j){msg($('m-code'),'One-time code: '+j.code+' (valid for '+j.validMinutes+' minutes, single use). Share it personally; the model still opens the private link and enters the email on file.','ok')}).catch(function(e){msg($('m-code'),e.message,'err')});
 });
@@ -200,6 +213,8 @@ drop.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.p
 drop.addEventListener('drop',function(e){handle(e.dataTransfer.files)});
 pick.addEventListener('change',function(){handle(pick.files);pick.value=''});
 
+var CRC_T=(function(){var t=new Uint32Array(256);for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crcUpdate(crc,u8){for(var i=0;i<u8.length;i++)crc=CRC_T[(crc^u8[i])&255]^(crc>>>8);return crc>>>0}
 var IMG=['image/jpeg','image/png','image/webp'],VID=['video/mp4','video/quicktime','video/webm'];
 var RAWEXT={cr2:'image/x-canon-cr2',nef:'image/x-nikon-nef'};
 function rawMime(f){var m=/\.(cr2|nef)$/i.exec(f.name);return m?RAWEXT[m[1].toLowerCase()]:null}
@@ -304,12 +319,15 @@ async function uploadLarge(id,fid,file,mime){
   var start=await api('upload/'+id+'?action=start&fid='+fid+'&mime='+encodeURIComponent(mime),{method:'POST',body:'{}'});
   var PART=32*1024*1024,parts=[],n=1;
   try{
+    var crc=0xffffffff;
     for(var o=0;o<file.size;o+=PART,n++){
-      var r=await api('upload/'+id+'?action=part&fid='+fid+'&uploadId='+encodeURIComponent(start.uploadId)+'&mime='+encodeURIComponent(mime)+'&n='+n,{method:'POST',body:file.slice(o,o+PART)});
+      var slice=file.slice(o,o+PART);crc=crcUpdate(crc,new Uint8Array(await slice.arrayBuffer()));
+      var r=await api('upload/'+id+'?action=part&fid='+fid+'&uploadId='+encodeURIComponent(start.uploadId)+'&mime='+encodeURIComponent(mime)+'&n='+n,{method:'POST',body:slice});
       parts.push({partNumber:r.partNumber,etag:r.etag});
       setLine(file.name,Math.min(100,Math.round((o+PART)/file.size*100))+'%');
     }
     await api('upload/'+id+'?action=complete&fid='+fid+'&uploadId='+encodeURIComponent(start.uploadId),{method:'POST',body:{parts:parts}});
+    return (crc^0xffffffff)>>>0;
   }catch(e){try{await api('upload/'+id+'?action=abort&fid='+fid+'&uploadId='+encodeURIComponent(start.uploadId),{method:'POST',body:'{}'})}catch(_){}throw e}
 }
 var lines={};
@@ -326,10 +344,11 @@ async function handle(list){
       setLine(f.name,'preparing preview…');
       var pv=raw?await rawImagePreview(f):isImg?await imagePreview(f):await videoPoster(f);
       setLine(f.name,'uploading…');
-      if(raw){await uploadLarge(id,fid,f,mime);await put(id,fid,'preview',pv.blob)}
-      else if(isImg){await put(id,fid,'original',f,f.type);await put(id,fid,'preview',pv.blob)}
-      else{await uploadLarge(id,fid,f,f.type);await put(id,fid,'poster',pv.blob)}
-      await api('deliveries/'+id+'/files',{method:'POST',body:{fid:fid,name:f.name,type:isImg?'image':'video',mime:mime,width:pv.dims.w,height:pv.dims.h}});
+      var crc32;
+      if(raw){crc32=await uploadLarge(id,fid,f,mime);await put(id,fid,'preview',pv.blob)}
+      else if(isImg){crc32=(crcUpdate(0xffffffff,new Uint8Array(await f.arrayBuffer()))^0xffffffff)>>>0;await put(id,fid,'original',f,f.type);await put(id,fid,'preview',pv.blob)}
+      else{crc32=await uploadLarge(id,fid,f,f.type);await put(id,fid,'poster',pv.blob)}
+      await api('deliveries/'+id+'/files',{method:'POST',body:{fid:fid,name:f.name,type:isImg?'image':'video',mime:mime,crc32:crc32,width:pv.dims.w,height:pv.dims.h}});
       setLine(f.name,'done ✓');
     }catch(e){setLine(f.name,'failed: '+e.message,1)}
   }

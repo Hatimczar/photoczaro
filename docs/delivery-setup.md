@@ -3,6 +3,8 @@
 Private, per-model delivery of photos and videos at `photoczaro.com/delivery/<id>`; admin at `photoczaro.com/delivery-admin`.
 
 ## How it works
+- Two access modes, chosen per delivery (changeable later): **link only** (default; anyone holding the private link can open it, no code) and **link plus emailed code**. The link carries 128 bits of randomness and is never listed or indexed, so treat it like a private key: whoever has it can view and download.
+- **Download all as ZIP**: once released, the model gets one ZIP of every original, streamed from R2 (no compression, exact size announced up front). The admin's browser records each file's CRC-32 at upload so the server does no hashing. Limit: about 4 GB per ZIP; larger deliveries fall back to per-file downloads.
 - Admin creates a delivery (model name, model email, title, expiry), uploads files, copies the private link and sends it to the model.
 - The model opens the link, enters the email on file, receives a 6-digit code (valid 10 min, single use, 5 attempts) and sees only their own delivery.
 - Images show watermarked previews (made in the admin's browser) until the delivery is **released**; videos show a watermarked poster frame. Releasing unlocks full-resolution originals and downloads.

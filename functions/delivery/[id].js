@@ -125,13 +125,18 @@ function render(m){
   $('g-note').hidden=!m.note;
   var exp=m.expiresAt?' This delivery stays available until '+new Date(m.expiresAt).toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'})+'.':'';
   $('g-banner').textContent=m.released
-    ?'Your files are released. Open any file to view it, or download the full-resolution originals.'+exp
+    ?'Your files are ready. Open any file to view it, or download the full-resolution originals, one by one or all together in a ZIP.'+exp
     :'These are watermarked previews. Your full-resolution files unlock here as soon as your delivery is released.'+exp;
   var tools=$('g-tools');tools.textContent='';
   if(m.released&&m.files.length){
-    var all=document.createElement('button');all.type='button';all.textContent='Download all ('+m.files.length+')';
-    all.addEventListener('click',function(){m.files.forEach(function(f,i){setTimeout(function(){var a=document.createElement('a');a.href=fileUrl(f,'original',true);a.download='';document.body.appendChild(a);a.click();a.remove()},i*900)})});
-    tools.appendChild(all);
+    if(m.zip){
+      var z=document.createElement('a');z.className='btn';z.href=api+'/zip';z.setAttribute('download','');
+      z.textContent='Download all as ZIP ('+m.files.length+' files, '+fmtSize(m.zip.size)+')';tools.appendChild(z);
+    }else{
+      var all=document.createElement('button');all.type='button';all.textContent='Download all ('+m.files.length+')';
+      all.addEventListener('click',function(){m.files.forEach(function(f,i){setTimeout(function(){var a=document.createElement('a');a.href=fileUrl(f,'original',true);a.download='';document.body.appendChild(a);a.click();a.remove()},i*900)})});
+      tools.appendChild(all);
+    }
   }
   var g=$('g-grid');g.textContent='';
   $('g-empty').hidden=m.files.length>0;

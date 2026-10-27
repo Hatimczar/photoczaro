@@ -25,8 +25,9 @@ export async function onRequestPost({ request, env, params }) {
   const hasPreview = type === 'image' && !!(await env.DELIVERY_R2.head(`${d.id}/${fid}/preview`));
   const hasPoster = type === 'video' && !!(await env.DELIVERY_R2.head(`${d.id}/${fid}/poster`));
   if (type === 'image' && !hasPreview) return json({ error: 'A watermarked preview is required for images.' }, 400);
+  const crc32 = Number.isInteger(b.crc32) && b.crc32 >= 0 && b.crc32 <= 0xffffffff ? b.crc32 : null;
   d.files = (d.files || []).filter((f) => f.id !== fid);
-  d.files.push({ id: fid, name: cleanName(b.name, 'file'), type, mime, raw, size: original.size, width: Math.round(+b.width) || null, height: Math.round(+b.height) || null, hasPreview, hasPoster, addedAt: Date.now() });
+  d.files.push({ id: fid, name: cleanName(b.name, 'file'), type, mime, raw, crc32, size: original.size, width: Math.round(+b.width) || null, height: Math.round(+b.height) || null, hasPreview, hasPoster, addedAt: Date.now() });
   await saveDelivery(env, d);
   return json({ ok: true, files: d.files.length });
 }

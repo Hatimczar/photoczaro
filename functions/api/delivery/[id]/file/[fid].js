@@ -1,4 +1,4 @@
-import { json, loadDelivery, saveDelivery, hasSession, isExpired, logEvent, parseRange, FID_RE, cleanName } from '../../../../_lib/delivery.js';
+import { json, loadDelivery, saveDelivery, canAccess, isExpired, logEvent, parseRange, FID_RE, cleanName } from '../../../../_lib/delivery.js';
 
 // Streams one object from private R2 after checking the viewer's session.
 //   ?v=preview  watermarked image preview (always allowed)
@@ -9,7 +9,7 @@ export async function onRequestGet({ request, env, params }) {
   const { id, fid } = params;
   if (!env.DELIVERY_R2) return json({ error: 'Not available.' }, 503);
   const d = await loadDelivery(env, id);
-  if (!d || !FID_RE.test(fid) || !(await hasSession(request, env, id))) return json({ error: 'Unauthorized.' }, 401);
+  if (!d || !FID_RE.test(fid) || !(await canAccess(request, env, d))) return json({ error: 'Unauthorized.' }, 401);
   if (isExpired(d)) return json({ error: 'This delivery has expired.' }, 410);
   const f = (d.files || []).find((x) => x.id === fid);
   if (!f) return json({ error: 'Not found.' }, 404);

@@ -39,7 +39,8 @@ button:disabled{opacity:.5;cursor:default}
 .tile img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;background:#151515}
 .tile .play{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(10,10,10,.65);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;pointer-events:none}
 .tile .play::after{content:"";border-left:14px solid var(--gold-light);border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
-.tile .meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;font-size:12px;color:var(--grey)}
+.tile .meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 8px;padding:10px 12px;font-size:12px;color:var(--grey)}
+.tile .meta .nm{flex:1 1 100%;min-width:0;color:rgba(245,240,235,.8)}
 .tile .meta span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tile .meta a{color:var(--gold-light);font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border-bottom:.5px solid rgba(232,213,163,.4);white-space:nowrap}
 .lb{position:fixed;inset:0;background:rgba(0,0,0,.94);display:none;align-items:center;justify-content:center;z-index:50;padding:3vw}
@@ -48,6 +49,7 @@ button:disabled{opacity:.5;cursor:default}
 .lb .x{position:absolute;top:16px;right:16px}
 .empty{color:var(--grey)}
 .sr{position:absolute;left:-9999px}
+@media (max-width:560px){.grid{grid-template-columns:repeat(2,1fr);gap:8px}main{padding-top:32px}.tile .meta{padding:8px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -122,7 +124,7 @@ function render(m){
     o.addEventListener('click',function(){open(f,m.released)});
     t.appendChild(o);
     var meta=document.createElement('div');meta.className='meta';
-    var n=document.createElement('span');n.textContent=(f.raw?'RAW · ':'')+f.name+' · '+fmtSize(f.size);meta.appendChild(n);
+    var n=document.createElement('span');n.className='nm';n.textContent=f.name;meta.appendChild(n);var sz=document.createElement('span');sz.textContent=(f.raw?'RAW · ':'')+fmtSize(f.size);meta.appendChild(sz);
     if(m.released){var d=document.createElement('a');d.href=fileUrl(f,'original',true);d.setAttribute('download','');d.textContent='Download';meta.appendChild(d)}
     t.appendChild(meta);g.appendChild(t);
   });

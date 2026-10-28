@@ -1,11 +1,11 @@
-import { json, loadDelivery, saveDelivery, canAccess, isExpired, logEvent, planZip, cleanName } from '../../../_lib/delivery.js';
+import { json, loadDelivery, saveDelivery, isExpired, logEvent, planZip, cleanName } from '../../../_lib/delivery.js';
 
 // "Download all": streams every original in one ZIP straight from private R2. Only after release.
-export async function onRequestGet({ request, env, params, waitUntil }) {
+export async function onRequestGet({ env, params, waitUntil }) {
   const id = params.id;
   if (!env.DELIVERY_R2) return json({ error: 'Not available.' }, 503);
   const d = await loadDelivery(env, id);
-  if (!d || !(await canAccess(request, env, d))) return json({ error: 'Unauthorized.' }, 401);
+  if (!d) return json({ error: 'Not found.' }, 404);
   if (isExpired(d)) return json({ error: 'This delivery has expired.' }, 410);
   if (d.status !== 'released') return json({ error: 'Originals are not released yet.' }, 403);
   const plan = planZip(d.files || [], d.createdAt);

@@ -28,16 +28,9 @@ h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2rem,6
 h1 em{color:var(--gold-light)}
 .eyebrow{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
 .lead{color:rgba(245,240,235,.75);line-height:1.75;max-width:620px;margin-bottom:28px}
-.card{background:var(--dark-2);border:.5px solid rgba(201,169,110,.25);padding:32px;max-width:460px}
-label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:8px}
-input{width:100%;background:var(--dark-3);border:1px solid rgba(255,255,255,.12);color:var(--white);font:inherit;font-size:16px;padding:14px;margin-bottom:18px}
-input.code{font-size:28px;letter-spacing:.5em;text-align:center}
 button,.btn{display:inline-block;background:var(--gold);color:#0a0a0a;border:0;font:inherit;font-size:12px;letter-spacing:.18em;text-transform:uppercase;padding:14px 26px;cursor:pointer;text-decoration:none}
 button.ghost,.btn.ghost{background:transparent;color:var(--gold-light);border:1px solid rgba(201,169,110,.5)}
 button:disabled{opacity:.5;cursor:default}
-.msg{min-height:22px;font-size:14px;margin-top:14px}
-.msg.err{color:var(--danger)}.msg.ok{color:var(--ok)}
-.hint{font-size:13px;color:var(--grey);line-height:1.6;margin-top:18px}
 .banner{border:.5px solid rgba(201,169,110,.35);background:var(--dark-2);padding:16px 20px;margin:0 0 28px;font-size:14px;line-height:1.65;color:rgba(245,240,235,.85)}
 .toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:24px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
@@ -61,25 +54,6 @@ button:disabled{opacity:.5;cursor:default}
 <body>
 <header><a class="logo" href="/">Photoczaro</a><span class="tag">Private delivery</span></header>
 <main id="main">
-  <section id="login" hidden>
-    <p class="eyebrow">Private delivery</p>
-    <h1>Open your <em>images and videos</em></h1>
-    <p class="lead">This delivery was prepared for you and is only visible to you. Enter the email address we have for you and we will send a one-time code.</p>
-    <form class="card" id="f-email" novalidate>
-      <label for="email">Your email</label>
-      <input id="email" type="email" autocomplete="email" inputmode="email" required>
-      <button type="submit" id="b-email">Send me a code</button>
-      <p class="msg" id="m-email" role="status" aria-live="polite"></p>
-    </form>
-    <form class="card" id="f-code" novalidate hidden>
-      <label for="code">6-digit code</label>
-      <input id="code" class="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" required>
-      <button type="submit" id="b-code">Open delivery</button>
-      <button type="button" class="ghost" id="b-back">Use another email</button>
-      <p class="msg" id="m-code" role="status" aria-live="polite"></p>
-      <p class="hint">If the email matches this delivery, the code arrives within a minute and works for 10 minutes. Check your spam folder, or message Hatim if it does not arrive.</p>
-    </form>
-  </section>
   <section id="gallery" hidden>
     <p class="eyebrow" id="g-model"></p>
     <h1 id="g-title"></h1>
@@ -101,14 +75,11 @@ button:disabled{opacity:.5;cursor:default}
 var id=location.pathname.split('/').filter(Boolean).pop();
 var api='/api/delivery/'+id;
 var $=function(s){return document.getElementById(s)};
-function show(n){['login','gallery','gone'].forEach(function(k){$(k).hidden=(k!==n)})}
-function msg(el,t,c){el.textContent=t||'';el.className='msg'+(c?' '+c:'')}
+function show(n){['gallery','gone'].forEach(function(k){$(k).hidden=(k!==n)})}
 function fmtSize(b){return b>=1048576?(b/1048576).toFixed(b>=10485760?0:1)+' MB':Math.max(1,Math.round(b/1024))+' KB'}
-function post(u,b){return fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b),credentials:'same-origin'})}
 
 function load(){
-  fetch(api+'/manifest',{credentials:'same-origin'}).then(function(r){
-    if(r.status===401){show('login');$('email').focus();return null}
+  fetch(api+'/manifest').then(function(r){
     if(!r.ok){show('gone');return null}
     return r.json();
   }).then(function(m){if(m)render(m)}).catch(function(){show('gone')});
@@ -171,27 +142,6 @@ $('lb-x').addEventListener('click',close);
 $('lb').addEventListener('click',function(e){if(e.target===$('lb'))close()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&$('lb').classList.contains('on'))close()});
 
-$('f-email').addEventListener('submit',function(e){
-  e.preventDefault();var em=$('email').value.trim();
-  if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(em)){msg($('m-email'),'Please enter a valid email address.','err');return}
-  $('b-email').disabled=true;msg($('m-email'),'Sending…');
-  post('/api/delivery/request-code',{id:id,email:em}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
-    $('b-email').disabled=false;
-    if(!x.ok){msg($('m-email'),x.j.error||'Something went wrong.','err');return}
-    $('f-email').hidden=true;$('f-code').hidden=false;$('code').focus();
-  }).catch(function(){$('b-email').disabled=false;msg($('m-email'),'Network error. Please try again.','err')});
-});
-$('b-back').addEventListener('click',function(){$('f-code').hidden=true;$('f-email').hidden=false;msg($('m-code'),'');$('email').focus()});
-$('f-code').addEventListener('submit',function(e){
-  e.preventDefault();var c=$('code').value.replace(/\\s+/g,'');
-  if(!/^\\d{6}$/.test(c)){msg($('m-code'),'Enter the 6-digit code.','err');return}
-  $('b-code').disabled=true;msg($('m-code'),'Checking…');
-  post('/api/delivery/verify',{id:id,code:c}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
-    $('b-code').disabled=false;
-    if(!x.ok){msg($('m-code'),x.j.error||'That code did not work.','err');return}
-    load();
-  }).catch(function(){$('b-code').disabled=false;msg($('m-code'),'Network error. Please try again.','err')});
-});
 load();
 })();
 </script>

@@ -60,18 +60,14 @@ tr.link{cursor:pointer}tr.link:hover td{background:rgba(255,255,255,.03)}
 
 <section id="list" hidden>
   <p class="eyebrow">Admin</p><h1>Private deliveries</h1>
-  <p class="sub">Each delivery has its own private link and email code, and is visible only to the model it belongs to and to you.</p>
+  <p class="sub">Each delivery has its own private link. Send it to the model: there is no code or login, so only people holding the link can open it.</p>
   <div class="panel">
     <h2 style="margin-top:0">New delivery</h2>
     <form id="f-new">
       <div class="row">
         <div><label for="n-model">Model name</label><input id="n-model" required maxlength="120"></div>
-        <div><label for="n-access">Access</label><select id="n-access"><option value="link">Anyone with the private link (no code)</option><option value="code">Link plus emailed code</option></select></div>
+        <div><label for="n-release">Release originals now</label><select id="n-release"><option value="1">Yes, ready to download</option><option value="0">No, watermarked previews first</option></select></div>
         <div><label for="n-title">Title</label><input id="n-title" required maxlength="120" placeholder="e.g. Portfolio shoot, October 2026"></div>
-      </div>
-      <div class="row">
-        <div><label for="n-email">Model email (only needed for the code option)</label><input id="n-email" type="email" maxlength="254"></div>
-        <div><label for="n-release" style="margin-top:6px">Release originals now</label><select id="n-release"><option value="1">Yes, ready to download</option><option value="0">No, watermarked previews first</option></select></div>
       </div>
       <div class="row">
         <div><label for="n-days">Available for (days, 0 = no expiry)</label><input id="n-days" type="number" min="0" max="365" value="30"></div>
@@ -97,12 +93,9 @@ tr.link{cursor:pointer}tr.link:hover td{background:rgba(255,255,255,.03)}
     <p class="msg" id="m-detail" role="status" aria-live="polite"></p>
     <div class="linkbox" style="margin-top:8px">
       <button type="button" class="ghost" id="b-release"></button>
-      <button type="button" class="ghost" id="b-access"></button>
-      <button type="button" class="ghost" id="b-code">Generate a one-time code to share personally</button>
       <button type="button" class="danger" id="b-delete">Delete delivery</button>
     </div>
-    <p class="msg" id="m-code" role="status"></p>
-  </div>
+      </div>
 
   <h2>Add images and videos</h2>
   <div class="panel">
@@ -154,7 +147,7 @@ $('logout').addEventListener('click',function(){fetch('/api/delivery-admin/logou
 
 $('f-new').addEventListener('submit',function(e){
   e.preventDefault();msg($('m-new'),'Creating…');
-  api('deliveries',{method:'POST',body:{modelName:$('n-model').value,email:$('n-email').value,access:$('n-access').value,release:$('n-release').value==='1',title:$('n-title').value,expiresDays:$('n-days').value,note:$('n-note').value}}).then(function(j){
+  api('deliveries',{method:'POST',body:{modelName:$('n-model').value,release:$('n-release').value==='1',title:$('n-title').value,expiresDays:$('n-days').value,note:$('n-note').value}}).then(function(j){
     $('f-new').reset();$('n-days').value='30';msg($('m-new'),'');openDetail(j.delivery.id);
   }).catch(function(e){if(e.message!=='auth')msg($('m-new'),e.message,'err')});
 });
@@ -165,13 +158,11 @@ function openDetail(id){
 function renderDetail(j){
   var d=j.delivery;show('detail');
   $('d-model').textContent=d.modelName;$('d-title').textContent=d.title;
-  $('d-link').value=j.link;$('d-email').textContent=(d.access==='link'?'Access: anyone with the link (no code).':'Access: link plus a code emailed to '+d.email+'.')+' · '+(d.status==='released'?'Released: the model can download full-resolution files.':'Preview only: the model sees watermarked previews until you release.')+' · Expires: '+fmtDate(d.expiresAt);
+  $('d-link').value=j.link;$('d-email').textContent='Access: anyone with the link (no code). · '+(d.status==='released'?'Released: the model can download full-resolution files.':'Preview only: the model sees watermarked previews until you release.')+' · Expires: '+fmtDate(d.expiresAt);
   $('d-stats').innerHTML='';
   [['Opened',d.viewCount||0],['Downloads',d.downloadCount||0],['Last opened',d.lastViewedAt?new Date(d.lastViewedAt).toLocaleString():'never'],['Files',(d.files||[]).length]].forEach(function(x){var s=document.createElement('span');s.textContent=x[0]+' ';var b=document.createElement('b');b.textContent=x[1];s.appendChild(b);$('d-stats').appendChild(s)});
-  $('b-code').hidden=(d.access==='link');
-  $('b-access').textContent=d.access==='link'?'Require an emailed code':'Switch to link only (no code)';
   $('b-release').textContent=d.status==='released'?'Lock again (preview only)':'Release originals to the model';
-  msg($('m-detail'),'');msg($('m-code'),'');
+  msg($('m-detail'),'');
   var f=$('files');f.textContent='';
   (d.files||[]).forEach(function(x){
     var c=document.createElement('div');c.className='file';var im=document.createElement('img');im.alt=x.name;im.loading='lazy';im.src='/api/delivery-admin/file/'+d.id+'/'+x.id+'?v='+(x.type==='video'?'poster':'preview');c.appendChild(im);
@@ -180,8 +171,8 @@ function renderDetail(j){
   });
   var L=$('log');L.textContent='';
   if(!j.log.length)L.textContent='No activity yet.';
-  var names={opened:'Model opened the delivery',download:'Model downloaded',code_requested:'Code requested by the model',code_failed:'Wrong code entered',code_generated_by_admin:'You generated a code'};
-  j.log.forEach(function(e){var r=document.createElement('div');r.textContent=new Date(e.ts).toLocaleString()+'  ·  '+(names[e.type]||e.type)+(e.file?': '+e.file:'')+(e.type==='code_requested'?(e.emailed?' (emailed)':' (email not sent: share a code yourself)'):'');L.appendChild(r)});
+  var names={opened:'Delivery opened',download:'File downloaded',zip_download:'ZIP downloaded'};
+  j.log.forEach(function(e){var r=document.createElement('div');r.textContent=new Date(e.ts).toLocaleString()+'  ·  '+(names[e.type]||e.type)+(e.file?': '+e.file:'');L.appendChild(r)});
 }
 $('back').addEventListener('click',function(){current=null;loadList()});
 $('copy').addEventListener('click',function(){navigator.clipboard.writeText($('d-link').value).then(function(){msg($('m-detail'),'Link copied.','ok')},function(){$('d-link').select()})});
@@ -189,15 +180,6 @@ $('b-release').addEventListener('click',function(){
   var to=current.status==='released'?'preview':'released';
   if(to==='released'&&!confirm('Release full-resolution originals to '+current.modelName+'? They will be able to download everything in this delivery.'))return;
   api('deliveries/'+current.id,{method:'PATCH',body:{status:to}}).then(function(){openDetail(current.id)}).catch(function(e){msg($('m-detail'),e.message,'err')});
-});
-$('b-access').addEventListener('click',function(){
-  var to=current.access==='link'?'code':'link';
-  var go=function(){api('deliveries/'+current.id,{method:'PATCH',body:{access:to}}).then(function(){openDetail(current.id)}).catch(function(e){msg($('m-detail'),e.message,'err')})};
-  if(to==='code'&&!current.email){var em=prompt('Model email address for the code:');if(!em)return;api('deliveries/'+current.id,{method:'PATCH',body:{email:em}}).then(go).catch(function(e){msg($('m-detail'),e.message,'err')});return}
-  go();
-});
-$('b-code').addEventListener('click',function(){
-  api('deliveries/'+current.id+'/code',{method:'POST',body:{}}).then(function(j){msg($('m-code'),'One-time code: '+j.code+' (valid for '+j.validMinutes+' minutes, single use). Share it personally; the model still opens the private link and enters the email on file.','ok')}).catch(function(e){msg($('m-code'),e.message,'err')});
 });
 $('b-delete').addEventListener('click',function(){
   if(!confirm('Permanently delete this delivery and every file in it? This cannot be undone.'))return;

@@ -1,7 +1,7 @@
-import { json, requireAdmin, sameOrigin, randomId, saveDelivery, normEmail, validEmail, cleanName } from '../../_lib/delivery.js';
+import { json, requireAdmin, sameOrigin, randomId, saveDelivery, cleanName } from '../../_lib/delivery.js';
 
 function summary(d) {
-  return { id: d.id, title: d.title, modelName: d.modelName, email: d.email, access: d.access || 'code', status: d.status, createdAt: d.createdAt, expiresAt: d.expiresAt || null,
+  return { id: d.id, title: d.title, modelName: d.modelName, status: d.status, createdAt: d.createdAt, expiresAt: d.expiresAt || null,
     fileCount: (d.files || []).length, viewCount: d.viewCount || 0, downloadCount: d.downloadCount || 0, lastViewedAt: d.lastViewedAt || null };
 }
 
@@ -23,15 +23,11 @@ export async function onRequestPost({ request, env }) {
   if (!sameOrigin(request)) return json({ error: 'Invalid request.' }, 403);
   let b;
   try { b = await request.json(); } catch { return json({ error: 'Invalid request.' }, 400); }
-  const email = normEmail(b.email);
   const modelName = cleanName(b.modelName, '');
   const title = cleanName(b.title, '');
-  const access = b.access === 'code' ? 'code' : 'link';
   if (!modelName || !title) return json({ error: 'Model name and title are required.' }, 400);
-  if (access === 'code' && !validEmail(email)) return json({ error: 'A valid email is required when a code is used.' }, 400);
-  if (email && !validEmail(email)) return json({ error: 'That email address is not valid.' }, 400);
   const days = Number.isFinite(+b.expiresDays) ? Math.max(0, Math.min(365, Math.floor(+b.expiresDays))) : 30;
-  const d = { id: randomId(16), title, modelName, email, access, note: String(b.note || '').slice(0, 500), status: b.release ? 'released' : 'preview',
+  const d = { id: randomId(16), title, modelName, note: String(b.note || '').slice(0, 500), status: b.release ? 'released' : 'preview',
     createdAt: Date.now(), expiresAt: days ? Date.now() + days * 86400000 : null, files: [], viewCount: 0, downloadCount: 0 };
   await saveDelivery(env, d);
   return json({ delivery: d, link: `https://photoczaro.com/delivery/${d.id}` }, 201);

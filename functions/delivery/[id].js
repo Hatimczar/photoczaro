@@ -36,7 +36,7 @@ button:disabled{opacity:.5;cursor:default}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
 .tile{background:var(--dark-2);border:.5px solid rgba(255,255,255,.08);position:relative}
 .tile button.open{all:unset;display:block;cursor:pointer;width:100%}
-.tile img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#151515}
+.tile img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;background:#151515}
 .tile .play{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(10,10,10,.65);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;pointer-events:none}
 .tile .play::after{content:"";border-left:14px solid var(--gold-light);border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
 .tile .meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;font-size:12px;color:var(--grey)}

@@ -1,4 +1,4 @@
-import { json, requireAdmin, sameOrigin, loadDelivery, FID_RE, IMAGE_TYPES, VIDEO_TYPES, RAW_TYPES } from '../../../_lib/delivery.js';
+import { json, requireAdmin, sameOrigin, loadDelivery, saveDelivery, FID_RE, IMAGE_TYPES, VIDEO_TYPES, RAW_TYPES } from '../../../_lib/delivery.js';
 
 // Admin-only uploads into private R2.
 //   POST ?action=put&fid=..&kind=original|preview|poster[&mime=..]          single request (files up to ~90 MB)
@@ -36,7 +36,7 @@ export async function onRequestPost({ request, env, params }) {
 
   if (action === 'put') {
     const kind = url.searchParams.get('kind');
-    if (!['original', 'preview', 'poster'].includes(kind)) return json({ error: 'Invalid kind.' }, 400);
+    if (!['original', 'preview', 'poster', 'clean', 'cleanposter'].includes(kind)) return json({ error: 'Invalid kind.' }, 400);
     const len = parseInt(request.headers.get('Content-Length') || '0', 10);
     if (!len || len > MAX_SINGLE) return json({ error: 'File too large for a single upload.' }, 413);
     const buf = new Uint8Array(await request.arrayBuffer());
@@ -50,6 +50,11 @@ export async function onRequestPost({ request, env, params }) {
       if (sn !== 'image/webp') return json({ error: 'Previews must be WebP images.' }, 400);
     }
     await env.DELIVERY_R2.put(`${base}/${kind}`, buf, { httpMetadata: { contentType: mime } });
+    if (kind === 'clean' || kind === 'cleanposter') {
+      // Un-watermarked display copies, shown instead of the watermarked ones once a delivery is released.
+      const f = (d.files || []).find((x) => x.id === fid);
+      if (f) { f[kind === 'clean' ? 'hasClean' : 'hasCleanPoster'] = true; await saveDelivery(env, d); }
+    }
     return json({ ok: true, size: buf.length });
   }
 

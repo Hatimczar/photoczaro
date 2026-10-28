@@ -21,7 +21,10 @@ export async function onRequestGet({ request, env, params }) {
   if (v === 'preview' && !f.hasPreview) return json({ error: 'Not found.' }, 404);
   if (v === 'poster' && !f.hasPoster) return json({ error: 'Not found.' }, 404);
 
-  const key = `${id}/${fid}/${v}`;
+  // Once released, the gallery shows clean (un-watermarked) copies when they exist.
+  const released = d.status === 'released';
+  const stored = v === 'preview' && released && f.hasClean ? 'clean' : v === 'poster' && released && f.hasCleanPoster ? 'cleanposter' : v;
+  const key = `${id}/${fid}/${stored}`;
   const head = await env.DELIVERY_R2.head(key);
   if (!head) return json({ error: 'Not found.' }, 404);
   const size = head.size;

@@ -100,7 +100,7 @@ tr.link{cursor:pointer}tr.link:hover td{background:rgba(255,255,255,.03)}
   <h2>Add images and videos</h2>
   <div class="panel">
     <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose files to upload">Drop JPG, PNG, WebP, CR2, NEF, MP4, MOV or WebM files here, or click to choose<input id="pick" type="file" multiple accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/webm,.cr2,.nef" hidden></div>
-    <p class="sub" style="margin:12px 0 0">Images get a watermarked preview made in your browser (use Chrome or Edge). For CR2 and NEF the preview is built from the JPEG inside the RAW file; the RAW itself stays locked until you release the delivery. Videos get a watermarked poster frame; the video itself stays locked until you release the delivery.</p>
+    <p class="sub" style="margin:12px 0 0">Each image or video gets a watermarked preview, shown until you release, plus a clean copy that replaces it after release (made in your browser, so use Chrome or Edge). For CR2 and NEF the preview is built from the JPEG inside the RAW file; the RAW itself stays locked until you release the delivery. Videos get a watermarked poster frame; the video itself stays locked until you release the delivery.</p>
     <div class="prog" id="prog"></div>
   </div>
   <div class="files" id="files"></div>
@@ -276,13 +276,13 @@ async function rawImagePreview(file){
   var jpg=file.slice(r.start,r.start+r.length,'image/jpeg');
   var bmp=await createImageBitmap(jpg,{imageOrientation:'none'});
   var c=drawOriented(bmp,r.orientation,1600);var dims=(r.orientation>=5)?{w:bmp.height,h:bmp.width}:{w:bmp.width,h:bmp.height};bmp.close&&bmp.close();
-  watermark(c);return {blob:await toWebp(c),dims:dims};
+  var clean=await toWebp(c);watermark(c);return {blob:await toWebp(c),clean:clean,dims:dims};
 }
 async function imagePreview(file){
   var bmp=await createImageBitmap(file),max=1600,s=Math.min(1,max/Math.max(bmp.width,bmp.height));
   var c=document.createElement('canvas');c.width=Math.round(bmp.width*s);c.height=Math.round(bmp.height*s);
-  c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);watermark(c);var dims={w:bmp.width,h:bmp.height};bmp.close&&bmp.close();
-  return {blob:await toWebp(c),dims:dims};
+  c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);var dims={w:bmp.width,h:bmp.height};bmp.close&&bmp.close();
+  var clean=await toWebp(c);watermark(c);return {blob:await toWebp(c),clean:clean,dims:dims};
 }
 function videoPoster(file){
   return new Promise(function(res,rej){
@@ -292,8 +292,8 @@ function videoPoster(file){
     v.onloadedmetadata=function(){v.currentTime=Math.min(1,(v.duration||2)/2)};
     v.onseeked=function(){
       var s=Math.min(1,1280/Math.max(v.videoWidth,v.videoHeight)),c=document.createElement('canvas');c.width=Math.round(v.videoWidth*s);c.height=Math.round(v.videoHeight*s);
-      c.getContext('2d').drawImage(v,0,0,c.width,c.height);watermark(c);var dims={w:v.videoWidth,h:v.videoHeight};URL.revokeObjectURL(url);
-      toWebp(c).then(function(b){res({blob:b,dims:dims})},rej);
+      c.getContext('2d').drawImage(v,0,0,c.width,c.height);var dims={w:v.videoWidth,h:v.videoHeight};URL.revokeObjectURL(url);
+      toWebp(c).then(function(clean){watermark(c);return toWebp(c).then(function(b){res({blob:b,clean:clean,dims:dims})})}).catch(rej);
     };
   });
 }
@@ -327,9 +327,9 @@ async function handle(list){
       var pv=raw?await rawImagePreview(f):isImg?await imagePreview(f):await videoPoster(f);
       setLine(f.name,'uploading…');
       var crc32;
-      if(raw){crc32=await uploadLarge(id,fid,f,mime);await put(id,fid,'preview',pv.blob)}
-      else if(isImg){crc32=(crcUpdate(0xffffffff,new Uint8Array(await f.arrayBuffer()))^0xffffffff)>>>0;await put(id,fid,'original',f,f.type);await put(id,fid,'preview',pv.blob)}
-      else{crc32=await uploadLarge(id,fid,f,f.type);await put(id,fid,'poster',pv.blob)}
+      if(raw){crc32=await uploadLarge(id,fid,f,mime);await put(id,fid,'preview',pv.blob);await put(id,fid,'clean',pv.clean)}
+      else if(isImg){crc32=(crcUpdate(0xffffffff,new Uint8Array(await f.arrayBuffer()))^0xffffffff)>>>0;await put(id,fid,'original',f,f.type);await put(id,fid,'preview',pv.blob);await put(id,fid,'clean',pv.clean)}
+      else{crc32=await uploadLarge(id,fid,f,f.type);await put(id,fid,'poster',pv.blob);await put(id,fid,'cleanposter',pv.clean)}
       await api('deliveries/'+id+'/files',{method:'POST',body:{fid:fid,name:f.name,type:isImg?'image':'video',mime:mime,crc32:crc32,width:pv.dims.w,height:pv.dims.h}});
       setLine(f.name,'done ✓');
     }catch(e){setLine(f.name,'failed: '+e.message,1)}

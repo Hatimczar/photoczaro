@@ -1,4 +1,4 @@
-import { json, loadDelivery, saveDelivery, isExpired, logEvent, parseRange, FID_RE, cleanName } from '../../../../_lib/delivery.js';
+import { json, loadDelivery, getFileRecord, getStats, putStats, isExpired, logEvent, parseRange, FID_RE, cleanName } from '../../../../_lib/delivery.js';
 
 // Streams one object from private R2 after checking the viewer's session.
 //   ?v=preview  watermarked image preview (always allowed)
@@ -10,9 +10,9 @@ export async function onRequestGet({ request, env, params }) {
   if (!env.DELIVERY_R2) return json({ error: 'Not available.' }, 503);
   const d = await loadDelivery(env, id);
   if (!d || !FID_RE.test(fid)) return json({ error: 'Not found.' }, 404);
-  if (isExpired(d)) return json({ error: 'This delivery has expired.' }, 410);
-  const f = (d.files || []).find((x) => x.id === fid);
+  const f = await getFileRecord(env, id, fid);
   if (!f) return json({ error: 'Not found.' }, 404);
+  if (isExpired(d)) return json({ error: 'This delivery has expired.' }, 410);
 
   const url = new URL(request.url);
   const v = url.searchParams.get('v') || 'preview';
@@ -23,9 +23,14 @@ export async function onRequestGet({ request, env, params }) {
 
   // Once released, the gallery shows clean (un-watermarked) copies when they exist.
   const released = d.status === 'released';
-  const stored = v === 'preview' && released && f.hasClean ? 'clean' : v === 'poster' && released && f.hasCleanPoster ? 'cleanposter' : v;
-  const key = `${id}/${fid}/${stored}`;
-  const head = await env.DELIVERY_R2.head(key);
+  let key = `${id}/${fid}/${v}`;
+  let head = null;
+  if (released && (v === 'preview' || v === 'poster')) {
+    const cleanKey = `${id}/${fid}/${v === 'preview' ? 'clean' : 'cleanposter'}`;
+    head = await env.DELIVERY_R2.head(cleanKey);
+    if (head) key = cleanKey;
+  }
+  if (!head) head = await env.DELIVERY_R2.head(key);
   if (!head) return json({ error: 'Not found.' }, 404);
   const size = head.size;
 
@@ -38,8 +43,9 @@ export async function onRequestGet({ request, env, params }) {
   };
   if (v === 'original' && url.searchParams.get('dl') === '1') {
     baseHeaders['Content-Disposition'] = `attachment; filename="${cleanName(f.name).replace(/[^\x20-\x7e]/g, '_')}"; filename*=UTF-8''${encodeURIComponent(cleanName(f.name))}`;
-    d.downloadCount = (d.downloadCount || 0) + 1;
-    await saveDelivery(env, d);
+    const st = await getStats(env, id);
+    st.downloadCount = (st.downloadCount || 0) + 1;
+    await putStats(env, id, st);
     await logEvent(env, id, 'download', { file: f.name });
   }
 

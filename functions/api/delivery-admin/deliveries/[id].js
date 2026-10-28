@@ -1,4 +1,4 @@
-import { json, requireAdmin, sameOrigin, loadDelivery, saveDelivery, cleanName } from '../../../_lib/delivery.js';
+import { json, requireAdmin, sameOrigin, loadDelivery, saveDelivery, cleanName, listFiles, getStats } from '../../../_lib/delivery.js';
 
 async function deleteAllObjects(env, id) {
   let cursor;
@@ -17,7 +17,8 @@ export async function onRequestGet({ request, env, params }) {
   const l = await env.DELIVERY_KV.list({ prefix: `l:${d.id}:` });
   for (const k of l.keys.slice(-60)) { const raw = await env.DELIVERY_KV.get(k.name); if (raw) log.push(JSON.parse(raw)); }
   log.reverse();
-  return json({ delivery: d, link: `https://photoczaro.com/delivery/${d.id}`, log });
+  const [files, st] = await Promise.all([listFiles(env, d.id), getStats(env, d.id)]);
+  return json({ delivery: { ...d, files, viewCount: st.viewCount || 0, downloadCount: st.downloadCount || 0, lastViewedAt: st.lastViewedAt || null }, link: `https://photoczaro.com/delivery/${d.id}`, log });
 }
 
 export async function onRequestPatch({ request, env, params }) {
@@ -44,6 +45,7 @@ export async function onRequestDelete({ request, env, params }) {
   if (!d) return json({ error: 'Not found.' }, 404);
   await deleteAllObjects(env, d.id);
   await env.DELIVERY_KV.delete(`d:${d.id}`);
+  await env.DELIVERY_KV.delete(`s:${d.id}`);
   const l = await env.DELIVERY_KV.list({ prefix: `l:${d.id}:` });
   for (const k of l.keys) await env.DELIVERY_KV.delete(k.name);
   return json({ ok: true });

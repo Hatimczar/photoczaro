@@ -1,4 +1,4 @@
-import { json, loadDelivery, saveDelivery, isExpired, logEvent, planZip, cleanName } from '../../../_lib/delivery.js';
+import { json, loadDelivery, listFiles, getStats, putStats, isExpired, logEvent, planZip, cleanName } from '../../../_lib/delivery.js';
 
 // "Download all": streams every original in one ZIP straight from private R2. Only after release.
 export async function onRequestGet({ env, params, waitUntil }) {
@@ -8,7 +8,8 @@ export async function onRequestGet({ env, params, waitUntil }) {
   if (!d) return json({ error: 'Not found.' }, 404);
   if (isExpired(d)) return json({ error: 'This delivery has expired.' }, 410);
   if (d.status !== 'released') return json({ error: 'Originals are not released yet.' }, 403);
-  const plan = planZip(d.files || [], d.createdAt);
+  const files = await listFiles(env, id);
+  const plan = planZip(files, d.createdAt);
   if (!plan.ok) return json({ error: plan.reason === 'too-large' ? 'This delivery is too large for one ZIP. Download the files individually.' : 'A ZIP is not available for this delivery.' }, 409);
 
   const FLS = typeof FixedLengthStream !== 'undefined' ? FixedLengthStream : null;
@@ -28,9 +29,10 @@ export async function onRequestGet({ env, params, waitUntil }) {
   })();
   if (typeof waitUntil === 'function') waitUntil(pump);
 
-  d.downloadCount = (d.downloadCount || 0) + 1;
-  await saveDelivery(env, d);
-  await logEvent(env, id, 'zip_download', { files: d.files.length });
+  const st = await getStats(env, id);
+  st.downloadCount = (st.downloadCount || 0) + 1;
+  await putStats(env, id, st);
+  await logEvent(env, id, 'zip_download', { files: files.length });
   const base = cleanName(`Photoczaro - ${d.title}`, 'Photoczaro delivery');
   return new Response(readable, {
     headers: {

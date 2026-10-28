@@ -1,11 +1,11 @@
-import { json, requireAdmin, loadDelivery, FID_RE, parseRange } from '../../../../_lib/delivery.js';
+import { json, requireAdmin, loadDelivery, getFileRecord, FID_RE, parseRange } from '../../../../_lib/delivery.js';
 
 // Admin preview of any stored object (including originals) for a delivery.
 export async function onRequestGet({ request, env, params }) {
   if (!(await requireAdmin(request, env))) return json({ error: 'Unauthorized.' }, 401);
   if (!env.DELIVERY_R2) return json({ error: 'Delivery storage is not configured yet.' }, 503);
   const d = await loadDelivery(env, params.id);
-  const f = d && FID_RE.test(params.fid) ? (d.files || []).find((x) => x.id === params.fid) : null;
+  const f = d && FID_RE.test(params.fid) ? await getFileRecord(env, d.id, params.fid) : null;
   if (!f) return json({ error: 'Not found.' }, 404);
   const v = new URL(request.url).searchParams.get('v') || 'preview';
   if (!['preview', 'poster', 'original'].includes(v)) return json({ error: 'Not found.' }, 404);

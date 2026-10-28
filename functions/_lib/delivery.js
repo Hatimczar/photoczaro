@@ -56,6 +56,42 @@ export async function loadDelivery(env, id) {
 }
 export async function saveDelivery(env, d) { await env.DELIVERY_KV.put(`d:${d.id}`, JSON.stringify(d)); }
 
+// ---- per-file records live in R2 (strongly consistent), not inside the delivery record ----
+// KV is only eventually consistent, so appending to a list stored in one KV value silently loses entries when
+// uploads overlap. Each file therefore gets its own object `${id}/_files/${fid}` carrying the record as metadata,
+// and listing a prefix returns every record in one call.
+const fileKey = (id, fid) => `${id}/_files/${fid}`;
+export async function putFileRecord(env, id, f) {
+  await env.DELIVERY_R2.put(fileKey(id, f.id), new Uint8Array(0), { customMetadata: { j: JSON.stringify(f) } });
+}
+export async function getFileRecord(env, id, fid) {
+  const h = await env.DELIVERY_R2.head(fileKey(id, fid));
+  if (!h || !h.customMetadata || !h.customMetadata.j) return null;
+  try { return JSON.parse(h.customMetadata.j); } catch { return null; }
+}
+export async function listFiles(env, id) {
+  const out = [];
+  let cursor;
+  do {
+    const l = await env.DELIVERY_R2.list({ prefix: `${id}/_files/`, cursor, include: ['customMetadata'] });
+    for (const o of l.objects) { try { out.push(JSON.parse(o.customMetadata.j)); } catch (_) {} }
+    cursor = l.truncated ? l.cursor : undefined;
+  } while (cursor);
+  // File-name order (numeric aware) matches shooting order for camera files: DSC_0002 before DSC_0010.
+  out.sort((a, b) => String(a.name).localeCompare(String(b.name), 'en', { numeric: true }));
+  return out;
+}
+export async function deleteFileObjects(env, id, fid) {
+  await env.DELIVERY_R2.delete(['original', 'preview', 'poster', 'clean', 'cleanposter'].map((k) => `${id}/${fid}/${k}`).concat(fileKey(id, fid)));
+}
+
+// ---- counters (lossy by nature, kept apart from the delivery record so they can never overwrite it) ----
+export async function getStats(env, id) {
+  const raw = await env.DELIVERY_KV.get(`s:${id}`);
+  return raw ? JSON.parse(raw) : { viewCount: 0, downloadCount: 0, lastViewedAt: null };
+}
+export async function putStats(env, id, s) { await env.DELIVERY_KV.put(`s:${id}`, JSON.stringify(s)); }
+
 export function isExpired(d) { return !!(d.expiresAt && Date.now() > d.expiresAt); }
 
 export async function logEvent(env, id, type, extra = {}) {

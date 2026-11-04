@@ -71,7 +71,7 @@ tr.link{cursor:pointer}tr.link:hover td{background:rgba(255,255,255,.03)}
       </div>
       <div class="row">
         <div><label for="n-days">Available for (days, 0 = no expiry)</label><input id="n-days" type="number" min="0" max="365" value="30"></div>
-        <div><label for="n-note">Note shown to the model (optional)</label><input id="n-note" maxlength="500"></div>
+        <div><label for="n-note">Note shown on the page (optional, up to 4000 characters, line breaks and web links are kept)</label><textarea id="n-note" rows="6" maxlength="4000"></textarea></div>
       </div>
       <button type="submit">Create delivery</button><p class="msg" id="m-new" role="status" aria-live="polite"></p>
     </form>

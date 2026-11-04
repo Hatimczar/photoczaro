@@ -30,7 +30,7 @@ export async function onRequestPatch({ request, env, params }) {
   try { b = await request.json(); } catch { return json({ error: 'Invalid request.' }, 400); }
   if (b.title !== undefined) d.title = cleanName(b.title, d.title);
   if (b.modelName !== undefined) d.modelName = cleanName(b.modelName, d.modelName);
-  if (b.note !== undefined) d.note = String(b.note).slice(0, 500);
+  if (b.note !== undefined) d.note = String(b.note).slice(0, 4000);
   if (b.expiresDays !== undefined) { const n = Math.max(0, Math.min(365, Math.floor(+b.expiresDays) || 0)); d.expiresAt = n ? Date.now() + n * 86400000 : null; }
   if (b.status !== undefined) { if (!['preview', 'released'].includes(b.status)) return json({ error: 'Invalid status.' }, 400); d.status = b.status; }
   await saveDelivery(env, d);

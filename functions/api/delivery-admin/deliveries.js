@@ -28,7 +28,7 @@ export async function onRequestPost({ request, env }) {
   const title = cleanName(b.title, '');
   if (!modelName || !title) return json({ error: 'Model name and title are required.' }, 400);
   const days = Number.isFinite(+b.expiresDays) ? Math.max(0, Math.min(365, Math.floor(+b.expiresDays))) : 30;
-  const d = { id: randomId(16), title, modelName, note: String(b.note || '').slice(0, 500), status: b.release ? 'released' : 'preview',
+  const d = { id: randomId(16), title, modelName, note: String(b.note || '').slice(0, 4000), status: b.release ? 'released' : 'preview',
     createdAt: Date.now(), expiresAt: days ? Date.now() + days * 86400000 : null };
   await saveDelivery(env, d);
   return json({ delivery: d, link: `https://photoczaro.com/delivery/${d.id}` }, 201);

@@ -28,6 +28,8 @@ h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2rem,6
 h1 em{color:var(--gold-light)}
 .eyebrow{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
 .lead{color:rgba(245,240,235,.75);line-height:1.75;max-width:620px;margin-bottom:28px}
+#g-note{white-space:pre-line}
+#g-note a{color:var(--gold-light);text-decoration:none;border-bottom:.5px solid rgba(232,213,163,.4);overflow-wrap:anywhere}
 button,.btn{display:inline-block;background:var(--gold);color:#0a0a0a;border:0;font:inherit;font-size:12px;letter-spacing:.18em;text-transform:uppercase;padding:14px 26px;cursor:pointer;text-decoration:none}
 button.ghost,.btn.ghost{background:transparent;color:var(--gold-light);border:1px solid rgba(201,169,110,.5)}
 button:disabled{opacity:.5;cursor:default}
@@ -87,6 +89,19 @@ function load(){
   }).then(function(m){if(m)render(m)}).catch(function(){show('gone')});
 }
 
+// Shows the note as plain text, turning only http(s) links and email addresses into links.
+function setNote(el,text){
+  el.textContent='';
+  var re=/(https?:\\/\\/[^\\s<>"]+|[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+)/g,last=0,m;
+  while((m=re.exec(text))){
+    var t=m[0].replace(/[.,;:)]+$/,'');
+    if(m.index>last)el.appendChild(document.createTextNode(text.slice(last,m.index)));
+    var a=document.createElement('a');
+    a.href=/^https?:/.test(t)?t:'mailto:'+t;a.textContent=t;a.target='_blank';a.rel='noopener noreferrer';
+    el.appendChild(a);last=m.index+t.length;re.lastIndex=last;
+  }
+  if(last<text.length)el.appendChild(document.createTextNode(text.slice(last)));
+}
 function fileUrl(f,v,dl){return api+'/file/'+f.id+'?v='+v+(dl?'&dl=1':'')}
 
 function render(m){
@@ -94,7 +109,7 @@ function render(m){
   document.title=m.title+' | Photoczaro delivery';
   $('g-model').textContent=m.modelName;
   $('g-title').textContent=m.title;
-  $('g-note').textContent=m.note||'';
+  setNote($('g-note'),m.note||'');
   $('g-note').hidden=!m.note;
   var exp=m.expiresAt?' This delivery stays available until '+new Date(m.expiresAt).toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'})+'.':'';
   $('g-banner').textContent=m.released

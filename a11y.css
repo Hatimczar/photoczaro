@@ -85,3 +85,43 @@ nav:not(.scrolled)::before {
   position: static; flex: none; margin-top: 8px;
   padding: 24px max(24px, env(safe-area-inset-right)) 0 max(24px, env(safe-area-inset-left));
 }
+
+/* ---- Mobile polish: 44px tap targets, 11px text floor, no iOS input zoom, no CTA overflow ---- */
+@media (max-width: 768px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select, textarea { font-size: 16px !important; }
+  input[type="checkbox"], input[type="radio"] { width: 24px; height: 24px; }
+  a, button, summary, input, select, textarea, label { touch-action: manipulation; }
+
+  /* Long CTA labels wrap instead of pushing the page sideways */
+  .cta-btn { white-space: normal !important; text-align: center; max-width: 100%; }
+
+  /* 44px tap areas */
+  .cta-btn, .nav-logo, .nav-back, .back-to-blog, .journal-footer-back, footer a, .footer a,
+  .mobile-menu-nav a, .mobile-menu-cta, .lightbox-close, .lb-close, .lb-arrow, .lightbox-nav,
+  .location-map-link, .wm-article-links a, .wm-routing a, .wm-alt-paths a, .alt-secondary, .agency-links a,
+  .pub-btn, .mag-pill, .pub-logo, .toc-inline summary, .toc-inline a, [class*="footer-back"],
+  [class*="footer-copy"] a, [class*="enquiry-fallback"] a, .post-meta-item a, .post-share a,
+  .post-share button, .read-next p a, .journal-filter-btn, .proof-tab, .model-toggle, .lang-switch-btn,
+  .post-footer a {
+    display: inline-flex !important; align-items: center; min-height: 44px !important;
+  }
+  .cta-btn { justify-content: center; }
+  .lightbox-close, .lb-close, .lb-arrow, .lightbox-nav, .lang-switch-btn { min-width: 44px; justify-content: center; }
+  .mobile-menu-nav li { min-height: 44px; }
+  .mobile-menu-socials a, .contact-socials a {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px;
+  }
+  .toc-inline li { padding: 0 !important; }
+
+  /* 11px text floor */
+  .model-toggle em[style] { font-size: 11px !important; }
+  th, .tip-block strong, .gear-note strong, .inline-cta-label, .read-next-label, .read-next-card-tag,
+  .read-next-cat, .post-tag, .post-category, .blog-card-category, .blog-card-date, .journal-filter-btn,
+  .cta-btn, .nav-back, .back-to-blog, .lang-switch-btn, .proof-tab, .js-year, .pp-section-number,
+  .magazine-pub, .pp-law, .vs-item-count, .project-eyebrow, .wm-section-label, .wm-proof-label,
+  .wm-card-label, .wm-faq-label, .vs-section-label, .pp-eyebrow, .pp-toc-title, .press-badge-label,
+  [class*="footer-copy"], [class*="footer-copy"] a, [class*="footer-back"], .pub-btn, .vs-field label,
+  .req, .toc-inline summary, .post-share a, .post-share button, .post-meta-item a, .read-next p a,
+  .wm-trust-list span, .vs-trust-list span { font-size: 11px !important; }
+  .post-body p[style*="font-size:9px"], .post-share span, .post-share-label { font-size: 11px !important; }
+}

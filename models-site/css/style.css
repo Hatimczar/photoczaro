@@ -848,6 +848,8 @@ footer#site-footer { padding: 24px var(--bento-pad) 24px; border-top: none; }
   .measure-slider { min-height: 44px; }
 
   .footer-h, .opt-tag, .unit-suffix, .apply-gallery-add-label, .cta-btn { font-size: 11px !important; }
+  .model-card-badge { font-size: 11px !important; }
+  .footer-bottom a { display: inline-flex; align-items: center; min-height: 44px; }
 }
 
 /* Language switch inside the mobile drawer: 44px targets, and the list opens in the flow of the drawer

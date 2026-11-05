@@ -338,7 +338,7 @@ button.cta-btn { font-family: inherit; border-width: 1px; }
      at the edges; on a narrow portrait screen "center" crops to the empty
      backdrop between them, showing only their nearest hands. Shift the
      focal point onto the model so the crop reads as a full portrait. */
-  .hero-bg { background-position: 97% 12%; }
+  .hero-bg { background-position: 97% 12%; background-image: url("../images/hero-1000.webp"); }
   .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.75) 0%, rgba(10,10,10,0.55) 45%, rgba(10,10,10,0.85) 100%); }
 }
 .hero-eyebrow {
@@ -848,4 +848,17 @@ footer#site-footer { padding: 24px var(--bento-pad) 24px; border-top: none; }
   .measure-slider { min-height: 44px; }
 
   .footer-h, .opt-tag, .unit-suffix, .apply-gallery-add-label, .cta-btn { font-size: 11px !important; }
+}
+
+/* Language switch inside the mobile drawer: 44px targets, and the list opens in the flow of the drawer
+   (not below the visible area) so every language is reachable by scrolling. */
+@media (max-width: 1250px) {
+  #lang-switch-slot-mobile .lang-switch-btn { min-height: 44px; min-width: 64px; font-size: 12px; }
+  #lang-switch-slot-mobile .lang-switch-menu {
+    position: static !important; display: none; opacity: 1 !important; visibility: visible !important;
+    transform: none !important; margin-top: 10px; width: 100%; min-width: 0;
+  }
+  #lang-switch-slot-mobile .lang-switch.open .lang-switch-menu { display: block; }
+  #lang-switch-slot-mobile .lang-switch-menu-item { min-height: 44px; display: flex !important; align-items: center; font-size: 15px !important; }
+  #lang-switch-slot-mobile .lang-switch-menu-item::before, #lang-switch-slot-mobile .lang-switch-menu-item::after { content: none !important; }
 }

@@ -124,4 +124,16 @@ nav:not(.scrolled)::before {
   .req, .toc-inline summary, .post-share a, .post-share button, .post-meta-item a, .read-next p a,
   .wm-trust-list span, .vs-trust-list span { font-size: 11px !important; }
   .post-body p[style*="font-size:9px"], .post-share span, .post-share-label { font-size: 11px !important; }
+
+  /* Language menu: a bottom sheet on phones so it can never be clipped by the screen edge */
+  .lang-switch:not(.lang-switch-nav) .lang-switch-menu {
+    position: fixed !important; left: 16px !important; right: 16px !important; top: auto !important;
+    bottom: calc(16px + env(safe-area-inset-bottom)) !important; min-width: 0 !important; width: auto !important;
+    padding: 8px !important; border-radius: 18px !important; z-index: 100001 !important;
+    background: rgba(18,16,14,0.97) !important; transform: translateY(14px);
+  }
+  .lang-switch.open .lang-switch-menu { transform: translateY(0) !important; }
+  .lang-switch:not(.lang-switch-nav) .lang-switch-menu a {
+    display: flex !important; align-items: center; min-height: 48px !important; padding: 0 16px !important; font-size: 15px !important;
+  }
 }

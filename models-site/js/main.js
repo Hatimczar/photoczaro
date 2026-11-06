@@ -64,12 +64,14 @@
   const ring = document.getElementById('cursor-ring');
   if (cursor && ring && !prefersReducedMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     let mx = 0, my = 0, rx = 0, ry = 0;
-    cursor.style.left = '0'; cursor.style.top = '0'; ring.style.left = '0'; ring.style.top = '0';
+    const useT = window.CSS && CSS.supports && CSS.supports('translate', '1px 1px');
+    if (useT) { cursor.style.left = '0'; cursor.style.top = '0'; ring.style.left = '0'; ring.style.top = '0'; }
+    const place = (el, x, y) => { if (useT) el.style.translate = x + 'px ' + y + 'px'; else { el.style.left = x + 'px'; el.style.top = y + 'px'; } };
     let running = false;
     function tickCursor() {
-      cursor.style.translate = mx + 'px ' + my + 'px';
+      place(cursor, mx, my);
       rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
-      ring.style.translate = rx + 'px ' + ry + 'px';
+      place(ring, rx, ry);
       if (Math.abs(mx - rx) > 0.1 || Math.abs(my - ry) > 0.1) requestAnimationFrame(tickCursor); else running = false;
     }
     document.addEventListener('mousemove', (e) => {

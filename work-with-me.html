@@ -1208,8 +1208,9 @@ lbPrev.addEventListener('click', e => { e.stopPropagation(); showPortfolioImage(
 lbNext.addEventListener('click', e => { e.stopPropagation(); showPortfolioImage(currentIdx + 1); });
 document.addEventListener('keydown', e => {
   if (!lb.classList.contains('open')) return;
-  if (e.key === 'ArrowRight') showPortfolioImage(currentIdx + 1);
-  if (e.key === 'ArrowLeft') showPortfolioImage(currentIdx - 1);
+  const rtlDoc = document.documentElement.dir === 'rtl';
+  if (e.key === (rtlDoc ? 'ArrowLeft' : 'ArrowRight')) showPortfolioImage(currentIdx + 1);
+  if (e.key === (rtlDoc ? 'ArrowRight' : 'ArrowLeft')) showPortfolioImage(currentIdx - 1);
   if (e.key === 'Escape') closePortfolioLightbox();
 });
 

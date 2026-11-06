@@ -1298,8 +1298,9 @@ lbNext.addEventListener('click', e => {
 
 document.addEventListener('keydown', e => {
   if (!lb.classList.contains('open')) return;
-  if (e.key === 'ArrowRight') showImage((currentIdx + 1) % currentImages.length);
-  if (e.key === 'ArrowLeft') showImage((currentIdx - 1 + currentImages.length) % currentImages.length);
+  const fwdKey = document.documentElement.dir === 'rtl' ? 'ArrowLeft' : 'ArrowRight', backKey = document.documentElement.dir === 'rtl' ? 'ArrowRight' : 'ArrowLeft';
+  if (e.key === fwdKey) showImage((currentIdx + 1) % currentImages.length);
+  if (e.key === backKey) showImage((currentIdx - 1 + currentImages.length) % currentImages.length);
   if (e.key === 'Escape') closeLightbox();
 });
 
@@ -1309,7 +1310,7 @@ lbImg.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; 
 lbImg.addEventListener('touchend', e => {
   const dx = e.changedTouches[0].clientX - touchStartX;
   if (Math.abs(dx) > 50) {
-    dx < 0 ? showImage((currentIdx+1)%currentImages.length) : showImage((currentIdx-1+currentImages.length)%currentImages.length);
+    ((document.documentElement.dir === 'rtl' ? dx > 0 : dx < 0)) ? showImage((currentIdx+1)%currentImages.length) : showImage((currentIdx-1+currentImages.length)%currentImages.length);
   }
 }, {passive:true});
 

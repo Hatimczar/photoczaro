@@ -806,6 +806,9 @@ footer#site-footer { padding: 24px var(--bento-pad) 24px; border-top: none; }
 .consent-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .consent-btn { flex: 1 1 120px; min-height: 44px; border-radius: 999px; font: inherit; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; border: 1px solid var(--gold); background: transparent; color: var(--gold-light); }
 .consent-accept { background: var(--gold); color: var(--dark); }
+.consent-banner { transition: transform .35s cubic-bezier(.4,0,.2,1), opacity .25s ease, visibility 0s linear 0s; }
+.menu-open .consent-banner { transform: translateY(calc(100% + 32px)); opacity: 0; visibility: hidden; transition: transform .35s cubic-bezier(.4,0,.2,1), opacity .25s ease, visibility 0s linear .35s; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .consent-banner, .menu-open .consent-banner { transition: none; } }
 .consent-btn:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
 .footer-link-btn { background: none; border: 0; padding: 6px 0; min-height: 28px; font: inherit; color: inherit; text-align: start; cursor: pointer; display: block; }
 .footer-link-btn:hover { color: var(--gold-light); }

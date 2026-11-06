@@ -138,6 +138,7 @@
     hamburger.classList.toggle('open', open);
     hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
     document.body.style.overflow = open ? 'hidden' : '';
+    document.body.classList.toggle('menu-open', open);
     if (open) {
       releaseMenu = inertOutside([mobileMenu, hamburger]);
       mobileMenu.querySelector('a')?.focus();

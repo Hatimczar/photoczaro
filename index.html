@@ -2353,11 +2353,16 @@ const ring = document.getElementById('cursor-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-(function animateCursor() {
-  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-  if (prefersReducedMotion) { rx = mx; ry = my; } else { rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1; }
-  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-  requestAnimationFrame(animateCursor);
+(function cursorLoop() {
+  cursor.style.left = '0'; cursor.style.top = '0'; ring.style.left = '0'; ring.style.top = '0';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches, running = false;
+  function tick() {
+    cursor.style.translate = mx + 'px ' + my + 'px';
+    if (reduce) { rx = mx; ry = my; } else { rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1; }
+    ring.style.translate = rx + 'px ' + ry + 'px';
+    if (Math.abs(mx - rx) > 0.1 || Math.abs(my - ry) > 0.1) requestAnimationFrame(tick); else running = false;
+  }
+  document.addEventListener('mousemove', function () { if (!running) { running = true; requestAnimationFrame(tick); } }, { passive: true });
 })();
 
 // Ring states: scale up on links/buttons, frosted glass on media items
@@ -2396,7 +2401,7 @@ window.addEventListener('pageshow', () => {
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 80);
-});
+}, { passive: true });
 
 // Hero bg zoom-in
 const heroBg = document.getElementById('hero-bg');
@@ -3396,12 +3401,19 @@ navSections.forEach(id => {
   if (a) navAnchors[id] = a;
 });
 const sectionEls = navSections.map(id => document.getElementById(id)).filter(Boolean);
+let sectionTicking = false, lastActiveSection = null;
 window.addEventListener('scroll', () => {
-  let current = '';
-  sectionEls.forEach(sec => {
-    if (window.scrollY >= sec.offsetTop - 160) current = sec.id;
+  if (sectionTicking) return;
+  sectionTicking = true;
+  requestAnimationFrame(() => {
+    sectionTicking = false;
+    let current = '';
+    const y = window.scrollY;
+    sectionEls.forEach(sec => { if (y >= sec.getBoundingClientRect().top + y - 160) current = sec.id; });
+    if (current === lastActiveSection) return;
+    lastActiveSection = current;
+    Object.entries(navAnchors).forEach(([id, a]) => a.classList.toggle('active', id === current));
   });
-  Object.entries(navAnchors).forEach(([id, a]) => a.classList.toggle('active', id === current));
 }, { passive: true });
 
 // Image protection: block right-click save, drag-to-desktop, and long-press save on mobile

@@ -64,13 +64,18 @@
   const ring = document.getElementById('cursor-ring');
   if (cursor && ring && !prefersReducedMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; });
-    (function animateCursor() {
-      cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    cursor.style.left = '0'; cursor.style.top = '0'; ring.style.left = '0'; ring.style.top = '0';
+    let running = false;
+    function tickCursor() {
+      cursor.style.translate = mx + 'px ' + my + 'px';
       rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
-      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-      requestAnimationFrame(animateCursor);
-    })();
+      ring.style.translate = rx + 'px ' + ry + 'px';
+      if (Math.abs(mx - rx) > 0.1 || Math.abs(my - ry) > 0.1) requestAnimationFrame(tickCursor); else running = false;
+    }
+    document.addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      if (!running) { running = true; requestAnimationFrame(tickCursor); }
+    }, { passive: true });
     document.querySelectorAll('a, button').forEach((el) => {
       el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
       el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));

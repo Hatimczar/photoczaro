@@ -2051,12 +2051,22 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- Privacy Policy (English only) -->
+  <!-- Privacy Policy (English and Arabic) -->
   <url>
     <loc>https://photoczaro.com/privacy-policy</loc>
     <xhtml:link rel="alternate" hreflang="en"        href="https://photoczaro.com/privacy-policy"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://photoczaro.com/ar/privacy-policy"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/privacy-policy"/>
-    <lastmod>2026-08-05</lastmod>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://photoczaro.com/ar/privacy-policy</loc>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://photoczaro.com/privacy-policy"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://photoczaro.com/ar/privacy-policy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/privacy-policy"/>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>

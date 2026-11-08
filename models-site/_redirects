@@ -1,3 +1,56 @@
+# Relative nav links in model.html resolve via a document.write <base>, which
+# browsers honour but crawlers reading raw HTML do not: they request
+# /models/about, /models/book-talent?models=x etc. and got 404. Send those to
+# the real pages. These must stay above the /models/:slug rewrites.
+/models/about /about 301
+/models/apply /apply 301
+/models/contact /contact 301
+/models/book-talent /book-talent 301
+/models/booking-terms /booking-terms 301
+/models/application-terms /application-terms 301
+/models/privacy-policy /privacy-policy 301
+/models/models /models 301
+/fr/models/about /fr/about 301
+/fr/models/apply /fr/apply 301
+/fr/models/contact /fr/contact 301
+/fr/models/book-talent /fr/book-talent 301
+/fr/models/booking-terms /fr/booking-terms 301
+/fr/models/application-terms /fr/application-terms 301
+/fr/models/privacy-policy /fr/privacy-policy 301
+/fr/models/models /fr/models 301
+/ru/models/about /ru/about 301
+/ru/models/apply /ru/apply 301
+/ru/models/contact /ru/contact 301
+/ru/models/book-talent /ru/book-talent 301
+/ru/models/booking-terms /ru/booking-terms 301
+/ru/models/application-terms /ru/application-terms 301
+/ru/models/privacy-policy /ru/privacy-policy 301
+/ru/models/models /ru/models 301
+/es/models/about /es/about 301
+/es/models/apply /es/apply 301
+/es/models/contact /es/contact 301
+/es/models/book-talent /es/book-talent 301
+/es/models/booking-terms /es/booking-terms 301
+/es/models/application-terms /es/application-terms 301
+/es/models/privacy-policy /es/privacy-policy 301
+/es/models/models /es/models 301
+/cs/models/about /cs/about 301
+/cs/models/apply /cs/apply 301
+/cs/models/contact /cs/contact 301
+/cs/models/book-talent /cs/book-talent 301
+/cs/models/booking-terms /cs/booking-terms 301
+/cs/models/application-terms /cs/application-terms 301
+/cs/models/privacy-policy /cs/privacy-policy 301
+/cs/models/models /cs/models 301
+/ar/models/about /ar/about 301
+/ar/models/apply /ar/apply 301
+/ar/models/contact /ar/contact 301
+/ar/models/book-talent /ar/book-talent 301
+/ar/models/booking-terms /ar/booking-terms 301
+/ar/models/application-terms /ar/application-terms 301
+/ar/models/privacy-policy /ar/privacy-policy 301
+/ar/models/models /ar/models 301
+
 # Clean model-profile URLs: /models/:slug rewrites (200, URL stays) to the
 # templated model.html, which reads the slug from the path (see model.html's
 # inline script). /model?slug=... keeps working for old shared links.

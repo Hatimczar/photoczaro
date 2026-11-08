@@ -18,7 +18,20 @@ const ORIGIN = "https://models.photoczaro.com";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
+/* Relative nav links in model.html resolve through a document.write <base>,
+   which browsers honour but crawlers reading the raw HTML do not: they ask for
+   /models/about, /models/book-talent?models=x and so on, which would 404 as
+   unknown profile slugs. These names are site pages, never profile slugs, so
+   send them to the real page (Functions run before _redirects, so this cannot
+   live there). */
+const PAGE_SLUGS = ["about", "apply", "contact", "book-talent", "booking-terms", "application-terms", "privacy-policy", "models"];
+
 export function renderModelPage(context, lang, slug) {
+  if (PAGE_SLUGS.includes(slug)) {
+    const url = new URL(context.request.url);
+    const prefix = lang ? "/" + lang : "";
+    return Response.redirect(`${url.origin}${prefix}/${slug}${url.search}`, 301);
+  }
   return edgeCached(context, () => buildModelPage(context, lang, slug));
 }
 

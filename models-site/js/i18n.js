@@ -17,6 +17,7 @@
 (function () {
   const SUPPORTED = ["en", "fr", "ru", "es", "cs", "ar"];
   const RTL = ["ar"];
+  const AR_ONLY = ["ar"]; // languages that get the Arabic-specific link and form-unit handling below
 
   function detectLang() {
     const seg = window.location.pathname.split("/")[1];
@@ -100,12 +101,28 @@
       const langs = (el.getAttribute("data-xsite-langs") || "").split(/\s+/);
       if (langs.includes(lang)) el.setAttribute("href", "https://photoczaro.com/" + lang + "/" + el.getAttribute("data-xsite"));
     });
+    /* Arabic only: keep home/roster links inside /ar/, and show the form's
+       examples and unit labels in Arabic (display text only). The server
+       already does this for the delivered HTML; this covers pages that were
+       not server-rendered. */
+    if (AR_ONLY.includes(lang)) {
+      document.querySelectorAll('a[href="/"]').forEach((el) => el.setAttribute("href", langPath(lang, "/")));
+      document.querySelectorAll('a[href="/models"]').forEach((el) => el.setAttribute("href", langPath(lang, "/models")));
+      const example = t("form.exampleShort");
+      const localiseExample = (v) => (example && v ? v.replace(/^e\.g\. (.+)$/, (m, n) => example.replace("{n}", n)) : v);
+      document.querySelectorAll("[data-ph-cm]").forEach((el) => {
+        ["placeholder", "data-ph-cm", "data-ph-in"].forEach((a) => { const v = el.getAttribute(a); if (v) el.setAttribute(a, localiseExample(v)); });
+      });
+      document.querySelectorAll("[data-unit-suffix]").forEach((el) => { el.textContent = "(" + unitLabel((document.getElementById("apply-unit") || {}).value || "cm") + ")"; });
+    }
     renderSwitchers();
     window.dispatchEvent(new CustomEvent("photoczaro:i18n-applied", { detail: { lang } }));
   }
 
+  /* Keep the roster filters (?category=...), the selected models
+     (?models=...) and any #anchor when the language changes. */
   function buildSwitcherHref(targetLang) {
-    return langPath(targetLang, unprefixedPath());
+    return langPath(targetLang, unprefixedPath()) + window.location.search + window.location.hash;
   }
 
   const LANG_LABELS = { en: "EN", fr: "FR", ru: "RU", es: "ES", cs: "CS", ar: "AR" };
@@ -134,6 +151,11 @@
       mobileSlot.innerHTML = buildSwitcherMarkup("-mobile");
       mobileSlot.dataset.rendered = "1";
     }
+    /* Filters and the shortlist can change the URL after load; take the current
+       query string and anchor at the moment a language is chosen. */
+    document.querySelectorAll(".lang-switch-menu a[hreflang]").forEach((a) => {
+      a.addEventListener("click", () => { a.setAttribute("href", buildSwitcherHref(a.getAttribute("hreflang"))); });
+    });
     document.querySelectorAll(".lang-switch-btn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -150,10 +172,19 @@
     });
   }
 
+  /* "cm"/"in" as shown to the visitor: Arabic reads سم / بوصة, everything else
+     keeps the plain code it always had. */
+  function unitLabel(unit) {
+    if (!AR_ONLY.includes(lang)) return unit;
+    const dict = (window.PHOTOCZARO_I18N_DICT && window.PHOTOCZARO_I18N_DICT[lang]) || {};
+    return Object.prototype.hasOwnProperty.call(dict, "vocab.unit." + unit) ? dict["vocab.unit." + unit] : unit;
+  }
+
   window.PhotoczaroI18n = {
     lang,
     dir,
     supported: SUPPORTED,
+    unitLabel,
     path,
     langPath: (targetLang) => buildSwitcherHref(targetLang),
     t(key) {

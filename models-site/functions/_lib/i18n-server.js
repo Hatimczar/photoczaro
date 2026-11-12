@@ -36,6 +36,11 @@ export async function getTranslator(context, lang) {
 
 const RTL_LANGS = ["ar"];
 
+/* Arabic-only refinements (other languages keep their current behaviour until
+   they are reviewed the same way): links that must stay inside /ar/, and the
+   measurement form's "e.g." examples and unit labels in Arabic. */
+const AR_ONLY = ["ar"];
+
 export async function translateResponse(context, res, lang) {
   if (!lang || lang === "en") return res;
   const dict = await loadDict(context);
@@ -72,6 +77,19 @@ export async function translateResponse(context, res, lang) {
     } } },
     { selector: "[data-blog-guide]", handler: { element(el) { el.setAttribute("href", `https://photoczaro.com/${lang}/blog/book-models-dubai-uae-photoczaro-models-roster`); } } },
   ];
+  if (AR_ONLY.includes(lang)) {
+    // Root-absolute links to this site's own home would leave the language.
+    rules.push({ selector: 'a[href="/"]', handler: { element(el) { el.setAttribute("href", `/${lang}/`); } } });
+    rules.push({ selector: 'a[href="/models"]', handler: { element(el) { el.setAttribute("href", `/${lang}/models`); } } });
+    // "e.g. 178" -> "مثال: 178" (display text only; the value logic never reads it).
+    const example = t("form.exampleShort");
+    const localiseExample = (v) => (example && v ? v.replace(/^e\.g\. (.+)$/, (m, n) => example.replace("{n}", n)) : v);
+    rules.push({ selector: "[data-ph-cm]", handler: { element(el) {
+      for (const a of ["placeholder", "data-ph-cm", "data-ph-in"]) { const v = el.getAttribute(a); if (v) el.setAttribute(a, localiseExample(v)); }
+    } } });
+    // "(cm)" next to a field label -> "(سم)"; apply.js keeps it in step with the CM/IN switch.
+    rules.push({ selector: "[data-unit-suffix]", handler: { element(el) { const u = t("vocab.unit.cm"); if (u) el.setInnerContent(`(${u})`); } } });
+  }
   // The page's language and direction are part of the HTML itself, not
   // something the browser script fixes up after load (screen readers,
   // crawlers and the first paint all see the right values). Arabic also

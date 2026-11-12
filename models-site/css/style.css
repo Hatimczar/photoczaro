@@ -867,3 +867,26 @@ footer#site-footer { padding: 24px var(--bento-pad) 24px; border-top: none; }
   #lang-switch-slot-mobile .lang-switch-menu-item { min-height: 44px; display: flex !important; align-items: center; font-size: 15px !important; }
   #lang-switch-slot-mobile .lang-switch-menu-item::before, #lang-switch-slot-mobile .lang-switch-menu-item::after { content: none !important; }
 }
+
+/* ---------- Arabic form readability ----------
+   Labels and helper text were sized, tracked and upper-cased for Latin capitals.
+   Arabic has no capitals and tracking breaks its joins, so it gets a readable
+   size and the lighter greys already used elsewhere on the site. Display only. */
+html[lang="ar"] .form-field label, html[lang="ar"] .field-label, html[lang="ar"] .unit-toggle-label,
+html[lang="ar"] .unit-toggle-field > label, html[lang="ar"] .choice-group legend, html[lang="ar"] .photo-slot-title {
+  font-size: 14px; letter-spacing: 0; text-transform: none; color: #cfcac2; line-height: 1.6;
+}
+html[lang="ar"] .form-hint, html[lang="ar"] .form-note, html[lang="ar"] .measurements-hint,
+html[lang="ar"] .photo-meta, html[lang="ar"] .form-checkbox, html[lang="ar"] .form-warning {
+  font-size: 14px; color: #b3ada4; line-height: 1.75; letter-spacing: 0; text-transform: none;
+}
+html[lang="ar"] .form-error { font-size: 14px; line-height: 1.7; letter-spacing: 0; }
+html[lang="ar"] .opt-tag, html[lang="ar"] .unit-suffix { font-size: 12.5px; color: #cfcac2; letter-spacing: 0; text-transform: none; }
+html[lang="ar"] .unit-toggle-btn { font-size: 14px; letter-spacing: 0; text-transform: none; }
+/* Letter-spacing and capitals break Arabic letter joins: small labels, eyebrows and meta text read as normal Arabic. */
+html[lang="ar"] .eyebrow, html[lang="ar"] .model-card-meta, html[lang="ar"] .filter-count, html[lang="ar"] .filter-reset,
+html[lang="ar"] .profile-tag, html[lang="ar"] .drawer-item-info span, html[lang="ar"] .breadcrumbs { letter-spacing: 0; text-transform: none; }
+html[lang="ar"] .eyebrow, html[lang="ar"] .model-card-meta, html[lang="ar"] .filter-count, html[lang="ar"] .filter-reset,
+html[lang="ar"] .profile-tag, html[lang="ar"] .drawer-item-info span { font-size: 13px; }
+/* Emails and phone numbers stay left-to-right inside right-to-left text. */
+html[dir="rtl"] a[href^="mailto:"], html[dir="rtl"] a[href^="tel:"] { direction: ltr; unicode-bidi: isolate; }

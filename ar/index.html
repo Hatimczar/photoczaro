@@ -1789,7 +1789,17 @@ html[dir="rtl"] .carousel-arrow,html[dir="rtl"] .lightbox-nav,html[dir="rtl"] .l
 html[dir="rtl"] .post-title{font-size:clamp(34px,5vw,58px)}
 </style>
 <style id="ar-fixes">.blog-card-lang{font-size:11px;line-height:1;padding:4px 9px;border:1px solid rgba(201,169,110,.45);border-radius:99px;color:var(--gold,#c9a96e);white-space:nowrap}.blog-card-meta{gap:10px;flex-wrap:wrap}
-html[dir="rtl"] .hero-title{direction:ltr;text-align:right}</style>
+html[dir="rtl"] .hero-title{direction:ltr;text-align:right}
+/* Enquiry forms: fields may not be wider than their column (the 320px page overflowed by 12px), and the small
+   labels / helper text get a readable size and the lighter greys already used on the page. Display only. */
+.wm-field input:not([type=checkbox]):not([type=radio]),.wm-field select,.wm-field textarea,.vs-field input:not([type=checkbox]):not([type=radio]),.vs-field select,.vs-field textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+.wm-field,.vs-field{min-width:0}
+.wm-field label,.vs-field label{font-size:14px;letter-spacing:0;text-transform:none;color:#cfcac2;line-height:1.6}
+.wm-field-check label{font-size:14px;color:rgba(245,240,235,.85);line-height:1.7}
+.wm-error,.vs-error,.wm-form-status,.vs-form-status{font-size:14px;line-height:1.6}
+.wm-note,.vs-note{font-size:14px}
+.vs-field input::placeholder,.vs-field textarea::placeholder{color:rgba(245,240,235,.6)}
+a[href^="mailto:"],a[href^="tel:"]{direction:ltr;unicode-bidi:isolate}</style>
 </head>
 <body>
 
@@ -2275,7 +2285,7 @@ html[dir="rtl"] .hero-title{direction:ltr;text-align:right}</style>
     <h2 class="contact-title reveal">خلّنا<br>نبدع مع بعض</h2>
     <p class="contact-subtitle reveal reveal-delay-1">مصور فوتوغرافي في دبي، متاح لجلسات البورتريه والأعمال التحريرية<br> وتصوير المجلات والمشاريع التجارية في دبي وأبوظبي وخارج الدولة.</p>
     <div class="cta-buttons reveal reveal-delay-2">
-      <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%27d%20like%20to%20enquire%20about%20a%20photoshoot" target="_blank" rel="noopener" class="cta-btn cta-btn-primary" data-cta-location="contact_section">راسلني على واتساب ←</a>
+      <a href="https://wa.me/971508065253?text=%D9%87%D9%84%D8%A7%20%D8%AD%D8%A7%D8%AA%D9%85%D8%8C%20%D8%A3%D8%A8%D9%8A%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%AC%D9%84%D8%B3%D8%A9%20%D8%AA%D8%B5%D9%88%D9%8A%D8%B1" target="_blank" rel="noopener" class="cta-btn cta-btn-primary" data-cta-location="contact_section">راسلني على واتساب ←</a>
       <a href="tel:+971508065253" class="cta-btn" data-cta-location="contact_section">اتصل بي ←</a>
       <a href="mailto:info@photoczaro.com" class="cta-btn" data-cta-location="contact_section">راسلني بالإيميل ←</a>
     </div>
@@ -2381,7 +2391,7 @@ html[dir="rtl"] .hero-title{direction:ltr;text-align:right}</style>
 </footer>
 
 <div class="sticky-mobile-cta">
-  <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I%27d%20like%20to%20enquire%20about%20a%20photoshoot" target="_blank" rel="noopener" class="sticky-cta-primary" data-cta-location="sticky_mobile_cta">مراسلتي على واتساب</a>
+  <a href="https://wa.me/971508065253?text=%D9%87%D9%84%D8%A7%20%D8%AD%D8%A7%D8%AA%D9%85%D8%8C%20%D8%A3%D8%A8%D9%8A%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%AC%D9%84%D8%B3%D8%A9%20%D8%AA%D8%B5%D9%88%D9%8A%D8%B1" target="_blank" rel="noopener" class="sticky-cta-primary" data-cta-location="sticky_mobile_cta">مراسلتي على واتساب</a>
   <a href="tel:+971508065253" class="sticky-cta-secondary" data-cta-location="sticky_mobile_cta">اتصال</a>
 </div>
 

@@ -660,7 +660,17 @@ html[dir="rtl"] .carousel-arrow,html[dir="rtl"] .lightbox-nav,html[dir="rtl"] .l
 html[dir="rtl"] .post-title{font-size:clamp(34px,5vw,58px)}
 </style>
 <style id="ar-fixes">.blog-card-lang{font-size:11px;line-height:1;padding:4px 9px;border:1px solid rgba(201,169,110,.45);border-radius:99px;color:var(--gold,#c9a96e);white-space:nowrap}.blog-card-meta{gap:10px;flex-wrap:wrap}
-html[dir="rtl"] .hero-title{direction:ltr;text-align:right}</style>
+html[dir="rtl"] .hero-title{direction:ltr;text-align:right}
+/* Enquiry forms: fields may not be wider than their column (the 320px page overflowed by 12px), and the small
+   labels / helper text get a readable size and the lighter greys already used on the page. Display only. */
+.wm-field input:not([type=checkbox]):not([type=radio]),.wm-field select,.wm-field textarea,.vs-field input:not([type=checkbox]):not([type=radio]),.vs-field select,.vs-field textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+.wm-field,.vs-field{min-width:0}
+.wm-field label,.vs-field label{font-size:14px;letter-spacing:0;text-transform:none;color:#cfcac2;line-height:1.6}
+.wm-field-check label{font-size:14px;color:rgba(245,240,235,.85);line-height:1.7}
+.wm-error,.vs-error,.wm-form-status,.vs-form-status{font-size:14px;line-height:1.6}
+.wm-note,.vs-note{font-size:14px}
+.vs-field input::placeholder,.vs-field textarea::placeholder{color:rgba(245,240,235,.6)}
+a[href^="mailto:"],a[href^="tel:"]{direction:ltr;unicode-bidi:isolate}</style>
 </head>
 <body>
 <a href="#main-content" class="skip-link">الانتقال إلى المحتوى</a>
@@ -782,7 +792,7 @@ html[dir="rtl"] .hero-title{direction:ltr;text-align:right}</style>
   <p class="journal-hero-eyebrow">ملاحظات من خلف الكاميرا</p>
   <h1 class="journal-hero-title">المدوّنة<br><em>الفوتوغرافية</em></h1>
   <p class="journal-hero-sub">مراجعات للمعدات، وملاحظات من جلسات التصوير، ودروس تعلّمتها بالتجربة. أكتبها من شغلي الحقيقي، مب من صور جاهزة.</p>
-  <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20notify%20me%20when%20you%20publish%20new%20Journal%20guides" target="_blank" rel="noopener" style="display:inline-block;margin-top:20px;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-light);text-decoration:none;border-bottom:0.5px solid rgba(232,213,163,0.35);padding-bottom:2px;">خلّك على اطلاع بأحدث الأدلة ←</a>
+  <a href="https://wa.me/971508065253?text=%D9%87%D9%84%D8%A7%20%D8%AD%D8%A7%D8%AA%D9%85%D8%8C%20%D8%B9%D8%B7%D9%86%D9%8A%20%D8%AE%D8%A8%D8%B1%20%D8%A5%D8%B0%D8%A7%20%D9%86%D8%B2%D9%84%D8%AA%20%D8%A3%D8%AF%D9%84%D8%A9%20%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20%D9%81%D9%8A%20%D8%A7%D9%84%D9%85%D8%AF%D9%88%D9%91%D9%86%D8%A9" target="_blank" rel="noopener" style="display:inline-block;margin-top:20px;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-light);text-decoration:none;border-bottom:0.5px solid rgba(232,213,163,0.35);padding-bottom:2px;">خلّك على اطلاع بأحدث الأدلة ←</a>
 </header>
 
 <!-- Posts -->

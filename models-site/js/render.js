@@ -337,7 +337,7 @@
     const skills = list(model.skills).map((v) => vocabHtml("skill", v, t)).join(", ");
 
     return `
-    <div class="breadcrumbs"><a href="/" data-i18n="a11y.home">${esc(t("a11y.home", "Home"))}</a><span>/</span><a href="models" data-i18n="nav.allModels">${esc(t("nav.allModels", "All Models"))}</a><span>/</span><span>${esc(model.name)}</span></div>
+    <div class="breadcrumbs"><a href="${path("/").startsWith("/ar") ? path("/") : "/"}" data-i18n="a11y.home">${esc(t("a11y.home", "Home"))}</a><span>/</span><a href="models" data-i18n="nav.allModels">${esc(t("nav.allModels", "All Models"))}</a><span>/</span><span>${esc(model.name)}</span></div>
     ${model.sample ? `<div class="profile-sample-notice"><strong data-i18n="profile.sampleStrong">${esc(t("profile.sampleStrong", "Sample profile."))}</strong> <span data-i18n="profile.sampleBody">${esc(t("profile.sampleBody", "Shown for demonstration only. Not a real person and not available for booking."))}</span></div>` : ""}
     <section class="profile-hero" style="margin-top:24px;">
       <div class="profile-media" style="--card-a:${esc(model.swatch[0])};--card-b:${esc(model.swatch[1])}">

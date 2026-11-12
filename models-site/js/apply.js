@@ -531,7 +531,7 @@
     });
     unitField.value = unit;
     unitFields.forEach((field) => { field.placeholder = field.dataset[unit === "in" ? "phIn" : "phCm"]; checkWarnings(field); });
-    form.querySelectorAll("[data-unit-suffix]").forEach((el) => { el.textContent = "(" + unit + ")"; });
+    form.querySelectorAll("[data-unit-suffix]").forEach((el) => { el.textContent = "(" + (window.PhotoczaroI18n && window.PhotoczaroI18n.unitLabel ? window.PhotoczaroI18n.unitLabel(unit) : unit) + ")"; });
     configureSliders();
   }
   unitToggle.addEventListener("click", (e) => {

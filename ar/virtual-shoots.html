@@ -601,7 +601,17 @@ html[dir="rtl"] .carousel-arrow,html[dir="rtl"] .lightbox-nav,html[dir="rtl"] .l
 html[dir="rtl"] .post-title{font-size:clamp(34px,5vw,58px)}
 </style>
 <style id="ar-fixes">.blog-card-lang{font-size:11px;line-height:1;padding:4px 9px;border:1px solid rgba(201,169,110,.45);border-radius:99px;color:var(--gold,#c9a96e);white-space:nowrap}.blog-card-meta{gap:10px;flex-wrap:wrap}
-html[dir="rtl"] .hero-title{direction:ltr;text-align:right}</style>
+html[dir="rtl"] .hero-title{direction:ltr;text-align:right}
+/* Enquiry forms: fields may not be wider than their column (the 320px page overflowed by 12px), and the small
+   labels / helper text get a readable size and the lighter greys already used on the page. Display only. */
+.wm-field input:not([type=checkbox]):not([type=radio]),.wm-field select,.wm-field textarea,.vs-field input:not([type=checkbox]):not([type=radio]),.vs-field select,.vs-field textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+.wm-field,.vs-field{min-width:0}
+.wm-field label,.vs-field label{font-size:14px;letter-spacing:0;text-transform:none;color:#cfcac2;line-height:1.6}
+.wm-field-check label{font-size:14px;color:rgba(245,240,235,.85);line-height:1.7}
+.wm-error,.vs-error,.wm-form-status,.vs-form-status{font-size:14px;line-height:1.6}
+.wm-note,.vs-note{font-size:14px}
+.vs-field input::placeholder,.vs-field textarea::placeholder{color:rgba(245,240,235,.6)}
+a[href^="mailto:"],a[href^="tel:"]{direction:ltr;unicode-bidi:isolate}</style>
 </head>
 <body>
 
@@ -1086,7 +1096,7 @@ html[dir="rtl"] .hero-title{direction:ltr;text-align:right}</style>
         <span class="vs-enquiry-fallback">تفضّل الإيميل؟ <a href="mailto:info@photoczaro.com?subject=Virtual%20Shoot%20Enquiry" id="vs-email-fallback" data-analytics-managed="true">تواصل مع Photoczaro</a></span>
       </div>
       <p class="vs-form-status" id="vs-form-status" role="status" aria-live="polite"></p>
-      <p class="vs-enquiry-fallback" style="margin-top:6px;">إذا جافاسكريبت ما يشتغل، راسلنا على <a href="https://wa.me/971508065253?text=Hello%20Photoczaro%2C%20I%20would%20like%20to%20enquire%20about%20a%20Virtual%20Shoot." target="_blank" rel="noopener noreferrer" id="vs-whatsapp-noscript" data-analytics-managed="true">واتساب</a> مباشرة.</p>
+      <p class="vs-enquiry-fallback" style="margin-top:6px;">إذا جافاسكريبت ما يشتغل، راسلنا على <a href="https://wa.me/971508065253?text=%D9%87%D9%84%D8%A7%20Photoczaro%D8%8C%20%D8%A3%D8%A8%D9%8A%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%AC%D9%84%D8%B3%D8%A9%20%D8%AA%D8%B5%D9%88%D9%8A%D8%B1%20%D8%B9%D9%86%20%D8%A8%D9%8F%D8%B9%D8%AF." target="_blank" rel="noopener noreferrer" id="vs-whatsapp-noscript" data-analytics-managed="true">واتساب</a> مباشرة.</p>
     </div>
   </form>
 </section>
@@ -1194,7 +1204,7 @@ html[dir="rtl"] .hero-title{direction:ltr;text-align:right}</style>
 </footer>
 
 <div class="sticky-mobile-cta">
-  <a href="https://wa.me/971508065253?text=Hello%20Photoczaro%2C%20I%20would%20like%20to%20enquire%20about%20a%20Virtual%20Shoot." target="_blank" class="sticky-cta-primary" data-cta-location="sticky_mobile_cta">مراسلتي على واتساب</a>
+  <a href="https://wa.me/971508065253?text=%D9%87%D9%84%D8%A7%20Photoczaro%D8%8C%20%D8%A3%D8%A8%D9%8A%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%AC%D9%84%D8%B3%D8%A9%20%D8%AA%D8%B5%D9%88%D9%8A%D8%B1%20%D8%B9%D9%86%20%D8%A8%D9%8F%D8%B9%D8%AF." target="_blank" class="sticky-cta-primary" data-cta-location="sticky_mobile_cta">مراسلتي على واتساب</a>
   <a href="tel:+971508065253" class="sticky-cta-secondary" data-cta-location="sticky_mobile_cta">اتصال</a>
 </div>
 
@@ -1435,20 +1445,21 @@ lbImg.addEventListener('touchend', e => {
     return el ? el.value.trim() : '';
   }
 
+  function choiceText(id){ const el = document.getElementById(id); if (el && el.tagName === 'SELECT' && el.value && el.selectedIndex >= 0) return el.options[el.selectedIndex].text.trim(); return fieldValue(id); }
   function buildMessage(){
     const name = fieldValue('vs-name');
     const location = fieldValue('vs-location');
-    const purpose = fieldValue('vs-purpose');
+    const purpose = choiceText('vs-purpose');
     const date = fieldValue('vs-date');
     const device = fieldValue('vs-device');
     const details = fieldValue('vs-details');
-    let msg = 'Hello Photoczaro, I would like to enquire about a Virtual Shoot.\n\n';
-    msg += `Name: ${name}\n`;
-    msg += `Country/City: ${location}\n`;
-    msg += `Purpose of the shoot: ${purpose}\n`;
-    msg += `Preferred date: ${date}\n`;
-    msg += `Device available: ${device}\n`;
-    msg += `Additional details: ${details}`;
+    let msg = 'هلا Photoczaro، أبي أستفسر عن جلسة تصوير عن بُعد.\n\n';
+    msg += `الاسم: ${name}\n`;
+    msg += `الدولة/المدينة: ${location}\n`;
+    msg += `الغرض من الجلسة: ${purpose}\n`;
+    msg += `التاريخ المفضّل: ${date}\n`;
+    msg += `الجهاز المتوفر: ${device}\n`;
+    msg += `تفاصيل إضافية: ${details}`;
     return msg;
   }
 
@@ -1457,7 +1468,7 @@ lbImg.addEventListener('touchend', e => {
     const required = [
       { id: 'vs-name', msg: 'يرجى إدخال اسمك.' },
       { id: 'vs-location', msg: 'يرجى إدخال بلدك أو مدينتك.' },
-      { id: 'vs-purpose', msg: 'يرجى اختيار الغرض.' }
+      { id: 'vs-purpose', msg: 'يرجى اختيار الغرض من التصوير.' }
     ];
     required.forEach(({id, msg}) => {
       const el = document.getElementById(id);

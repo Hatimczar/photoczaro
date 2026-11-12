@@ -27,3 +27,9 @@ id = "248fb268a2d34eadbd4e0bc3f473d542"
 [[r2_buckets]]
 binding = "MEDIA"
 bucket_name = "photoczaro-models-media"
+
+# Footer page-view counter (functions/api/visit.js). The SAME namespace is bound in
+# both Pages projects (photoczaro + photoczaro-models) so the footer shows one shared total.
+[[kv_namespaces]]
+binding = "VISITS_KV"
+id = "537604153b9e469abf2187bc3397f36c"

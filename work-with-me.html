@@ -391,6 +391,59 @@
   .wm-enquiry-fallback a:hover { color: var(--white); }
   .wm-form-status { margin-top: 16px; font-size: 13px; color: var(--gold-light); min-height: 18px; }
 
+  /* Enquiry flow: one question at a time (js/wm-enquiry-flow.js) */
+  .wm-flow { margin-top: 36px; max-width: 680px; padding: 32px; border: 0.5px solid rgba(201,169,110,0.25); background: rgba(201,169,110,0.04); border-radius: 4px; }
+  .wm-flow [hidden], .wm-flow[hidden], .wm-nojs[hidden] { display: none !important; }
+  .wm-progress-row { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .wm-progress { margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-light); white-space: nowrap; }
+  .wm-progress-bar { flex: 1; height: 2px; background: rgba(255,255,255,0.12); border-radius: 2px; overflow: hidden; }
+  .wm-progress-fill { display: block; height: 100%; width: 33.34%; background: var(--gold); transition: width 0.35s var(--ease); }
+  .wm-flow-step.is-entering { animation: wmStepIn 0.28s ease both; }
+  @keyframes wmStepIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .wm-step-title { font-family: 'Cormorant Garamond', 'Cormorant Fallback', serif; font-size: clamp(26px, 5.4vw, 34px); font-weight: 300; line-height: 1.2; color: var(--white); margin: 0 0 22px; text-wrap: balance; }
+  .wm-cards { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 640px) { .wm-cards { grid-template-columns: 1fr 1fr; } }
+  .wm-card { position: relative; display: block; min-width: 0; }
+  .wm-card input.wm-radio { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; z-index: 1; }
+  .wm-card-face { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 64px; padding: 16px 18px; background: var(--dark-2); border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; font-size: 16px; line-height: 1.4; color: var(--white); transition: border-color 0.2s, background 0.2s; }
+  .wm-card:hover .wm-card-face { border-color: rgba(201,169,110,0.55); }
+  .wm-card-title { min-width: 0; overflow-wrap: anywhere; }
+  .wm-card-mark { position: relative; flex: none; width: 22px; height: 22px; border: 1.5px solid rgba(255,255,255,0.38); border-radius: 50%; }
+  .wm-card input.wm-radio:checked + .wm-card-face { border-color: var(--gold); background: rgba(201,169,110,0.11); }
+  .wm-card input.wm-radio:checked + .wm-card-face .wm-card-mark { background: var(--gold); border-color: var(--gold); }
+  .wm-card input.wm-radio:checked + .wm-card-face .wm-card-mark::after { content: ''; position: absolute; left: 50%; top: 46%; width: 6px; height: 11px; border: solid var(--dark); border-width: 0 2px 2px 0; transform: translate(-50%, -55%) rotate(45deg); }
+  .wm-card input.wm-radio:focus-visible + .wm-card-face { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .wm-flow-input { display: block; width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; color: var(--white); font-family: inherit; font-size: 16px; padding: 14px 16px; transition: border-color 0.2s, background 0.2s; }
+  .wm-flow-input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-color: var(--gold); background: rgba(255,255,255,0.06); }
+  .wm-flow-input[aria-invalid="true"] { border-color: #e6a06b; }
+  textarea.wm-flow-input { min-height: 132px; resize: vertical; line-height: 1.6; }
+  .wm-hint { margin: -10px 0 14px; font-size: 14px; line-height: 1.6; color: var(--grey); }
+  .wm-flow .wm-error { margin: 10px 0 0; min-height: 0; }
+  .wm-flow .wm-error:empty { display: none; }
+  .wm-review { margin: 0 0 22px; border-top: 0.5px solid rgba(255,255,255,0.12); }
+  .wm-review > div { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 16px; padding: 14px 0; border-bottom: 0.5px solid rgba(255,255,255,0.12); }
+  .wm-review dt { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); padding-top: 3px; }
+  .wm-review dd { margin: 0; font-size: 16px; line-height: 1.6; color: var(--white); overflow-wrap: anywhere; white-space: pre-line; }
+  .wm-flow .wm-field-check { margin-top: 4px; }
+  .wm-flow-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin-top: 28px; }
+  .wm-link-btn { background: none; border: 0; border-radius: 0; padding: 0 4px; min-height: 44px; display: inline-flex; align-items: center; color: var(--gold-light); font: inherit; font-size: 14px; text-decoration: underline; text-decoration-color: rgba(232,213,163,0.45); text-underline-offset: 5px; cursor: pointer; transition: color 0.2s; }
+  .wm-link-btn:hover { color: var(--white); text-decoration-color: var(--white); }
+  .wm-flow-foot a { border-bottom: 0; text-decoration: underline; text-decoration-color: rgba(232,213,163,0.45); text-underline-offset: 5px; }
+  .wm-flow-foot a:hover { text-decoration-color: var(--white); }
+  .wm-flow .wm-form-status { margin-top: 14px; min-height: 0; }
+  .wm-flow .wm-form-status:empty { display: none; }
+  .wm-flow-foot { margin: 22px 0 0; padding-top: 6px; border-top: 0.5px solid rgba(255,255,255,0.08); }
+  .wm-flow-note { margin-top: 16px; max-width: 680px; font-size: 12.5px; line-height: 1.7; color: var(--grey); }
+  .wm-nojs { margin-top: 28px; max-width: 680px; }
+  .wm-nojs a { color: var(--gold-light); }
+  @media (max-width: 480px) {
+    .wm-flow { padding: 24px 18px; }
+    .wm-review > div { grid-template-columns: minmax(0, 1fr); }
+    .wm-flow-actions .cta-btn { flex: 1 1 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .wm-flow-step.is-entering { animation: none; } .wm-progress-fill, .wm-card-face { transition: none; } }
+  @media (forced-colors: active) { .wm-card input.wm-radio:checked + .wm-card-face { outline: 2px solid Highlight; } }
+
   /* Alternative paths */
   .wm-alt-paths { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 20px; align-items: center; }
   .wm-alt-paths .alt-secondary { font-size: 12.5px; color: var(--grey); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 2px; }
@@ -652,93 +705,89 @@
 <!-- 4. Structured enquiry form -->
 <section class="wm-section wm-section-narrow" id="enquiry">
   <p class="wm-section-label">Get Started</p>
-  <h2>Plan Your <em>Photoshoot</em></h2>
-  <p class="wm-body-text">Share a few details and we'll prepare your enquiry. Your form details remain in your browser until you choose Continue on WhatsApp. The email option opens a separate message and does not include these form fields.</p>
+  <h2>Enquire About a <em>Photoshoot</em></h2>
+  <p class="wm-body-text">Tell me what you have in mind. If you’re not sure where to start, I’ll help you figure it out.</p>
 
-  <form id="wm-enquiry-form" class="wm-enquiry-grid" novalidate>
-    <div class="wm-field">
-      <label for="wm-name">Name <span class="req">*</span></label>
-      <input type="text" id="wm-name" name="name" required autocomplete="name">
-      <span class="wm-error" data-error-for="wm-name"></span>
-    </div>
-    <div class="wm-field">
-      <label for="wm-location">Country / City <span class="req">*</span></label>
-      <input type="text" id="wm-location" name="location" required autocomplete="address-level2">
-      <span class="wm-error" data-error-for="wm-location"></span>
-    </div>
-    <div class="wm-field">
-      <label for="wm-session-type">Type of session <span class="req">*</span></label>
-      <select id="wm-session-type" name="sessionType" required>
-        <option value="" disabled selected>Choose one…</option>
-        <option value="Portrait Session">Portrait Session</option>
-        <option value="Model Portfolio or Test Shoot">Model Portfolio or Test Shoot</option>
-        <option value="Editorial or Creative Session">Editorial or Creative Session</option>
-        <option value="Not Sure Yet">Not Sure Yet</option>
-      </select>
-      <span class="wm-error" data-error-for="wm-session-type"></span>
-    </div>
-    <div class="wm-field">
-      <label for="wm-experience">Experience level</label>
-      <select id="wm-experience" name="experience">
-        <option value="" disabled selected>Choose one…</option>
-        <option value="First photoshoot">First photoshoot</option>
-        <option value="Some experience">Some experience</option>
-        <option value="Experienced model or client">Experienced model or client</option>
-      </select>
-    </div>
-    <div class="wm-field wm-field-full">
-      <label for="wm-purpose">Purpose of the images <span class="req">*</span></label>
-      <select id="wm-purpose" name="purpose" required>
-        <option value="" disabled selected>Choose one…</option>
-        <option value="Personal portraits">Personal portraits</option>
-        <option value="Model portfolio">Model portfolio</option>
-        <option value="Agency submission">Agency submission</option>
-        <option value="Social content">Social content</option>
-        <option value="Editorial concept">Editorial concept</option>
-        <option value="Other">Other</option>
-      </select>
-      <span class="wm-error" data-error-for="wm-purpose"></span>
-    </div>
-    <div class="wm-field">
-      <label for="wm-date">Preferred date or date range</label>
-      <input type="text" id="wm-date" name="date" placeholder="e.g. mid-September">
-    </div>
-    <div class="wm-field">
-      <label for="wm-setting">Preferred setting</label>
-      <select id="wm-setting" name="setting">
-        <option value="" disabled selected>Choose one…</option>
-        <option value="Studio">Studio</option>
-        <option value="Outdoor">Outdoor</option>
-        <option value="On location">On location</option>
-        <option value="Need guidance">Need guidance</option>
-      </select>
-    </div>
-    <div class="wm-field">
-      <label for="wm-looks">Number of looks or outfits</label>
-      <input type="text" id="wm-looks" name="looks" placeholder="e.g. 2">
-    </div>
-    <div class="wm-field">
-      <label for="wm-portfolio">Instagram or portfolio link</label>
-      <input type="text" id="wm-portfolio" name="portfolio" placeholder="@yourusername">
-    </div>
-    <div class="wm-field wm-field-full">
-      <label for="wm-details">Concept or additional details</label>
-      <textarea id="wm-details" name="details" placeholder="Anything else worth knowing"></textarea>
-    </div>
-    <div class="wm-field wm-field-full wm-field-check">
-      <input type="checkbox" id="wm-privacy" name="privacy" required>
-      <label for="wm-privacy">I understand that my details will be used to prepare my enquiry and, when I continue, passed to WhatsApp so I can send them to Photoczaro, in line with the <a href="/privacy-policy">Privacy Policy</a>. <span class="req">*</span></label>
-    </div>
-    <div class="wm-field-full">
-      <span class="wm-error" data-error-for="wm-privacy"></span>
-      <div class="wm-enquiry-actions">
-        <button type="submit" class="cta-btn cta-btn-primary" id="wm-submit-btn">Continue on WhatsApp →</button>
-        <span class="wm-enquiry-fallback">Prefer email? <a href="mailto:info@photoczaro.com?subject=Photoshoot%20Enquiry" id="wm-email-fallback" data-analytics-managed="true">Contact Photoczaro</a></span>
+  <div class="wm-flow" id="wm-flow" hidden>
+    <form id="wm-enquiry-form" novalidate>
+      <div class="wm-progress-row">
+        <p class="wm-progress" id="wm-progress">1 of 3</p>
+        <span class="wm-progress-bar" aria-hidden="true"><span class="wm-progress-fill" id="wm-progress-fill"></span></span>
+      </div>
+
+      <div class="wm-flow-step" data-step="1">
+        <h3 class="wm-step-title" id="wm-step-title-1" tabindex="-1" aria-describedby="wm-progress">What would you like to shoot?</h3>
+        <div class="wm-cards" id="wm-type-group" role="radiogroup" aria-labelledby="wm-step-title-1">
+          <label class="wm-card"><input class="wm-radio" type="radio" name="shootType" value="model-digitals"><span class="wm-card-face"><span class="wm-card-title">Model digitals</span><span class="wm-card-mark" aria-hidden="true"></span></span></label>
+          <label class="wm-card"><input class="wm-radio" type="radio" name="shootType" value="portfolio" data-cta="Model portfolio or test shoot"><span class="wm-card-face"><span class="wm-card-title">Portfolio shoot</span><span class="wm-card-mark" aria-hidden="true"></span></span></label>
+          <label class="wm-card"><input class="wm-radio" type="radio" name="shootType" value="creative" data-cta="Editorial or creative session"><span class="wm-card-face"><span class="wm-card-title">Creative or editorial shoot</span><span class="wm-card-mark" aria-hidden="true"></span></span></label>
+          <label class="wm-card"><input class="wm-radio" type="radio" name="shootType" value="other" data-cta="Personal portrait"><span class="wm-card-face"><span class="wm-card-title">Something else</span><span class="wm-card-mark" aria-hidden="true"></span></span></label>
+          <label class="wm-card"><input class="wm-radio" type="radio" name="shootType" value="unsure"><span class="wm-card-face"><span class="wm-card-title">I’m not sure yet</span><span class="wm-card-mark" aria-hidden="true"></span></span></label>
+        </div>
+        <p class="wm-error" id="wm-err-type"></p>
+      </div>
+
+      <div class="wm-flow-step" data-step="2" hidden>
+        <h3 class="wm-step-title" id="wm-step-title-2" tabindex="-1" aria-describedby="wm-progress">What’s your name?</h3>
+        <input class="wm-flow-input" type="text" id="wm-name" name="name" autocomplete="name" maxlength="80" required aria-required="true" aria-labelledby="wm-step-title-2">
+        <p class="wm-error" id="wm-err-name"></p>
+      </div>
+
+      <div class="wm-flow-step" data-step="3" hidden>
+        <h3 class="wm-step-title" id="wm-step-title-3" tabindex="-1" aria-describedby="wm-progress">Anything else you’d like to share?</h3>
+        <p class="wm-hint" id="wm-note-hint">A preferred date, a shoot idea, or a link to your Instagram or portfolio.</p>
+        <textarea class="wm-flow-input" id="wm-note" name="notes" rows="4" maxlength="800" aria-labelledby="wm-step-title-3" aria-describedby="wm-note-hint"></textarea>
+      </div>
+
+      <div class="wm-flow-step" data-step="4" hidden>
+        <h3 class="wm-step-title" id="wm-step-title-4" tabindex="-1" aria-describedby="wm-progress">Check your details</h3>
+        <dl class="wm-review">
+          <div><dt>Shoot type</dt><dd id="wm-rv-type"></dd></div>
+          <div><dt>Name</dt><dd id="wm-rv-name"></dd></div>
+          <div id="wm-rv-note-row" hidden><dt>Notes</dt><dd id="wm-rv-note"></dd></div>
+        </dl>
+        <div class="wm-field wm-field-check">
+          <input type="checkbox" id="wm-privacy" name="privacy" required aria-required="true">
+          <label for="wm-privacy">I understand that my details will be used to prepare my enquiry and, when I continue, passed to WhatsApp so I can send them to Photoczaro, in line with the <a href="/privacy-policy">Privacy Policy</a>. <span class="req">*</span></label>
+        </div>
+        <p class="wm-error" id="wm-err-privacy"></p>
+      </div>
+
+      <div class="wm-flow-actions">
+        <button type="submit" class="cta-btn cta-btn-primary" id="wm-next">Continue</button>
+        <button type="button" class="wm-link-btn" id="wm-back" hidden>Back</button>
+        <button type="button" class="wm-link-btn" id="wm-skip" hidden>Skip</button>
       </div>
       <p class="wm-form-status" id="wm-form-status" role="status" aria-live="polite"></p>
-      <p class="wm-enquiry-fallback" style="margin-top:6px;">JavaScript disabled? Message us directly on <a href="https://wa.me/971508065253?text=Hello%20Photoczaro%2C%20I%20would%20like%20to%20plan%20a%20photoshoot." target="_blank" rel="noopener noreferrer" id="wm-whatsapp-noscript" data-analytics-managed="true">WhatsApp</a>.</p>
-    </div>
-  </form>
+      <p class="wm-flow-foot wm-enquiry-fallback"><a href="mailto:info@photoczaro.com?subject=Photoshoot%20Enquiry" id="wm-email-fallback" data-analytics-managed="true">Email me instead</a></p>
+    </form>
+  </div>
+  <script type="application/json" id="wm-flow-config">
+{
+  "wa": "971508065253",
+  "progress": "{n} of {total}",
+  "review": "Review",
+  "next": "Continue",
+  "send": "Continue on WhatsApp",
+  "opening": "Opening WhatsApp. Check the message there and send it when you’re ready.",
+  "errors": {
+    "type": "Please choose one option to continue.",
+    "name": "Please enter your name.",
+    "privacy": "Please acknowledge the Privacy Policy to continue."
+  },
+  "message": {
+    "greeting": "Hi Hatim, I'd like to enquire about a photoshoot.",
+    "name": "Name",
+    "type": "Shoot type",
+    "notes": "Notes"
+  }
+}
+  </script>
+
+  <div class="wm-nojs" id="wm-nojs">
+    <p class="wm-body-text">The enquiry form needs JavaScript. You can still reach me directly on <a href="https://wa.me/971508065253?text=Hi%20Hatim%2C%20I'd%20like%20to%20enquire%20about%20a%20photoshoot." target="_blank" rel="noopener noreferrer" id="wm-whatsapp-noscript" data-analytics-managed="true">WhatsApp</a> or by <a href="mailto:info@photoczaro.com?subject=Photoshoot%20Enquiry" id="wm-email-nojs" data-analytics-managed="true">email</a>.</p>
+  </div>
+  <p class="wm-flow-note">Your form details remain in your browser until you choose Continue on WhatsApp. The email option opens a separate message and does not include these form fields.</p>
 
   <!-- Alternative booking paths -->
   <div class="wm-alt-paths">
@@ -1139,13 +1188,8 @@ const sessionTypeIds = {
   'Editorial or creative session': 'editorial'
 };
 document.querySelectorAll('.session-cta').forEach(a=>{
-  a.addEventListener('click', (e) => {
+  a.addEventListener('click', () => {
     const label = a.dataset.sessionType;
-    const select = document.getElementById('wm-session-type');
-    const map = { 'Personal portrait': 'Portrait Session', 'Model portfolio or test shoot': 'Model Portfolio or Test Shoot', 'Editorial or creative session': 'Editorial or Creative Session' };
-    if (select && map[label]) {
-      select.value = map[label];
-    }
     wmTrack('work_with_me_session_select', { session_type_id: sessionTypeIds[label] || 'unknown', cta_location: 'session_card' });
   });
 });
@@ -1217,100 +1261,8 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closePortfolioLightbox();
 });
 
-// Enquiry form: builds WhatsApp message client-side, no backend, no PII in analytics
-(function(){
-  const form = document.getElementById('wm-enquiry-form');
-  const statusEl = document.getElementById('wm-form-status');
-  const emailFallback = document.getElementById('wm-email-fallback');
-  const whatsappNoscript = document.getElementById('wm-whatsapp-noscript');
-  let started = false;
-
-  function markStarted(){
-    if (!started) { started = true; wmTrack('work_with_me_form_start', {}); }
-  }
-  form.querySelectorAll('input, select, textarea').forEach(el => {
-    el.addEventListener('focus', markStarted, { once: true });
-  });
-
-  function fieldValue(id){
-    const el = document.getElementById(id);
-    return el ? el.value.trim() : '';
-  }
-
-  function buildMessage(){
-    let msg = 'Hello Photoczaro, I would like to plan a photoshoot.\n\n';
-    msg += `Name: ${fieldValue('wm-name')}\n`;
-    msg += `Country/City: ${fieldValue('wm-location')}\n`;
-    msg += `Session type: ${fieldValue('wm-session-type')}\n`;
-    msg += `Experience level: ${fieldValue('wm-experience')}\n`;
-    msg += `Purpose: ${fieldValue('wm-purpose')}\n`;
-    msg += `Preferred date: ${fieldValue('wm-date')}\n`;
-    msg += `Preferred setting: ${fieldValue('wm-setting')}\n`;
-    msg += `Looks/outfits: ${fieldValue('wm-looks')}\n`;
-    msg += `Instagram/portfolio: ${fieldValue('wm-portfolio')}\n`;
-    msg += `Additional details: ${fieldValue('wm-details')}`;
-    return msg;
-  }
-
-  function setError(id, message){
-    const el = document.getElementById(id);
-    const errEl = form.querySelector(`[data-error-for="${id}"]`);
-    if (errEl) {
-      if (!errEl.id) errEl.id = 'err-' + id;
-      errEl.textContent = message || '';
-      // Each field points at its own error text, so it is read when the field is reached.
-      const ids = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean).filter(x => x !== errEl.id);
-      if (message) ids.push(errEl.id);
-      if (ids.length) el.setAttribute('aria-describedby', ids.join(' ')); else el.removeAttribute('aria-describedby');
-    }
-    if (message) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
-  }
-
-  function validate(){
-    let firstInvalid = null;
-    const required = [
-      { id: 'wm-name', msg: 'Please enter your name.' },
-      { id: 'wm-location', msg: 'Please enter your country or city.' },
-      { id: 'wm-session-type', msg: 'Please choose a session type.' },
-      { id: 'wm-purpose', msg: 'Please choose a purpose.' }
-    ];
-    required.forEach(({id, msg}) => {
-      const el = document.getElementById(id);
-      if (!el.value.trim()) { setError(id, msg); if (!firstInvalid) firstInvalid = el; }
-      else setError(id, '');
-    });
-    const privacy = document.getElementById('wm-privacy');
-    if (!privacy.checked) { setError('wm-privacy', 'Please acknowledge the Privacy Policy to continue.'); if (!firstInvalid) firstInvalid = privacy; }
-    else setError('wm-privacy', '');
-    return firstInvalid;
-  }
-
-  // Corrected fields lose their error straight away.
-  form.addEventListener('input', (e) => { if (e.target.hasAttribute && e.target.hasAttribute('aria-invalid') && e.target.value && e.target.value.trim()) setError(e.target.id, ''); });
-  form.addEventListener('change', (e) => { if (e.target.id === 'wm-privacy' && e.target.checked) setError('wm-privacy', ''); else if (e.target.hasAttribute && e.target.hasAttribute('aria-invalid') && e.target.value) setError(e.target.id, ''); });
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    const firstInvalid = validate();
-    if (firstInvalid) {
-      statusEl.textContent = 'Please complete the required fields above.';
-      firstInvalid.focus();
-      return;
-    }
-    const message = buildMessage();
-    const url = 'https://wa.me/971508065253?text=' + encodeURIComponent(message);
-    statusEl.textContent = 'Opening WhatsApp…';
-    wmTrack('work_with_me_whatsapp_continue', { cta_location: 'enquiry_form' });
-    window.open(url, '_blank', 'noopener,noreferrer');
-  });
-
-  if (emailFallback) {
-    emailFallback.addEventListener('click', () => wmTrack('work_with_me_email_click', { cta_location: 'enquiry_form' }));
-  }
-  if (whatsappNoscript) {
-    whatsappNoscript.addEventListener('click', () => wmTrack('work_with_me_whatsapp_continue', { cta_location: 'enquiry_form_fallback' }));
-  }
-})();
+// Enquiry flow: see /js/wm-enquiry-flow.js (answers stay in the page, never in analytics)
 </script>
+<script src="/js/wm-enquiry-flow.js?v=1" defer></script>
 </body>
 </html>

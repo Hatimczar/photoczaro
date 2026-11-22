@@ -1967,7 +1967,7 @@
 <footer>
   <span class="footer-logo">Photoczaro</span>
   <a href="https://models.photoczaro.com/fr/" style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.95)'">Photoczaro Models</a>
-    <a href="/fr/privacy-policy" style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.95)'">Privacy Policy</a><span class="footer-copy">© <span class="js-year">2026</span> Photoczaro - Tous droits réservés</span><script src="/js/site-year.js?v=1" defer></script><script src="/js/visit-counter.js?v=1" defer></script>
+    <a href="/fr/privacy-policy" style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.95)'">Privacy Policy</a><a href="/fr/site-map" data-footer-sitemap style="font-size:11px;color:rgba(138,134,128,0.95);letter-spacing:0.1em;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(138,134,128,0.95)'">Plan du site</a><span class="footer-copy">© <span class="js-year">2026</span> Photoczaro - Tous droits réservés</span><script src="/js/site-year.js?v=1" defer></script><script src="/js/odometer.js?v=3" defer></script><script src="/js/visit-counter.js?v=3" defer></script>
 <style>
   .lang-switch { position: relative; display: inline-block; }
   .lang-switch-btn {
@@ -3118,29 +3118,13 @@ document.querySelectorAll('.gallery-item, .magazine-card, .project-cover').forEa
   card.addEventListener('mouseenter', () => { card.style.transition = 'transform 0.1s'; });
 });
 
-// Animated stat counters
-const statEls = document.querySelectorAll('.stat-num');
-const statObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    const el = entry.target;
-    const raw = el.textContent.trim();
-    const num = parseInt(raw);
-    if (isNaN(num)) return;
-    const suffix = raw.replace(/[0-9]/g, '');
-    let start = 0, duration = 1400;
-    const step = timestamp => {
-      if (!start) start = timestamp;
-      const progress = Math.min((timestamp - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * num) + suffix;
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-    statObserver.unobserve(el);
-  });
-}, { threshold: 0.5 });
-statEls.forEach(el => statObserver.observe(el));
+// Animated stat counters (odometer roll, shared /js/odometer.js)
+document.querySelectorAll('.stat-num').forEach(el => {
+  const raw = el.textContent.trim();
+  if (!/\d/.test(raw)) return;
+  const go = () => window.PCOdometer ? window.PCOdometer.mount(el, raw, { threshold: 0.5 }) : null;
+  if (document.readyState === 'complete') go(); else window.addEventListener('load', go);
+});
 
 // Lightbox touch swipe
 let lbTouchX = null;

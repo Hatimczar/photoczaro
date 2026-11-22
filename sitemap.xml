@@ -3346,4 +3346,82 @@
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://photoczaro.com/site-map</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://photoczaro.com/site-map"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://photoczaro.com/fr/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://photoczaro.com/ru/site-map"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://photoczaro.com/es/site-map"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://photoczaro.com/cs/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://photoczaro.com/ar/site-map"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/site-map"/>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://photoczaro.com/fr/site-map</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://photoczaro.com/site-map"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://photoczaro.com/fr/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://photoczaro.com/ru/site-map"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://photoczaro.com/es/site-map"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://photoczaro.com/cs/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://photoczaro.com/ar/site-map"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/site-map"/>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://photoczaro.com/ru/site-map</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://photoczaro.com/site-map"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://photoczaro.com/fr/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://photoczaro.com/ru/site-map"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://photoczaro.com/es/site-map"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://photoczaro.com/cs/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://photoczaro.com/ar/site-map"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/site-map"/>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://photoczaro.com/es/site-map</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://photoczaro.com/site-map"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://photoczaro.com/fr/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://photoczaro.com/ru/site-map"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://photoczaro.com/es/site-map"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://photoczaro.com/cs/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://photoczaro.com/ar/site-map"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/site-map"/>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://photoczaro.com/cs/site-map</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://photoczaro.com/site-map"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://photoczaro.com/fr/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://photoczaro.com/ru/site-map"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://photoczaro.com/es/site-map"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://photoczaro.com/cs/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://photoczaro.com/ar/site-map"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/site-map"/>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://photoczaro.com/ar/site-map</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://photoczaro.com/site-map"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://photoczaro.com/fr/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://photoczaro.com/ru/site-map"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://photoczaro.com/es/site-map"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://photoczaro.com/cs/site-map"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://photoczaro.com/ar/site-map"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://photoczaro.com/site-map"/>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
 </urlset>

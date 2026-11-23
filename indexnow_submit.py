@@ -1,112 +1,54 @@
 #!/usr/bin/env python3
 """
-Submit all photoczaro.com URLs to Bing + Yandex + Seznam via IndexNow.
-Run once after each deploy: python3 indexnow_submit.py
+Submit photoczaro.com URLs to Bing + Yandex + Seznam via IndexNow.
+
+Reads the URL list from sitemap.xml, so new pages are included automatically.
+Yandex Webmaster shows IndexNow as the source for most pages it picks up, so run
+this after each deploy.
+
+  python3 indexnow_submit.py --days 3      # URLs whose <lastmod> is within the last 3 days (default 3)
+  python3 indexnow_submit.py --all         # every URL in the sitemap
+  python3 indexnow_submit.py --dry-run     # list what would be sent, send nothing
 """
-import urllib.request, json
+import argparse, datetime, json, re, urllib.request, urllib.error
+from pathlib import Path
 
 KEY  = "2412699535ea4bb3898250ab1aa9e0f3"
 HOST = "photoczaro.com"
-
-URLS = [
-    # Main pages
-    "https://photoczaro.com/",
-    "https://photoczaro.com/journal",
-    "https://photoczaro.com/work-with-me",
-    "https://photoczaro.com/for-agencies",
-    "https://photoczaro.com/ru/for-agencies",
-    # English blog posts
-    "https://photoczaro.com/blog/what-its-like-to-work-with-me",
-    "https://photoczaro.com/blog/best-modeling-agencies-dubai",
-    "https://photoczaro.com/blog/fujifilm-x100vi-review",
-    "https://photoczaro.com/blog/shooting-golden-hour-dubai",
-    "https://photoczaro.com/blog/malvie-magazine-interview",
-    "https://photoczaro.com/blog/sony-a7cr-portrait-photographer",
-    "https://photoczaro.com/blog/modeling-portfolio-dubai-guide",
-    "https://photoczaro.com/blog/start-modeling-dubai-no-experience",
-    "https://photoczaro.com/blog/book-models-dubai-uae-photoczaro-models-roster",
-    "https://photoczaro.com/blog/photoshoot-cost-dubai",
-    # French
-    "https://photoczaro.com/fr/",
-    "https://photoczaro.com/fr/journal",
-    "https://photoczaro.com/fr/blog/fujifilm-x100vi-review",
-    "https://photoczaro.com/fr/blog/shooting-golden-hour-dubai",
-    "https://photoczaro.com/fr/blog/malvie-magazine-interview",
-    "https://photoczaro.com/fr/blog/sony-a7cr-portrait-photographer",
-    "https://photoczaro.com/fr/blog/modeling-portfolio-dubai-guide",
-    "https://photoczaro.com/fr/blog/start-modeling-dubai-no-experience",
-    "https://photoczaro.com/fr/blog/book-models-dubai-uae-photoczaro-models-roster",
-    "https://photoczaro.com/fr/blog/photoshoot-cost-dubai",
-    "https://photoczaro.com/fr/blog/what-its-like-to-work-with-me",
-    "https://photoczaro.com/fr/blog/best-modeling-agencies-dubai",
-    # Russian
-    "https://photoczaro.com/ru/",
-    "https://photoczaro.com/ru/journal",
-    "https://photoczaro.com/ru/blog/fujifilm-x100vi-review",
-    "https://photoczaro.com/ru/blog/shooting-golden-hour-dubai",
-    "https://photoczaro.com/ru/blog/malvie-magazine-interview",
-    "https://photoczaro.com/ru/blog/sony-a7cr-portrait-photographer",
-    "https://photoczaro.com/ru/blog/modeling-portfolio-dubai-guide",
-    "https://photoczaro.com/ru/blog/start-modeling-dubai-no-experience",
-    "https://photoczaro.com/ru/blog/book-models-dubai-uae-photoczaro-models-roster",
-    "https://photoczaro.com/ru/blog/photoshoot-cost-dubai",
-    "https://photoczaro.com/ru/blog/what-its-like-to-work-with-me",
-    "https://photoczaro.com/ru/blog/best-modeling-agencies-dubai",
-    # Spanish
-    "https://photoczaro.com/es/",
-    "https://photoczaro.com/es/journal",
-    "https://photoczaro.com/es/blog/fujifilm-x100vi-review",
-    "https://photoczaro.com/es/blog/shooting-golden-hour-dubai",
-    "https://photoczaro.com/es/blog/malvie-magazine-interview",
-    "https://photoczaro.com/es/blog/sony-a7cr-portrait-photographer",
-    "https://photoczaro.com/es/blog/modeling-portfolio-dubai-guide",
-    "https://photoczaro.com/es/blog/start-modeling-dubai-no-experience",
-    "https://photoczaro.com/es/blog/book-models-dubai-uae-photoczaro-models-roster",
-    "https://photoczaro.com/es/blog/photoshoot-cost-dubai",
-    "https://photoczaro.com/es/blog/what-its-like-to-work-with-me",
-    "https://photoczaro.com/es/blog/best-modeling-agencies-dubai",
-    # Czech
-    "https://photoczaro.com/cs/",
-    "https://photoczaro.com/cs/journal",
-    "https://photoczaro.com/cs/blog/fujifilm-x100vi-review",
-    "https://photoczaro.com/cs/blog/shooting-golden-hour-dubai",
-    "https://photoczaro.com/cs/blog/malvie-magazine-interview",
-    "https://photoczaro.com/cs/blog/sony-a7cr-portrait-photographer",
-    "https://photoczaro.com/cs/blog/modeling-portfolio-dubai-guide",
-    "https://photoczaro.com/cs/blog/start-modeling-dubai-no-experience",
-    "https://photoczaro.com/cs/blog/book-models-dubai-uae-photoczaro-models-roster",
-    "https://photoczaro.com/ar/blog/book-models-dubai-uae-photoczaro-models-roster",
-    "https://photoczaro.com/cs/blog/photoshoot-cost-dubai",
-    "https://photoczaro.com/cs/blog/what-its-like-to-work-with-me",
-    "https://photoczaro.com/cs/blog/best-modeling-agencies-dubai",
-    # Other
-    "https://photoczaro.com/privacy-policy",
-]
-
-PAYLOAD = json.dumps({
-    "host": HOST,
-    "key": KEY,
-    "keyLocation": f"https://{HOST}/{KEY}.txt",
-    "urlList": URLS,
-}).encode()
-
+SITEMAP = Path(__file__).with_name("sitemap.xml")
 ENDPOINTS = [
     "https://www.bing.com/indexnow",
     "https://yandex.com/indexnow",
     "https://search.seznam.cz/indexnow",
 ]
 
+ap = argparse.ArgumentParser()
+ap.add_argument("--days", type=int, default=3)
+ap.add_argument("--all", action="store_true")
+ap.add_argument("--dry-run", action="store_true")
+args = ap.parse_args()
+
+xml = SITEMAP.read_text(encoding="utf-8")
+cutoff = datetime.date.today() - datetime.timedelta(days=args.days)
+urls = []
+for block in re.findall(r"<url>(.*?)</url>", xml, re.S):
+    loc = re.search(r"<loc>([^<]+)</loc>", block).group(1).strip()
+    lm = re.search(r"<lastmod>([^<]+)</lastmod>", block)
+    if args.all or (lm and datetime.date.fromisoformat(lm.group(1).strip()[:10]) >= cutoff):
+        urls.append(loc)
+urls = sorted(set(urls))[:10000]
+print(f"{len(urls)} URLs selected" + (" (all)" if args.all else f" (lastmod within {args.days} days)"))
+if args.dry_run or not urls:
+    print("\n".join(urls[:20]) + ("\n..." if len(urls) > 20 else ""))
+    raise SystemExit(0)
+
+payload = json.dumps({"host": HOST, "key": KEY, "keyLocation": f"https://{HOST}/{KEY}.txt", "urlList": urls}).encode()
 for endpoint in ENDPOINTS:
-    req = urllib.request.Request(
-        endpoint,
-        data=PAYLOAD,
-        headers={"Content-Type": "application/json; charset=utf-8"},
-        method="POST",
-    )
+    req = urllib.request.Request(endpoint, data=payload, headers={"Content-Type": "application/json; charset=utf-8"}, method="POST")
     try:
-        with urllib.request.urlopen(req, timeout=15) as r:
-            print(f"{endpoint} → {r.status}")
+        with urllib.request.urlopen(req, timeout=20) as r:
+            print(f"{endpoint} -> {r.status}")
     except urllib.error.HTTPError as e:
-        print(f"{endpoint} → HTTP {e.code}: {e.read().decode()}")
+        print(f"{endpoint} -> HTTP {e.code}: {e.read().decode()[:200]}")
     except Exception as e:
-        print(f"{endpoint} → ERROR: {e}")
+        print(f"{endpoint} -> ERROR: {e}")

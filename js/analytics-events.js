@@ -63,6 +63,7 @@
   function classifyGenericContact(a) {
     var href = a.getAttribute('href') || '';
     if (/^https:\/\/wa\.me\//i.test(href)) return { event: 'whatsapp_click', destinationType: 'whatsapp' };
+    if (/^https:\/\/t\.me\/\+/i.test(href)) return { event: 'telegram_click', destinationType: 'telegram' };
     if (/^tel:/i.test(href)) return { event: 'call_click', destinationType: 'call' };
     if (/^mailto:/i.test(href)) return { event: 'email_click', destinationType: 'email' };
     return null;

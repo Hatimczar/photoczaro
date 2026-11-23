@@ -151,7 +151,15 @@
     return lines.join('\n');
   }
   function buildUrl() {
+    // Telegram links cannot prefill text, so those pages copy the draft instead.
+    if (cfg.tg) return 'https://t.me/' + cfg.tg;
     return 'https://wa.me/' + cfg.wa + '?text=' + encodeURIComponent(buildMessage());
+  }
+  function copyDraft() {
+    var text = buildMessage();
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(function () {});
+    } catch (e) {}
   }
 
   function markStarted() {
@@ -168,9 +176,10 @@
       show(current + 1, true);
       return;
     }
-    // Opens WhatsApp with the draft ready. Nothing is sent from here.
+    // Opens WhatsApp with the draft ready (Telegram: draft copied first). Nothing is sent from here.
     statusEl.textContent = cfg.opening;
-    track('work_with_me_whatsapp_continue');
+    if (cfg.tg) copyDraft();
+    track(cfg.tg ? 'work_with_me_telegram_continue' : 'work_with_me_whatsapp_continue');
     window.open(buildUrl(), '_blank', 'noopener,noreferrer');
   });
 

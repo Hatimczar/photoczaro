@@ -22,6 +22,17 @@ export async function onRequest({ request, next, env }) {
     }
   }
 
+  // Legacy WordPress demo/portfolio URLs: permanently gone (410)
+  const gonePrefixes = ['/montoya_portfolio/', '/portfolio_category/'];
+  const goneExact = ['/shortcodes', '/shortcodes/', '/blue-ocean-waves', '/blue-ocean-waves/', '/blonde-surf-girl', '/blonde-surf-girl/'];
+  if (goneExact.includes(url.pathname) || gonePrefixes.some(p => url.pathname.startsWith(p))) {
+    const page = await env.ASSETS.fetch(new URL('/404.html', url.origin));
+    return new Response(page.body, {
+      status: 410,
+      headers: { 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': 'noindex' },
+    });
+  }
+
   // Only auto-redirect the root path
   if (url.pathname !== '/') return next();
 

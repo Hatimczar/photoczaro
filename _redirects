@@ -64,3 +64,20 @@
 /es/blog/how-to-pose-for-a-portrait-photoshoot /es/blog/how-to-pose-for-portrait-photoshoot 301
 /cs/blog/how-to-pose-for-a-portrait-photoshoot /cs/blog/how-to-pose-for-portrait-photoshoot 301
 
+# Legacy WordPress URLs (pre-rebuild) that Yandex still lists
+/contact /work-with-me 301
+/contact/ /work-with-me 301
+/category/blog /journal 301
+/category/blog/ /journal 301
+/author/photoczaro /journal 301
+/author/photoczaro/ /journal 301
+/portfolio-grid / 301
+/portfolio-grid/ / 301
+/archive-gallery / 301
+/archive-gallery/ / 301
+/parallax-gallery / 301
+/parallax-gallery/ / 301
+/stories / 301
+/stories/ / 301
+/endless-road-stories / 301
+/endless-road-stories/ / 301
